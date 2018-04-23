@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>AppCore.DependencyInjection.Autofac.Tests</AssemblyName>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AppCore.DI.Autofac\AppCore.DI.Autofac.csproj" />
+    <ProjectReference Include="..\AppCore.DI.Specification.Tests\AppCore.DI.Specification.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

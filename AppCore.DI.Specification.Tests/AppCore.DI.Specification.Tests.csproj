@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>AppCore.DependencyInjection.Specification.Tests</AssemblyName>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AppCore.DI.Abstractions\AppCore.DI.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Remove="xunit.runner.console" />
+    <PackageReference Remove="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+</Project>
