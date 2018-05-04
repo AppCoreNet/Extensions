@@ -16,7 +16,7 @@
 
 namespace AppCore.DependencyInjection
 {
-    class MyService : IMyService
+    public class MyService : IMyService
     {
     }
 }

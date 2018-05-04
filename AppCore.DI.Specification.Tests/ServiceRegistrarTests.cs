@@ -208,6 +208,37 @@ namespace AppCore.DependencyInjection
         [InlineData(ServiceLifetime.Transient)]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(ServiceLifetime.Singleton)]
+        public void RegisterOnlyOnceWithOpenGenericType(ServiceLifetime lifetime)
+        {
+            var registration = ServiceRegistration.Create(
+                typeof(IGenericService<>),
+                typeof(GenericService1<>),
+                lifetime);
+
+            Registrar.Register(registration);
+
+            var registration2 = ServiceRegistration.Create(
+                typeof(IGenericService<>),
+                typeof(GenericService1<>),
+                lifetime,
+                ServiceRegistrationFlags.SkipIfRegistered);
+
+            Registrar.Register(registration2);
+
+            var services = (IEnumerable<IGenericService<string>>)BuildServiceProvider()
+                .GetService(typeof(IEnumerable<IGenericService<string>>));
+
+            services.Should()
+                    .HaveCount(1);
+
+            services.Should()
+                    .AllBeOfType<GenericService1<string>>();
+        }
+
+        [Theory]
+        [InlineData(ServiceLifetime.Transient)]
+        [InlineData(ServiceLifetime.Scoped)]
+        [InlineData(ServiceLifetime.Singleton)]
         public void RegisterOnlyOnceEnumerableWithType(ServiceLifetime lifetime)
         {
             var registration = ServiceRegistration.Create(
@@ -233,6 +264,37 @@ namespace AppCore.DependencyInjection
 
             services.Should()
                     .AllBeOfType<MyService>();
+        }
+
+        [Theory]
+        [InlineData(ServiceLifetime.Transient)]
+        [InlineData(ServiceLifetime.Scoped)]
+        [InlineData(ServiceLifetime.Singleton)]
+        public void RegisterOnlyOnceEnumerableWithOpenGenericType(ServiceLifetime lifetime)
+        {
+            var registration = ServiceRegistration.Create(
+                typeof(IGenericService<>),
+                typeof(GenericService1<>),
+                lifetime);
+
+            Registrar.Register(registration);
+
+            var registration2 = ServiceRegistration.Create(
+                typeof(IGenericService<>),
+                typeof(GenericService1<>),
+                lifetime,
+                ServiceRegistrationFlags.SkipIfRegistered | ServiceRegistrationFlags.Enumerable);
+
+            Registrar.Register(registration2);
+
+            var services = (IEnumerable<IGenericService<string>>)BuildServiceProvider()
+                .GetService(typeof(IEnumerable<IGenericService<string>>));
+
+            services.Should()
+                    .HaveCount(1);
+
+            services.Should()
+                    .AllBeOfType<GenericService1<string>>();
         }
 
         [Theory]
@@ -373,6 +435,106 @@ namespace AppCore.DependencyInjection
                             typeof(MyService2)
                         },
                         o => o.WithStrictOrdering());
+        }
+
+        [Fact]
+        public void RegisterAssembly()
+        {
+            var registration = AssemblyRegistration.Create(
+                new[]
+                {
+                    typeof(ServiceRegistrarTests).Assembly
+                },
+                typeof(IMyService),
+                ServiceLifetime.Scoped);
+
+            Registrar.RegisterAssembly(registration);
+
+            var services = (IEnumerable<IMyService>)BuildServiceProvider()
+                .GetService(typeof(IEnumerable<IMyService>));
+
+            services.Should()
+                    .HaveCount(2);
+
+            services.Select(s => s.GetType())
+                    .ShouldBeEquivalentTo(
+                        new[]
+                        {
+                            typeof(MyService),
+                            typeof(MyService2)
+                        });
+        }
+
+        [Fact]
+        public void RegisterAssemblyGenericServices()
+        {
+            var registration = AssemblyRegistration.Create(
+                new[]
+                {
+                    typeof(ServiceRegistrarTests).Assembly
+                },
+                typeof(IGenericService<>),
+                ServiceLifetime.Scoped);
+
+            Registrar.RegisterAssembly(registration);
+
+            var services = (IEnumerable<IGenericService<string>>)BuildServiceProvider()
+                .GetService(typeof(IEnumerable<IGenericService<string>>));
+
+            services.Should()
+                    .HaveCount(3);
+
+            services.Select(s => s.GetType())
+                    .ShouldBeEquivalentTo(
+                        new[]
+                        {
+                            typeof(GenericService1<string>),
+                            typeof(GenericService2<string>),
+                            typeof(ClosedGenericService)
+                        });
+        }
+
+        [Fact]
+        public void RegisterAssemblyOnlyOnce()
+        {
+            var registration = AssemblyRegistration.Create(
+                new[]
+                {
+                    typeof(ServiceRegistrarTests).Assembly
+                },
+                typeof(IMyService),
+                ServiceLifetime.Scoped,
+                ServiceRegistrationFlags.SkipIfRegistered);
+
+            Registrar.RegisterAssembly(registration);
+
+            var services = (IEnumerable<IMyService>)BuildServiceProvider()
+                .GetService(typeof(IEnumerable<IMyService>));
+
+            services.Should()
+                    .HaveCount(1);
+        }
+
+        [Fact]
+        public void RegisterAssemblyOnlyOnceEnumerable()
+        {
+            var registration = AssemblyRegistration.Create(
+                new[]
+                {
+                    typeof(ServiceRegistrarTests).Assembly
+                },
+                typeof(IMyService),
+                ServiceLifetime.Scoped,
+                ServiceRegistrationFlags.SkipIfRegistered | ServiceRegistrationFlags.Enumerable);
+
+            Registrar.RegisterAssembly(registration);
+            Registrar.RegisterAssembly(registration);
+
+            var services = (IEnumerable<IMyService>)BuildServiceProvider()
+                .GetService(typeof(IEnumerable<IMyService>));
+
+            services.Should()
+                    .HaveCount(2);
         }
     }
 }
