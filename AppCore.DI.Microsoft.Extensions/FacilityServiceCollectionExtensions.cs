@@ -21,8 +21,17 @@ using AppCore.Diagnostics;
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Provides extension methods for registering facilities with a <see cref="IServiceCollection"/>.
+    /// </summary>
     public static class FacilityServiceCollectionExtensions
     {
+        /// <summary>
+        /// Registers a facility with the given <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> where to register.</param>
+        /// <param name="facility">The <see cref="IFacility"/> to register.</param>
+        /// <param name="configure">Delegate invoked to configure the facility.</param>
         public static IServiceCollection AddFacility(
             this IServiceCollection services,
             IFacility facility,
@@ -36,6 +45,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        /// <summary>
+        /// Registers a facility with the given <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <typeparam name="TFacility">The type of the <see cref="IFacility"/> to register.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection"/> where to register.</param>
+        /// <param name="configure">Delegate invoked to configure the facility.</param>
         public static IServiceCollection AddFacility<TFacility>(
             this IServiceCollection services,
             Action<FacilityBuilder<TFacility>> configure = null)

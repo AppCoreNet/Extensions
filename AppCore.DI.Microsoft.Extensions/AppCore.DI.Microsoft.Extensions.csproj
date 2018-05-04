@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFrameworks>netstandard1.0;netstandard2.0</TargetFrameworks>
     <RootNamespace>AppCore.DependencyInjection</RootNamespace>
     <Description>Implementations for the Microsoft.Extensions.DependencyInjection.</Description>
     <AssemblyName>AppCore.DependencyInjection.Microsoft.Extensions</AssemblyName>
@@ -11,7 +11,11 @@
     <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[1.0,3.0)" />
+    <PackageReference Include="AppCore.TypeHelpers.Sources" Version="$(AppCore_Shared_Version)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Condition="'$(TargetFramework)' == 'netstandard1.0'" Version="[1.0,2.0)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Condition="'$(TargetFramework)' == 'netstandard2.0'" Version="[2.0,3.0)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -20,6 +20,7 @@ namespace AppCore.DependencyInjection
     /// Represents a type used to register services with a dependency injection container.
     /// </summary>
     /// <seealso cref="ServiceRegistration"/>
+    /// <seealso cref="AssemblyRegistration"/>
     public interface IServiceRegistrar
     {
         /// <summary>
@@ -27,5 +28,11 @@ namespace AppCore.DependencyInjection
         /// </summary>
         /// <param name="registration">The <see cref="ServiceRegistration"/> describing the service to register.</param>
         void Register(ServiceRegistration registration);
+
+        /// <summary>
+        /// Registers services from a set of assemblies with the dependency injection container.
+        /// </summary>
+        /// <param name="registration">The <see cref="AssemblyRegistration"/> describing the services to register.</param>
+        void RegisterAssembly(AssemblyRegistration registration);
     }
 }

@@ -27,6 +27,10 @@ namespace AppCore.DependencyInjection
     {
         private readonly IComponentContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutofacServiceProvider"/> class.
+        /// </summary>
+        /// <param name="context">The <see cref="IComponentContext"/>.</param>
         public AutofacServiceProvider(IComponentContext context)
         {
             Ensure.Arg.NotNull(context, nameof(context));

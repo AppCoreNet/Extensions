@@ -19,13 +19,39 @@ using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Represents a type to configure facilities.
+    /// </summary>
     public class FacilityBuilder : IFacilityBuilder
     {
-        private class ServiceRegistrationList : List<ServiceRegistration>, IServiceRegistrar
+        private class ServiceRegistrationList : IServiceRegistrar
         {
+            private readonly List<ServiceRegistration> _services = new List<ServiceRegistration>();
+
+            private readonly List<AssemblyRegistration> _serviceAssemblies =
+                new List<AssemblyRegistration>();
+
             public void Register(ServiceRegistration registration)
             {
-                Add(registration);
+                _services.Add(registration);
+            }
+
+            public void RegisterAssembly(AssemblyRegistration registration)
+            {
+                _serviceAssemblies.Add(registration);
+            }
+
+            public void RegisterServices(IServiceRegistrar registrar)
+            {
+                foreach (ServiceRegistration service in _services)
+                {
+                    registrar.Register(service);
+                }
+
+                foreach (AssemblyRegistration serviceAssembly in _serviceAssemblies)
+                {
+                    registrar.RegisterAssembly(serviceAssembly);
+                }
             }
         }
 
@@ -36,6 +62,10 @@ namespace AppCore.DependencyInjection
 
         IServiceRegistrar IFacilityBuilder.Registrar => _registrar;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FacilityBuilder"/> class.
+        /// </summary>
+        /// <param name="facility">The <see cref="IFacility"/> which is configured.</param>
         public FacilityBuilder(IFacility facility)
         {
             Ensure.Arg.NotNull(facility, nameof(facility));
@@ -43,24 +73,29 @@ namespace AppCore.DependencyInjection
             _facility = facility;
         }
 
+        /// <inheritdoc />
         void IFacilityBuilder.RegisterServices(IServiceRegistrar registrar)
         {
             RegisterServices(registrar);
         }
 
+        /// <summary>
+        /// Registers all services of the facility with the given <see cref="IServiceRegistrar"/>.
+        /// </summary>
+        /// <param name="registrar">The <see cref="IServiceRegistrar"/>.</param>
         protected virtual void RegisterServices(IServiceRegistrar registrar)
         {
             Ensure.Arg.NotNull(registrar, nameof(registrar));
 
             _facility.RegisterServices(registrar);
-
-            foreach (ServiceRegistration registration in _registrar)
-            {
-                registrar.Register(registration);
-            }
+            _registrar.RegisterServices(registrar);
         }
     }
 
+    /// <summary>
+    /// Represents a type to configure a facility.
+    /// </summary>
+    /// <typeparam name="TFacility">The type of the <see cref="IFacility"/>.</typeparam>
     public class FacilityBuilder<TFacility> : FacilityBuilder, IFacilityBuilder<TFacility>
         where TFacility : IFacility
     {
@@ -68,11 +103,19 @@ namespace AppCore.DependencyInjection
 
         TFacility IFacilityBuilder<TFacility>.Facility => (TFacility) ((IFacilityBuilder)this).Facility;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FacilityBuilder{TFacility}"/> class.
+        /// </summary>
+        /// <param name="facility">The <see cref="IFacility"/> to configure.</param>
         public FacilityBuilder(TFacility facility)
             : base(facility)
         {
         }
 
+        /// <summary>
+        /// Configures the facility to use the given <see cref="IFacilityExtension{TFacility}"/>.
+        /// </summary>
+        /// <param name="extension">The <see cref="IFacilityExtension{TFacility}"/> added to the facility.</param>
         public void UseExtension(IFacilityExtension<TFacility> extension)
         {
             Ensure.Arg.NotNull(extension, nameof(extension));
@@ -80,6 +123,10 @@ namespace AppCore.DependencyInjection
             _extensions.Add(extension);
         }
 
+        /// <summary>
+        /// Registers all services of the facility with the given <see cref="IServiceRegistrar"/>.
+        /// </summary>
+        /// <param name="registrar">The <see cref="IServiceRegistrar"/>.</param>
         protected override void RegisterServices(IServiceRegistrar registrar)
         {
             base.RegisterServices(registrar);

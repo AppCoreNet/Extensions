@@ -94,6 +94,11 @@ namespace AppCore.DependencyInjection
                 });
         }
 
+        public void RegisterAssembly(AssemblyRegistration registration)
+        {
+            throw new NotImplementedException();
+        }
+
         private static ILifecycle GetLifecycle(ServiceLifetime lifetime)
         {
             switch (lifetime)

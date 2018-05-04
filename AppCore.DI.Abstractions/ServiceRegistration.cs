@@ -19,20 +19,45 @@ using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Represents parameters for registering a service.
+    /// </summary>
+    /// <seealso cref="IServiceRegistrar"/>
     public readonly struct ServiceRegistration
     {
+        /// <summary>
+        /// Gets the type of service which is registered.
+        /// </summary>
         public Type ServiceType { get; }
 
+        /// <summary>
+        /// Gets the most known type of the service.
+        /// </summary>
         public Type LimitType { get; }
 
+        /// <summary>
+        /// Gets the <see cref="Type"/> which is instantiated.
+        /// </summary>
         public Type ImplementationType { get; }
 
+        /// <summary>
+        /// Gets the factory method used to instantiate the service.
+        /// </summary>
         public Func<IServiceProvider, object> ImplementationFactory { get; }
 
+        /// <summary>
+        /// Gets the singleton instance of the service.
+        /// </summary>
         public object ImplementationInstance { get; }
 
+        /// <summary>
+        /// Gets the lifetime of the service.
+        /// </summary>
         public ServiceLifetime Lifetime { get; }
 
+        /// <summary>
+        /// Gets service registration flags.
+        /// </summary>
         public ServiceRegistrationFlags Flags { get; }
 
         private ServiceRegistration(

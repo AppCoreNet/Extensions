@@ -25,10 +25,17 @@ using Autofac.Core;
 
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Provides Autofac based <see cref="IServiceRegistrar"/> implementation.
+    /// </summary>
     public class AutofacServiceRegistrar : IServiceRegistrar
     {
         private readonly ContainerBuilder _builder;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutofacServiceRegistrar"/> class.
+        /// </summary>
+        /// <param name="builder">The <see cref="ContainerBuilder"/>.</param>
         public AutofacServiceRegistrar(ContainerBuilder builder)
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
@@ -41,6 +48,7 @@ namespace AppCore.DependencyInjection
                     .IfNotRegistered(typeof(IServiceProvider));
         }
 
+        /// <inheritdoc />
         public void Register(ServiceRegistration registration)
         {
             if (registration.ImplementationFactory != null)
@@ -53,7 +61,9 @@ namespace AppCore.DependencyInjection
                 rb.RegistrationData.DeferredCallback = _builder.RegisterCallback(
                     cr => RegistrationBuilder.RegisterSingleComponent(cr, rb));
 
-                ApplyActivationProperties(rb, registration);
+                rb.As(registration.ServiceType);
+                ApplyLifetime(rb, registration.Lifetime);
+                ApplyFlags(rb, registration.Flags, registration.ServiceType, registration.LimitType);
             }
 
             else if (registration.ImplementationInstance != null)
@@ -61,7 +71,9 @@ namespace AppCore.DependencyInjection
                 IRegistrationBuilder<object, SimpleActivatorData, SingleRegistrationStyle> rb =
                     _builder.RegisterInstance(registration.ImplementationInstance);
 
-                ApplyActivationProperties(rb, registration);
+                rb.As(registration.ServiceType);
+                ApplyLifetime(rb, registration.Lifetime);
+                ApplyFlags(rb, registration.Flags, registration.ServiceType, registration.LimitType);
             }
 
             else if (registration.ImplementationType != null)
@@ -72,25 +84,27 @@ namespace AppCore.DependencyInjection
                     IRegistrationBuilder<object, ReflectionActivatorData, DynamicRegistrationStyle> rb =
                         _builder.RegisterGeneric(registration.ImplementationType);
 
-                    ApplyActivationProperties(rb, registration);
+                    rb.As(registration.ServiceType);
+                    ApplyLifetime(rb, registration.Lifetime);
+                    ApplyFlags(rb, registration.Flags, registration.ServiceType, registration.LimitType);
                 }
                 else
                 {
                     IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> rb =
                         _builder.RegisterType(registration.ImplementationType);
 
-                    ApplyActivationProperties(rb, registration);
+                    rb.As(registration.ServiceType);
+                    ApplyLifetime(rb, registration.Lifetime);
+                    ApplyFlags(rb, registration.Flags, registration.ServiceType, registration.LimitType);
                 }
             }
         }
 
-        private void ApplyActivationProperties<TLimit, TActivatorData, TRegistrationStyle>(
+        private void ApplyLifetime<TLimit, TActivatorData, TRegistrationStyle>(
             IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> rb,
-            ServiceRegistration registration)
+            ServiceLifetime lifetime)
         {
-            rb.As(registration.ServiceType);
-
-            switch (registration.Lifetime)
+            switch (lifetime)
             {
                 case ServiceLifetime.Transient:
                     rb.InstancePerDependency();
@@ -104,27 +118,83 @@ namespace AppCore.DependencyInjection
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
 
-            if ((registration.Flags & ServiceRegistrationFlags.SkipIfRegistered)
+        private void ApplyFlags<TLimit, TActivatorData, TRegistrationStyle>(
+            IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> rb,
+            ServiceRegistrationFlags flags, Type serviceType, Type limitType)
+        {
+            if ((flags & ServiceRegistrationFlags.SkipIfRegistered)
                 == ServiceRegistrationFlags.SkipIfRegistered)
             {
-                if ((registration.Flags & ServiceRegistrationFlags.Enumerable)
-                    == ServiceRegistrationFlags.Enumerable)
-                {
-                    rb.OnlyIf(
-                        r =>
-                        {
-                            IEnumerable<IInstanceActivator> instanceActivators =
-                                r.RegistrationsFor(new TypedService(registration.ServiceType))
-                                 .Select(cr => cr.Activator);
+                rb.OnlyIf(
+                    r =>
+                    {
+                        Type resolvedServiceType = serviceType;
+                        Type resolvedLimitType = limitType;
 
-                            return instanceActivators.All(a => a.LimitType != registration.LimitType);
-                        });
-                }
-                else
+                        if (serviceType.GetTypeInfo()
+                                       .IsGenericTypeDefinition)
+                        {
+                            // in case of open generic services we need to check against closed
+                            // generic service type
+                            resolvedServiceType = serviceType.MakeGenericType(typeof(object));
+                            resolvedLimitType = limitType.MakeGenericType(typeof(object));
+                        }
+
+                        IEnumerable<IInstanceActivator> instanceActivators =
+                            r.RegistrationsFor(new TypedService(resolvedServiceType))
+                             .Select(cr => cr.Activator);
+
+                        if ((flags & ServiceRegistrationFlags.Enumerable)
+                            == ServiceRegistrationFlags.Enumerable)
+                        {
+                            return instanceActivators.All(a => a.LimitType != resolvedLimitType);
+                        }
+
+                        return !instanceActivators.Any();
+                    });
+            }
+        }
+
+        /// <inheritdoc />
+        public void RegisterAssembly(AssemblyRegistration registration)
+        {
+            // Autofac doesnt support scanning for open generic types so we have to
+            // do it on our own :(
+
+            var scanner = new AssemblyScanner();
+            IEnumerable<Type> implementationTypes =
+                registration.Assemblies.SelectMany(assembly => scanner.GetTypes(assembly, registration.ServiceType));
+
+            ServiceLifetime GetServiceLifetime(Type implementationType)
+            {
+                var lifetimeAttribute =
+                    implementationType.GetTypeInfo()
+                                      .GetCustomAttribute<ServiceLifetimeAttribute>();
+
+                return lifetimeAttribute?.Lifetime ?? registration.DefaultLifetime;
+            }
+
+            bool isOpenGenericService = registration.ServiceType.GetTypeInfo()
+                                                    .IsGenericTypeDefinition;
+
+            foreach (Type implementationType in implementationTypes)
+            {
+                Type serviceType = registration.ServiceType;
+
+                // need to register closed types with closed generic service type
+                if (isOpenGenericService && !implementationType.GetTypeInfo().IsGenericTypeDefinition)
                 {
-                    rb.IfNotRegistered(registration.ServiceType);
+                    serviceType = implementationType.GetClosedTypeOf(serviceType);
                 }
+
+                Register(
+                    ServiceRegistration.Create(
+                        serviceType,
+                        implementationType,
+                        GetServiceLifetime(implementationType),
+                        registration.Flags));
             }
         }
     }

@@ -21,8 +21,19 @@ namespace AppCore.DependencyInjection
     /// </summary>
     public enum ServiceLifetime
     {
+        /// <summary>
+        /// The service is instantiated each time it is resolved.
+        /// </summary>
         Transient,
+
+        /// <summary>
+        /// The service is instantiated only once.
+        /// </summary>
         Singleton,
+
+        /// <summary>
+        /// The service is instantiated per scope.
+        /// </summary>
         Scoped,
     }
 }

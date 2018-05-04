@@ -15,23 +15,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using MicrosoftDI = Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Provides Microsoft Dependency Injection based <see cref="IServiceRegistrar"/> implementation.
+    /// </summary>
     public class ServiceCollectionRegistrar : IServiceRegistrar
     {
         private readonly IServiceCollection _services;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServiceCollectionRegistrar"/> class.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> where services are registered.</param>
         public ServiceCollectionRegistrar(IServiceCollection services)
         {
             Ensure.Arg.NotNull(services, nameof(services));
             _services = services;
         }
 
+        /// <inheritdoc />
         public void Register(ServiceRegistration registration)
         {
             if ((registration.Flags & ServiceRegistrationFlags.SkipIfRegistered)
@@ -80,7 +90,7 @@ namespace AppCore.DependencyInjection
                 descriptor = ServiceDescriptor.Describe(
                     registration.ServiceType,
                     registration.ImplementationFactory,
-                    GetLifetime(registration.Lifetime));
+                    ConvertLifetime(registration.Lifetime));
             }
 
             else if (registration.ImplementationInstance != null)
@@ -95,13 +105,51 @@ namespace AppCore.DependencyInjection
                 descriptor = ServiceDescriptor.Describe(
                     registration.ServiceType,
                     registration.ImplementationType,
-                    GetLifetime(registration.Lifetime));
+                    ConvertLifetime(registration.Lifetime));
             }
 
             _services.Add(descriptor);
         }
 
-        private MicrosoftDI.ServiceLifetime GetLifetime(ServiceLifetime lifetime)
+        /// <inheritdoc />
+        public void RegisterAssembly(AssemblyRegistration registration)
+        {
+            var scanner = new AssemblyScanner();
+            IEnumerable<Type> implementationTypes =
+                registration.Assemblies.SelectMany(assembly => scanner.GetTypes(assembly, registration.ServiceType));
+
+            ServiceLifetime GetServiceLifetime(Type implementationType)
+            {
+                var lifetimeAttribute =
+                    implementationType.GetTypeInfo()
+                                      .GetCustomAttribute<ServiceLifetimeAttribute>();
+
+                return lifetimeAttribute?.Lifetime ?? registration.DefaultLifetime;
+            }
+
+            bool isOpenGenericService = registration.ServiceType.GetTypeInfo()
+                                                    .IsGenericTypeDefinition;
+
+            foreach (Type implementationType in implementationTypes)
+            {
+                Type serviceType = registration.ServiceType;
+
+                // need to register closed types with closed generic service type
+                if (isOpenGenericService && !implementationType.GetTypeInfo().IsGenericTypeDefinition)
+                {
+                    serviceType = implementationType.GetClosedTypeOf(serviceType);
+                }
+
+                Register(
+                    ServiceRegistration.Create(
+                        serviceType,
+                        implementationType,
+                        GetServiceLifetime(implementationType),
+                        registration.Flags));
+            }
+        }
+
+        private MicrosoftDI.ServiceLifetime ConvertLifetime(ServiceLifetime lifetime)
         {
             MicrosoftDI.ServiceLifetime result;
             switch (lifetime)

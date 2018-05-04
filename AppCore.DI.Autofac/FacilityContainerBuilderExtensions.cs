@@ -21,19 +21,35 @@ using AppCore.Diagnostics;
 // ReSharper disable once CheckNamespace
 namespace Autofac
 {
+    /// <summary>
+    /// Provides extension methods for registering facilities with a <see cref="ContainerBuilder"/>.
+    /// </summary>
     public static class FacilityContainerBuilderExtensions
     {
+        /// <summary>
+        /// Registers a facility with the given <see cref="ContainerBuilder"/>.
+        /// </summary>
+        /// <param name="builder">The <see cref="ContainerBuilder"/> where to register.</param>
+        /// <param name="facility">The <see cref="IFacility"/> to register.</param>
+        /// <param name="configure">Delegate invoked to configure the facility.</param>
         public static void RegisterFacility(
             this ContainerBuilder builder,
             IFacility facility,
             Action<FacilityBuilder> configure = null)
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
+            Ensure.Arg.NotNull(facility, nameof(facility));
 
             var registry = new AutofacServiceRegistrar(builder);
             registry.AddFacility(facility, configure);
         }
 
+        /// <summary>
+        /// Registers a facility with the given <see cref="ContainerBuilder"/>.
+        /// </summary>
+        /// <typeparam name="TFacility">The type of the <see cref="IFacility"/> to register.</typeparam>
+        /// <param name="builder">The <see cref="ContainerBuilder"/> where to register.</param>
+        /// <param name="configure">Delegate invoked to configure the facility.</param>
         public static void RegisterFacility<TFacility>(
             this ContainerBuilder builder,
             Action<FacilityBuilder<TFacility>> configure = null)
