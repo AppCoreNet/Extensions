@@ -15,24 +15,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using StructureMap;
+using Autofac;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Autofac
 {
-    public class StructureMapServiceRegistrarTests : ServiceRegistrarTests
+    public class AutofacComponentRegistryTests : ComponentRegistryTests
     {
-        public override IServiceRegistrar Registrar { get; }
+        public ContainerBuilder ContainerBuilder { get; }
 
-        public StructureMapServiceRegistrarTests()
+        public override IComponentRegistry Registry { get; }
+
+        public AutofacComponentRegistryTests()
         {
-            var registry = new StructureMapServiceRegistrar();
-            Registrar = registry;
+            ContainerBuilder = new ContainerBuilder();
+            Registry = new AutofacComponentRegistry(ContainerBuilder);
         }
 
-        protected override IServiceProvider BuildServiceProvider()
+        protected override IContainer BuildContainer()
         {
-            return new Container(c => c.AddRegistry((StructureMapServiceRegistrar) Registrar))
-                .GetInstance<IServiceProvider>();
+            return new AutofacContainer(ContainerBuilder.Build());
         }
     }
 }

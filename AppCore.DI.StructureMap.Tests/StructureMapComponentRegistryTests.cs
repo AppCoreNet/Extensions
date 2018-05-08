@@ -14,26 +14,23 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-using Microsoft.Extensions.DependencyInjection;
+using StructureMap;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.StructureMap
 {
-    public class ServiceCollectionRegistrarTests : ServiceRegistrarTests
+    public class StructureMapComponentRegistryTests : ComponentRegistryTests
     {
-        public IServiceCollection ServiceCollection { get; }
+        public override IComponentRegistry Registry { get; }
 
-        public override IServiceRegistrar Registrar { get; }
-
-        public ServiceCollectionRegistrarTests()
+        public StructureMapComponentRegistryTests()
         {
-            ServiceCollection = new ServiceCollection();
-            Registrar = new ServiceCollectionRegistrar(ServiceCollection);
+            var registry = new StructureMapComponentRegistry();
+            Registry = registry;
         }
 
-        protected override IServiceProvider BuildServiceProvider()
+        protected override IContainer BuildContainer()
         {
-            return ServiceCollection.BuildServiceProvider();
+            return new StructureMapContainer(new Container(c => c.AddRegistry((StructureMapComponentRegistry) Registry)));
         }
     }
 }

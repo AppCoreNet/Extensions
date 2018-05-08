@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>AppCore.DependencyInjection.Microsoft.Extensions.Tests</AssemblyName>
-    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+    <RootNamespace>AppCore.DependencyInjection.Microsoft.Extensions</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -15,25 +15,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using Autofac;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Microsoft.Extensions
 {
-    public class AutofacServiceRegistrarTests : ServiceRegistrarTests
+    public class MicrosoftComponentRegistryTests : ComponentRegistryTests
     {
-        public ContainerBuilder ContainerBuilder { get; }
+        public IServiceCollection ServiceCollection { get; }
 
-        public override IServiceRegistrar Registrar { get; }
+        public override IComponentRegistry Registry { get; }
 
-        public AutofacServiceRegistrarTests()
+        public MicrosoftComponentRegistryTests()
         {
-            ContainerBuilder = new ContainerBuilder();
-            Registrar = new AutofacServiceRegistrar(ContainerBuilder);
+            ServiceCollection = new ServiceCollection();
+            Registry = new MicrosoftComponentRegistry(ServiceCollection);
         }
 
-        protected override IServiceProvider BuildServiceProvider()
+        protected override IContainer BuildContainer()
         {
-            return ContainerBuilder.Build().Resolve<IServiceProvider>();
+            return new MicrosoftContainer(ServiceCollection.BuildServiceProvider());
         }
     }
 }

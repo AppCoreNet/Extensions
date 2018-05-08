@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>AppCore.DependencyInjection.StructureMap.Tests</AssemblyName>
-    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+    <RootNamespace>AppCore.DependencyInjection.StructureMap</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
