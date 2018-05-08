@@ -14,29 +14,26 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-
 namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Defines service registration options.
+    /// Defines the lifetime of a component.
     /// </summary>
-    [Flags]
-    public enum ServiceRegistrationFlags
+    public enum ComponentLifetime
     {
         /// <summary>
-        /// No special registration options.
+        /// The component is instantiated each time it is resolved.
         /// </summary>
-        None,
+        Transient,
 
         /// <summary>
-        /// Skips registration if service with same type is already registered.
+        /// The component is instantiated only once.
         /// </summary>
-        SkipIfRegistered,
+        Singleton,
 
         /// <summary>
-        /// Skips registration if service with same type and implementation is already registered.
+        /// The component is instantiated per scope.
         /// </summary>
-        Enumerable
+        Scoped,
     }
 }

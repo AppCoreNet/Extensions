@@ -24,43 +24,43 @@ namespace AppCore.DependencyInjection
     /// </summary>
     public class FacilityBuilder : IFacilityBuilder
     {
-        private class ServiceRegistrationList : IServiceRegistrar
+        private class ComponentRegistry : IComponentRegistry
         {
-            private readonly List<ServiceRegistration> _services = new List<ServiceRegistration>();
+            private readonly List<ComponentRegistration> _components = new List<ComponentRegistration>();
 
-            private readonly List<AssemblyRegistration> _serviceAssemblies =
-                new List<AssemblyRegistration>();
+            private readonly List<ComponentAssemblyRegistration> _componentAssemblies =
+                new List<ComponentAssemblyRegistration>();
 
-            public void Register(ServiceRegistration registration)
+            public void Register(ComponentRegistration registration)
             {
-                _services.Add(registration);
+                _components.Add(registration);
             }
 
-            public void RegisterAssembly(AssemblyRegistration registration)
+            public void RegisterAssembly(ComponentAssemblyRegistration registration)
             {
-                _serviceAssemblies.Add(registration);
+                _componentAssemblies.Add(registration);
             }
 
-            public void RegisterServices(IServiceRegistrar registrar)
+            public void RegisterComponents(IComponentRegistry registry)
             {
-                foreach (ServiceRegistration service in _services)
+                foreach (ComponentRegistration component in _components)
                 {
-                    registrar.Register(service);
+                    registry.Register(component);
                 }
 
-                foreach (AssemblyRegistration serviceAssembly in _serviceAssemblies)
+                foreach (ComponentAssemblyRegistration componentAssembly in _componentAssemblies)
                 {
-                    registrar.RegisterAssembly(serviceAssembly);
+                    registry.RegisterAssembly(componentAssembly);
                 }
             }
         }
 
-        private readonly ServiceRegistrationList _registrar = new ServiceRegistrationList();
+        private readonly ComponentRegistry _registry = new ComponentRegistry();
         private readonly IFacility _facility;
 
         IFacility IFacilityBuilder.Facility => _facility;
 
-        IServiceRegistrar IFacilityBuilder.Registrar => _registrar;
+        IComponentRegistry IFacilityBuilder.Registry => _registry;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FacilityBuilder"/> class.
@@ -74,21 +74,21 @@ namespace AppCore.DependencyInjection
         }
 
         /// <inheritdoc />
-        void IFacilityBuilder.RegisterServices(IServiceRegistrar registrar)
+        void IFacilityBuilder.RegisterComponents(IComponentRegistry registry)
         {
-            RegisterServices(registrar);
+            RegisterComponents(registry);
         }
 
         /// <summary>
-        /// Registers all services of the facility with the given <see cref="IServiceRegistrar"/>.
+        /// Registers all components of the facility with the given <see cref="IComponentRegistry"/>.
         /// </summary>
-        /// <param name="registrar">The <see cref="IServiceRegistrar"/>.</param>
-        protected virtual void RegisterServices(IServiceRegistrar registrar)
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        protected virtual void RegisterComponents(IComponentRegistry registry)
         {
-            Ensure.Arg.NotNull(registrar, nameof(registrar));
+            Ensure.Arg.NotNull(registry, nameof(registry));
 
-            _facility.RegisterServices(registrar);
-            _registrar.RegisterServices(registrar);
+            _facility.RegisterComponents(registry);
+            _registry.RegisterComponents(registry);
         }
     }
 
@@ -124,16 +124,16 @@ namespace AppCore.DependencyInjection
         }
 
         /// <summary>
-        /// Registers all services of the facility with the given <see cref="IServiceRegistrar"/>.
+        /// Registers all components of the facility with the given <see cref="IComponentRegistry"/>.
         /// </summary>
-        /// <param name="registrar">The <see cref="IServiceRegistrar"/>.</param>
-        protected override void RegisterServices(IServiceRegistrar registrar)
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        protected override void RegisterComponents(IComponentRegistry registry)
         {
-            base.RegisterServices(registrar);
+            base.RegisterComponents(registry);
 
             foreach (IFacilityExtension<TFacility> extension in _extensions)
             {
-                extension.RegisterServices(registrar, ((IFacilityBuilder<TFacility>)this).Facility);
+                extension.RegisterComponents(registry, ((IFacilityBuilder<TFacility>)this).Facility);
             }
         }
     }

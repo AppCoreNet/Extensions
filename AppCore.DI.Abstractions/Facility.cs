@@ -25,23 +25,23 @@ namespace AppCore.DependencyInjection
     /// <seealso cref="IFacility"/>
     public abstract class Facility : IFacility
     {
-        private readonly Action<IServiceRegistrar> _registrationCallback;
+        private readonly Action<IComponentRegistry> _registrationCallback;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Facility"/> class.
         /// </summary>
         /// <param name="registrationCallback">
-        ///     The <see cref="Action{T}"/> which is invoked when facility services should be registered.
+        ///     The <see cref="Action{T}"/> which is invoked when facility components should be registered.
         /// </param>
-        protected Facility(Action<IServiceRegistrar> registrationCallback)
+        protected Facility(Action<IComponentRegistry> registrationCallback)
         {
             Ensure.Arg.NotNull(registrationCallback, nameof(registrationCallback));
             _registrationCallback = registrationCallback;
         }
 
-        void IFacility.RegisterServices(IServiceRegistrar registrar)
+        void IFacility.RegisterComponents(IComponentRegistry registry)
         {
-            _registrationCallback(registrar);
+            _registrationCallback(registry);
         }
     }
 }

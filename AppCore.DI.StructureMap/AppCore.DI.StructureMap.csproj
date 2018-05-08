@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
-    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+    <RootNamespace>AppCore.DependencyInjection.StructureMap</RootNamespace>
     <Description>Implementations for StructureMap.</Description>
     <AssemblyName>AppCore.DependencyInjection.StructureMap</AssemblyName>
   </PropertyGroup>

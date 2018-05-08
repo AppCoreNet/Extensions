@@ -14,25 +14,42 @@
 // DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-namespace AppCore.DependencyInjection
+using System;
+using System.Collections.Generic;
+using AppCore.Diagnostics;
+
+namespace AppCore.DependencyInjection.StructureMap
 {
     /// <summary>
-    /// Represents a type used to register services with a dependency injection container.
+    /// StructureMap based <see cref="IContainer"/> implementation.
     /// </summary>
-    /// <seealso cref="ServiceRegistration"/>
-    /// <seealso cref="AssemblyRegistration"/>
-    public interface IServiceRegistrar
+    public class StructureMapContainer : IContainer
     {
-        /// <summary>
-        /// Registers a service with the dependency injection container.
-        /// </summary>
-        /// <param name="registration">The <see cref="ServiceRegistration"/> describing the service to register.</param>
-        void Register(ServiceRegistration registration);
+        private readonly global::StructureMap.IContainer _container;
 
-        /// <summary>
-        /// Registers services from a set of assemblies with the dependency injection container.
-        /// </summary>
-        /// <param name="registration">The <see cref="AssemblyRegistration"/> describing the services to register.</param>
-        void RegisterAssembly(AssemblyRegistration registration);
+        public ContainerCapabilities Capabilities { get; } = ContainerCapabilities.ContraVariance;
+
+        public StructureMapContainer(global::StructureMap.IContainer container)
+        {
+            Ensure.Arg.NotNull(container, nameof(container));
+            _container = container;
+        }
+
+        public object Resolve(Type contractType)
+        {
+            return _container.GetInstance(contractType);
+        }
+
+        public object ResolveOptional(Type contractType)
+        {
+            Ensure.Arg.NotNull(contractType, nameof(contractType));
+
+            if (contractType.IsClosedTypeOf(typeof(IEnumerable<>)))
+            {
+                return _container.GetInstance(contractType);
+            }
+
+            return _container.TryGetInstance(contractType);
+        }
     }
 }

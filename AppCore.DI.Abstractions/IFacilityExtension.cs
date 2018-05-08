@@ -25,6 +25,6 @@ namespace AppCore.DependencyInjection
     public interface IFacilityExtension<in TFacility>
         where TFacility : IFacility
     {
-        void RegisterServices(IServiceRegistrar registrar, TFacility facility);
+        void RegisterComponents(IComponentRegistry registrar, TFacility facility);
     }
 }

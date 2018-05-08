@@ -22,13 +22,14 @@ namespace AppCore.DependencyInjection
     /// <seealso cref="Facility"/>
     /// <seealso cref="FacilityExtension{TFacility}"/>
     /// <seealso cref="IFacilityExtension{TFacility}"/>
-    /// <seealso cref="IServiceRegistrar"/>
+    /// <seealso cref="IComponentRegistry"/>
+    /// <seealso cref="IContainer"/>
     public interface IFacility
     {
         /// <summary>
-        /// Invoked to register the facility services with the dependency injection container.
+        /// Invoked to register the facility components with the dependency injection container.
         /// </summary>
-        /// <param name="registrar">The <see cref="IServiceRegistrar"/>.</param>
-        void RegisterServices(IServiceRegistrar registrar);
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        void RegisterComponents(IComponentRegistry registry);
     }
 }

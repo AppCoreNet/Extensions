@@ -16,6 +16,7 @@
 
 using System;
 using AppCore.DependencyInjection;
+using AppCore.DependencyInjection.StructureMap;
 using AppCore.Diagnostics;
 
 // ReSharper disable once CheckNamespace
@@ -31,8 +32,8 @@ namespace StructureMap
             Ensure.Arg.NotNull(configExpression, nameof(configExpression));
             Ensure.Arg.NotNull(facility, nameof(facility));
 
-            var registrar = new StructureMapServiceRegistrar();
-            registrar.AddFacility(facility, configure);
+            var registrar = new StructureMapComponentRegistry();
+            registrar.RegisterFacility(facility, configure);
             configExpression.AddRegistry(registrar);
         }
 
@@ -43,8 +44,8 @@ namespace StructureMap
         {
             Ensure.Arg.NotNull(configExpression, nameof(configExpression));
 
-            var registrar = new StructureMapServiceRegistrar();
-            registrar.AddFacility(configure);
+            var registrar = new StructureMapComponentRegistry();
+            registrar.RegisterFacility(configure);
             configExpression.AddRegistry(registrar);
         }
     }

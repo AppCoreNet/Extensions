@@ -17,23 +17,22 @@
 namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Defines the lifetime of a service instance.
+    /// Represents a type used to register components with a dependency injection container.
     /// </summary>
-    public enum ServiceLifetime
+    /// <seealso cref="ComponentRegistration"/>
+    /// <seealso cref="ComponentAssemblyRegistration"/>
+    public interface IComponentRegistry
     {
         /// <summary>
-        /// The service is instantiated each time it is resolved.
+        /// Registers a component with the dependency injection container.
         /// </summary>
-        Transient,
+        /// <param name="registration">The <see cref="ComponentRegistration"/> describing the component to register.</param>
+        void Register(ComponentRegistration registration);
 
         /// <summary>
-        /// The service is instantiated only once.
+        /// Registers components from a set of assemblies with the dependency injection container.
         /// </summary>
-        Singleton,
-
-        /// <summary>
-        /// The service is instantiated per scope.
-        /// </summary>
-        Scoped,
+        /// <param name="registration">The <see cref="ComponentAssemblyRegistration"/> describing the components to register.</param>
+        void RegisterAssembly(ComponentAssemblyRegistration registration);
     }
 }

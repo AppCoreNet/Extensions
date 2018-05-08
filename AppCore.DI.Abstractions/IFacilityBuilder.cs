@@ -27,15 +27,15 @@ namespace AppCore.DependencyInjection
         IFacility Facility { get; }
 
         /// <summary>
-        /// The <see cref="IServiceRegistrar"/> where services are registered.
+        /// The <see cref="IComponentRegistry"/> where components are registered.
         /// </summary>
-        IServiceRegistrar Registrar { get; }
+        IComponentRegistry Registry { get; }
 
         /// <summary>
-        /// Invoked to register services of the facility.
+        /// Invoked to register components of the facility.
         /// </summary>
-        /// <param name="registrar">The <see cref="IServiceRegistrar"/>.</param>
-        void RegisterServices(IServiceRegistrar registrar);
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        void RegisterComponents(IComponentRegistry registry);
     }
 
     /// <summary>

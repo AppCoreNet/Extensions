@@ -16,6 +16,7 @@
 
 using System;
 using AppCore.DependencyInjection;
+using AppCore.DependencyInjection.Autofac;
 using AppCore.Diagnostics;
 
 // ReSharper disable once CheckNamespace
@@ -40,8 +41,8 @@ namespace Autofac
             Ensure.Arg.NotNull(builder, nameof(builder));
             Ensure.Arg.NotNull(facility, nameof(facility));
 
-            var registry = new AutofacServiceRegistrar(builder);
-            registry.AddFacility(facility, configure);
+            var registry = new AutofacComponentRegistry(builder);
+            registry.RegisterFacility(facility, configure);
         }
 
         /// <summary>
@@ -57,8 +58,8 @@ namespace Autofac
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
 
-            var registrar = new AutofacServiceRegistrar(builder);
-            registrar.AddFacility(configure);
+            var registrar = new AutofacComponentRegistry(builder);
+            registrar.RegisterFacility(configure);
         }
     }
 }

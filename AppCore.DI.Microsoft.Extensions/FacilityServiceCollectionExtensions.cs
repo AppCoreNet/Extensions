@@ -16,6 +16,7 @@
 
 using System;
 using AppCore.DependencyInjection;
+using AppCore.DependencyInjection.Microsoft.Extensions;
 using AppCore.Diagnostics;
 
 // ReSharper disable once CheckNamespace
@@ -40,8 +41,8 @@ namespace Microsoft.Extensions.DependencyInjection
             Ensure.Arg.NotNull(services, nameof(services));
             Ensure.Arg.NotNull(facility, nameof(facility));
 
-            var registry = new ServiceCollectionRegistrar(services);
-            registry.AddFacility(facility, configure);
+            var registry = new MicrosoftComponentRegistry(services);
+            registry.RegisterFacility(facility, configure);
             return services;
         }
 
@@ -58,8 +59,8 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             Ensure.Arg.NotNull(services, nameof(services));
 
-            var registry = new ServiceCollectionRegistrar(services);
-            registry.AddFacility(configure);
+            var registry = new MicrosoftComponentRegistry(services);
+            registry.RegisterFacility(configure);
             return services;
         }
     }

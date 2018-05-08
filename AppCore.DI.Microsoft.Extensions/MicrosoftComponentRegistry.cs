@@ -20,39 +20,42 @@ using System.Linq;
 using System.Reflection;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using MicrosoftDI = Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Microsoft.Extensions
 {
     /// <summary>
-    /// Provides Microsoft Dependency Injection based <see cref="IServiceRegistrar"/> implementation.
+    /// Provides Microsoft Dependency Injection based <see cref="IComponentRegistry"/> implementation.
     /// </summary>
-    public class ServiceCollectionRegistrar : IServiceRegistrar
+    public class MicrosoftComponentRegistry : IComponentRegistry
     {
         private readonly IServiceCollection _services;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceCollectionRegistrar"/> class.
+        /// Initializes a new instance of the <see cref="MicrosoftComponentRegistry"/> class.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> where services are registered.</param>
-        public ServiceCollectionRegistrar(IServiceCollection services)
+        public MicrosoftComponentRegistry(IServiceCollection services)
         {
             Ensure.Arg.NotNull(services, nameof(services));
             _services = services;
+
+            services.TryAddSingleton<IContainer, MicrosoftContainer>();
+            services.TryAddScoped<IContainerScopeFactory, MicrosoftContainerScopeFactory>();
         }
 
         /// <inheritdoc />
-        public void Register(ServiceRegistration registration)
+        public void Register(ComponentRegistration registration)
         {
-            if ((registration.Flags & ServiceRegistrationFlags.SkipIfRegistered)
-                == ServiceRegistrationFlags.SkipIfRegistered)
+            if ((registration.Flags & ComponentRegistrationFlags.SkipIfRegistered)
+                == ComponentRegistrationFlags.SkipIfRegistered)
             {
-                if ((registration.Flags & ServiceRegistrationFlags.Enumerable) == ServiceRegistrationFlags.Enumerable)
+                if ((registration.Flags & ComponentRegistrationFlags.Enumerable) == ComponentRegistrationFlags.Enumerable)
                 {
                     if (_services.Any(
                         sd =>
                         {
-                            if (sd.ServiceType != registration.ServiceType)
+                            if (sd.ServiceType != registration.ContractType)
                                 return false;
 
                             if (sd.ImplementationType != null)
@@ -67,8 +70,15 @@ namespace AppCore.DependencyInjection
 
                             if (sd.ImplementationFactory != null)
                             {
-                                return sd.ImplementationFactory.Target.GetType()
-                                         .GenericTypeArguments[0]
+                                Type implementationFactoryType = sd.ImplementationFactory.Target.GetType();
+                                if (implementationFactoryType == typeof(ImplementationFactoryWrapper))
+                                {
+                                    return ((ImplementationFactoryWrapper) sd.ImplementationFactory.Target).LimitType
+                                           == registration.LimitType;
+                                }
+
+                                return implementationFactoryType.GetTypeInfo().IsGenericType
+                                       && implementationFactoryType.GenericTypeArguments[0]
                                        == registration.LimitType;
                             }
 
@@ -78,7 +88,7 @@ namespace AppCore.DependencyInjection
                 }
                 else
                 {
-                    if (_services.Any(sd => sd.ServiceType == registration.ServiceType))
+                    if (_services.Any(sd => sd.ServiceType == registration.ContractType))
                         return;
                 }
             }
@@ -87,23 +97,27 @@ namespace AppCore.DependencyInjection
 
             if (registration.ImplementationFactory != null)
             {
-                descriptor = ServiceDescriptor.Describe(
-                    registration.ServiceType,
+                var factoryWrapper = new ImplementationFactoryWrapper(
                     registration.ImplementationFactory,
+                    registration.LimitType);
+
+                descriptor = ServiceDescriptor.Describe(
+                    registration.ContractType,
+                    factoryWrapper.CreateInstance,
                     ConvertLifetime(registration.Lifetime));
             }
 
             else if (registration.ImplementationInstance != null)
             {
                 descriptor = new ServiceDescriptor(
-                    registration.ServiceType,
+                    registration.ContractType,
                     registration.ImplementationInstance);
             }
 
             else if (registration.ImplementationType != null)
             {
                 descriptor = ServiceDescriptor.Describe(
-                    registration.ServiceType,
+                    registration.ContractType,
                     registration.ImplementationType,
                     ConvertLifetime(registration.Lifetime));
             }
@@ -112,27 +126,27 @@ namespace AppCore.DependencyInjection
         }
 
         /// <inheritdoc />
-        public void RegisterAssembly(AssemblyRegistration registration)
+        public void RegisterAssembly(ComponentAssemblyRegistration registration)
         {
             var scanner = new AssemblyScanner();
             IEnumerable<Type> implementationTypes =
-                registration.Assemblies.SelectMany(assembly => scanner.GetTypes(assembly, registration.ServiceType));
+                registration.Assemblies.SelectMany(assembly => scanner.GetTypes(assembly, registration.ContractType));
 
-            ServiceLifetime GetServiceLifetime(Type implementationType)
+            ComponentLifetime GetServiceLifetime(Type implementationType)
             {
                 var lifetimeAttribute =
                     implementationType.GetTypeInfo()
-                                      .GetCustomAttribute<ServiceLifetimeAttribute>();
+                                      .GetCustomAttribute<LifetimeAttribute>();
 
                 return lifetimeAttribute?.Lifetime ?? registration.DefaultLifetime;
             }
 
-            bool isOpenGenericService = registration.ServiceType.GetTypeInfo()
+            bool isOpenGenericService = registration.ContractType.GetTypeInfo()
                                                     .IsGenericTypeDefinition;
 
             foreach (Type implementationType in implementationTypes)
             {
-                Type serviceType = registration.ServiceType;
+                Type serviceType = registration.ContractType;
 
                 // need to register closed types with closed generic service type
                 if (isOpenGenericService && !implementationType.GetTypeInfo().IsGenericTypeDefinition)
@@ -141,7 +155,7 @@ namespace AppCore.DependencyInjection
                 }
 
                 Register(
-                    ServiceRegistration.Create(
+                    ComponentRegistration.Create(
                         serviceType,
                         implementationType,
                         GetServiceLifetime(implementationType),
@@ -149,19 +163,19 @@ namespace AppCore.DependencyInjection
             }
         }
 
-        private MicrosoftDI.ServiceLifetime ConvertLifetime(ServiceLifetime lifetime)
+        private ServiceLifetime ConvertLifetime(ComponentLifetime lifetime)
         {
-            MicrosoftDI.ServiceLifetime result;
+            ServiceLifetime result;
             switch (lifetime)
             {
-                case ServiceLifetime.Transient:
-                    result = MicrosoftDI.ServiceLifetime.Transient;
+                case ComponentLifetime.Transient:
+                    result = ServiceLifetime.Transient;
                     break;
-                case ServiceLifetime.Singleton:
-                    result = MicrosoftDI.ServiceLifetime.Singleton;
+                case ComponentLifetime.Singleton:
+                    result = ServiceLifetime.Singleton;
                     break;
-                case ServiceLifetime.Scoped:
-                    result = MicrosoftDI.ServiceLifetime.Scoped;
+                case ComponentLifetime.Scoped:
+                    result = ServiceLifetime.Scoped;
                     break;
                 default:
                     throw new NotImplementedException();

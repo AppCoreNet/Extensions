@@ -28,15 +28,15 @@ namespace AppCore.DependencyInjection
     public abstract class FacilityExtension<TFacility> : IFacilityExtension<TFacility>
         where TFacility : IFacility
     {
-        private readonly Action<IServiceRegistrar, TFacility> _registrationCallback;
+        private readonly Action<IComponentRegistry, TFacility> _registrationCallback;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FacilityExtension{TFacility}"/> class.
         /// </summary>
         /// <param name="registrationCallback">
-        ///     The <see cref="Action{T}"/> which is invoked when facility extension services should be registered.
+        ///     The <see cref="Action{T}"/> which is invoked when facility extension components should be registered.
         /// </param>
-        protected FacilityExtension(Action<IServiceRegistrar, TFacility> registrationCallback)
+        protected FacilityExtension(Action<IComponentRegistry, TFacility> registrationCallback)
         {
             Ensure.Arg.NotNull(registrationCallback, nameof(registrationCallback));
 
@@ -47,16 +47,16 @@ namespace AppCore.DependencyInjection
         /// Initializes a new instance of the <see cref="FacilityExtension{TFacility}"/> class.
         /// </summary>
         /// <param name="registrationCallback">
-        ///     The <see cref="Action{T}"/> which is invoked when facility extension services should be registered.
+        ///     The <see cref="Action{T}"/> which is invoked when facility extension components should be registered.
         /// </param>
-        protected FacilityExtension(Action<IServiceRegistrar> registrationCallback)
+        protected FacilityExtension(Action<IComponentRegistry> registrationCallback)
         {
             Ensure.Arg.NotNull(registrationCallback, nameof(registrationCallback));
 
             _registrationCallback = (sr, f) => registrationCallback(sr);
         }
 
-        void IFacilityExtension<TFacility>.RegisterServices(IServiceRegistrar registrar, TFacility facility)
+        void IFacilityExtension<TFacility>.RegisterComponents(IComponentRegistry registrar, TFacility facility)
         {
             _registrationCallback(registrar, facility);
         }

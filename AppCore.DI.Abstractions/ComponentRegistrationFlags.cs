@@ -15,35 +15,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
-using System.Collections.Generic;
-using AppCore.Diagnostics;
-using StructureMap;
 
 namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// StructureMap based <see cref="IServiceProvider"/> implementation.
+    /// Defines component registration options.
     /// </summary>
-    public class StructureMapServiceProvider : IServiceProvider
+    [Flags]
+    public enum ComponentRegistrationFlags
     {
-        private readonly IContainer _container;
+        /// <summary>
+        /// No special registration options.
+        /// </summary>
+        None,
 
-        public StructureMapServiceProvider(IContainer container)
-        {
-            Ensure.Arg.NotNull(container, nameof(container));
-            _container = container;
-        }
+        /// <summary>
+        /// Skips registration if component with same contract is already registered.
+        /// </summary>
+        SkipIfRegistered,
 
-        public object GetService(Type serviceType)
-        {
-            Ensure.Arg.NotNull(serviceType, nameof(serviceType));
-
-            if (serviceType.IsClosedTypeOf(typeof(IEnumerable<>)))
-            {
-                return _container.GetInstance(serviceType);
-            }
-
-            return _container.TryGetInstance(serviceType);
-        }
+        /// <summary>
+        /// Skips registration if component with same contract and implementation is already registered.
+        /// </summary>
+        Enumerable
     }
 }

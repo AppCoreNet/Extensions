@@ -22,16 +22,16 @@ namespace AppCore.DependencyInjection
     /// <summary>
     /// Represents parameters for registering a service.
     /// </summary>
-    /// <seealso cref="IServiceRegistrar"/>
-    public readonly struct ServiceRegistration
+    /// <seealso cref="IComponentRegistry"/>
+    public readonly struct ComponentRegistration
     {
         /// <summary>
-        /// Gets the type of service which is registered.
+        /// Gets the type of component which is registered.
         /// </summary>
-        public Type ServiceType { get; }
+        public Type ContractType { get; }
 
         /// <summary>
-        /// Gets the most known type of the service.
+        /// Gets the most known type of the component.
         /// </summary>
         public Type LimitType { get; }
 
@@ -41,32 +41,32 @@ namespace AppCore.DependencyInjection
         public Type ImplementationType { get; }
 
         /// <summary>
-        /// Gets the factory method used to instantiate the service.
+        /// Gets the factory method used to instantiate the component.
         /// </summary>
-        public Func<IServiceProvider, object> ImplementationFactory { get; }
+        public Func<IContainer, object> ImplementationFactory { get; }
 
         /// <summary>
-        /// Gets the singleton instance of the service.
+        /// Gets the singleton instance of the component.
         /// </summary>
         public object ImplementationInstance { get; }
 
         /// <summary>
-        /// Gets the lifetime of the service.
+        /// Gets the lifetime of the component.
         /// </summary>
-        public ServiceLifetime Lifetime { get; }
+        public ComponentLifetime Lifetime { get; }
 
         /// <summary>
-        /// Gets service registration flags.
+        /// Gets component registration flags.
         /// </summary>
-        public ServiceRegistrationFlags Flags { get; }
+        public ComponentRegistrationFlags Flags { get; }
 
-        private ServiceRegistration(
-            Type serviceType,
+        private ComponentRegistration(
+            Type contractType,
             Type implementationType,
-            ServiceLifetime lifetime,
-            ServiceRegistrationFlags flags)
+            ComponentLifetime lifetime,
+            ComponentRegistrationFlags flags)
         {
-            ServiceType = serviceType;
+            ContractType = contractType;
             LimitType = implementationType;
             ImplementationType = implementationType;
             ImplementationFactory = null;
@@ -75,14 +75,14 @@ namespace AppCore.DependencyInjection
             Flags = flags;
         }
 
-        private ServiceRegistration(
-            Type serviceType,
+        private ComponentRegistration(
+            Type contractType,
             Type limitType,
-            Func<IServiceProvider, object> implementationFactory,
-            ServiceLifetime lifetime,
-            ServiceRegistrationFlags flags)
+            Func<IContainer, object> implementationFactory,
+            ComponentLifetime lifetime,
+            ComponentRegistrationFlags flags)
         {
-            ServiceType = serviceType;
+            ContractType = contractType;
             LimitType = limitType;
             ImplementationType = null;
             ImplementationFactory = implementationFactory;
@@ -91,56 +91,56 @@ namespace AppCore.DependencyInjection
             Flags = flags;
         }
 
-        private ServiceRegistration(
-            Type serviceType,
+        private ComponentRegistration(
+            Type contractType,
             object implementationInstance,
-            ServiceRegistrationFlags flags)
+            ComponentRegistrationFlags flags)
         {
-            ServiceType = serviceType;
+            ContractType = contractType;
             LimitType = implementationInstance.GetType();
             ImplementationType = null;
             ImplementationFactory = null;
             ImplementationInstance = implementationInstance;
-            Lifetime = ServiceLifetime.Singleton;
+            Lifetime = ComponentLifetime.Singleton;
             Flags = flags;
         }
 
-        public static ServiceRegistration Create(
-            Type serviceType,
+        public static ComponentRegistration Create(
+            Type contractType,
             Type implementationType,
-            ServiceLifetime lifetime,
-            ServiceRegistrationFlags flags = ServiceRegistrationFlags.None)
+            ComponentLifetime lifetime,
+            ComponentRegistrationFlags flags = ComponentRegistrationFlags.None)
         {
-            Ensure.Arg.NotNull(serviceType, nameof(serviceType));
+            Ensure.Arg.NotNull(contractType, nameof(contractType));
             Ensure.Arg.NotNull(implementationType, nameof(implementationType));
-            Ensure.Arg.OfType(implementationType, serviceType, nameof(implementationType));
+            Ensure.Arg.OfType(implementationType, contractType, nameof(implementationType));
 
-            return new ServiceRegistration(serviceType, implementationType, lifetime, flags);
+            return new ComponentRegistration(contractType, implementationType, lifetime, flags);
         }
 
-        public static ServiceRegistration Create<T>(
-            Type serviceType,
-            Func<IServiceProvider, T> implementationFactory,
-            ServiceLifetime lifetime,
-            ServiceRegistrationFlags flags = ServiceRegistrationFlags.None)
+        public static ComponentRegistration Create<T>(
+            Type contractType,
+            Func<IContainer, T> implementationFactory,
+            ComponentLifetime lifetime,
+            ComponentRegistrationFlags flags = ComponentRegistrationFlags.None)
         {
-            Ensure.Arg.NotNull(serviceType, nameof(serviceType));
+            Ensure.Arg.NotNull(contractType, nameof(contractType));
             Ensure.Arg.NotNull(implementationFactory, nameof(implementationFactory));
-            Ensure.Arg.OfType(typeof(T), serviceType, nameof(implementationFactory));
+            Ensure.Arg.OfType(typeof(T), contractType, nameof(implementationFactory));
 
-            return new ServiceRegistration(serviceType, typeof(T), sp => implementationFactory(sp), lifetime, flags);
+            return new ComponentRegistration(contractType, typeof(T), c => implementationFactory(c), lifetime, flags);
         }
 
-        public static ServiceRegistration Create<T>(
-            Type serviceType,
+        public static ComponentRegistration Create<T>(
+            Type contractType,
             T implementationInstance,
-            ServiceRegistrationFlags flags = ServiceRegistrationFlags.None)
+            ComponentRegistrationFlags flags = ComponentRegistrationFlags.None)
         {
-            Ensure.Arg.NotNull(serviceType, nameof(serviceType));
+            Ensure.Arg.NotNull(contractType, nameof(contractType));
             Ensure.Arg.NotNull(implementationInstance, nameof(implementationInstance));
-            Ensure.Arg.OfType(typeof(T), serviceType, nameof(implementationInstance));
+            Ensure.Arg.OfType(typeof(T), contractType, nameof(implementationInstance));
 
-            return new ServiceRegistration(serviceType, implementationInstance, flags);
+            return new ComponentRegistration(contractType, implementationInstance, flags);
         }
     }
 }

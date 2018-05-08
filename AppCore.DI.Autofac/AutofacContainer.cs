@@ -15,33 +15,48 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Linq;
 using AppCore.Diagnostics;
 using Autofac;
+using Autofac.Features.Variance;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Autofac
 {
     /// <summary>
-    /// Autofac based <see cref="IServiceProvider"/> implementation.
+    /// Autofac based <see cref="IContainer"/> implementation.
     /// </summary>
-    public class AutofacServiceProvider : IServiceProvider
+    public class AutofacContainer : IContainer
     {
         private readonly IComponentContext _context;
 
+        public ContainerCapabilities Capabilities { get; }
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="AutofacServiceProvider"/> class.
+        /// Initializes a new instance of the <see cref="AutofacContainer"/> class.
         /// </summary>
         /// <param name="context">The <see cref="IComponentContext"/>.</param>
-        public AutofacServiceProvider(IComponentContext context)
+        public AutofacContainer(IComponentContext context)
         {
             Ensure.Arg.NotNull(context, nameof(context));
+
             _context = context;
+
+            var capabilities = ContainerCapabilities.None;
+            if (context.ComponentRegistry.Sources.OfType<ContravariantRegistrationSource>().Any())
+                capabilities = capabilities | ContainerCapabilities.ContraVariance;
+
+            Capabilities = capabilities;
+        }
+
+        public object Resolve(Type contractType)
+        {
+            return _context.Resolve(contractType);
         }
 
         /// <inheritdoc />
-        public object GetService(Type serviceType)
+        public object ResolveOptional(Type contractType)
         {
-            Ensure.Arg.NotNull(serviceType, nameof(serviceType));
-            return _context.ResolveOptional(serviceType);
+            return _context.ResolveOptional(contractType);
         }
     }
 }
