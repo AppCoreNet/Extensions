@@ -1,18 +1,5 @@
-﻿// Copyright 2018 the AppCore project.
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
-// to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all copies or substantial portions
-// of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
-// BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -30,29 +17,17 @@ namespace AppCore.DependencyInjection.Autofac
     /// </summary>
     public class AutofacComponentRegistry : IComponentRegistry
     {
-        private readonly ContainerBuilder _builder;
+        private readonly List<Func<IEnumerable<ComponentRegistration>>> _registrationCallbacks =
+            new List<Func<IEnumerable<ComponentRegistration>>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacComponentRegistry"/> class.
         /// </summary>
-        /// <param name="builder">The <see cref="ContainerBuilder"/>.</param>
-        public AutofacComponentRegistry(ContainerBuilder builder)
+        public AutofacComponentRegistry()
         {
-            Ensure.Arg.NotNull(builder, nameof(builder));
-
-            _builder = builder;
-
-            _builder.RegisterType<AutofacContainer>()
-                    .As<IContainer>()
-                    .IfNotRegistered(typeof(IContainer));
-
-            _builder.RegisterType<AutofacContainerScopeFactory>()
-                    .As<IContainerScopeFactory>()
-                    .IfNotRegistered(typeof(IContainerScopeFactory));
         }
 
-        /// <inheritdoc />
-        public void Register(ComponentRegistration registration)
+        private void Register(ContainerBuilder builder, ComponentRegistration registration)
         {
             if (registration.ImplementationFactory != null)
             {
@@ -61,7 +36,7 @@ namespace AppCore.DependencyInjection.Autofac
                         registration.LimitType,
                         (ctxt, parameters) => registration.ImplementationFactory(ctxt.Resolve<IContainer>()));
 
-                rb.RegistrationData.DeferredCallback = _builder.RegisterCallback(
+                rb.RegistrationData.DeferredCallback = builder.RegisterCallback(
                     cr => RegistrationBuilder.RegisterSingleComponent(cr, rb));
 
                 rb.As(registration.ContractType);
@@ -72,7 +47,7 @@ namespace AppCore.DependencyInjection.Autofac
             else if (registration.ImplementationInstance != null)
             {
                 IRegistrationBuilder<object, SimpleActivatorData, SingleRegistrationStyle> rb =
-                    _builder.RegisterInstance(registration.ImplementationInstance);
+                    builder.RegisterInstance(registration.ImplementationInstance);
 
                 rb.As(registration.ContractType);
                 ApplyLifetime(rb, registration.Lifetime);
@@ -85,7 +60,7 @@ namespace AppCore.DependencyInjection.Autofac
                                 .IsGenericTypeDefinition)
                 {
                     IRegistrationBuilder<object, ReflectionActivatorData, DynamicRegistrationStyle> rb =
-                        _builder.RegisterGeneric(registration.ImplementationType);
+                        builder.RegisterGeneric(registration.ImplementationType);
 
                     rb.As(registration.ContractType);
                     ApplyLifetime(rb, registration.Lifetime);
@@ -94,7 +69,7 @@ namespace AppCore.DependencyInjection.Autofac
                 else
                 {
                     IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> rb =
-                        _builder.RegisterType(registration.ImplementationType);
+                        builder.RegisterType(registration.ImplementationType);
 
                     rb.As(registration.ContractType);
                     ApplyLifetime(rb, registration.Lifetime);
@@ -127,8 +102,8 @@ namespace AppCore.DependencyInjection.Autofac
             IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> rb,
             ComponentRegistrationFlags flags, Type serviceType, Type limitType)
         {
-            if ((flags & ComponentRegistrationFlags.SkipIfRegistered)
-                == ComponentRegistrationFlags.SkipIfRegistered)
+            if ((flags & ComponentRegistrationFlags.IfNoneRegistered)
+                == ComponentRegistrationFlags.IfNoneRegistered)
             {
                 rb.OnlyIf(
                     r =>
@@ -149,8 +124,8 @@ namespace AppCore.DependencyInjection.Autofac
                             r.RegistrationsFor(new TypedService(resolvedServiceType))
                              .Select(cr => cr.Activator);
 
-                        if ((flags & ComponentRegistrationFlags.Enumerable)
-                            == ComponentRegistrationFlags.Enumerable)
+                        if ((flags & ComponentRegistrationFlags.IfNotRegistered)
+                            == ComponentRegistrationFlags.IfNotRegistered)
                         {
                             return instanceActivators.All(a => a.LimitType != resolvedLimitType);
                         }
@@ -161,43 +136,27 @@ namespace AppCore.DependencyInjection.Autofac
         }
 
         /// <inheritdoc />
-        public void RegisterAssembly(ComponentAssemblyRegistration registration)
+        public void RegisterCallback(Func<IEnumerable<ComponentRegistration>> registrationCallback)
         {
-            // Autofac doesnt support scanning for open generic types so we have to
-            // do it on our own :(
+            Ensure.Arg.NotNull(registrationCallback, nameof(registrationCallback));
+            _registrationCallbacks.Add(registrationCallback);
+        }
 
-            var scanner = new AssemblyScanner();
-            IEnumerable<Type> implementationTypes =
-                registration.Assemblies.SelectMany(assembly => scanner.GetTypes(assembly, registration.ContractType));
+        public void RegisterComponents(ContainerBuilder builder)
+        {
+            Ensure.Arg.NotNull(builder, nameof(builder));
 
-            ComponentLifetime GetServiceLifetime(Type implementationType)
+            builder.RegisterType<AutofacContainer>()
+                   .As<IContainer>()
+                   .IfNotRegistered(typeof(IContainer));
+
+            builder.RegisterType<AutofacContainerScopeFactory>()
+                   .As<IContainerScopeFactory>()
+                   .IfNotRegistered(typeof(IContainerScopeFactory));
+
+            foreach (ComponentRegistration registration in _registrationCallbacks.SelectMany(c => c()))
             {
-                var lifetimeAttribute =
-                    implementationType.GetTypeInfo()
-                                      .GetCustomAttribute<LifetimeAttribute>();
-
-                return lifetimeAttribute?.Lifetime ?? registration.DefaultLifetime;
-            }
-
-            bool isOpenGenericService = registration.ContractType.GetTypeInfo()
-                                                    .IsGenericTypeDefinition;
-
-            foreach (Type implementationType in implementationTypes)
-            {
-                Type serviceType = registration.ContractType;
-
-                // need to register closed types with closed generic service type
-                if (isOpenGenericService && !implementationType.GetTypeInfo().IsGenericTypeDefinition)
-                {
-                    serviceType = implementationType.GetClosedTypeOf(serviceType);
-                }
-
-                Register(
-                    ComponentRegistration.Create(
-                        serviceType,
-                        implementationType,
-                        GetServiceLifetime(implementationType),
-                        registration.Flags));
+                Register(builder, registration);
             }
         }
     }

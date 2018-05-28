@@ -1,4 +1,7 @@
-﻿using AppCore.Diagnostics;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
+
+using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection.StructureMap
 {

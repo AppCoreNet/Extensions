@@ -1,18 +1,5 @@
-﻿// Copyright 2018 the AppCore project.
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
-// to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all copies or substantial portions
-// of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
-// BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -29,30 +16,24 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
     /// </summary>
     public class MicrosoftComponentRegistry : IComponentRegistry
     {
-        private readonly IServiceCollection _services;
+        private readonly List<Func<IEnumerable<ComponentRegistration>>> _registrationCallbacks =
+            new List<Func<IEnumerable<ComponentRegistration>>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MicrosoftComponentRegistry"/> class.
         /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> where services are registered.</param>
-        public MicrosoftComponentRegistry(IServiceCollection services)
+        public MicrosoftComponentRegistry()
         {
-            Ensure.Arg.NotNull(services, nameof(services));
-            _services = services;
-
-            services.TryAddSingleton<IContainer, MicrosoftContainer>();
-            services.TryAddScoped<IContainerScopeFactory, MicrosoftContainerScopeFactory>();
         }
 
-        /// <inheritdoc />
-        public void Register(ComponentRegistration registration)
+        private void Register(IServiceCollection services, ComponentRegistration registration)
         {
-            if ((registration.Flags & ComponentRegistrationFlags.SkipIfRegistered)
-                == ComponentRegistrationFlags.SkipIfRegistered)
+            if ((registration.Flags & ComponentRegistrationFlags.IfNoneRegistered)
+                == ComponentRegistrationFlags.IfNoneRegistered)
             {
-                if ((registration.Flags & ComponentRegistrationFlags.Enumerable) == ComponentRegistrationFlags.Enumerable)
+                if ((registration.Flags & ComponentRegistrationFlags.IfNotRegistered) == ComponentRegistrationFlags.IfNotRegistered)
                 {
-                    if (_services.Any(
+                    if (services.Any(
                         sd =>
                         {
                             if (sd.ServiceType != registration.ContractType)
@@ -88,7 +69,7 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
                 }
                 else
                 {
-                    if (_services.Any(sd => sd.ServiceType == registration.ContractType))
+                    if (services.Any(sd => sd.ServiceType == registration.ContractType))
                         return;
                 }
             }
@@ -122,45 +103,7 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
                     ConvertLifetime(registration.Lifetime));
             }
 
-            _services.Add(descriptor);
-        }
-
-        /// <inheritdoc />
-        public void RegisterAssembly(ComponentAssemblyRegistration registration)
-        {
-            var scanner = new AssemblyScanner();
-            IEnumerable<Type> implementationTypes =
-                registration.Assemblies.SelectMany(assembly => scanner.GetTypes(assembly, registration.ContractType));
-
-            ComponentLifetime GetServiceLifetime(Type implementationType)
-            {
-                var lifetimeAttribute =
-                    implementationType.GetTypeInfo()
-                                      .GetCustomAttribute<LifetimeAttribute>();
-
-                return lifetimeAttribute?.Lifetime ?? registration.DefaultLifetime;
-            }
-
-            bool isOpenGenericService = registration.ContractType.GetTypeInfo()
-                                                    .IsGenericTypeDefinition;
-
-            foreach (Type implementationType in implementationTypes)
-            {
-                Type serviceType = registration.ContractType;
-
-                // need to register closed types with closed generic service type
-                if (isOpenGenericService && !implementationType.GetTypeInfo().IsGenericTypeDefinition)
-                {
-                    serviceType = implementationType.GetClosedTypeOf(serviceType);
-                }
-
-                Register(
-                    ComponentRegistration.Create(
-                        serviceType,
-                        implementationType,
-                        GetServiceLifetime(implementationType),
-                        registration.Flags));
-            }
+            services.Add(descriptor);
         }
 
         private ServiceLifetime ConvertLifetime(ComponentLifetime lifetime)
@@ -182,6 +125,26 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
             }
 
             return result;
+        }
+
+        /// <inheritdoc />
+        public void RegisterCallback(Func<IEnumerable<ComponentRegistration>> registrationCallback)
+        {
+            Ensure.Arg.NotNull(registrationCallback, nameof(registrationCallback));
+            _registrationCallbacks.Add(registrationCallback);
+        }
+
+        public void RegisterComponents(IServiceCollection services)
+        {
+            Ensure.Arg.NotNull(services, nameof(services));
+
+            services.TryAddSingleton<IContainer, MicrosoftContainer>();
+            services.TryAddScoped<IContainerScopeFactory, MicrosoftContainerScopeFactory>();
+
+            foreach (ComponentRegistration registration in _registrationCallbacks.SelectMany(c => c()))
+            {
+                Register(services, registration);
+            }
         }
     }
 }

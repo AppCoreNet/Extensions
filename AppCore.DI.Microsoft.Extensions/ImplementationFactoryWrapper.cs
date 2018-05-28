@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
+
+using System;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.DependencyInjection.Microsoft.Extensions

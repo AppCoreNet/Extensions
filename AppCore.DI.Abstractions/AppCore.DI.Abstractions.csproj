@@ -11,7 +11,6 @@
     <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

@@ -1,53 +1,35 @@
-﻿// Copyright 2018 the AppCore project.
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
-// to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all copies or substantial portions
-// of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
-// BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
+using AppCore.Diagnostics;
 using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Pipeline;
 
 namespace AppCore.DependencyInjection.StructureMap
 {
-    public class StructureMapComponentRegistry : Registry, IComponentRegistry
+    public class StructureMapComponentRegistry : IComponentRegistry
     {
+        private readonly List<Func<IEnumerable<ComponentRegistration>>> _registrationCallbacks =
+            new List<Func<IEnumerable<ComponentRegistration>>>();
+
         public StructureMapComponentRegistry()
         {
-            For<IContainer>()
-                .LifecycleIs(Lifecycles.Container)
-                .UseIfNone<StructureMapContainer>();
-
-            For<IContainerScopeFactory>()
-                .LifecycleIs(Lifecycles.Container)
-                .UseIfNone<StructureMapContainerScopeFactory>();
         }
 
-        public void Register(ComponentRegistration registration)
+        private void Register(Registry registry, ComponentRegistration registration)
         {
-            Configure(
+            registry.Configure(
                 pg =>
                 {
-                    if ((registration.Flags & ComponentRegistrationFlags.SkipIfRegistered)
-                        == ComponentRegistrationFlags.SkipIfRegistered)
+                    if ((registration.Flags & ComponentRegistrationFlags.IfNoneRegistered)
+                        == ComponentRegistrationFlags.IfNoneRegistered)
                     {
-                        if ((registration.Flags & ComponentRegistrationFlags.Enumerable)
-                            == ComponentRegistrationFlags.Enumerable)
+                        if ((registration.Flags & ComponentRegistrationFlags.IfNotRegistered)
+                            == ComponentRegistrationFlags.IfNotRegistered)
                         {
                             if (pg.HasFamily(registration.ContractType)
                                 && pg.Families[registration.ContractType]
@@ -90,32 +72,6 @@ namespace AppCore.DependencyInjection.StructureMap
                 });
         }
 
-        public void RegisterAssembly(ComponentAssemblyRegistration registration)
-        {
-            var scanner = new AssemblyScanner();
-            IEnumerable<Type> implementationTypes =
-                registration.Assemblies.SelectMany(assembly => scanner.GetTypes(assembly, registration.ContractType));
-
-            ComponentLifetime GetServiceLifetime(Type implementationType)
-            {
-                var lifetimeAttribute =
-                    implementationType.GetTypeInfo()
-                                      .GetCustomAttribute<LifetimeAttribute>();
-
-                return lifetimeAttribute?.Lifetime ?? registration.DefaultLifetime;
-            }
-
-            foreach (Type implementationType in implementationTypes)
-            {
-                Register(
-                    ComponentRegistration.Create(
-                        registration.ContractType,
-                        implementationType,
-                        GetServiceLifetime(implementationType),
-                        registration.Flags));
-            }
-        }
-
         private static ILifecycle GetLifecycle(ComponentLifetime lifetime)
         {
             switch (lifetime)
@@ -128,6 +84,31 @@ namespace AppCore.DependencyInjection.StructureMap
                     return Lifecycles.Container;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lifetime), lifetime, null);
+            }
+        }
+
+        /// <inheritdoc />
+        public void RegisterCallback(Func<IEnumerable<ComponentRegistration>> registrationCallback)
+        {
+            Ensure.Arg.NotNull(registrationCallback, nameof(registrationCallback));
+            _registrationCallbacks.Add(registrationCallback);
+        }
+
+        public void RegisterComponents(Registry registry)
+        {
+            Ensure.Arg.NotNull(registry, nameof(registry));
+
+            registry.For<IContainer>()
+                .LifecycleIs(Lifecycles.Container)
+                .UseIfNone<StructureMapContainer>();
+
+            registry.For<IContainerScopeFactory>()
+                .LifecycleIs(Lifecycles.Container)
+                .UseIfNone<StructureMapContainerScopeFactory>();
+
+            foreach (ComponentRegistration registration in _registrationCallbacks.SelectMany(c => c()))
+            {
+                Register(registry, registration);
             }
         }
     }

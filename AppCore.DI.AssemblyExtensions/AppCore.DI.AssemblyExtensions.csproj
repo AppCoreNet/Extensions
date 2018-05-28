@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
-    <RootNamespace>AppCore.DependencyInjection.StructureMap</RootNamespace>
-    <Description>Implementations for StructureMap.</Description>
-    <AssemblyName>AppCore.DependencyInjection.StructureMap</AssemblyName>
+    <TargetFrameworks>netstandard1.0;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+    <Description>Assembly scanning extensions for DependencyInjection containers.</Description>
+    <AssemblyName>AppCore.DependencyInjection.AssemblyExtensions</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +14,7 @@
     <PackageReference Include="AppCore.TypeHelpers.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="structuremap" Version="[4.3,5.0)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.0.3" Condition="'$(TargetFramework)'=='netstandard1.6'" />
   </ItemGroup>
 
   <ItemGroup>

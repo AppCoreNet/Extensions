@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
+
+using System.Collections.Generic;
 using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection
