@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp1.0;netcoreapp2.0</TargetFrameworks>
+    <AssemblyName>AppCore.DependencyInjection.AssemblyExtensions.Tests</AssemblyName>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AppCore.DI.AssemblyExtensions\AppCore.DI.AssemblyExtensions.csproj" />
+  </ItemGroup>
+
+</Project>

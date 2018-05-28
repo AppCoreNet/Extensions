@@ -1,4 +1,7 @@
-﻿using StructureMap;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
+
+using StructureMap;
 
 namespace AppCore.DependencyInjection.StructureMap
 {
@@ -14,7 +17,7 @@ namespace AppCore.DependencyInjection.StructureMap
         public override IContainerScope CreateScope()
         {
             var container = new StructureMapContainer(
-                new Container(c => c.AddRegistry((StructureMapComponentRegistry) Registry)));
+                new Container(c => ((StructureMapComponentRegistry) Registry).RegisterComponents(c)));
 
             return new StructureMapContainerScope(
                 container.Resolve<global::StructureMap.IContainer>()

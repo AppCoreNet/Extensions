@@ -3,7 +3,11 @@
 
 namespace AppCore.DependencyInjection
 {
-    public class ClosedGenericService : IGenericService<string>
+    public interface IContract
+    {
+    }
+
+    public interface IContract<T>
     {
     }
 }

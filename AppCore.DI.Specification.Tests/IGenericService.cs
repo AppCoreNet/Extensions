@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
 
 namespace AppCore.DependencyInjection
 {

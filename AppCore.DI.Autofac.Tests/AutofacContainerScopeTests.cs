@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018 the AppCore .NET project.
+
 using Autofac;
 
 namespace AppCore.DependencyInjection.Autofac
@@ -14,11 +14,12 @@ namespace AppCore.DependencyInjection.Autofac
         public AutofacContainerScopeTests()
         {
             Builder = new ContainerBuilder();
-            Registry = new AutofacComponentRegistry(Builder);
+            Registry = new AutofacComponentRegistry();
         }
 
         public override IContainerScope CreateScope()
         {
+            ((AutofacComponentRegistry) Registry).RegisterComponents(Builder);
             return new AutofacContainerScope(Builder.Build().BeginLifetimeScope());
         }
     }
