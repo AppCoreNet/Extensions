@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AppCore.DI.Autofac\AppCore.DI.Autofac.csproj" />
-    <ProjectReference Include="..\AppCore.DI.Specification.Tests\AppCore.DI.Specification.Tests.csproj" />
+    <ProjectReference Include="..\AppCore.DI.Tests.Specification\AppCore.DI.Tests.Specification.csproj" />
   </ItemGroup>
 
 </Project>

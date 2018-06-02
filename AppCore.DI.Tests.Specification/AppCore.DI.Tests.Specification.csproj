@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>AppCore.DependencyInjection.Specification.Tests</AssemblyName>
+    <AssemblyName>AppCore.DependencyInjection.Tests.Specification</AssemblyName>
     <RootNamespace>AppCore.DependencyInjection</RootNamespace>
   </PropertyGroup>
 

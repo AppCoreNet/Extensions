@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AppCore.DI.Microsoft.Extensions\AppCore.DI.Microsoft.Extensions.csproj" />
-    <ProjectReference Include="..\AppCore.DI.Specification.Tests\AppCore.DI.Specification.Tests.csproj" />
+    <ProjectReference Include="..\AppCore.DI.Tests.Specification\AppCore.DI.Tests.Specification.csproj" />
   </ItemGroup>
 
   <ItemGroup>
