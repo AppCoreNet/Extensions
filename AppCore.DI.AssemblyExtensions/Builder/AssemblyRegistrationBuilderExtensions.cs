@@ -13,6 +13,9 @@ using Microsoft.Extensions.DependencyModel;
 
 namespace AppCore.DependencyInjection.Builder
 {
+    /// <summary>
+    /// Provides extension methods for <see cref="IRegistrationBuilder"/> and <see cref="IRegistrationBuilder{TContract}"/>.
+    /// </summary>
     public static class AssemblyRegistrationBuilderExtensions
     {
         private static void RegisterScannerCallback(
@@ -47,6 +50,15 @@ namespace AppCore.DependencyInjection.Builder
             });
         }
 
+        /// <summary>
+        /// Adds components by scanning the specified <see cref="Assembly"/>.
+        /// </summary>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <param name="assembly">The <see cref="Assembly"/> which should be scanned.</param>
+        /// <returns>The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Argument <paramref name="builder"/> or <paramref name="assembly"/> is <c>null</c>.
+        /// </exception>
         public static IComponentRegistrationBuilder<AssemblyRegistrationInfo> AddFromAssembly(
             this IRegistrationBuilder builder,
             Assembly assembly)
@@ -62,6 +74,15 @@ namespace AppCore.DependencyInjection.Builder
             return new AssemblyComponentRegistrationBuilder(builder, registrationInfo);
         }
 
+        /// <summary>
+        /// Adds components by scanning the specified <see cref="Assembly"/>.
+        /// </summary>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <param name="assembly">The <see cref="Assembly"/> which should be scanned.</param>
+        /// <returns>The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Argument <paramref name="builder"/> or <paramref name="assembly"/> is <c>null</c>.
+        /// </exception>
         public static IComponentRegistrationBuilder<TContract, AssemblyRegistrationInfo> AddFromAssembly<TContract>(
             this IRegistrationBuilder<TContract> builder,
             Assembly assembly)
@@ -85,7 +106,14 @@ namespace AppCore.DependencyInjection.Builder
                                     .Select(Assembly.Load);
         }
 
-        public static IComponentRegistrationBuilder<AssemblyRegistrationInfo> AddFromAllAssemblies(
+        /// <summary>
+        /// Adds components by scanning all assemblies of the <see cref="DependencyContext"/>.
+        /// </summary>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <param name="dependencyContext">The <see cref="DependencyContext"/> which should be scanned.</param>
+        /// <returns>The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
+        public static IComponentRegistrationBuilder<AssemblyRegistrationInfo> AddFromDependencyContext(
             this IRegistrationBuilder builder,
             DependencyContext dependencyContext = null)
         {
@@ -100,7 +128,14 @@ namespace AppCore.DependencyInjection.Builder
             return new AssemblyComponentRegistrationBuilder(builder, registrationInfo);
         }
 
-        public static IComponentRegistrationBuilder<TContract, AssemblyRegistrationInfo> AddFromAllAssemblies<TContract>(
+        /// <summary>
+        /// Adds components by scanning all assemblies of the <see cref="DependencyContext"/>.
+        /// </summary>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <param name="dependencyContext">The <see cref="DependencyContext"/> which should be scanned.</param>
+        /// <returns>The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
+        public static IComponentRegistrationBuilder<TContract, AssemblyRegistrationInfo> AddFromDependencyContext<TContract>(
             this IRegistrationBuilder<TContract> builder,
             DependencyContext dependencyContext = null)
         {
@@ -110,34 +145,6 @@ namespace AppCore.DependencyInjection.Builder
 
             var registrationInfo = new AssemblyRegistrationInfo(typeof(TContract));
             var scanner = new AssemblyScanner(typeof(TContract), LoadAssemblies(dependencyContext));
-            builder.RegisterScannerCallback(scanner, registrationInfo);
-
-            return new AssemblyComponentRegistrationBuilder<TContract>(builder, registrationInfo);
-        }
-
-#endif
-
-#if NETSTANDARD2_0
-
-        public static IComponentRegistrationBuilder<AssemblyRegistrationInfo> AddFromAllAssemblies(
-            this IRegistrationBuilder builder)
-        {
-            Ensure.Arg.NotNull(builder, nameof(builder));
-
-            var registrationInfo = new AssemblyRegistrationInfo(builder.ContractType);
-            var scanner = new AssemblyScanner(builder.ContractType, AppDomain.CurrentDomain.GetAssemblies());
-            builder.RegisterScannerCallback(scanner, registrationInfo);
-
-            return new AssemblyComponentRegistrationBuilder(builder, registrationInfo);
-        }
-
-        public static IComponentRegistrationBuilder<TContract, AssemblyRegistrationInfo> AddFromAllAssemblies<TContract>(
-            this IRegistrationBuilder<TContract> builder)
-        {
-            Ensure.Arg.NotNull(builder, nameof(builder));
-
-            var registrationInfo = new AssemblyRegistrationInfo(typeof(TContract));
-            var scanner = new AssemblyScanner(typeof(TContract), AppDomain.CurrentDomain.GetAssemblies());
             builder.RegisterScannerCallback(scanner, registrationInfo);
 
             return new AssemblyComponentRegistrationBuilder<TContract>(builder, registrationInfo);

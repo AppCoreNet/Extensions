@@ -5,10 +5,14 @@ using System;
 
 namespace AppCore.DependencyInjection.Builder
 {
+    /// <summary>
+    /// Provides component registration info for instance based registrations.
+    /// </summary>
     public abstract class SingleInstanceRegistrationInfo : IComponentRegistrationInfo
     {
         internal Type ContractType { get; }
 
+        /// <inheritdoc />
         public ComponentRegistrationFlags Flags { get; set; }
 
         internal SingleInstanceRegistrationInfo(Type contractType)

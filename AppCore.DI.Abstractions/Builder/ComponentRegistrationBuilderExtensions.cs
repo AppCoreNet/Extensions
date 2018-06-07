@@ -1,12 +1,26 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
+using System;
 using AppCore.Diagnostics;
 
+// ReSharper disable PossibleStructMemberModificationOfNonVariableStruct
 namespace AppCore.DependencyInjection.Builder
 {
+    /// <summary>
+    /// Provides extension methods for <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/> and
+    /// <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.
+    /// </summary>
     public static class ComponentRegistrationBuilderExtensions
     {
+        /// <summary>
+        /// Specifies the lifetime of the registered component.
+        /// </summary>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <param name="lifetime">The lifetime of the coponent.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TRegistrationInfo> WithLifetime<TRegistrationInfo>(
             this IComponentRegistrationBuilder<TRegistrationInfo> builder,
             ComponentLifetime lifetime)
@@ -17,6 +31,15 @@ namespace AppCore.DependencyInjection.Builder
             return builder;
         }
 
+        /// <summary>
+        /// Specifies the lifetime of the registered component.
+        /// </summary>
+        /// <typeparam name="TContract">The contract implemented by the component.</typeparam>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <param name="lifetime">The lifetime of the coponent.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TContract, TRegistrationInfo> WithLifetime<TContract, TRegistrationInfo>(
             this IComponentRegistrationBuilder<TContract, TRegistrationInfo> builder,
             ComponentLifetime lifetime)
@@ -27,57 +50,100 @@ namespace AppCore.DependencyInjection.Builder
             return builder;
         }
 
+        /// <summary>
+        /// Specifies that the component must be instantiated per dependency.
+        /// </summary>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TRegistrationInfo> PerDependency<TRegistrationInfo>(
             this IComponentRegistrationBuilder<TRegistrationInfo> builder)
             where TRegistrationInfo : IComponentRegistrationInfoWithLifetime
         {
-            builder.WithLifetime(ComponentLifetime.Transient);
-            return builder;
+            return builder.WithLifetime(ComponentLifetime.Transient);
         }
 
+        /// <summary>
+        /// Specifies that the component must be instantiated per dependency.
+        /// </summary>
+        /// <typeparam name="TContract">The contract implemented by the component.</typeparam>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TContract, TRegistrationInfo> PerDependency<TContract, TRegistrationInfo>(
             this IComponentRegistrationBuilder<TContract, TRegistrationInfo> builder)
             where TRegistrationInfo : IComponentRegistrationInfoWithLifetime
         {
-            builder.WithLifetime(ComponentLifetime.Transient);
-            return builder;
+            return builder.WithLifetime(ComponentLifetime.Transient);
         }
 
+        /// <summary>
+        /// Specifies that the component must be instantiated per container scope.
+        /// </summary>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TRegistrationInfo> PerScope<TRegistrationInfo>(
             this IComponentRegistrationBuilder<TRegistrationInfo> builder)
             where TRegistrationInfo : IComponentRegistrationInfoWithLifetime
         {
-            builder.WithLifetime(ComponentLifetime.Scoped);
-            return builder;
+            return builder.WithLifetime(ComponentLifetime.Scoped);
         }
 
+        /// <summary>
+        /// Specifies that the component must be instantiated per container scope.
+        /// </summary>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <typeparam name="TContract">The contract implemented by the component.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TContract, TRegistrationInfo> PerScope<TContract, TRegistrationInfo>(
             this IComponentRegistrationBuilder<TContract, TRegistrationInfo> builder)
             where TRegistrationInfo : IComponentRegistrationInfoWithLifetime
         {
-            builder.WithLifetime(ComponentLifetime.Scoped);
-            return builder;
+            return builder.WithLifetime(ComponentLifetime.Scoped);
         }
 
+        /// <summary>
+        /// Specifies that the component must be instantiated only once.
+        /// </summary>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TRegistrationInfo> PerContainer<TRegistrationInfo>(
             this IComponentRegistrationBuilder<TRegistrationInfo> builder)
             where TRegistrationInfo : IComponentRegistrationInfoWithLifetime
         {
-            builder.WithLifetime(ComponentLifetime.Singleton);
-            return builder;
+            return builder.WithLifetime(ComponentLifetime.Singleton);
         }
 
+        /// <summary>
+        /// Specifies that the component must be instantiated only once.
+        /// </summary>
+        /// <typeparam name="TContract">The contract implemented by the component.</typeparam>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TContract, TRegistrationInfo> PerContainer<TContract, TRegistrationInfo>(
             this IComponentRegistrationBuilder<TContract, TRegistrationInfo> builder)
             where TRegistrationInfo : IComponentRegistrationInfoWithLifetime
         {
-            builder.WithLifetime(ComponentLifetime.Singleton);
-            return builder;
+            return builder.WithLifetime(ComponentLifetime.Singleton);
         }
 
         /// <summary>
         /// Skips registration if component with same contract and implementation is already registered.
         /// </summary>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TRegistrationInfo> IfNotRegistered<TRegistrationInfo>(
             this IComponentRegistrationBuilder<TRegistrationInfo> builder)
             where TRegistrationInfo : IComponentRegistrationInfo
@@ -90,6 +156,11 @@ namespace AppCore.DependencyInjection.Builder
         /// <summary>
         /// Skips registration if component with same contract and implementation is already registered.
         /// </summary>
+        /// <typeparam name="TContract">The contract implemented by the component.</typeparam>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TContract, TRegistrationInfo> IfNotRegistered<
             TContract, TRegistrationInfo>(
             this IComponentRegistrationBuilder<TContract, TRegistrationInfo> builder)
@@ -103,6 +174,10 @@ namespace AppCore.DependencyInjection.Builder
         /// <summary>
         /// Skips registration if a component with same contract is already registered.
         /// </summary>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TRegistrationInfo> IfNoneRegistered<TRegistrationInfo>(
             this IComponentRegistrationBuilder<TRegistrationInfo> builder)
             where TRegistrationInfo : IComponentRegistrationInfo
@@ -115,6 +190,11 @@ namespace AppCore.DependencyInjection.Builder
         /// <summary>
         /// Skips registration if a component with same contract is already registered.
         /// </summary>
+        /// <typeparam name="TContract">The contract implemented by the component.</typeparam>
+        /// <typeparam name="TRegistrationInfo">The registration information.</typeparam>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <returns>The <paramref name="builder"/>.</returns>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
         public static IComponentRegistrationBuilder<TContract, TRegistrationInfo> IfNoneRegistered<
             TContract, TRegistrationInfo>(
             this IComponentRegistrationBuilder<TContract, TRegistrationInfo> builder)

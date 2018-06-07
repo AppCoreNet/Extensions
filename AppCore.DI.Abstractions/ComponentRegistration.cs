@@ -13,7 +13,7 @@ namespace AppCore.DependencyInjection
     public readonly struct ComponentRegistration
     {
         /// <summary>
-        /// Gets the type of component which is registered.
+        /// Gets the contract iof the component which is registered.
         /// </summary>
         public Type ContractType { get; }
 

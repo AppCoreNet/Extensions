@@ -5,13 +5,18 @@ using System;
 
 namespace AppCore.DependencyInjection.Builder
 {
+    /// <summary>
+    /// Provides component registration info for type based registrations.
+    /// </summary>
     public class TypeRegistrationInfo : IComponentRegistrationInfoWithLifetime
     {
         private readonly Type _contractType;
         private readonly Type _componentType;
 
+        /// <inheritdoc />
         public ComponentLifetime Lifetime { get; set; } = ComponentLifetime.Transient;
 
+        /// <inheritdoc />
         public ComponentRegistrationFlags Flags { get; set; }
 
         internal TypeRegistrationInfo(Type contractType, Type componentType)

@@ -9,6 +9,9 @@ using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Represents a type used to scan assemblies for exported types.
+    /// </summary>
     public class AssemblyScanner
     {
         private static readonly List<string> DefaultExcludedAssemblies = new List<string>
@@ -18,12 +21,29 @@ namespace AppCore.DependencyInjection
             "AppCore"
         };
 
+        /// <summary>
+        /// The contract for which types are scanned.
+        /// </summary>
         public Type ContractType { get; }
 
+        /// <summary>
+        /// Gets the <see cref="IList{T}"/> of <see cref="Assembly"/> to scan.
+        /// </summary>
         public IList<Assembly> Assemblies { get; }
 
+        /// <summary>
+        /// Gets the <see cref="IList{T}"/> of type filters.
+        /// </summary>
         public IList<Predicate<Type>> Filters { get; } = new List<Predicate<Type>>();
 
+        /// <summary>
+        /// Initalizes a new instance of the <see cref="AssemblyScanner"/> class.
+        /// </summary>
+        /// <param name="contractType">The type being implemented by types to search for.</param>
+        /// <param name="assemblies">The list of assemblies to scan.</param>
+        /// <exception cref="ArgumentNullException">
+        ///     Argument <paramref name="contractType"/> or <paramref name="assemblies"/> is <c>null</c>.
+        /// </exception>
         public AssemblyScanner(Type contractType, IEnumerable<Assembly> assemblies)
         {
             Ensure.Arg.NotNull(contractType, nameof(contractType));
@@ -34,6 +54,11 @@ namespace AppCore.DependencyInjection
             Filters.Add(FilterSystemAssemblies);
         }
 
+        /// <summary>
+        /// Initalizes a new instance of the <see cref="AssemblyScanner"/> class.
+        /// </summary>
+        /// <param name="contractType">The type being implemented by types to search for.</param>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="contractType"/> is <c>null</c>.</exception>
         public AssemblyScanner(Type contractType)
             : this(contractType, Enumerable.Empty<Assembly>())
         {
@@ -72,7 +97,7 @@ namespace AppCore.DependencyInjection
                         .Contains(ContractType);
                 });
 
-            foreach (Predicate<Type> registrationFilter in Filters)
+            foreach (Predicate<Type> registrationFilter in Filters.ToArray())
             {
                 exportedTypes = exportedTypes.Where(et => registrationFilter(et));
             }
@@ -80,10 +105,13 @@ namespace AppCore.DependencyInjection
             return exportedTypes;
         }
 
+        /// <summary>
+        /// Scans all assemblies for types.
+        /// </summary>
+        /// <returns>The <see cref="IEnumerable{T}"/> of types found.</returns>
         public IEnumerable<Type> ScanAssemblies()
         {
-            return Assemblies.SelectMany(GetTypes);
+            return Assemblies.ToArray().SelectMany(GetTypes);
         }
     }
 }
-

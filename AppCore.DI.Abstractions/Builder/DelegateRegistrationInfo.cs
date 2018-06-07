@@ -5,12 +5,17 @@ using System;
 
 namespace AppCore.DependencyInjection.Builder
 {
+    /// <summary>
+    /// Provides component registration info for delegate based registrations.
+    /// </summary>
     public abstract class DelegateRegistrationInfo : IComponentRegistrationInfoWithLifetime
     {
         internal Type ContractType { get; }
 
+        /// <inheritdoc />
         public ComponentLifetime Lifetime { get; set; } = ComponentLifetime.Transient;
 
+        /// <inheritdoc />
         public ComponentRegistrationFlags Flags { get; set; }
 
         internal DelegateRegistrationInfo(Type contractType)
