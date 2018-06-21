@@ -12,12 +12,6 @@ namespace AppCore.DependencyInjection.Builder
     public interface IFacilityBuilder
     {
         /// <summary>
-        /// Gets the <see cref="IComponentRegistry"/> the facility was created for.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        IComponentRegistry Registry { get; }
-
-        /// <summary>
         /// The <see cref="IFacility"/> which is being registered.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]

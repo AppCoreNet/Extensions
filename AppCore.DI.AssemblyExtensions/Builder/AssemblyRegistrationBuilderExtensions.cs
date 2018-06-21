@@ -66,7 +66,11 @@ namespace AppCore.DependencyInjection.Builder
             Ensure.Arg.NotNull(builder, nameof(builder));
             Ensure.Arg.NotNull(assembly, nameof(assembly));
 
-            var registrationInfo = new AssemblyRegistrationInfo(builder.ContractType);
+            var registrationInfo = new AssemblyRegistrationInfo(builder.ContractType)
+            {
+                Lifetime = builder.DefaultLifetime
+            };
+
             var scanner = new AssemblyScanner(builder.ContractType);
             scanner.Assemblies.Add(assembly);
             builder.RegisterScannerCallback(scanner, registrationInfo);
@@ -90,7 +94,11 @@ namespace AppCore.DependencyInjection.Builder
             Ensure.Arg.NotNull(builder, nameof(builder));
             Ensure.Arg.NotNull(assembly, nameof(assembly));
 
-            var registrationInfo = new AssemblyRegistrationInfo(typeof(TContract));
+            var registrationInfo = new AssemblyRegistrationInfo(typeof(TContract))
+            {
+                Lifetime = builder.DefaultLifetime
+            };
+
             var scanner = new AssemblyScanner(typeof(TContract));
             scanner.Assemblies.Add(assembly);
             builder.RegisterScannerCallback(scanner, registrationInfo);
@@ -121,7 +129,11 @@ namespace AppCore.DependencyInjection.Builder
 
             dependencyContext = dependencyContext ?? DependencyContext.Default;
 
-            var registrationInfo = new AssemblyRegistrationInfo(builder.ContractType);
+            var registrationInfo = new AssemblyRegistrationInfo(builder.ContractType)
+            {
+                Lifetime = builder.DefaultLifetime
+            };
+
             var scanner = new AssemblyScanner(builder.ContractType, LoadAssemblies(dependencyContext));
             builder.RegisterScannerCallback(scanner, registrationInfo);
 
@@ -143,7 +155,11 @@ namespace AppCore.DependencyInjection.Builder
 
             dependencyContext = dependencyContext ?? DependencyContext.Default;
 
-            var registrationInfo = new AssemblyRegistrationInfo(typeof(TContract));
+            var registrationInfo = new AssemblyRegistrationInfo(typeof(TContract))
+            {
+                Lifetime = builder.DefaultLifetime
+            };
+
             var scanner = new AssemblyScanner(typeof(TContract), LoadAssemblies(dependencyContext));
             builder.RegisterScannerCallback(scanner, registrationInfo);
 

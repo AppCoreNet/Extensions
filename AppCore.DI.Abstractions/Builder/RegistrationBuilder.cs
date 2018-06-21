@@ -8,6 +8,8 @@ namespace AppCore.DependencyInjection.Builder
 {
     internal class RegistrationBuilder : IRegistrationBuilder
     {
+        public ComponentLifetime DefaultLifetime { get; set; } = ComponentLifetime.Transient;
+
         public IComponentRegistry Registry { get; }
 
         public Type ContractType { get; }
@@ -22,7 +24,11 @@ namespace AppCore.DependencyInjection.Builder
         {
             Ensure.Arg.OfType(typeof(TComponent), ContractType, nameof(TComponent));
 
-            var registrationInfo = new TypeRegistrationInfo(ContractType, typeof(TComponent));
+            var registrationInfo = new TypeRegistrationInfo(ContractType, typeof(TComponent))
+            {
+                Lifetime = DefaultLifetime
+            };
+
             Registry.RegisterCallback(() => new[] {registrationInfo.CreateRegistration()});
 
             return
@@ -37,7 +43,11 @@ namespace AppCore.DependencyInjection.Builder
             Ensure.Arg.NotNull(factory, nameof(factory));
             Ensure.Arg.OfType(typeof(TComponent), ContractType, nameof(factory));
 
-            var registrationInfo = new DelegateRegistrationInfo<TComponent>(ContractType, factory);
+            var registrationInfo = new DelegateRegistrationInfo<TComponent>(ContractType, factory)
+            {
+                Lifetime = DefaultLifetime
+            };
+
             Registry.RegisterCallback(() => new[] {registrationInfo.CreateRegistration()});
 
             return
@@ -65,7 +75,11 @@ namespace AppCore.DependencyInjection.Builder
             Ensure.Arg.NotNull(componentType, nameof(componentType));
             Ensure.Arg.OfType(componentType, ContractType, nameof(componentType));
 
-            var registrationInfo = new TypeRegistrationInfo(ContractType, componentType);
+            var registrationInfo = new TypeRegistrationInfo(ContractType, componentType)
+            {
+                Lifetime = DefaultLifetime
+            };
+
             Registry.RegisterCallback(() => new[] {registrationInfo.CreateRegistration()});
 
             return
@@ -77,6 +91,8 @@ namespace AppCore.DependencyInjection.Builder
 
     internal class RegistrationBuilder<TContract> : IRegistrationBuilder<TContract>
     {
+        public ComponentLifetime DefaultLifetime { get; set; } = ComponentLifetime.Transient;
+
         public IComponentRegistry Registry { get; }
 
         public RegistrationBuilder(IComponentRegistry registry)
@@ -87,7 +103,11 @@ namespace AppCore.DependencyInjection.Builder
         public IComponentRegistrationBuilder<TContract, TypeRegistrationInfo> Add<TComponent>()
             where TComponent : TContract
         {
-            var registrationInfo = new TypeRegistrationInfo(typeof(TContract), typeof(TComponent));
+            var registrationInfo = new TypeRegistrationInfo(typeof(TContract), typeof(TComponent))
+            {
+                Lifetime = DefaultLifetime
+            };
+
             Registry.RegisterCallback(() => new[] {registrationInfo.CreateRegistration()});
 
             return
@@ -102,7 +122,11 @@ namespace AppCore.DependencyInjection.Builder
         {
             Ensure.Arg.NotNull(factory, nameof(factory));
 
-            var registrationInfo = new DelegateRegistrationInfo<TComponent>(typeof(TContract), factory);
+            var registrationInfo = new DelegateRegistrationInfo<TComponent>(typeof(TContract), factory)
+            {
+                Lifetime = DefaultLifetime
+            };
+
             Registry.RegisterCallback(() => new[] {registrationInfo.CreateRegistration()});
 
             return
@@ -131,7 +155,11 @@ namespace AppCore.DependencyInjection.Builder
             Ensure.Arg.NotNull(componentType, nameof(componentType));
             Ensure.Arg.OfType(componentType, typeof(TContract), nameof(componentType));
 
-            var registrationInfo = new TypeRegistrationInfo(typeof(TContract), componentType);
+            var registrationInfo = new TypeRegistrationInfo(typeof(TContract), componentType)
+            {
+                Lifetime = DefaultLifetime
+            };
+
             Registry.RegisterCallback(() => new[] {registrationInfo.CreateRegistration()});
 
             return

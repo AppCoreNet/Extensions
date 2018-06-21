@@ -1,10 +1,6 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
-using System;
-using System.Collections.Generic;
-using AppCore.DependencyInjection.Builder;
-
 namespace AppCore.DependencyInjection
 {
     /// <summary>
@@ -13,10 +9,6 @@ namespace AppCore.DependencyInjection
     /// <seealso cref="IFacility"/>
     public abstract class Facility : IFacility
     {
-        private readonly FacilityComponentRegistry _registry = new FacilityComponentRegistry();
-
-        protected IComponentRegistry Registry => _registry;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Facility"/> class.
         /// </summary>
@@ -24,29 +16,11 @@ namespace AppCore.DependencyInjection
         {
         }
 
-        protected void Register(ComponentRegistration registration)
-        {
-            _registry.Register(registration);
-        }
+        protected abstract void RegisterComponents(IComponentRegistry registry);
 
-        protected IRegistrationBuilder Register(Type contractType)
+        void IFacility.RegisterComponents(IComponentRegistry registry)
         {
-            return _registry.Register(contractType);
-        }
-
-        protected IRegistrationBuilder<TContract> Register<TContract>()
-        {
-            return _registry.Register<TContract>();
-        }
-
-        protected virtual void RegisterComponents()
-        {
-        }
-
-        IEnumerable<ComponentRegistration> IFacility.GetComponentRegistrations()
-        {
-            RegisterComponents();
-            return _registry.GetComponentRegistrations();
+            RegisterComponents(registry);
         }
     }
 }

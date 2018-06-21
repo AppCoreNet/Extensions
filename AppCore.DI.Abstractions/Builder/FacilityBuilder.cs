@@ -2,26 +2,22 @@
 // Copyright (c) 2018 the AppCore .NET project.
 
 using System.Collections.Generic;
-using System.Linq;
 using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection.Builder
 {
     internal class FacilityBuilder : IFacilityBuilder
     {
-        public IComponentRegistry Registry { get; }
-
         public IFacility Facility { get; }
 
-        public FacilityBuilder(IComponentRegistry registry, IFacility facility)
+        public FacilityBuilder(IFacility facility)
         {
-            Registry = registry;
             Facility = facility;
         }
 
-        public virtual IEnumerable<ComponentRegistration> BuildRegistrations()
+        public virtual void RegisterComponents(IComponentRegistry registry)
         {
-            return Facility.GetComponentRegistrations();
+            Facility.RegisterComponents(registry);
         }
     }
 
@@ -32,15 +28,19 @@ namespace AppCore.DependencyInjection.Builder
 
         public new TFacility Facility => (TFacility) ((IFacilityBuilder)this).Facility;
 
-        public FacilityBuilder(IComponentRegistry registry, TFacility facility)
-            : base(registry, facility)
+        public FacilityBuilder(TFacility facility)
+            : base(facility)
         {
         }
 
-        public override IEnumerable<ComponentRegistration> BuildRegistrations()
+        public override void RegisterComponents(IComponentRegistry registry)
         {
-            return base.BuildRegistrations()
-                       .Concat(_extensions.SelectMany(e => e.GetComponentRegistrations(Facility)));
+            foreach (IFacilityExtension<TFacility> facilityExtension in _extensions)
+            {
+                facilityExtension.RegisterComponents(registry, Facility);
+            }
+
+            base.RegisterComponents(registry);
         }
 
         public IFacilityBuilder<TFacility> AddExtension(IFacilityExtension<TFacility> extension)

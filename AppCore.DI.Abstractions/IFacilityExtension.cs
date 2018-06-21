@@ -1,8 +1,6 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
-using System.Collections.Generic;
-
 namespace AppCore.DependencyInjection
 {
     /// <summary>
@@ -15,8 +13,8 @@ namespace AppCore.DependencyInjection
         where TFacility : IFacility
     {
         /// <summary>
-        /// Returns the components registerd by the facility extension.
+        /// Invoked to register components of the facility extension.
         /// </summary>
-        IEnumerable<ComponentRegistration> GetComponentRegistrations(TFacility facility);
+        void RegisterComponents(IComponentRegistry registry, TFacility facility);
     }
 }

@@ -41,8 +41,16 @@ namespace AppCore.DependencyInjection
             Ensure.Arg.NotNull(registry, nameof(registry));
             Ensure.Arg.NotNull(facility, nameof(facility));
 
-            var builder = new FacilityBuilder(registry, facility);
-            registry.RegisterCallback(builder.BuildRegistrations);
+            var builder = new FacilityBuilder(facility);
+            var facilityRegistry = new FacilityComponentRegistry();
+
+            registry.RegisterCallback(
+                () =>
+                {
+                    builder.RegisterComponents(facilityRegistry);
+                    return facilityRegistry.GetComponentRegistrations();
+                });
+
             return builder;
         }
 
@@ -57,8 +65,15 @@ namespace AppCore.DependencyInjection
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
 
-            var builder = new FacilityBuilder<TFacility>(registry, new TFacility());
-            registry.RegisterCallback(builder.BuildRegistrations);
+            var builder = new FacilityBuilder<TFacility>(new TFacility());
+            var facilityRegistry = new FacilityComponentRegistry();
+
+            registry.RegisterCallback(() =>
+            {
+                builder.RegisterComponents(facilityRegistry);
+                return facilityRegistry.GetComponentRegistrations();
+            });
+
             return builder;
         }
     }

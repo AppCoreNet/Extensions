@@ -14,8 +14,8 @@ namespace AppCore.DependencyInjection
     public interface IFacility
     {
         /// <summary>
-        /// Returns the components registerd by the facility.
+        /// Invoked to register components of the facility.
         /// </summary>
-        IEnumerable<ComponentRegistration> GetComponentRegistrations();
+        void RegisterComponents(IComponentRegistry registry);
     }
 }

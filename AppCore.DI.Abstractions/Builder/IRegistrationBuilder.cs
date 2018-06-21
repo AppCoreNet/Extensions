@@ -13,6 +13,12 @@ namespace AppCore.DependencyInjection.Builder
     public interface IRegistrationBuilder
     {
         /// <summary>
+        /// Gets or sets the default lifetime for components.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        ComponentLifetime DefaultLifetime { get; set; }
+
+        /// <summary>
         /// Gets the <see cref="IComponentRegistry"/>.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -82,6 +88,12 @@ namespace AppCore.DependencyInjection.Builder
     /// <seealso cref="IComponentRegistry"/>
     public interface IRegistrationBuilder<TContract>
     {
+        /// <summary>
+        /// Gets or sets the default lifetime for components.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        ComponentLifetime DefaultLifetime { get; set; }
+
         /// <summary>
         /// Gets the <see cref="IComponentRegistry"/>.
         /// </summary>

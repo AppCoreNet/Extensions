@@ -1,10 +1,6 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
-using System;
-using System.Collections.Generic;
-using AppCore.DependencyInjection.Builder;
-
 namespace AppCore.DependencyInjection
 {
     /// <summary>
@@ -16,10 +12,6 @@ namespace AppCore.DependencyInjection
     public abstract class FacilityExtension<TFacility> : IFacilityExtension<TFacility>
         where TFacility : IFacility
     {
-        private readonly FacilityComponentRegistry _registry = new FacilityComponentRegistry();
-
-        protected IComponentRegistry Registry => _registry;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FacilityExtension{TFacility}"/> class.
         /// </summary>
@@ -27,29 +19,11 @@ namespace AppCore.DependencyInjection
         {
         }
 
-        protected void Register(ComponentRegistration registration)
-        {
-            _registry.Register(registration);
-        }
+        protected abstract void RegisterComponents(IComponentRegistry registry, TFacility facility);
 
-        protected IRegistrationBuilder Register(Type contractType)
+        void IFacilityExtension<TFacility>.RegisterComponents(IComponentRegistry registry, TFacility facility)
         {
-            return _registry.Register(contractType);
-        }
-
-        protected IRegistrationBuilder<TContract> Register<TContract>()
-        {
-            return _registry.Register<TContract>();
-        }
-
-        protected virtual void RegisterComponents(TFacility facility)
-        {
-        }
-
-        IEnumerable<ComponentRegistration> IFacilityExtension<TFacility>.GetComponentRegistrations(TFacility facility)
-        {
-            RegisterComponents(facility);
-            return _registry.GetComponentRegistrations();
+            RegisterComponents(registry, facility);
         }
     }
 }
