@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net452;netstandard1.1</TargetFrameworks>
-    <RootNamespace>AppCore.DependencyInjection.Autofac</RootNamespace>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
     <Description>Implementations for Autofac.</Description>
     <AssemblyName>AppCore.DependencyInjection.Autofac</AssemblyName>
   </PropertyGroup>

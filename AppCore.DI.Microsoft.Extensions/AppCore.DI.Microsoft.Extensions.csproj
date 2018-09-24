@@ -1,18 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.0;netstandard2.0</TargetFrameworks>
-    <RootNamespace>AppCore.DependencyInjection.Microsoft.Extensions</RootNamespace>
+    <TargetFrameworks>netstandard1.1;netstandard2.0</TargetFrameworks>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
     <Description>Implementations for the Microsoft.Extensions.DependencyInjection.</Description>
     <AssemblyName>AppCore.DependencyInjection.Microsoft.Extensions</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AppCore.DI.Microsoft.Extensions.csproj.DotSettings" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Condition="'$(TargetFramework)' == 'netstandard1.0'" Version="[1.0,2.0)" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Condition="'$(TargetFramework)' == 'netstandard2.0'" Version="[2.0,3.0)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Condition="'$(TargetFramework)' == 'netstandard1.1'" Version="[1.0,2.0)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Condition="'$(TargetFramework)' == 'netstandard2.0'" Version="[2.0,3.0)" />
   </ItemGroup>
 
   <ItemGroup>

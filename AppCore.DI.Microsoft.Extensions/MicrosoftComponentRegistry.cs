@@ -9,7 +9,7 @@ using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace AppCore.DependencyInjection.Microsoft.Extensions
+namespace AppCore.DependencyInjection
 {
     /// <summary>
     /// Provides Microsoft Dependency Injection based <see cref="IComponentRegistry"/> implementation.
@@ -134,11 +134,15 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
             _registrationCallbacks.Add(registrationCallback);
         }
 
+        /// <summary>
+        /// Registers all components with the specified <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> where to register components.</param>
         public void RegisterComponents(IServiceCollection services)
         {
             Ensure.Arg.NotNull(services, nameof(services));
 
-            services.TryAddSingleton<IContainer, MicrosoftContainer>();
+            services.TryAddTransient<IContainer, MicrosoftContainer>();
             services.TryAddScoped<IContainerScopeFactory, MicrosoftContainerScopeFactory>();
 
             foreach (ComponentRegistration registration in _registrationCallbacks.SelectMany(c => c()))

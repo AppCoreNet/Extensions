@@ -7,7 +7,7 @@ using AppCore.Diagnostics;
 using Autofac;
 using Autofac.Features.Variance;
 
-namespace AppCore.DependencyInjection.Autofac
+namespace AppCore.DependencyInjection
 {
     /// <summary>
     /// Autofac based <see cref="IContainer"/> implementation.
@@ -16,6 +16,7 @@ namespace AppCore.DependencyInjection.Autofac
     {
         private readonly IComponentContext _context;
 
+        /// <inheritdoc />
         public ContainerCapabilities Capabilities { get; }
 
         /// <summary>
@@ -35,6 +36,7 @@ namespace AppCore.DependencyInjection.Autofac
             Capabilities = capabilities;
         }
 
+        /// <inheritdoc />
         public object Resolve(Type contractType)
         {
             return _context.Resolve(contractType);

@@ -10,7 +10,7 @@ using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
 
-namespace AppCore.DependencyInjection.Autofac
+namespace AppCore.DependencyInjection
 {
     /// <summary>
     /// Provides Autofac based <see cref="IComponentRegistry"/> implementation.
@@ -142,6 +142,10 @@ namespace AppCore.DependencyInjection.Autofac
             _registrationCallbacks.Add(registrationCallback);
         }
 
+        /// <summary>
+        /// Registers components with the given <see cref="ContainerBuilder"/>.
+        /// </summary>
+        /// <param name="builder">The <see cref="ContainerBuilder"/> where components are registered.</param>
         public void RegisterComponents(ContainerBuilder builder)
         {
             Ensure.Arg.NotNull(builder, nameof(builder));

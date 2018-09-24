@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <Import Project="../build/netfx.props" />
@@ -9,9 +10,4 @@
   <Import Project="../build/sources.props" />
   <Import Project="../build/dependency-versions.props" />
   
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="11.1.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
 </Project>

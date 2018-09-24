@@ -2,15 +2,16 @@
 
   <PropertyGroup>
     <TargetFrameworks>net452;netstandard1.3</TargetFrameworks>
-    <RootNamespace>AppCore.DependencyInjection.StructureMap</RootNamespace>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
     <Description>Implementations for StructureMap.</Description>
     <AssemblyName>AppCore.DependencyInjection.StructureMap</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <None Remove="AppCore.DI.StructureMap.csproj.DotSettings" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AppCore.TypeHelpers.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

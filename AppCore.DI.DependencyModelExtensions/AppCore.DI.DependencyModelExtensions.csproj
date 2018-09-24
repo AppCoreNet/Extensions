@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net452;netstandard1.3;netstandard1.6</TargetFrameworks>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+    <Description>Dependency context assembly scanning extensions for DependencyInjection containers.</Description>
+    <AssemblyName>AppCore.DependencyInjection.DependencyModelExtensions</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AppCore.TypeHelpers.Sources" Version="$(AppCore_Shared_Version)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AppCore.DI.Abstractions\AppCore.DI.Abstractions.csproj" />
+    <ProjectReference Include="..\AppCore.DI.AssemblyExtensions\AppCore.DI.AssemblyExtensions.csproj" />
+  </ItemGroup>
+
+</Project>

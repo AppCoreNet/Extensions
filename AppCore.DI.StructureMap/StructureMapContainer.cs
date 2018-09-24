@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection.StructureMap
+namespace AppCore.DependencyInjection
 {
     /// <summary>
     /// StructureMap based <see cref="IContainer"/> implementation.
@@ -14,19 +14,26 @@ namespace AppCore.DependencyInjection.StructureMap
     {
         private readonly global::StructureMap.IContainer _container;
 
+        /// <inheritdoc />
         public ContainerCapabilities Capabilities { get; } = ContainerCapabilities.ContraVariance;
 
-        public StructureMapContainer(global::StructureMap.IContainer container)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StructureMapContainer"/> class.
+        /// </summary>
+        /// <param name="container">The <see cref="StructureMap.IContainer"/>.</param>
+        public StructureMapContainer(StructureMap.IContainer container)
         {
             Ensure.Arg.NotNull(container, nameof(container));
             _container = container;
         }
 
+        /// <inheritdoc />
         public object Resolve(Type contractType)
         {
             return _container.GetInstance(contractType);
         }
 
+        /// <inheritdoc />
         public object ResolveOptional(Type contractType)
         {
             Ensure.Arg.NotNull(contractType, nameof(contractType));

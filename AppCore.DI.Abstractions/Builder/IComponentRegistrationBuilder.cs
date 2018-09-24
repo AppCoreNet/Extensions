@@ -13,6 +13,9 @@ namespace AppCore.DependencyInjection.Builder
     public interface IComponentRegistrationBuilder<out TRegistrationInfo>
         where TRegistrationInfo : IComponentRegistrationInfo
     {
+        /// <summary>
+        /// Gets the <see cref="IComponentRegistrationInfo"/>.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         TRegistrationInfo RegistrationInfo { get; }
 
@@ -87,6 +90,9 @@ namespace AppCore.DependencyInjection.Builder
     public interface IComponentRegistrationBuilder<TContract, out TRegistrationInfo>
         where TRegistrationInfo : IComponentRegistrationInfo
     {
+        /// <summary>
+        /// Gets the <see cref="IComponentRegistrationInfo"/>.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         TRegistrationInfo RegistrationInfo { get; }
 

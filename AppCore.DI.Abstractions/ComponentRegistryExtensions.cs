@@ -7,14 +7,28 @@ using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Provides extension methods for the <see cref="IComponentRegistry"/>.
+    /// </summary>
     public static class ComponentRegistryExtensions
     {
+        /// <summary>
+        /// Registers a <see cref="ComponentRegistration"/> with the component registry.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/> where the component is registered.</param>
+        /// <param name="registration">The <see cref="ComponentRegistration"/> which is registered.</param>
         public static void Register(this IComponentRegistry registry, ComponentRegistration registration)
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
             registry.RegisterCallback(() => new[] { registration });
         }
 
+        /// <summary>
+        /// Registers a component for the specified <paramref name="contractType"/>.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/> where the component is registered.</param>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <returns>The <see cref="IRegistrationBuilder"/> which is used to register the component.</returns>
         public static IRegistrationBuilder Register(this IComponentRegistry registry, Type contractType)
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
@@ -22,6 +36,12 @@ namespace AppCore.DependencyInjection
             return new RegistrationBuilder(registry, contractType);
         }
 
+        /// <summary>
+        /// Registers a component for the specified <typeparamref name="TContract"/>.
+        /// </summary>
+        /// <typeparam name="TContract">The type of the contract.</typeparam>
+        /// <param name="registry">The <see cref="IComponentRegistry"/> where the component is registered.</param>
+        /// <returns>The <see cref="IRegistrationBuilder{TContract}"/> which is used to register the component.</returns>
         public static IRegistrationBuilder<TContract> Register<TContract>(this IComponentRegistry registry)
         {
             Ensure.Arg.NotNull(registry, nameof(registry));

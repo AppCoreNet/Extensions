@@ -9,13 +9,19 @@ using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Pipeline;
 
-namespace AppCore.DependencyInjection.StructureMap
+namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Represents StructureMap based <see cref="IComponentRegistry"/>.
+    /// </summary>
     public class StructureMapComponentRegistry : IComponentRegistry
     {
         private readonly List<Func<IEnumerable<ComponentRegistration>>> _registrationCallbacks =
             new List<Func<IEnumerable<ComponentRegistration>>>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StructureMapComponentRegistry"/>.
+        /// </summary>
         public StructureMapComponentRegistry()
         {
         }
@@ -94,6 +100,10 @@ namespace AppCore.DependencyInjection.StructureMap
             _registrationCallbacks.Add(registrationCallback);
         }
 
+        /// <summary>
+        /// Registers all components with the specified <paramref name="registry"/>.
+        /// </summary>
+        /// <param name="registry">The <see cref="Registry"/> where to register components.</param>
         public void RegisterComponents(Registry registry)
         {
             Ensure.Arg.NotNull(registry, nameof(registry));

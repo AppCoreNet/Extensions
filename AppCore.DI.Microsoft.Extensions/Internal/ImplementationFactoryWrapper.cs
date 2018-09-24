@@ -4,7 +4,7 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection.Microsoft.Extensions
+namespace AppCore.DependencyInjection
 {
     internal class ImplementationFactoryWrapper
     {

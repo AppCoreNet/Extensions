@@ -4,7 +4,7 @@
 using System;
 using StructureMap.Pipeline;
 
-namespace AppCore.DependencyInjection.StructureMap
+namespace AppCore.DependencyInjection
 {
     internal class ContainerLambdaInstance<T, TPluginType> : LambdaInstance<T, TPluginType>
         where T : TPluginType

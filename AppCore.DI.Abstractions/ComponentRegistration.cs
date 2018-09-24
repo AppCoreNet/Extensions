@@ -7,13 +7,13 @@ using AppCore.Diagnostics;
 namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Represents parameters for registering a service.
+    /// Represents parameters for registering a component.
     /// </summary>
     /// <seealso cref="IComponentRegistry"/>
     public readonly struct ComponentRegistration
     {
         /// <summary>
-        /// Gets the contract iof the component which is registered.
+        /// Gets the contract of the component which is registered.
         /// </summary>
         public Type ContractType { get; }
 
@@ -92,6 +92,14 @@ namespace AppCore.DependencyInjection
             Flags = flags;
         }
 
+        /// <summary>
+        /// Creates a <see cref="ComponentRegistration"/> for the specified contract and implementation type.
+        /// </summary>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <param name="implementationType">The type of the implementation.</param>
+        /// <param name="lifetime">The component lifetime.</param>
+        /// <param name="flags">The registration flags.</param>
+        /// <returns>The <see cref="ComponentRegistration"/>.</returns>
         public static ComponentRegistration Create(
             Type contractType,
             Type implementationType,
@@ -105,6 +113,15 @@ namespace AppCore.DependencyInjection
             return new ComponentRegistration(contractType, implementationType, lifetime, flags);
         }
 
+        /// <summary>
+        /// Creates a <see cref="ComponentRegistration"/> for the specified contract with factory delegate.
+        /// </summary>
+        /// <typeparam name="T">The type of the implementation.</typeparam>
+        /// <param name="contractType">The contract type.</param>
+        /// <param name="implementationFactory">The factory.</param>
+        /// <param name="lifetime">The component lifetime.</param>
+        /// <param name="flags">The registration flags.</param>
+        /// <returns>The <see cref="ComponentRegistration"/>.</returns>
         public static ComponentRegistration Create<T>(
             Type contractType,
             Func<IContainer, T> implementationFactory,
@@ -118,6 +135,14 @@ namespace AppCore.DependencyInjection
             return new ComponentRegistration(contractType, typeof(T), c => implementationFactory(c), lifetime, flags);
         }
 
+        /// <summary>
+        /// Creates a singleton <see cref="ComponentRegistration"/> for the specified contract.
+        /// </summary>
+        /// <typeparam name="T">The type of the implementation.</typeparam>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <param name="implementationInstance">The singleton instance.</param>
+        /// <param name="flags">The registration flags.</param>
+        /// <returns>The <see cref="ComponentRegistration"/>.</returns>
         public static ComponentRegistration Create<T>(
             Type contractType,
             T implementationInstance,

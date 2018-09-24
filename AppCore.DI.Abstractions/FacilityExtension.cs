@@ -19,6 +19,11 @@ namespace AppCore.DependencyInjection
         {
         }
 
+        /// <summary>
+        /// Must be implemented to register the components of the facility extension.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/> where components are registered.</param>
+        /// <param name="facility">The <see cref="IFacility"/> for which components are registered.</param>
         protected abstract void RegisterComponents(IComponentRegistry registry, TFacility facility);
 
         void IFacilityExtension<TFacility>.RegisterComponents(IComponentRegistry registry, TFacility facility)
