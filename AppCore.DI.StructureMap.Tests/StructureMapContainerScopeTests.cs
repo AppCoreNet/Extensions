@@ -3,7 +3,7 @@
 
 using StructureMap;
 
-namespace AppCore.DependencyInjection.StructureMap
+namespace AppCore.DependencyInjection
 {
     public class StructureMapContainerScopeTests : ContainerScopeTests
     {

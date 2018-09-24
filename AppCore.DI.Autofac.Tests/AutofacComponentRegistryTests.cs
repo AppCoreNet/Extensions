@@ -3,7 +3,7 @@
 
 using Autofac;
 
-namespace AppCore.DependencyInjection.Autofac
+namespace AppCore.DependencyInjection
 {
     public class AutofacComponentRegistryTests : ComponentRegistryTests
     {

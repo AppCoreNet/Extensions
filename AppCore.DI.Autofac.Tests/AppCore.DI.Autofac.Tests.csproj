@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net452;netcoreapp1.0;netcoreapp2.0</TargetFrameworks>
     <AssemblyName>AppCore.DependencyInjection.Autofac.Tests</AssemblyName>
-    <RootNamespace>AppCore.DependencyInjection.Autofac</RootNamespace>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

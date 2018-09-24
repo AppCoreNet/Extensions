@@ -3,7 +3,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection.Microsoft.Extensions
+namespace AppCore.DependencyInjection
 {
     public class MicrosoftContainerScopeTests : ContainerScopeTests
     {
