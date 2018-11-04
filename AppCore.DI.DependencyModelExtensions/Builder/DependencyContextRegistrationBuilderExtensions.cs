@@ -31,14 +31,14 @@ namespace AppCore.DependencyInjection.Builder
         public static IComponentRegistrationBuilder<AssemblyRegistrationInfo> AddFromDependencyContext(
             this IRegistrationBuilder builder,
             DependencyContext dependencyContext
-            #if NET452 || NETSTANDARD1_6
+            #if NET452 || NETSTANDARD1_6 || NETSTANDARD2_0
                 = null
             #endif
             )
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
 
-#if NET452 || NETSTANDARD1_6
+#if NET452 || NETSTANDARD1_6 || NETSTANDARD2_0
             dependencyContext = dependencyContext ?? DependencyContext.Default;
  #endif
 
@@ -55,14 +55,14 @@ namespace AppCore.DependencyInjection.Builder
         public static IComponentRegistrationBuilder<TContract, AssemblyRegistrationInfo> AddFromDependencyContext<TContract>(
             this IRegistrationBuilder<TContract> builder,
             DependencyContext dependencyContext
-            #if NET452 || NETSTANDARD1_6
+            #if NET452 || NETSTANDARD1_6 || NETSTANDARD2_0
                 = null
             #endif
             )
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
 
-#if NET452 || NETSTANDARD1_6
+#if NET452 || NETSTANDARD1_6 || NETSTANDARD2_0
             dependencyContext = dependencyContext ?? DependencyContext.Default;
 #endif
 

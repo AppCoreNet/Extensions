@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard1.0</TargetFrameworks>
+    <TargetFrameworks>net452;netstandard1.0;netstandard2.0</TargetFrameworks>
     <RootNamespace>AppCore.DependencyInjection</RootNamespace>
     <Description>Assembly scanning extensions for DependencyInjection containers.</Description>
     <AssemblyName>AppCore.DependencyInjection.AssemblyExtensions</AssemblyName>
