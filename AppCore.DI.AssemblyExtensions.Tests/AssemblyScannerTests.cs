@@ -19,12 +19,10 @@ namespace AppCore.DependencyInjection
             scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
             scanner.ScanAssemblies()
-                   .ShouldBeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1),
-                           typeof(ContractImpl2)
-                       });
+                   .Should()
+                   .BeEquivalentTo(
+                       typeof(ContractImpl1),
+                       typeof(ContractImpl2));
         }
 
         [Fact]
@@ -37,14 +35,12 @@ namespace AppCore.DependencyInjection
             scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
             scanner.ScanAssemblies()
-                   .ShouldBeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1<>),
-                           typeof(ContractImpl2<>),
-                           typeof(ContractImpl1String),
-                           typeof(ContractImpl2String)
-                       });
+                   .Should()
+                   .BeEquivalentTo(
+                       typeof(ContractImpl1<>),
+                       typeof(ContractImpl2<>),
+                       typeof(ContractImpl1String),
+                       typeof(ContractImpl2String));
         }
 
         [Fact]
@@ -57,12 +53,10 @@ namespace AppCore.DependencyInjection
             scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
             scanner.ScanAssemblies()
-                   .ShouldBeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1String),
-                           typeof(ContractImpl2String)
-                       });
+                   .Should()
+                   .BeEquivalentTo(
+                       typeof(ContractImpl1String),
+                       typeof(ContractImpl2String));
         }
 
         [Fact]
@@ -75,12 +69,10 @@ namespace AppCore.DependencyInjection
             scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
             scanner.ScanAssemblies()
-                   .ShouldBeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1),
-                           typeof(ContractImpl2)
-                       });
+                   .Should()
+                   .BeEquivalentTo(
+                       typeof(ContractImpl1),
+                       typeof(ContractImpl2));
         }
 
         [Fact]
@@ -93,14 +85,12 @@ namespace AppCore.DependencyInjection
             scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
             scanner.ScanAssemblies()
-                   .ShouldBeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1<>),
-                           typeof(ContractImpl2<>),
-                           typeof(ContractImpl1String),
-                           typeof(ContractImpl2String)
-                       });
+                   .Should()
+                   .BeEquivalentTo(
+                       typeof(ContractImpl1<>),
+                       typeof(ContractImpl2<>),
+                       typeof(ContractImpl1String),
+                       typeof(ContractImpl2String));
         }
 
         [Fact]
@@ -113,12 +103,10 @@ namespace AppCore.DependencyInjection
             scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
             scanner.ScanAssemblies()
-                   .ShouldBeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1String),
-                           typeof(ContractImpl2String)
-                       });
+                   .Should()
+                   .BeEquivalentTo(
+                       typeof(ContractImpl1String),
+                       typeof(ContractImpl2String));
         }
     }
 }

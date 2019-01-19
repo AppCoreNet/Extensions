@@ -127,7 +127,8 @@ namespace AppCore.DependencyInjection
                     .HaveCount(2);
 
             services.Select(s => s.GetType())
-                    .ShouldBeEquivalentTo(
+                    .Should()
+                    .BeEquivalentTo(
                         new[]
                         {
                             typeof(MyService),
@@ -311,7 +312,8 @@ namespace AppCore.DependencyInjection
                     .HaveCount(2);
 
             services.Select(s => s.GetType())
-                    .ShouldBeEquivalentTo(
+                    .Should()
+                    .BeEquivalentTo(
                         new[]
                         {
                             typeof(MyService),
@@ -414,7 +416,8 @@ namespace AppCore.DependencyInjection
                     .HaveCount(2);
 
             services.Select(s => s.GetType())
-                    .ShouldBeEquivalentTo(
+                    .Should()
+                    .BeEquivalentTo(
                         new[]
                         {
                             typeof(MyService),
