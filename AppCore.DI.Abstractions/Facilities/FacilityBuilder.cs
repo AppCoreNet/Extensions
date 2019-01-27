@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection.Builder
+namespace AppCore.DependencyInjection.Facilities
 {
     internal class FacilityBuilder : IFacilityBuilder
     {

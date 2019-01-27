@@ -1,15 +1,15 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
+using AppCore.DependencyInjection.Builder;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection.Builder
+namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Provides extension methods for the <see cref="IRegistrationBuilder"/> and <see cref="IRegistrationBuilder{TContract}"/>
-    /// interfaces.
+    /// Provides extension methods for registering components with the <see cref="IComponentRegistry"/>.
     /// </summary>
-    public static class RegistrationBuilderExtensions
+    public static partial class RegistrationExtensions
     {
         /// <summary>
         /// Specifies the default lifetime for components.

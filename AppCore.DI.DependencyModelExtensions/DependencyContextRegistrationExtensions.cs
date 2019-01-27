@@ -5,15 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AppCore.DependencyInjection.Builder;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyModel;
 
-namespace AppCore.DependencyInjection.Builder
+namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Provides extension methods for <see cref="IRegistrationBuilder"/> and <see cref="IRegistrationBuilder{TContract}"/>.
+    /// Provides extension methods for registering components with the <see cref="IComponentRegistry"/> via assembly scanning.
     /// </summary>
-    public static class DependencyContextRegistrationBuilderExtensions
+    public static class DependencyContextRegistrationExtensions
     {
         private static IEnumerable<Assembly> LoadAssemblies(DependencyContext dependencyContext)
         {

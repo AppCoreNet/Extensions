@@ -3,7 +3,7 @@
 
 using System.ComponentModel;
 
-namespace AppCore.DependencyInjection.Builder
+namespace AppCore.DependencyInjection.Facilities
 {
     /// <summary>
     /// Represents a type to register facilities.

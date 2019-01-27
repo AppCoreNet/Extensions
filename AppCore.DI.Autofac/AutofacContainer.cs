@@ -7,7 +7,7 @@ using AppCore.Diagnostics;
 using Autofac;
 using Autofac.Features.Variance;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Autofac
 {
     /// <summary>
     /// Autofac based <see cref="IContainer"/> implementation.

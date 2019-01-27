@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.StructureMap
 {
     /// <summary>
     /// StructureMap based <see cref="IContainer"/> implementation.
@@ -21,7 +21,7 @@ namespace AppCore.DependencyInjection
         /// Initializes a new instance of the <see cref="StructureMapContainer"/> class.
         /// </summary>
         /// <param name="container">The <see cref="StructureMap.IContainer"/>.</param>
-        public StructureMapContainer(StructureMap.IContainer container)
+        public StructureMapContainer(global::StructureMap.IContainer container)
         {
             Ensure.Arg.NotNull(container, nameof(container));
             _container = container;

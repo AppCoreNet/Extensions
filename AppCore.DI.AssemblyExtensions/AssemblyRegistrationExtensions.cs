@@ -4,14 +4,15 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AppCore.DependencyInjection.Builder;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection.Builder
+namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Provides extension methods for <see cref="IRegistrationBuilder"/> and <see cref="IRegistrationBuilder{TContract}"/>.
+    /// Provides extension methods for registering components with the <see cref="IComponentRegistry"/> via assembly scanning.
     /// </summary>
-    public static class AssemblyRegistrationBuilderExtensions
+    public static class AssemblyRegistrationExtensions
     {
         private static void RegisterScannerCallback(
             this IRegistrationBuilder builder,
@@ -141,6 +142,46 @@ namespace AppCore.DependencyInjection.Builder
         {
             Ensure.Arg.NotNull(assembly, nameof(assembly));
             return builder.AddFromAssemblies(new[] {assembly});
+        }
+
+        /// <summary>
+        /// Adds a type filter when scanning assemblies.
+        /// </summary>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</param>
+        /// <param name="filter">The predicate used to filter types.</param>
+        /// <returns>The <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Argument <paramref name="builder"/> or <paramref name="filter"/> is <c>null</c>.
+        /// </exception>
+        public static IComponentRegistrationBuilder<AssemblyRegistrationInfo> WithFilter(
+            this IComponentRegistrationBuilder<AssemblyRegistrationInfo> builder,
+            Predicate<Type> filter)
+        {
+            Ensure.Arg.NotNull(builder, nameof(builder));
+            Ensure.Arg.NotNull(filter, nameof(filter));
+
+            builder.RegistrationInfo.Filters.Add(filter);
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds a type filter when scanning assemblies.
+        /// </summary>
+        /// <param name="builder">The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</param>
+        /// <param name="filter">The predicate used to filter types.</param>
+        /// <returns>The <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.</returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Argument <paramref name="builder"/> or <paramref name="filter"/> is <c>null</c>.
+        /// </exception>
+        public static IComponentRegistrationBuilder<TContract, AssemblyRegistrationInfo> WithFilter<TContract>(
+            this IComponentRegistrationBuilder<TContract, AssemblyRegistrationInfo> builder,
+            Predicate<Type> filter)
+        {
+            Ensure.Arg.NotNull(builder, nameof(builder));
+            Ensure.Arg.NotNull(filter, nameof(filter));
+
+            builder.RegistrationInfo.Filters.Add(filter);
+            return builder;
         }
     }
 }

@@ -1,60 +1,57 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
-
-using System;
+﻿using System;
 using AppCore.DependencyInjection;
+using AppCore.DependencyInjection.Autofac;
 using AppCore.DependencyInjection.Facilities;
-using AppCore.DependencyInjection.Microsoft.Extensions;
 using AppCore.Diagnostics;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection
+namespace Autofac
 {
     /// <summary>
-    /// Provides extensions methods to register facilities with a <see cref="IServiceCollection"/>.
+    /// Provides extensions methods to register facilities with a <see cref="ContainerBuilder"/>.
     /// </summary>
-    public static class FacilityServiceCollectionExtensions
+    public static class FacilityRegistrationExtensions
     {
         /// <summary>
         /// Register the specified <typeparamref name="TFacility"/> with the service collection.
         /// </summary>
         /// <typeparam name="TFacility">The type of the <see cref="IFacility"/> to register.</typeparam>
-        /// <param name="services">The <see cref="IServiceCollection"/> where to register the facility.</param>
+        /// <param name="builder">The <see cref="ContainerBuilder"/> where to register the facility.</param>
         /// <param name="configure">Optional delegate to configure the facility.</param>
-        /// <returns>The <see cref="IServiceCollection"/>.</returns>
-        public static IServiceCollection AddFacility<TFacility>(
-            this IServiceCollection services,
+        /// <returns>The <see cref="ContainerBuilder"/>.</returns>
+        public static ContainerBuilder RegisterFacility<TFacility>(
+            this ContainerBuilder builder,
             Action<IFacilityBuilder<TFacility>> configure = null)
             where TFacility : IFacility, new()
         {
-            Ensure.Arg.NotNull(services, nameof(services));
+            Ensure.Arg.NotNull(builder, nameof(builder));
 
-            var registry = new MicrosoftComponentRegistry();
+            var registry = new AutofacComponentRegistry();
             IFacilityBuilder<TFacility> facilityBuilder = registry.RegisterFacility<TFacility>();
             configure?.Invoke(facilityBuilder);
-            registry.RegisterComponents(services);
-            return services;
+            registry.RegisterComponents(builder);
+            return builder;
         }
 
         /// <summary>
         /// Register the specified <paramref name="facility"/> with the service collection.
         /// </summary>
         /// <param name="facility">The <see cref="IFacility"/> to register.</param>
-        /// <param name="services">The <see cref="IServiceCollection"/> where to register the facility.</param>
+        /// <param name="builder">The <see cref="ContainerBuilder"/> where to register the facility.</param>
         /// <param name="configure">Optional delegate to configure the facility.</param>
-        /// <returns>The <see cref="IServiceCollection"/>.</returns>
-        public static IServiceCollection AddFacility(
-            this IServiceCollection services,
+        /// <returns>The <see cref="ContainerBuilder"/>.</returns>
+        public static ContainerBuilder RegisterFacility(
+            this ContainerBuilder builder,
             IFacility facility,
             Action<IFacilityBuilder> configure = null)
         {
-            Ensure.Arg.NotNull(services, nameof(services));
+            Ensure.Arg.NotNull(builder, nameof(builder));
 
-            var registry = new MicrosoftComponentRegistry();
+            var registry = new AutofacComponentRegistry();
             IFacilityBuilder facilityBuilder = registry.RegisterFacility(facility);
             configure?.Invoke(facilityBuilder);
-            registry.RegisterComponents(services);
-            return services;
+            registry.RegisterComponents(builder);
+            return builder;
         }
     }
 }

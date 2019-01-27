@@ -9,7 +9,7 @@ using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Microsoft.Extensions
 {
     /// <summary>
     /// Provides Microsoft Dependency Injection based <see cref="IComponentRegistry"/> implementation.

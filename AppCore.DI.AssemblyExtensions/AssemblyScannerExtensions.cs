@@ -4,8 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using AppCore.DependencyInjection.Builder;
 
-namespace AppCore.DependencyInjection.Builder
+namespace AppCore.DependencyInjection
 {
     internal static class AssemblyScannerExtensions
     {

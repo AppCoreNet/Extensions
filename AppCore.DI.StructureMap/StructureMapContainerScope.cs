@@ -4,14 +4,14 @@
 using System;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.StructureMap
 {
     /// <summary>
     /// Represents StructureMap <see cref="IContainerScope"/>.
     /// </summary>
     public class StructureMapContainerScope : IContainerScope
     {
-        private readonly StructureMap.IContainer _internalContainer;
+        private readonly global::StructureMap.IContainer _internalContainer;
         private readonly IContainer _container;
 
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace AppCore.DependencyInjection
         /// Initializes a new instance of the <see cref="StructureMapContainerScope"/>.
         /// </summary>
         /// <param name="container">The <see cref="StructureMap.IContainer"/>.</param>
-        public StructureMapContainerScope(StructureMap.IContainer container)
+        public StructureMapContainerScope(global::StructureMap.IContainer container)
         {
             Ensure.Arg.NotNull(container, nameof(container));
             _internalContainer = container;

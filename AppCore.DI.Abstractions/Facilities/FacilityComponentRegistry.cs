@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Facilities
 {
     internal class FacilityComponentRegistry : IComponentRegistry
     {

@@ -2,16 +2,16 @@
 // Copyright (c) 2018 the AppCore .NET project.
 
 using System;
+using AppCore.DependencyInjection.Builder;
 using AppCore.Diagnostics;
 
-// ReSharper disable PossibleStructMemberModificationOfNonVariableStruct
-namespace AppCore.DependencyInjection.Builder
+namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Provides extension methods for <see cref="IComponentRegistrationBuilder{TRegistrationInfo}"/> and
-    /// <see cref="IComponentRegistrationBuilder{TContract, TRegistrationInfo}"/>.
+    /// Provides extension methods for registering components with the <see cref="IComponentRegistry"/>.
     /// </summary>
-    public static class ComponentRegistrationBuilderExtensions
+    // ReSharper disable PossibleStructMemberModificationOfNonVariableStruct
+    public static partial class RegistrationExtensions
     {
         /// <summary>
         /// Specifies the lifetime of the registered component.

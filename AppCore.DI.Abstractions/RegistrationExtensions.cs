@@ -3,14 +3,15 @@
 
 using System;
 using AppCore.DependencyInjection.Builder;
+using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Provides extension methods for the <see cref="IComponentRegistry"/>.
+    /// Provides extension methods for registering components with the <see cref="IComponentRegistry"/>.
     /// </summary>
-    public static class ComponentRegistryExtensions
+    public static partial class RegistrationExtensions
     {
         /// <summary>
         /// Registers a <see cref="ComponentRegistration"/> with the component registry.

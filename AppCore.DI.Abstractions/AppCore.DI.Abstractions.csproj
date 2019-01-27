@@ -13,4 +13,10 @@
     </PackageReference>
   </ItemGroup>
   
+  <ItemGroup>
+    <Compile Update="RegistrationExtensions.*.cs">
+      <DependentUpon>RegistrationExtensions.cs</DependentUpon>
+    </Compile>  
+  </ItemGroup>
+
 </Project>

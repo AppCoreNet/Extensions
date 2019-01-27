@@ -4,7 +4,7 @@
 using AppCore.Diagnostics;
 using Autofac;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Autofac
 {
     /// <summary>
     /// Represents Autofac based <see cref="IContainerScopeFactory"/>.

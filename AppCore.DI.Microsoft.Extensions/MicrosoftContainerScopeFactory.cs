@@ -4,7 +4,7 @@
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Microsoft.Extensions
 {
     /// <summary>
     /// Represents a Microsoft DI based <see cref="IContainerScopeFactory"/>.

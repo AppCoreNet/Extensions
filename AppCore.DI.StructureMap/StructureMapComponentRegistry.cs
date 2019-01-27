@@ -9,7 +9,7 @@ using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Pipeline;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.StructureMap
 {
     /// <summary>
     /// Represents StructureMap based <see cref="IComponentRegistry"/>.

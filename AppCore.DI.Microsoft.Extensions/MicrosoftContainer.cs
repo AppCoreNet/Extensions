@@ -5,7 +5,7 @@ using System;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Microsoft.Extensions
 {
     /// <summary>
     /// Represents Microsoft DI based <see cref="IContainer"/> implementation.

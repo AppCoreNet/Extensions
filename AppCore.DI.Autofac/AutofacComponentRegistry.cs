@@ -10,7 +10,7 @@ using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Autofac
 {
     /// <summary>
     /// Provides Autofac based <see cref="IComponentRegistry"/> implementation.
