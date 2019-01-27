@@ -3,7 +3,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Microsoft.Extensions
 {
     public class MicrosoftComponentRegistryTests : ComponentRegistryTests
     {

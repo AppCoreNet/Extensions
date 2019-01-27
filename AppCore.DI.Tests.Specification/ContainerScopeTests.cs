@@ -1,6 +1,7 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
+using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
@@ -30,6 +31,39 @@ namespace AppCore.DependencyInjection
 
             disposable.Received(1)
                       .Dispose();
+        }
+
+        [Fact]
+        public void ResolvesDifferentInstanceFromDifferentScope()
+        {
+            Registry.Register(
+                ComponentRegistration.Create(typeof(IMyService), typeof(MyService), ComponentLifetime.Scoped));
+
+            using (IContainerScope scope1 = CreateScope())
+            using (IContainerScope scope2 = CreateScope())
+            {
+                var service1 = scope1.Container.Resolve<IMyService>();
+                var service2 = scope2.Container.Resolve<IMyService>();
+
+                service1.Should()
+                        .NotBeSameAs(service2);
+            }
+        }
+
+        [Fact]
+        public void ResolvesSameInstanceFromSameScope()
+        {
+            Registry.Register(
+                ComponentRegistration.Create(typeof(IMyService), typeof(MyService), ComponentLifetime.Scoped));
+
+            using (IContainerScope scope = CreateScope())
+            {
+                var service1 = scope.Container.Resolve<IMyService>();
+                var service2 = scope.Container.Resolve<IMyService>();
+
+                service1.Should()
+                        .BeSameAs(service2);
+            }
         }
 
         [Fact]

@@ -3,13 +3,15 @@
 
 using Autofac;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Autofac
 {
     public class AutofacContainerScopeTests : ContainerScopeTests
     {
         public override IComponentRegistry Registry { get; }
 
         public ContainerBuilder Builder { get; }
+
+        private global::Autofac.IContainer _container;
 
         public AutofacContainerScopeTests()
         {
@@ -19,8 +21,13 @@ namespace AppCore.DependencyInjection
 
         public override IContainerScope CreateScope()
         {
-            ((AutofacComponentRegistry) Registry).RegisterComponents(Builder);
-            return new AutofacContainerScope(Builder.Build().BeginLifetimeScope());
+            if (_container == null)
+            {
+                ((AutofacComponentRegistry) Registry).RegisterComponents(Builder);
+                _container = Builder.Build();
+            }
+
+            return new AutofacContainerScope(_container.BeginLifetimeScope());
         }
     }
 }
