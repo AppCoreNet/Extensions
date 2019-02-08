@@ -108,31 +108,78 @@ namespace AppCore.DependencyInjection.Autofac
                 rb.OnlyIf(
                     r =>
                     {
-                        Type resolvedServiceType = serviceType;
-                        Type resolvedLimitType = limitType;
-
-                        if (serviceType.GetTypeInfo()
-                                       .IsGenericTypeDefinition)
-                        {
-                            // in case of open generic services we need to check against closed
-                            // generic service type
-                            resolvedServiceType = serviceType.MakeGenericType(typeof(object));
-                            resolvedLimitType = limitType.MakeGenericType(typeof(object));
-                        }
+                        // in case of open generic services we need to check against closed
+                        // generic service type
+                        serviceType = ConstructOpenGenericType(serviceType);
 
                         IEnumerable<IInstanceActivator> instanceActivators =
-                            r.RegistrationsFor(new TypedService(resolvedServiceType))
+                            r.RegistrationsFor(new TypedService(serviceType))
                              .Select(cr => cr.Activator);
 
                         if ((flags & ComponentRegistrationFlags.IfNotRegistered)
                             == ComponentRegistrationFlags.IfNotRegistered)
                         {
-                            return instanceActivators.All(a => a.LimitType != resolvedLimitType);
+                            limitType = ConstructOpenGenericType(limitType);
+                            return instanceActivators.All(a => a.LimitType != limitType);
                         }
 
                         return !instanceActivators.Any();
                     });
             }
+        }
+
+        private static Type ConstructOpenGenericType(Type serviceType)
+        {
+            TypeInfo serviceTypeInfo = serviceType.GetTypeInfo();
+            if (serviceTypeInfo.IsGenericTypeDefinition)
+            {
+                Type[] serviceTypeParameters = serviceTypeInfo.GenericTypeParameters;
+
+                var genericTypeArguments = new Dictionary<Type,Type>();
+                foreach (Type serviceTypeParameter in serviceTypeParameters)
+                {
+                    genericTypeArguments.Add(
+                        serviceTypeParameter,
+                        serviceTypeParameter
+                            .GetTypeInfo()
+                            .GetGenericParameterConstraints()
+                            .SingleOrDefault()?? typeof(object));
+                }
+
+                foreach (Type genericTypeArgument in genericTypeArguments.Keys.ToArray())
+                {
+                    TypeInfo genericTypeArgumentTypeInfo = genericTypeArguments[genericTypeArgument].GetTypeInfo();
+                    if (genericTypeArgumentTypeInfo.IsGenericType && genericTypeArgumentTypeInfo.ContainsGenericParameters)
+                    {
+                        var genericTypeParameters =
+                            new Type[genericTypeArgumentTypeInfo.GenericTypeArguments.Length];
+
+                        for (var i = 0; i < genericTypeArgumentTypeInfo.GenericTypeArguments.Length; i++)
+                        {
+                            if (genericTypeArgumentTypeInfo.GenericTypeArguments[i]
+                                                           .IsGenericParameter)
+                            {
+                                genericTypeParameters[i] = genericTypeArguments[genericTypeArgumentTypeInfo.GenericTypeArguments[i]];
+                            }
+                            else
+                            {
+                                genericTypeParameters[i] = typeof(object);
+                            }
+                        }
+
+                        genericTypeArguments[genericTypeArgument] =
+                            genericTypeArgumentTypeInfo.GetGenericTypeDefinition()
+                                                       .MakeGenericType(genericTypeParameters);
+                    }
+                }
+
+                serviceType = serviceType.MakeGenericType(
+                    genericTypeArguments.OrderBy(kv => kv.Key.GenericParameterPosition)
+                                        .Select(kv => kv.Value)
+                                        .ToArray());
+            }
+
+            return serviceType;
         }
 
         /// <inheritdoc />
