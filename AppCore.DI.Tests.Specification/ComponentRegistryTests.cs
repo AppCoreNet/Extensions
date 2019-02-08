@@ -226,6 +226,37 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Transient)]
         [InlineData(ComponentLifetime.Scoped)]
         [InlineData(ComponentLifetime.Singleton)]
+        public void RegisterOnlyOnceWithOpenGenericType2(ComponentLifetime lifetime)
+        {
+            ComponentRegistration registration = ComponentRegistration.Create(
+                typeof(IGenericService<,>),
+                typeof(GenericService1<,>),
+                lifetime);
+
+            Registry.Register(registration);
+
+            ComponentRegistration registration2 = ComponentRegistration.Create(
+                typeof(IGenericService<,>),
+                typeof(GenericService1<,>),
+                lifetime,
+                ComponentRegistrationFlags.IfNoneRegistered);
+
+            Registry.Register(registration2);
+
+            IEnumerable<IGenericService<string,IEnumerable<string>>> services = BuildContainer()
+                .ResolveAll<IGenericService<string,IEnumerable<string>>>();
+
+            services.Should()
+                    .HaveCount(1);
+
+            services.Should()
+                    .AllBeOfType<GenericService1<string,IEnumerable<string>>>();
+        }
+
+        [Theory]
+        [InlineData(ComponentLifetime.Transient)]
+        [InlineData(ComponentLifetime.Scoped)]
+        [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceEnumerableWithType(ComponentLifetime lifetime)
         {
             ComponentRegistration registration = ComponentRegistration.Create(
@@ -282,6 +313,37 @@ namespace AppCore.DependencyInjection
 
             services.Should()
                     .AllBeOfType<GenericService1<string>>();
+        }
+
+        [Theory]
+        [InlineData(ComponentLifetime.Transient)]
+        [InlineData(ComponentLifetime.Scoped)]
+        [InlineData(ComponentLifetime.Singleton)]
+        public void RegisterOnlyOnceEnumerableWithOpenGenericType2(ComponentLifetime lifetime)
+        {
+            ComponentRegistration registration = ComponentRegistration.Create(
+                typeof(IGenericService<,>),
+                typeof(GenericService1<,>),
+                lifetime);
+
+            Registry.Register(registration);
+
+            ComponentRegistration registration2 = ComponentRegistration.Create(
+                typeof(IGenericService<,>),
+                typeof(GenericService1<,>),
+                lifetime,
+                ComponentRegistrationFlags.IfNotRegistered);
+
+            Registry.Register(registration2);
+
+            IEnumerable<IGenericService<string,IEnumerable<string>>> services = BuildContainer()
+                .ResolveAll<IGenericService<string,IEnumerable<string>>>();
+
+            services.Should()
+                    .HaveCount(1);
+
+            services.Should()
+                    .AllBeOfType<GenericService1<string, IEnumerable<string>>>();
         }
 
         [Theory]
