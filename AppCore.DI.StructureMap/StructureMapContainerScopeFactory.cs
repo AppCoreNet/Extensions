@@ -2,6 +2,7 @@
 // Copyright (c) 2018 the AppCore .NET project.
 
 using AppCore.Diagnostics;
+using SM = StructureMap;
 
 namespace AppCore.DependencyInjection.StructureMap
 {
@@ -15,8 +16,8 @@ namespace AppCore.DependencyInjection.StructureMap
         /// <summary>
         /// Initializes a new instance of the <see cref="StructureMapContainerScopeFactory"/>.
         /// </summary>
-        /// <param name="container">The <see cref="StructureMap.IContainer"/>.</param>
-        public StructureMapContainerScopeFactory(global::StructureMap.IContainer container)
+        /// <param name="container">The <see cref="SM.IContainer"/>.</param>
+        public StructureMapContainerScopeFactory(SM.IContainer container)
         {
             Ensure.Arg.NotNull(container, nameof(container));
             _container = container;

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using AppCore.Diagnostics;
+using SM = StructureMap;
 
 namespace AppCore.DependencyInjection.StructureMap
 {
@@ -12,7 +13,7 @@ namespace AppCore.DependencyInjection.StructureMap
     /// </summary>
     public class StructureMapContainer : IContainer
     {
-        private readonly global::StructureMap.IContainer _container;
+        private readonly SM.IContainer _container;
 
         /// <inheritdoc />
         public ContainerCapabilities Capabilities { get; } = ContainerCapabilities.ContraVariance;
@@ -20,8 +21,8 @@ namespace AppCore.DependencyInjection.StructureMap
         /// <summary>
         /// Initializes a new instance of the <see cref="StructureMapContainer"/> class.
         /// </summary>
-        /// <param name="container">The <see cref="StructureMap.IContainer"/>.</param>
-        public StructureMapContainer(global::StructureMap.IContainer container)
+        /// <param name="container">The <see cref="SM.IContainer"/>.</param>
+        public StructureMapContainer(SM.IContainer container)
         {
             Ensure.Arg.NotNull(container, nameof(container));
             _container = container;

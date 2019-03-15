@@ -3,6 +3,7 @@
 
 using System;
 using AppCore.Diagnostics;
+using SM = StructureMap;
 
 namespace AppCore.DependencyInjection.StructureMap
 {
@@ -20,8 +21,8 @@ namespace AppCore.DependencyInjection.StructureMap
         /// <summary>
         /// Initializes a new instance of the <see cref="StructureMapContainerScope"/>.
         /// </summary>
-        /// <param name="container">The <see cref="StructureMap.IContainer"/>.</param>
-        public StructureMapContainerScope(global::StructureMap.IContainer container)
+        /// <param name="container">The <see cref="SM.IContainer"/>.</param>
+        public StructureMapContainerScope(SM.IContainer container)
         {
             Ensure.Arg.NotNull(container, nameof(container));
             _internalContainer = container;
