@@ -35,26 +35,5 @@ namespace Microsoft.Extensions.DependencyInjection
             registry.RegisterComponents(services);
             return services;
         }
-
-        /// <summary>
-        /// Register the specified <paramref name="facility"/> with the service collection.
-        /// </summary>
-        /// <param name="facility">The <see cref="IFacility"/> to register.</param>
-        /// <param name="services">The <see cref="IServiceCollection"/> where to register the facility.</param>
-        /// <param name="configure">Optional delegate to configure the facility.</param>
-        /// <returns>The <see cref="IServiceCollection"/>.</returns>
-        public static IServiceCollection AddFacility(
-            this IServiceCollection services,
-            IFacility facility,
-            Action<IFacilityBuilder> configure = null)
-        {
-            Ensure.Arg.NotNull(services, nameof(services));
-
-            var registry = new MicrosoftComponentRegistry();
-            IFacilityBuilder facilityBuilder = registry.RegisterFacility(facility);
-            configure?.Invoke(facilityBuilder);
-            registry.RegisterComponents(services);
-            return services;
-        }
     }
 }

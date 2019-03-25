@@ -32,26 +32,5 @@ namespace Autofac
             registry.RegisterComponents(builder);
             return builder;
         }
-
-        /// <summary>
-        /// Register the specified <paramref name="facility"/> with the service collection.
-        /// </summary>
-        /// <param name="facility">The <see cref="IFacility"/> to register.</param>
-        /// <param name="builder">The <see cref="ContainerBuilder"/> where to register the facility.</param>
-        /// <param name="configure">Optional delegate to configure the facility.</param>
-        /// <returns>The <see cref="ContainerBuilder"/>.</returns>
-        public static ContainerBuilder RegisterFacility(
-            this ContainerBuilder builder,
-            IFacility facility,
-            Action<IFacilityBuilder> configure = null)
-        {
-            Ensure.Arg.NotNull(builder, nameof(builder));
-
-            var registry = new AutofacComponentRegistry();
-            IFacilityBuilder facilityBuilder = registry.RegisterFacility(facility);
-            configure?.Invoke(facilityBuilder);
-            registry.RegisterComponents(builder);
-            return builder;
-        }
     }
 }
