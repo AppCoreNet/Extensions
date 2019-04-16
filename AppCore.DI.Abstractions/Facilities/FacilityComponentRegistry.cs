@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace AppCore.DependencyInjection.Facilities
 {
-    internal class FacilityComponentRegistry : IComponentRegistry
+    internal sealed class FacilityComponentRegistry : IComponentRegistry
     {
         private readonly List<Func<IEnumerable<ComponentRegistration>>> _registrations =
             new List<Func<IEnumerable<ComponentRegistration>>>();

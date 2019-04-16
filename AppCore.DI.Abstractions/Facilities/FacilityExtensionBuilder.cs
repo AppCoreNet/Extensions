@@ -3,15 +3,32 @@
 
 namespace AppCore.DependencyInjection.Facilities
 {
-    internal class FacilityExtensionBuilder<TFacility, TExtension> : IFacilityExtensionBuilder<TFacility, TExtension>
+    internal sealed class FacilityExtensionBuilder<TFacility, TExtension> : IFacilityExtensionBuilder<TFacility, TExtension>
         where TFacility : IFacility
         where TExtension : IFacilityExtension<TFacility>
     {
-        public TExtension FacilityExtension { get; }
+        public IFacilityBuilder<TFacility> FacilityBuilder { get; }
 
-        public FacilityExtensionBuilder(TExtension facilityExtension)
+        public TFacility Facility => FacilityBuilder.Facility;
+
+        public TExtension Extension { get; }
+
+        public FacilityExtensionBuilder(IFacilityBuilder<TFacility> facilityBuilder, TExtension facilityExtension)
         {
-            FacilityExtension = facilityExtension;
+            FacilityBuilder = facilityBuilder;
+            Extension = facilityExtension;
+        }
+
+        public IFacilityExtensionBuilder<TFacility, TExtension1> AddExtension<TExtension1>(TExtension1 extension)
+            where TExtension1 : IFacilityExtension<TFacility>
+        {
+            return FacilityBuilder.AddExtension(extension);
+        }
+
+        public IFacilityExtensionBuilder<TFacility, TExtension1> AddExtension<TExtension1>()
+            where TExtension1 : IFacilityExtension<TFacility>, new()
+        {
+            return FacilityBuilder.AddExtension<TExtension1>();
         }
     }
 }

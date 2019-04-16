@@ -12,7 +12,7 @@ namespace AppCore.DependencyInjection.Facilities
     /// <typeparam name="TExtension">The type of the facility extension.</typeparam>
     /// <seealso cref="IFacility"/>
     /// <seealso cref="IFacilityExtension{TFacility}"/>
-    public interface IFacilityExtensionBuilder<out TFacility, out TExtension>
+    public interface IFacilityExtensionBuilder<out TFacility, out TExtension> : IFacilityBuilder<TFacility>
         where TFacility : IFacility
         where TExtension : IFacilityExtension<TFacility>
     {
@@ -20,6 +20,6 @@ namespace AppCore.DependencyInjection.Facilities
         /// The <see cref="IFacilityExtension"/> which is being registered.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        TExtension FacilityExtension { get; }
+        TExtension Extension { get; }
     }
 }

@@ -1,13 +1,12 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
-using System;
 using System.Collections.Generic;
 using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection.Facilities
 {
-    internal class FacilityBuilder<TFacility> : IFacilityBuilder<TFacility>
+    internal sealed class FacilityBuilder<TFacility> : IFacilityBuilder<TFacility>
         where TFacility : IFacility
     {
         private readonly List<IFacilityExtension<TFacility>> _extensions = new List<IFacilityExtension<TFacility>>();
@@ -29,22 +28,18 @@ namespace AppCore.DependencyInjection.Facilities
             }
         }
 
-        public IFacilityBuilder<TFacility> AddExtension<TExtension>(
-            TExtension extension,
-            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure = null)
+        public IFacilityExtensionBuilder<TFacility, TExtension> AddExtension<TExtension>(TExtension extension)
             where TExtension : IFacilityExtension<TFacility>
         {
             Ensure.Arg.NotNull(extension, nameof(extension));
-            configure?.Invoke(new FacilityExtensionBuilder<TFacility, TExtension>(extension));
             _extensions.Add(extension);
-            return this;
+            return new FacilityExtensionBuilder<TFacility, TExtension>(this, extension);
         }
 
-        public IFacilityBuilder<TFacility> AddExtension<TExtension>(
-            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure = null)
+        public IFacilityExtensionBuilder<TFacility, TExtension> AddExtension<TExtension>()
             where TExtension : IFacilityExtension<TFacility>, new()
         {
-            return AddExtension(new TExtension(), configure);
+            return AddExtension(new TExtension());
         }
     }
 }

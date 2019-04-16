@@ -109,7 +109,7 @@ namespace AppCore.DependencyInjection.Autofac
                     r =>
                     {
                         // in case of open generic services we need to check against closed
-                        // generic service type
+                        // generic service type. See https://github.com/autofac/Autofac/issues/958
                         serviceType = ConstructOpenGenericType(serviceType);
 
                         IEnumerable<IInstanceActivator> instanceActivators =
