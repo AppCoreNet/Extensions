@@ -1,5 +1,5 @@
 ﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018,2019 the AppCore .NET project.
 
 using System.ComponentModel;
 
@@ -12,7 +12,7 @@ namespace AppCore.DependencyInjection.Facilities
     /// <typeparam name="TExtension">The type of the facility extension.</typeparam>
     /// <seealso cref="IFacility"/>
     /// <seealso cref="IFacilityExtension{TFacility}"/>
-    public interface IFacilityExtensionBuilder<out TFacility, out TExtension> : IFacilityBuilder<TFacility>
+    public interface IFacilityExtensionBuilder<out TFacility, out TExtension>
         where TFacility : IFacility
         where TExtension : IFacilityExtension<TFacility>
     {

@@ -1,6 +1,7 @@
 ﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018,2019 the AppCore .NET project.
 
+using System;
 using System.Collections.Generic;
 using AppCore.Diagnostics;
 
@@ -28,18 +29,22 @@ namespace AppCore.DependencyInjection.Facilities
             }
         }
 
-        public IFacilityExtensionBuilder<TFacility, TExtension> AddExtension<TExtension>(TExtension extension)
+        public IFacilityBuilder<TFacility> AddExtension<TExtension>(
+            TExtension extension,
+            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure)
             where TExtension : IFacilityExtension<TFacility>
         {
             Ensure.Arg.NotNull(extension, nameof(extension));
             _extensions.Add(extension);
-            return new FacilityExtensionBuilder<TFacility, TExtension>(this, extension);
+            configure?.Invoke(new FacilityExtensionBuilder<TFacility, TExtension>(this, extension));
+            return this;
         }
 
-        public IFacilityExtensionBuilder<TFacility, TExtension> AddExtension<TExtension>()
+        public IFacilityBuilder<TFacility> AddExtension<TExtension>(
+            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure)
             where TExtension : IFacilityExtension<TFacility>, new()
         {
-            return AddExtension(new TExtension());
+            return AddExtension(new TExtension(), configure);
         }
     }
 }

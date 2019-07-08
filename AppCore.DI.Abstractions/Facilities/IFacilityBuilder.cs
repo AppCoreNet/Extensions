@@ -1,6 +1,7 @@
 ﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018,2019 the AppCore .NET project.
 
+using System;
 using System.ComponentModel;
 
 namespace AppCore.DependencyInjection.Facilities
@@ -24,17 +25,22 @@ namespace AppCore.DependencyInjection.Facilities
         /// Adds an extension to the facility.
         /// </summary>
         /// <param name="extension">The <see cref="IFacilityExtension{TFacility}"/> to add.</param>
+        /// <param name="configure">The delegate which is invoked to configure the extension.</param>
         /// <typeparam name="TExtension">The type of <see cref="IFacilityExtension{TFacility}"/> to add.</typeparam>
-        /// <returns>The <see cref="IFacilityExtensionBuilder{TFacility, TExtension}"/> to enable method chaining.</returns>
-        IFacilityExtensionBuilder<TFacility, TExtension> AddExtension<TExtension>(TExtension extension)
+        /// <returns>The <see cref="IFacilityBuilder{TFacility}"/> to enable method chaining.</returns>
+        IFacilityBuilder<TFacility> AddExtension<TExtension>(
+            TExtension extension,
+            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure = null)
             where TExtension : IFacilityExtension<TFacility>;
 
         /// <summary>
         /// Adds an extension to the facility.
         /// </summary>
+        /// <param name="configure">The delegate which is invoked to configure the extension.</param>
         /// <typeparam name="TExtension">The type of <see cref="IFacilityExtension{TFacility}"/> to add.</typeparam>
         /// <returns>The <see cref="IFacilityExtensionBuilder{TFacility, TExtension}"/> to enable method chaining.</returns>
-        IFacilityExtensionBuilder<TFacility, TExtension> AddExtension<TExtension>()
+        IFacilityBuilder<TFacility> AddExtension<TExtension>(
+            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure = null)
             where TExtension : IFacilityExtension<TFacility>, new();
     }
 }
