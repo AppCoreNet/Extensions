@@ -1,5 +1,5 @@
 ﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018,2019 the AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -25,19 +25,22 @@ namespace AppCore.DependencyInjection
                 return lifetimeAttribute?.Lifetime ?? registrationInfo.Lifetime;
             }
 
-            bool isOpenGenericService = registrationInfo.ContractType.GetTypeInfo()
-                                                    .IsGenericTypeDefinition;
+            bool isOpenGenericContractType = registrationInfo.ContractType.GetTypeInfo()
+                                                             .IsGenericTypeDefinition;
 
             foreach (Type componentType in componentTypes)
             {
-                Type contractType = registrationInfo.ContractType;
+                bool isOpenGenericComponentType = componentType.GetTypeInfo()
+                                                               .IsGenericTypeDefinition;
+
+                // skip non-closed generic component types if contract type is not a open generic type
+                if (!isOpenGenericContractType && isOpenGenericComponentType)
+                    continue;
 
                 // need to register closed types with closed generic contract type
-                if (isOpenGenericService && !componentType.GetTypeInfo()
-                                                          .IsGenericTypeDefinition)
-                {
+                Type contractType = registrationInfo.ContractType;
+                if (isOpenGenericContractType && !isOpenGenericComponentType)
                     contractType = componentType.GetClosedTypeOf(contractType);
-                }
 
                 yield return ComponentRegistration.Create(
                     contractType,
