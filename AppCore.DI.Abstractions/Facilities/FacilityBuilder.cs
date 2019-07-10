@@ -8,43 +8,51 @@ using AppCore.Diagnostics;
 namespace AppCore.DependencyInjection.Facilities
 {
     internal sealed class FacilityBuilder<TFacility> : IFacilityBuilder<TFacility>
-        where TFacility : IFacility
+        where TFacility : IFacility, new()
     {
-        private readonly List<IFacilityExtension<TFacility>> _extensions = new List<IFacilityExtension<TFacility>>();
+        private readonly List<Action<TFacility>> _callbacks = new List<Action<TFacility>>();
 
-        public TFacility Facility { get; }
-
-        public FacilityBuilder(TFacility facility)
+        public void Configure(Action<TFacility> configure)
         {
-            Facility = facility;
+            Ensure.Arg.NotNull(configure, nameof(configure));
+            _callbacks.Add(configure);
         }
 
-        public void RegisterComponents(IComponentRegistry registry)
+        public TFacility Build()
         {
-            Facility.RegisterComponents(registry);
+            var facility = new TFacility();
+            foreach (Action<TFacility> callback in _callbacks)
+                callback(facility);
 
-            foreach (IFacilityExtension<TFacility> facilityExtension in _extensions)
-            {
-                facilityExtension.RegisterComponents(registry, Facility);
-            }
+            return facility;
         }
 
-        public IFacilityBuilder<TFacility> AddExtension<TExtension>(
-            TExtension extension,
-            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure)
+        public IFacilityBuilder<TFacility> Add<TExtension>(TExtension extension)
             where TExtension : IFacilityExtension<TFacility>
         {
             Ensure.Arg.NotNull(extension, nameof(extension));
-            _extensions.Add(extension);
-            configure?.Invoke(new FacilityExtensionBuilder<TFacility, TExtension>(this, extension));
+
+            Configure(facility =>
+            {
+                facility.Extensions.Add(extension);
+            });
+
             return this;
         }
 
-        public IFacilityBuilder<TFacility> AddExtension<TExtension>(
+        public IFacilityBuilder<TFacility> Add<TExtension>(
             Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure)
             where TExtension : IFacilityExtension<TFacility>, new()
         {
-            return AddExtension(new TExtension(), configure);
+            Configure(facility =>
+            {
+                var builder = new FacilityExtensionBuilder<TFacility, TExtension>();
+                configure?.Invoke(builder);
+
+                facility.Extensions.Add(builder.Build(facility));
+            });
+
+            return this;
         }
     }
 }

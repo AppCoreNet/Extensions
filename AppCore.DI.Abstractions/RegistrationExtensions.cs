@@ -1,5 +1,5 @@
 ﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018,2019 the AppCore .NET project.
 
 using System;
 using AppCore.DependencyInjection.Builder;
@@ -52,29 +52,20 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Registers a facility with the dependency injection container.
         /// </summary>
-        /// <typeparam name="TFacility">The type of the facility.</typeparam>
         /// <param name="registry">The <see cref="IComponentRegistry"/> where to register components.</param>
         /// <param name="facility">The facility which is registered.</param>
-        /// <returns>The <see cref="IFacilityBuilder{TFacility}"/>.</returns>
-        public static IFacilityBuilder<TFacility> RegisterFacility<TFacility>(
-            this IComponentRegistry registry,
-            TFacility facility)
-            where TFacility : IFacility
+        public static void RegisterFacility(this IComponentRegistry registry, IFacility facility)
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
             Ensure.Arg.NotNull(facility, nameof(facility));
-
-            var builder = new FacilityBuilder<TFacility>(facility);
 
             registry.RegisterCallback(
                 () =>
                 {
                     var facilityRegistry = new FacilityComponentRegistry();
-                    builder.RegisterComponents(facilityRegistry);
+                    facility.RegisterComponents(facilityRegistry);
                     return facilityRegistry.GetComponentRegistrations();
                 });
-
-            return builder;
         }
 
         /// <summary>
@@ -86,7 +77,21 @@ namespace AppCore.DependencyInjection
         public static IFacilityBuilder<TFacility> RegisterFacility<TFacility>(this IComponentRegistry registry)
             where TFacility : IFacility, new()
         {
-            return RegisterFacility(registry, new TFacility());
+            Ensure.Arg.NotNull(registry, nameof(registry));
+
+            var builder = new FacilityBuilder<TFacility>();
+
+            registry.RegisterCallback(
+                () =>
+                {
+                    var facilityRegistry = new FacilityComponentRegistry();
+                    builder.Build()
+                           .RegisterComponents(facilityRegistry);
+
+                    return facilityRegistry.GetComponentRegistrations();
+                });
+
+            return builder;
         }
     }
 }

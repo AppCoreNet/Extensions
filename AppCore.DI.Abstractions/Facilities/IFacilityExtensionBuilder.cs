@@ -1,6 +1,7 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018,2019 the AppCore .NET project.
 
+using System;
 using System.ComponentModel;
 
 namespace AppCore.DependencyInjection.Facilities
@@ -17,9 +18,9 @@ namespace AppCore.DependencyInjection.Facilities
         where TExtension : IFacilityExtension<TFacility>
     {
         /// <summary>
-        /// The <see cref="IFacilityExtension"/> which is being registered.
+        /// Configures the <see cref="IFacilityExtension{TFacility}"/> which is being registered.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        TExtension Extension { get; }
+        void Configure(Action<TFacility, TExtension> configure);
     }
 }

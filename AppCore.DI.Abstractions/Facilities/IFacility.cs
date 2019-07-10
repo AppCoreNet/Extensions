@@ -1,5 +1,7 @@
 ﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018,2019 the AppCore .NET project.
+
+using System.Collections.Generic;
 
 namespace AppCore.DependencyInjection.Facilities
 {
@@ -11,6 +13,11 @@ namespace AppCore.DependencyInjection.Facilities
     /// <seealso cref="IFacilityExtension{TFacility}"/>
     public interface IFacility
     {
+        /// <summary>
+        /// Gets the list of facility extensions.
+        /// </summary>
+        IList<IFacilityExtension> Extensions { get; }
+
         /// <summary>
         /// Invoked to register components of the facility.
         /// </summary>

@@ -16,21 +16,18 @@ namespace AppCore.DependencyInjection.Facilities
         where TFacility : IFacility
     {
         /// <summary>
-        /// The <see cref="IFacility"/> which is being registered.
+        /// Configures the <see cref="IFacility"/> which is being registered.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        TFacility Facility { get; }
+        void Configure(Action<TFacility> configure);
 
         /// <summary>
         /// Adds an extension to the facility.
         /// </summary>
         /// <param name="extension">The <see cref="IFacilityExtension{TFacility}"/> to add.</param>
-        /// <param name="configure">The delegate which is invoked to configure the extension.</param>
         /// <typeparam name="TExtension">The type of <see cref="IFacilityExtension{TFacility}"/> to add.</typeparam>
         /// <returns>The <see cref="IFacilityBuilder{TFacility}"/> to enable method chaining.</returns>
-        IFacilityBuilder<TFacility> AddExtension<TExtension>(
-            TExtension extension,
-            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure = null)
+        IFacilityBuilder<TFacility> Add<TExtension>(TExtension extension)
             where TExtension : IFacilityExtension<TFacility>;
 
         /// <summary>
@@ -39,7 +36,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// <param name="configure">The delegate which is invoked to configure the extension.</param>
         /// <typeparam name="TExtension">The type of <see cref="IFacilityExtension{TFacility}"/> to add.</typeparam>
         /// <returns>The <see cref="IFacilityExtensionBuilder{TFacility, TExtension}"/> to enable method chaining.</returns>
-        IFacilityBuilder<TFacility> AddExtension<TExtension>(
+        IFacilityBuilder<TFacility> Add<TExtension>(
             Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure = null)
             where TExtension : IFacilityExtension<TFacility>, new();
     }
