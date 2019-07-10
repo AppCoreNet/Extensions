@@ -1,5 +1,5 @@
 ﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018,2019 the AppCore .NET project.
 
 using System.Reflection;
 using FluentAssertions;
@@ -22,7 +22,8 @@ namespace AppCore.DependencyInjection
                    .Should()
                    .BeEquivalentTo(
                        typeof(ContractImpl1),
-                       typeof(ContractImpl2));
+                       typeof(ContractImpl2),
+                       typeof(ContractImplOpenGeneric<>));
         }
 
         [Fact]
