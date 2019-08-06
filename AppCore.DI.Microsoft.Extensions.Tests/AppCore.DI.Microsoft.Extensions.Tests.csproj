@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.0;netcoreapp1.1;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
     <AssemblyName>AppCore.DependencyInjection.Microsoft.Extensions.Tests</AssemblyName>
     <RootNamespace>AppCore.DependencyInjection.Microsoft.Extensions</RootNamespace>
   </PropertyGroup>
@@ -14,10 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AppCore.DI.Microsoft.Extensions\AppCore.DI.Microsoft.Extensions.csproj" />
     <ProjectReference Include="..\AppCore.DI.Tests.Specification\AppCore.DI.Tests.Specification.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 </Project>

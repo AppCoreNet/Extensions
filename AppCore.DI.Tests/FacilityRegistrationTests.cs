@@ -1,6 +1,7 @@
 // Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
+using System.Linq;
 using AppCore.DependencyInjection.Facilities;
 using FluentAssertions;
 using NSubstitute;
@@ -33,14 +34,9 @@ namespace AppCore.DependencyInjection
         public void FacilityRegistersExtensionComponents()
         {
             var registry = new TestComponentRegistry();
-            var facility = new TestFacility();
-            var extension = new TestFacilityExtension();
 
-            registry.RegisterFacility(facility)
-                    .AddExtension(
-                        extension,
-                        builder => builder.FacilityExtension.Should()
-                                          .BeSameAs(extension));
+            registry.RegisterFacility<TestFacility>()
+                    .Add<TestFacilityExtension>();
 
             registry.GetRegistrations()
                     .Should()
@@ -68,13 +64,13 @@ namespace AppCore.DependencyInjection
             var facility = new TestFacility();
             var extension = Substitute.For<IFacilityExtension<TestFacility>>();
 
-            registry.RegisterFacility(facility)
-                    .AddExtension(extension);
+            facility.Extensions.Add(extension);
 
+            registry.RegisterFacility(facility);
             registry.GetRegistrations();
 
-            extension.Received(Quantity.Exactly(1))
-                     .RegisterComponents(Arg.Any<IComponentRegistry>(), facility);
+            ((IFacilityExtension) extension).Received(Quantity.Exactly(1))
+                                            .RegisterComponents(Arg.Any<IComponentRegistry>(), facility);
         }
     }
 }

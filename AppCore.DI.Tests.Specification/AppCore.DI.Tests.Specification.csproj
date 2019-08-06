@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard1.5;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.5;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' != 'Unix'">$(TargetFrameworks);net452</TargetFrameworks>
+    <IsTestProject>false</IsTestProject>
     <AssemblyName>AppCore.DependencyInjection.Tests.Specification</AssemblyName>
     <RootNamespace>AppCore.DependencyInjection</RootNamespace>
   </PropertyGroup>
@@ -11,12 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Remove="Microsoft.NET.Test.Sdk" />
     <PackageReference Remove="xunit.runner.console" />
     <PackageReference Remove="xunit.runner.visualstudio" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='net452'">
-    <Reference Include="System.Runtime" />
+    <PackageReference Remove="coverlet.msbuild" />
   </ItemGroup>
 
 </Project>
