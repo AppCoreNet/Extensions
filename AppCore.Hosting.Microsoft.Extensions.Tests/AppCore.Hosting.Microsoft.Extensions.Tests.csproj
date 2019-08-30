@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
+    <RootNamespace>AppCore.Hosting.Microsoft.Extensions</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AppCore.Hosting.Microsoft.Extensions\AppCore.Hosting.Microsoft.Extensions.csproj" />
+  </ItemGroup>
+
+</Project>
