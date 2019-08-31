@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using AppCore.Logging;
 using NSubstitute;
 using Xunit;
 
@@ -13,16 +14,17 @@ namespace AppCore.Hosting.Microsoft.Extensions
             var service1 = Substitute.For<IBackgroundService>();
             var service2 = Substitute.For<IBackgroundService>();
 
-            var adapter = new BackgroundServiceHostAdapter(new[] {service1, service2});
+            var adapter = new BackgroundServiceHostAdapter(
+                new[] {service1, service2},
+                Substitute.For<ILogger<BackgroundServiceHost>>());
             
-            var ct = new CancellationToken();
-            await adapter.StartAsync(ct);
+            await adapter.StartAsync(CancellationToken.None);
 
             await service1.Received(1)
-                          .StartAsync(ct);
+                          .StartAsync(Arg.Any<CancellationToken>());
 
             await service2.Received(1)
-                          .StartAsync(ct);
+                          .StartAsync(Arg.Any<CancellationToken>());
         }
 
         [Fact]
@@ -31,16 +33,17 @@ namespace AppCore.Hosting.Microsoft.Extensions
             var service1 = Substitute.For<IBackgroundService>();
             var service2 = Substitute.For<IBackgroundService>();
 
-            var adapter = new BackgroundServiceHostAdapter(new[] {service1, service2});
+            var adapter = new BackgroundServiceHostAdapter(
+                new[] {service1, service2},
+                Substitute.For<ILogger<BackgroundServiceHost>>());
             
-            var ct = new CancellationToken();
-            await adapter.StopAsync(ct);
+            await adapter.StopAsync(CancellationToken.None);
 
             await service1.Received(1)
-                          .StopAsync(ct);
+                          .StopAsync(Arg.Any<CancellationToken>());
 
             await service2.Received(1)
-                          .StopAsync(ct);
+                          .StopAsync(Arg.Any<CancellationToken>());
         }
     }
 }
