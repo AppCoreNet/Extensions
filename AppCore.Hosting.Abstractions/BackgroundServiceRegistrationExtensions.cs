@@ -29,7 +29,7 @@ namespace AppCore.DependencyInjection
                 new RegistrationFacilityExtension<IBackgroundServiceFacility, IBackgroundService>(
                     (r,f) =>
                     {
-                        r.WithDefaultLifetime(ComponentLifetime.Singleton);
+                        r.WithDefaultLifetime(ComponentLifetime.Transient);
                         registrationBuilder(r);
                     }));
         }

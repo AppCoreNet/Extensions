@@ -10,10 +10,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[2.0.0,3.0.0)" />
+    <PackageReference Include="AppCore.Logging.Abstractions" Version="$(AppCore_Logging_Version)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppCore.Hosting\AppCore.Hosting.csproj" />
+    <ProjectReference Include="..\AppCore.Hosting.Abstractions\AppCore.Hosting.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

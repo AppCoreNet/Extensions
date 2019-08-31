@@ -9,7 +9,7 @@ using AppCore.Logging;
 
 namespace AppCore.Hosting
 {
-    public class BackgroundServiceHost
+    public class BackgroundServiceHost : IBackgroundServiceHost
     {
         private readonly List<IBackgroundService> _services;
         private readonly ILogger<BackgroundServiceHost> _logger;
