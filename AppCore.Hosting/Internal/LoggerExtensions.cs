@@ -9,37 +9,37 @@ namespace AppCore.Hosting
             LoggerEvent.Define<string>(
                 LogLevel.Trace,
                 LogEventIds.ServiceStarting,
-                "Starting background service {serviceType} ...");
+                "Starting service {serviceType} ...");
 
         private static readonly LoggerEventDelegate<string, long> _serviceStarted =
             LoggerEvent.Define<string, long>(
                 LogLevel.Info,
                 LogEventIds.ServiceStarted,
-                "Successfully started service {serviceType} in {elapsedTime} ms.");
+                "Started service {serviceType} in {elapsedTime} ms.");
 
         private static readonly LoggerEventDelegate<string, long> _serviceStartFailed =
             LoggerEvent.Define<string, long>(
                 LogLevel.Error,
                 LogEventIds.ServiceStartFailed,
-                "Failed to start {serviceType} after {elapsedTime} ms.");
+                "Failed to start service {serviceType} after {elapsedTime} ms.");
 
         private static readonly LoggerEventDelegate<string> _serviceStopping =
             LoggerEvent.Define<string>(
                 LogLevel.Trace,
                 LogEventIds.ServiceStopping,
-                "Stopping background service {serviceType} ...");
+                "Stopping service {serviceType} ...");
 
         private static readonly LoggerEventDelegate<string, long> _serviceStopped =
             LoggerEvent.Define<string, long>(
                 LogLevel.Info,
                 LogEventIds.ServiceStopped,
-                "Successfully stopped service {serviceType} in {elapsedTime} ms.");
+                "Stopped service {serviceType} in {elapsedTime} ms.");
 
         private static readonly LoggerEventDelegate<string, long> _serviceStopFailed =
             LoggerEvent.Define<string, long>(
                 LogLevel.Error,
                 LogEventIds.ServiceStopFailed,
-                "Failed to stop {serviceType} after {elapsedTime} ms.");
+                "Failed to stop service {serviceType} after {elapsedTime} ms.");
 
         public static void ServiceStarting(this ILogger logger, IBackgroundService service)
         {
