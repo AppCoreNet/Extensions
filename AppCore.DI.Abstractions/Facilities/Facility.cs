@@ -1,4 +1,4 @@
-﻿// Licensed under the MIT License.
+// Licensed under the MIT License.
 // Copyright (c) 2018,2019 the AppCore .NET project.
 
 using System.Collections.Generic;
@@ -45,8 +45,8 @@ namespace AppCore.DependencyInjection.Facilities
         /// <param name="registry">The <see cref="IComponentRegistry"/> where components are registered.</param>
         protected virtual void RegisterComponentsCore(IComponentRegistry registry)
         {
-            RegisterComponents(registry);
             RegisterExtensionComponents(registry);
+            RegisterComponents(registry);
         }
 
         void IFacility.RegisterComponents(IComponentRegistry registry)
