@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Condition="$(TargetFramework.StartsWith('netcoreapp2'))" Version="[2.0,3.0)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Condition="$(TargetFramework.StartsWith('netcoreapp3'))" Version="[3.0,4.0)" />
   </ItemGroup>
 
   <ItemGroup>
