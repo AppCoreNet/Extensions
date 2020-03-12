@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -9,12 +9,12 @@
     <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[2.0.0,3.0.0)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[2.0.0,4.0.0)" />
     <PackageReference Include="AppCore.Logging.Abstractions" Version="$(AppCore_Logging_Version)" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppCore.Hosting.Abstractions\AppCore.Hosting.Abstractions.csproj" />
+    <ProjectReference Include="..\AppCore.Hosting\AppCore.Hosting.csproj" />
   </ItemGroup>
 
 </Project>
