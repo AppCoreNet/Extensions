@@ -1,12 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>AppCore.Hosting.Microsoft.Extensions</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AppCore.Hosting.Microsoft.Extensions\AppCore.Hosting.Microsoft.Extensions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Condition="$(TargetFramework.StartsWith('netcoreapp2'))" Version="[2.1,3.0)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Condition="$(TargetFramework.StartsWith('netcoreapp3'))" Version="[3.1,4.0)" />
   </ItemGroup>
 
 </Project>
