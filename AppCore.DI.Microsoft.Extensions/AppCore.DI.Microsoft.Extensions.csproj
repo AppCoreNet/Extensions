@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.1;netstandard2.0</TargetFrameworks>
     <RootNamespace>AppCore.DependencyInjection.Microsoft.Extensions</RootNamespace>
-    <Description>Provides integration of the Microsoft.Extensions dependency injection container.</Description>
+    <Description>Provides integration of Microsoft.Extensions.DependencyInjection into AppCore .NET</Description>
     <AssemblyName>AppCore.DependencyInjection.Microsoft.Extensions</AssemblyName>
   </PropertyGroup>
 

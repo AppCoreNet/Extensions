@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net452;netstandard1.0;netstandard2.0</TargetFrameworks>
     <RootNamespace>AppCore.DependencyInjection</RootNamespace>
-    <Description>Assembly scanning extensions for dependency injection containers.</Description>
+    <Description>Assembly scanning extensions for AppCore .NET dependency injection.</Description>
     <AssemblyName>AppCore.DependencyInjection.AssemblyExtensions</AssemblyName>
   </PropertyGroup>
 
