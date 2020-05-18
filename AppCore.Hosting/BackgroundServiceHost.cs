@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -61,7 +61,7 @@ namespace AppCore.Hosting
         {
             _logger.ServiceStarting(service);
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            var stopwatch = Stopwatch.StartNew();
             try
             {
                 await service.StartAsync(cancellationTokenSource.Token);
@@ -82,7 +82,7 @@ namespace AppCore.Hosting
         {
             _logger.ServiceStopping(service);
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            var stopwatch = Stopwatch.StartNew();
             try
             {
                 await service.StopAsync(cancellationTokenSource.Token);

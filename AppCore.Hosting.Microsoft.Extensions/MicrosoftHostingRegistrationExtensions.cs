@@ -1,4 +1,7 @@
-﻿using AppCore.DependencyInjection.Facilities;
+// Licensed under the MIT License.
+// Copyright (c) 2018-2020 the AppCore .NET project.
+
+using AppCore.DependencyInjection.Facilities;
 using AppCore.Hosting;
 using AppCore.Hosting.Microsoft.Extensions;
 
@@ -7,8 +10,8 @@ namespace AppCore.DependencyInjection
 {
     public static class MicrosoftHostingRegistrationExtensions
     {
-        public static IFacilityBuilder<IBackgroundServiceFacility> AddMicrosoftHosting(
-            this IFacilityBuilder<IBackgroundServiceFacility> builder)
+        public static IFacilityBuilder<IHostingFacility> AddMicrosoftHosting(
+            this IFacilityBuilder<IHostingFacility> builder)
         {
             return builder.Add<MicrosoftHostingExtension>();
         }

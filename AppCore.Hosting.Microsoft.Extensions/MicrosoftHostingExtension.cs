@@ -1,4 +1,4 @@
-﻿// Licensed under the MIT License.
+// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
 using AppCore.DependencyInjection;
@@ -7,12 +7,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace AppCore.Hosting.Microsoft.Extensions
 {
-    public class MicrosoftHostingExtension : FacilityExtension<IBackgroundServiceFacility>
+    public class MicrosoftHostingExtension : FacilityExtension<IHostingFacility>
     {
-        protected override void RegisterComponents(IComponentRegistry registry, IBackgroundServiceFacility facility)
+        protected override void RegisterComponents(IComponentRegistry registry, IHostingFacility facility)
         {
             registry.Register<IHostedService>()
-                    .Add<BackgroundServiceHostAdapter>();
+                    .Add<MicrosoftHostingAdapter>()
+                    .IfNotRegistered();
         }
     }
 }

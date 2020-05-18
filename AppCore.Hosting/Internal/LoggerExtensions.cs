@@ -1,4 +1,7 @@
-﻿using System;
+// Licensed under the MIT License.
+// Copyright (c) 2018-2020 the AppCore .NET project.
+
+using System;
 using AppCore.Logging;
 
 namespace AppCore.Hosting
@@ -13,7 +16,7 @@ namespace AppCore.Hosting
 
         private static readonly LoggerEventDelegate<string, long> _serviceStarted =
             LoggerEvent.Define<string, long>(
-                LogLevel.Info,
+                LogLevel.Debug,
                 LogEventIds.ServiceStarted,
                 "Started service {serviceType} in {elapsedTime} ms.");
 
@@ -31,7 +34,7 @@ namespace AppCore.Hosting
 
         private static readonly LoggerEventDelegate<string, long> _serviceStopped =
             LoggerEvent.Define<string, long>(
-                LogLevel.Info,
+                LogLevel.Debug,
                 LogEventIds.ServiceStopped,
                 "Stopped service {serviceType} in {elapsedTime} ms.");
 
@@ -40,6 +43,24 @@ namespace AppCore.Hosting
                 LogLevel.Error,
                 LogEventIds.ServiceStopFailed,
                 "Failed to stop service {serviceType} after {elapsedTime} ms.");
+
+        private static readonly LoggerEventDelegate<string> _taskExecuting =
+            LoggerEvent.Define<string>(
+                LogLevel.Trace,
+                LogEventIds.TaskExecuting,
+                "Executing startup task {startupTaskType}...");
+
+        private static readonly LoggerEventDelegate<string, long> _taskExecuted =
+            LoggerEvent.Define<string, long>(
+                LogLevel.Debug,
+                LogEventIds.TaskExecuted,
+                "Startup task {startupTaskType} finished in {elapsedTime} ms.");
+
+        private static readonly LoggerEventDelegate<string, long> _taskFailed =
+            LoggerEvent.Define<string, long>(
+                LogLevel.Error,
+                LogEventIds.ServiceStartFailed,
+                "Failed to execute {startupTaskType} after {elapsedTime} ms.");
 
         public static void ServiceStarting(this ILogger logger, IBackgroundService service)
         {
@@ -81,6 +102,30 @@ namespace AppCore.Hosting
             _serviceStopFailed(
                 logger,
                 service.GetType().GetDisplayName(),
+                (long) elapsed.TotalMilliseconds,
+                exception: exception);
+        }
+
+        public static void TaskExecuting(this ILogger logger, IStartupTask task)
+        {
+            _taskExecuting(
+                logger,
+                task.GetType().GetDisplayName());
+        }
+
+        public static void TaskExecuted(this ILogger logger, IStartupTask task, TimeSpan elapsed)
+        {
+            _taskExecuted(
+                logger,
+                task.GetType().GetDisplayName(),
+                (long) elapsed.TotalMilliseconds);
+        }
+
+        public static void TaskFailed(this ILogger logger, IStartupTask task, TimeSpan elapsed, Exception exception)
+        {
+            _taskFailed(
+                logger,
+                task.GetType().GetDisplayName(),
                 (long) elapsed.TotalMilliseconds,
                 exception: exception);
         }
