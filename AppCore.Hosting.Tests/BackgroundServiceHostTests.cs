@@ -1,4 +1,7 @@
-﻿using System;
+// Licensed under the MIT License.
+// Copyright (c) 2018-2020 the AppCore .NET project.
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCore.Logging;
@@ -12,7 +15,7 @@ namespace AppCore.Hosting
     public class BackgroundServiceHostTests
     {
         [Fact]
-        public async Task StartsAllS()
+        public async Task StartStartAllServices()
         {
             var service1 = Substitute.For<IBackgroundService>();
             var service2 = Substitute.For<IBackgroundService>();
