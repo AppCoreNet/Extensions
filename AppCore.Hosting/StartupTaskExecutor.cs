@@ -42,6 +42,7 @@ namespace AppCore.Hosting
                 catch (Exception error)
                 {
                     _logger.TaskFailed(startupTask, stopwatch.Elapsed, error);
+                    throw;
                 }
 
                 _logger.TaskExecuted(startupTask, stopwatch.Elapsed);
