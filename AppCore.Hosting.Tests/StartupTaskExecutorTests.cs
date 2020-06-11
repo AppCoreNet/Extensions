@@ -14,7 +14,7 @@ namespace AppCore.Hosting
     public class StartupTaskExecutorTests
     {
         [Fact]
-        public async Task ExecuteExecutesAllTasks()
+        public async Task ExecutesAll()
         {
             var task1 = Substitute.For<IStartupTask>();
             var task2 = Substitute.For<IStartupTask>();

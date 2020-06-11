@@ -15,7 +15,7 @@ namespace AppCore.Hosting
     public class BackgroundServiceHostTests
     {
         [Fact]
-        public async Task StartStartAllServices()
+        public async Task StartsAll()
         {
             var service1 = Substitute.For<IBackgroundService>();
             var service2 = Substitute.For<IBackgroundService>();

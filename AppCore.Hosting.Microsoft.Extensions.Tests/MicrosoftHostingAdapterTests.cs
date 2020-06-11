@@ -54,6 +54,7 @@ namespace AppCore.Hosting.Microsoft.Extensions
             }
             catch
             {
+                // ignored
             }
 
             await backgroundServiceHost.DidNotReceive()
