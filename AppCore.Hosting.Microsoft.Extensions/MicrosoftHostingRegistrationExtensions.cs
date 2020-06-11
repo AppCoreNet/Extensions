@@ -10,7 +10,12 @@ namespace AppCore.DependencyInjection
 {
     public static class MicrosoftHostingRegistrationExtensions
     {
-        public static IFacilityBuilder<IHostingFacility> AddMicrosoftHosting(
+        /// <summary>
+        /// Registers adapters for Microsoft.Extensions.Hosting.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static IFacilityBuilder<IHostingFacility> UseMicrosoftHosting(
             this IFacilityBuilder<IHostingFacility> builder)
         {
             return builder.Add<MicrosoftHostingExtension>();

@@ -19,7 +19,7 @@ namespace AppCore.DependencyInjection
         /// <param name="registrationBuilder">A delegate to configure the <see cref="IRegistrationBuilder{TContract}"/>.</param>
         /// <returns>The <paramref name="builder"/>.</returns>
         /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
-        public static IFacilityBuilder<IHostingFacility> UseBackgroundServices(
+        public static IFacilityBuilder<IHostingFacility> AddBackgroundServices(
             this IFacilityBuilder<IHostingFacility> builder,
             Action<IRegistrationBuilder<IBackgroundService>> registrationBuilder)
         {
@@ -41,7 +41,7 @@ namespace AppCore.DependencyInjection
         /// <param name="registrationBuilder">A delegate to configure the <see cref="IRegistrationBuilder{TContract}"/>.</param>
         /// <returns>The <paramref name="builder"/>.</returns>
         /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
-        public static IFacilityBuilder<IHostingFacility> UseStartupTasks(
+        public static IFacilityBuilder<IHostingFacility> AddStartupTasks(
             this IFacilityBuilder<IHostingFacility> builder,
             Action<IRegistrationBuilder<IStartupTask>> registrationBuilder)
         {
