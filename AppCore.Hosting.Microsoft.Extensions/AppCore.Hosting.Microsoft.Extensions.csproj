@@ -9,8 +9,9 @@
     <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[2.0.0,4.0.0)" />
-    <PackageReference Include="AppCore.Logging.Abstractions" Version="$(AppCore_Logging_Version)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[2.1.0,4.0.0)" />
+    <PackageReference Include="AppCore.DependencyInjection.Microsoft.Extensions" Version="$(AppCore_DI_Version)" />
+    <PackageReference Include="AppCore.Logging.Microsoft.Extensions" Version="$(AppCore_Logging_Version)" />
   </ItemGroup>
 
   <ItemGroup>
