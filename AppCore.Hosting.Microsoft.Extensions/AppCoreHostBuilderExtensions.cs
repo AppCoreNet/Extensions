@@ -33,7 +33,7 @@ namespace Microsoft.Extensions.Hosting
                     configureAction?.Invoke(context, registry);
 
                     registry.RegisterFacility<HostingFacility>()
-                            .UseMicrosoftHosting();
+                            .UseMicrosoftExtensions();
 
                     registry.RegisterFacility<LoggingFacility>()
                             .UseMicrosoftExtensions();

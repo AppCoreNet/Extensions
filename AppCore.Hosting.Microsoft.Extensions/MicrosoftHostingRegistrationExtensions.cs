@@ -18,7 +18,7 @@ namespace AppCore.DependencyInjection
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IFacilityBuilder<IHostingFacility> UseMicrosoftHosting(
+        public static IFacilityBuilder<IHostingFacility> UseMicrosoftExtensions(
             this IFacilityBuilder<IHostingFacility> builder)
         {
             return builder.Add<MicrosoftHostingExtension>();
