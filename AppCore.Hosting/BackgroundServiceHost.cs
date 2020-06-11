@@ -1,3 +1,6 @@
+// Licensed under the MIT License.
+// Copyright (c) 2018-2020 the AppCore .NET project.
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,11 +12,19 @@ using AppCore.Logging;
 
 namespace AppCore.Hosting
 {
+    /// <summary>
+    /// Provides the default implementation of the <see cref="IBackgroundServiceHost"/>.
+    /// </summary>
     public class BackgroundServiceHost : IBackgroundServiceHost
     {
         private readonly List<IBackgroundService> _services;
         private readonly ILogger<BackgroundServiceHost> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BackgroundServiceHost"/> class.
+        /// </summary>
+        /// <param name="services">The background services which are hosted.</param>
+        /// <param name="logger">The logger.</param>
         public BackgroundServiceHost(IEnumerable<IBackgroundService> services, ILogger<BackgroundServiceHost> logger)
         {
             Ensure.Arg.NotNull(services, nameof(services));
@@ -23,16 +34,21 @@ namespace AppCore.Hosting
             _logger = logger;
         }
 
+        /// <inheritdoc />
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            var startedServices = new List<IBackgroundService>(_services.Count);
+            var services = new List<IBackgroundService>(_services.Count);
 
             var cancellationTokenSource = new CancellationTokenSource();
             using (cancellationToken.Register(() => cancellationTokenSource.Cancel(false)))
             {
                 try
                 {
-                    await Task.WhenAll(_services.Select(s => StartService(s, startedServices, cancellationTokenSource)));
+                    IEnumerable<Task> tasks =
+                        _services.Select(s => StartService(s, services, cancellationTokenSource));
+
+                    await Task.WhenAll(tasks)
+                              .ConfigureAwait(false);
                 }
                 catch (Exception)
                 {
@@ -42,11 +58,14 @@ namespace AppCore.Hosting
                         var stopCancellationTokenSource = new CancellationTokenSource();
                         using (cancellationToken.Register(() => stopCancellationTokenSource.Cancel(false)))
                         {
-                            await Task.WhenAll(startedServices.Select(s => StopService(s, stopCancellationTokenSource)));
+                            IEnumerable<Task> tasks = services.Select(s => StopService(s, stopCancellationTokenSource));
+                            await Task.WhenAll(tasks)
+                                      .ConfigureAwait(false);
                         }
                     }
                     catch
                     {
+                        // ignored
                     }
 
                     throw;
@@ -96,13 +115,15 @@ namespace AppCore.Hosting
             }
         }
 
+        /// <inheritdoc />
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             var cancellationTokenSource = new CancellationTokenSource();
             using (cancellationToken.Register(() => cancellationTokenSource.Cancel(false)))
             {
                 IEnumerable<Task> tasks = _services.Select(s => StopService(s, cancellationTokenSource));
-                await Task.WhenAll(tasks);
+                await Task.WhenAll(tasks)
+                          .ConfigureAwait(false);
             }
         }
     }

@@ -8,6 +8,9 @@ using AppCore.Hosting.Microsoft.Extensions;
 // ReSharper disable once CheckNamespace
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Provides extension methods to register Microsoft.Extensions.Hosting facility extension.
+    /// </summary>
     public static class MicrosoftHostingRegistrationExtensions
     {
         /// <summary>

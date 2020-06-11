@@ -5,6 +5,9 @@ using AppCore.DependencyInjection.Facilities;
 
 namespace AppCore.Hosting
 {
+    /// <summary>
+    /// Represents the facility for the application host.
+    /// </summary>
     public interface IHostingFacility : IFacility
     {
     }

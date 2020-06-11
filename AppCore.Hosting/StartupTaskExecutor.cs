@@ -12,11 +12,19 @@ using AppCore.Logging;
 
 namespace AppCore.Hosting
 {
+    /// <summary>
+    /// Provides the default implementation of the <see cref="IStartupTaskExecutor"/>.
+    /// </summary>
     public class StartupTaskExecutor : IStartupTaskExecutor
     {
         private readonly IEnumerable<IStartupTask> _startupTasks;
         private readonly ILogger<StartupTaskExecutor> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StartupTaskExecutor"/> class.
+        /// </summary>
+        /// <param name="startupTasks">The startup tasks to execute.</param>
+        /// <param name="logger">The logger.</param>
         public StartupTaskExecutor(IEnumerable<IStartupTask> startupTasks, ILogger<StartupTaskExecutor> logger)
         {
             Ensure.Arg.NotNull(startupTasks, nameof(startupTasks));
@@ -26,6 +34,7 @@ namespace AppCore.Hosting
             _logger = logger;
         }
 
+        /// <inheritdoc />
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             var stopwatch = new Stopwatch();

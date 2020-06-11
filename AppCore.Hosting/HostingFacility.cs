@@ -7,8 +7,12 @@ using AppCore.Hosting;
 // ReSharper disable once CheckNamespace
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Represents the facility for the application host.
+    /// </summary>
     public class HostingFacility : Facility, IHostingFacility
     {
+        /// <inheritdoc />
         protected override void RegisterComponents(IComponentRegistry registry)
         {
             registry.RegisterFacility<LoggingFacility>();

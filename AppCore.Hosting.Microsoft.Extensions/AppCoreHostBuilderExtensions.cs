@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.Hosting
         /// <returns>The same instance of the <see cref="IHostBuilder"/>.</returns>
         public static IHostBuilder ConfigureAppCore(
             this IHostBuilder builder,
-            Action<IComponentRegistry> configureAction = null)
+            Action<IComponentRegistry> configureAction)
         {
             return builder.ConfigureAppCore((_, services) => configureAction?.Invoke(services));
         }
