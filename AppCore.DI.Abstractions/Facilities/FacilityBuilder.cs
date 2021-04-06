@@ -1,58 +1,24 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018,2019 the AppCore .NET project.
-
-using System;
-using System.Collections.Generic;
-using AppCore.Diagnostics;
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 namespace AppCore.DependencyInjection.Facilities
 {
-    internal sealed class FacilityBuilder<TFacility> : IFacilityBuilder<TFacility>
-        where TFacility : IFacility, new()
+    internal sealed class FacilityBuilder<T> : IFacilityBuilder<T>
+        where T : Facility
     {
-        private readonly List<Action<TFacility>> _callbacks = new List<Action<TFacility>>();
+        public IComponentRegistry Registry { get; }
 
-        public void Configure(Action<TFacility> configure)
+        public T Facility { get; }
+
+        public FacilityBuilder(IComponentRegistry registry, T facility)
         {
-            Ensure.Arg.NotNull(configure, nameof(configure));
-            _callbacks.Add(configure);
+            Registry = registry;
+            Facility = facility;
         }
 
-        public TFacility Build()
+        public void Build()
         {
-            var facility = new TFacility();
-            foreach (Action<TFacility> callback in _callbacks)
-                callback(facility);
-
-            return facility;
-        }
-
-        public IFacilityBuilder<TFacility> Add<TExtension>(TExtension extension)
-            where TExtension : IFacilityExtension<TFacility>
-        {
-            Ensure.Arg.NotNull(extension, nameof(extension));
-
-            Configure(facility =>
-            {
-                facility.Extensions.Add(extension);
-            });
-
-            return this;
-        }
-
-        public IFacilityBuilder<TFacility> Add<TExtension>(
-            Action<IFacilityExtensionBuilder<TFacility, TExtension>> configure)
-            where TExtension : IFacilityExtension<TFacility>, new()
-        {
-            Configure(facility =>
-            {
-                var builder = new FacilityExtensionBuilder<TFacility, TExtension>();
-                configure?.Invoke(builder);
-
-                facility.Extensions.Add(builder.Build(facility));
-            });
-
-            return this;
+            Facility.Build(Registry);
         }
     }
 }

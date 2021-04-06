@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -16,30 +16,81 @@ namespace AppCore.DependencyInjection.StructureMap
     /// </summary>
     public class StructureMapComponentRegistry : IComponentRegistry
     {
-        private readonly List<Func<IEnumerable<ComponentRegistration>>> _registrationCallbacks =
-            new List<Func<IEnumerable<ComponentRegistration>>>();
+        private readonly Registry _registry;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StructureMapComponentRegistry"/>.
         /// </summary>
-        public StructureMapComponentRegistry()
+        public StructureMapComponentRegistry(Registry registry)
         {
+            Ensure.Arg.NotNull(registry, nameof(registry));
+
+            registry.For<IContainer>()
+                    .LifecycleIs(Lifecycles.Container)
+                    .UseIfNone<StructureMapContainer>();
+
+            registry.For<IContainerScopeFactory>()
+                    .LifecycleIs(Lifecycles.Container)
+                    .UseIfNone<StructureMapContainerScopeFactory>();
+
+            _registry = registry;
         }
 
-        private void Register(Registry registry, ComponentRegistration registration)
+        /// <inheritdoc />
+        public IComponentRegistry Add(IEnumerable<ComponentRegistration> registrations)
         {
-            registry.Configure(
+            Ensure.Arg.NotNull(registrations, nameof(registrations));
+
+            foreach (ComponentRegistration registration in registrations)
+            {
+                Register(registration);
+            }
+
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IComponentRegistry TryAdd(IEnumerable<ComponentRegistration> registrations)
+        {
+            Ensure.Arg.NotNull(registrations, nameof(registrations));
+
+            foreach (ComponentRegistration registration in registrations)
+            {
+                Register(registration, false, true);
+            }
+
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IComponentRegistry TryAddEnumerable(IEnumerable<ComponentRegistration> registrations)
+        {
+            Ensure.Arg.NotNull(registrations, nameof(registrations));
+
+            foreach (ComponentRegistration registration in registrations)
+            {
+                Register(registration, true, false);
+            }
+
+            return this;
+        }
+
+        private void Register(ComponentRegistration registration,
+                              bool skipIfNotPresent = false,
+                              bool skipIfNonePresent = false)
+        {
+            _registry.Configure(
                 pg =>
                 {
-                    if ((registration.Flags & ComponentRegistrationFlags.IfNoneRegistered)
-                        == ComponentRegistrationFlags.IfNoneRegistered)
+                    Type implementationType = registration.GetImplementationType();
+
+                    if (skipIfNotPresent || skipIfNonePresent)
                     {
-                        if ((registration.Flags & ComponentRegistrationFlags.IfNotRegistered)
-                            == ComponentRegistrationFlags.IfNotRegistered)
+                        if (skipIfNotPresent)
                         {
                             if (pg.HasFamily(registration.ContractType)
                                 && pg.Families[registration.ContractType]
-                                     .Instances.Any(i => i.ReturnedType == registration.LimitType))
+                                     .Instances.Any(i => i.ReturnedType == implementationType))
                                 return;
                         }
                         else
@@ -55,12 +106,10 @@ namespace AppCore.DependencyInjection.StructureMap
                     if (registration.ImplementationFactory != null)
                     {
                         Type instanceType = typeof(ContainerLambdaInstance<,>).MakeGenericType(
-                            registration.LimitType,
+                            implementationType,
                             registration.ContractType);
 
-                        instance = (Instance) Activator.CreateInstance(
-                            instanceType,
-                            registration.ImplementationFactory);
+                        instance = (Instance) Activator.CreateInstance(instanceType, registration.ImplementationFactory);
                     }
 
                     else if (registration.ImplementationInstance != null)
@@ -90,35 +139,6 @@ namespace AppCore.DependencyInjection.StructureMap
                     return Lifecycles.Container;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(lifetime), lifetime, null);
-            }
-        }
-
-        /// <inheritdoc />
-        public void RegisterCallback(Func<IEnumerable<ComponentRegistration>> registrationCallback)
-        {
-            Ensure.Arg.NotNull(registrationCallback, nameof(registrationCallback));
-            _registrationCallbacks.Add(registrationCallback);
-        }
-
-        /// <summary>
-        /// Registers all components with the specified <paramref name="registry"/>.
-        /// </summary>
-        /// <param name="registry">The <see cref="Registry"/> where to register components.</param>
-        public void RegisterComponents(Registry registry)
-        {
-            Ensure.Arg.NotNull(registry, nameof(registry));
-
-            registry.For<IContainer>()
-                .LifecycleIs(Lifecycles.Container)
-                .UseIfNone<StructureMapContainer>();
-
-            registry.For<IContainerScopeFactory>()
-                .LifecycleIs(Lifecycles.Container)
-                .UseIfNone<StructureMapContainerScopeFactory>();
-
-            foreach (ComponentRegistration registration in _registrationCallbacks.SelectMany(c => c()))
-            {
-                Register(registry, registration);
             }
         }
     }

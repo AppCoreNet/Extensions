@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
 using AppCore.Diagnostics;
@@ -10,17 +10,12 @@ namespace AppCore.DependencyInjection
     /// Represents parameters for registering a component.
     /// </summary>
     /// <seealso cref="IComponentRegistry"/>
-    public readonly struct ComponentRegistration
+    public class ComponentRegistration
     {
         /// <summary>
         /// Gets the contract of the component which is registered.
         /// </summary>
         public Type ContractType { get; }
-
-        /// <summary>
-        /// Gets the most known type of the component.
-        /// </summary>
-        public Type LimitType { get; }
 
         /// <summary>
         /// Gets the <see cref="Type"/> which is instantiated.
@@ -30,7 +25,7 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Gets the factory method used to instantiate the component.
         /// </summary>
-        public Func<IContainer, object> ImplementationFactory { get; }
+        public IFactory<object> ImplementationFactory { get; }
 
         /// <summary>
         /// Gets the singleton instance of the component.
@@ -42,54 +37,85 @@ namespace AppCore.DependencyInjection
         /// </summary>
         public ComponentLifetime Lifetime { get; }
 
-        /// <summary>
-        /// Gets component registration flags.
-        /// </summary>
-        public ComponentRegistrationFlags Flags { get; }
-
         private ComponentRegistration(
             Type contractType,
             Type implementationType,
-            ComponentLifetime lifetime,
-            ComponentRegistrationFlags flags)
+            ComponentLifetime lifetime)
         {
+            Ensure.Arg.NotNull(contractType, nameof(contractType));
+            Ensure.Arg.NotNull(implementationType, nameof(implementationType));
+            Ensure.Arg.OfType(implementationType, contractType, nameof(implementationType));
+
             ContractType = contractType;
-            LimitType = implementationType;
             ImplementationType = implementationType;
-            ImplementationFactory = null;
-            ImplementationInstance = null;
             Lifetime = lifetime;
-            Flags = flags;
         }
 
         private ComponentRegistration(
             Type contractType,
-            Type limitType,
-            Func<IContainer, object> implementationFactory,
-            ComponentLifetime lifetime,
-            ComponentRegistrationFlags flags)
+            IFactory<object> implementationFactory,
+            ComponentLifetime lifetime)
         {
+            Ensure.Arg.NotNull(contractType, nameof(contractType));
+            Ensure.Arg.NotNull(implementationFactory, nameof(implementationFactory));
+
             ContractType = contractType;
-            LimitType = limitType;
-            ImplementationType = null;
             ImplementationFactory = implementationFactory;
-            ImplementationInstance = null;
             Lifetime = lifetime;
-            Flags = flags;
         }
 
         private ComponentRegistration(
             Type contractType,
-            object implementationInstance,
-            ComponentRegistrationFlags flags)
+            object implementationInstance)
         {
+            Ensure.Arg.NotNull(contractType, nameof(contractType));
+            Ensure.Arg.NotNull(implementationInstance, nameof(implementationInstance));
+            Ensure.Arg.OfType(implementationInstance.GetType(), contractType, nameof(implementationInstance));
+
             ContractType = contractType;
-            LimitType = implementationInstance.GetType();
-            ImplementationType = null;
-            ImplementationFactory = null;
             ImplementationInstance = implementationInstance;
             Lifetime = ComponentLifetime.Singleton;
-            Flags = flags;
+        }
+
+        /// <summary>
+        /// Gets the implementation type of the component.
+        /// </summary>
+        /// <returns>The implementation type.</returns>
+        public Type GetImplementationType()
+        {
+            if (ImplementationType != null)
+                return ImplementationType;
+
+            if (ImplementationInstance != null)
+                return ImplementationInstance.GetType();
+
+            if (ImplementationFactory != null)
+                return ImplementationFactory.GetType().GenericTypeArguments[0];
+
+            throw new InvalidOperationException("Internal error");
+        }
+
+        /// <summary>
+        /// Creates a singleton <see cref="ComponentRegistration"/> for the specified contract.
+        /// </summary>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <param name="instance">The singleton instance.</param>
+        /// <returns>The <see cref="ComponentRegistration"/>.</returns>
+        public static ComponentRegistration Create(Type contractType, object instance)
+        {
+            return new ComponentRegistration(contractType, instance);
+        }
+
+        /// <summary>
+        /// Creates a singleton <see cref="ComponentRegistration"/> for the specified contract.
+        /// </summary>
+        /// <typeparam name="TContract">The type of the contract.</typeparam>
+        /// <param name="instance">The singleton instance.</param>
+        /// <returns>The <see cref="ComponentRegistration"/>.</returns>
+        public static ComponentRegistration Create<TContract>(TContract instance)
+            where TContract : class
+        {
+            return new ComponentRegistration(typeof(TContract), instance);
         }
 
         /// <summary>
@@ -98,61 +124,149 @@ namespace AppCore.DependencyInjection
         /// <param name="contractType">The type of the contract.</param>
         /// <param name="implementationType">The type of the implementation.</param>
         /// <param name="lifetime">The component lifetime.</param>
-        /// <param name="flags">The registration flags.</param>
         /// <returns>The <see cref="ComponentRegistration"/>.</returns>
         public static ComponentRegistration Create(
             Type contractType,
             Type implementationType,
-            ComponentLifetime lifetime,
-            ComponentRegistrationFlags flags = ComponentRegistrationFlags.None)
+            ComponentLifetime lifetime)
         {
-            Ensure.Arg.NotNull(contractType, nameof(contractType));
-            Ensure.Arg.NotNull(implementationType, nameof(implementationType));
-            Ensure.Arg.OfType(implementationType, contractType, nameof(implementationType));
+            return new ComponentRegistration(contractType, implementationType, lifetime);
+        }
 
-            return new ComponentRegistration(contractType, implementationType, lifetime, flags);
+        /// <summary>
+        /// Creates a <see cref="ComponentRegistration"/> for the specified contract and implementation type.
+        /// </summary>
+        /// <typeparam name="TContract">The type of the contract.</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation.</typeparam>
+        /// <param name="lifetime">The component lifetime.</param>
+        /// <returns>The <see cref="ComponentRegistration"/>.</returns>
+        public static ComponentRegistration Create<TContract, TImplementation>(ComponentLifetime lifetime)
+            where TContract : class
+            where TImplementation : class, TContract
+        {
+            return new ComponentRegistration(typeof(TContract), typeof(TImplementation), lifetime);
         }
 
         /// <summary>
         /// Creates a <see cref="ComponentRegistration"/> for the specified contract with factory delegate.
         /// </summary>
-        /// <typeparam name="T">The type of the implementation.</typeparam>
         /// <param name="contractType">The contract type.</param>
-        /// <param name="implementationFactory">The factory.</param>
+        /// <param name="factory">The factory.</param>
         /// <param name="lifetime">The component lifetime.</param>
-        /// <param name="flags">The registration flags.</param>
         /// <returns>The <see cref="ComponentRegistration"/>.</returns>
-        public static ComponentRegistration Create<T>(
+        public static ComponentRegistration Create(
             Type contractType,
-            Func<IContainer, T> implementationFactory,
-            ComponentLifetime lifetime,
-            ComponentRegistrationFlags flags = ComponentRegistrationFlags.None)
+            IFactory<object> factory,
+            ComponentLifetime lifetime)
         {
-            Ensure.Arg.NotNull(contractType, nameof(contractType));
-            Ensure.Arg.NotNull(implementationFactory, nameof(implementationFactory));
-            Ensure.Arg.OfType(typeof(T), contractType, nameof(implementationFactory));
+            return new ComponentRegistration(contractType, factory, lifetime);
+        }
 
-            return new ComponentRegistration(contractType, typeof(T), c => implementationFactory(c), lifetime, flags);
+        /// <summary>
+        /// Creates a <see cref="ComponentRegistration"/> for the specified contract with factory delegate.
+        /// </summary>
+        /// <typeparam name="TContract">The contract type.</typeparam>
+        /// <param name="factory">The factory.</param>
+        /// <param name="lifetime">The component lifetime.</param>
+        /// <returns>The <see cref="ComponentRegistration"/>.</returns>
+        public static ComponentRegistration Create<TContract>(
+            IFactory<TContract> factory,
+            ComponentLifetime lifetime)
+            where TContract : class
+        {
+            return new ComponentRegistration(typeof(TContract), factory, lifetime);
         }
 
         /// <summary>
         /// Creates a singleton <see cref="ComponentRegistration"/> for the specified contract.
         /// </summary>
-        /// <typeparam name="T">The type of the implementation.</typeparam>
         /// <param name="contractType">The type of the contract.</param>
-        /// <param name="implementationInstance">The singleton instance.</param>
-        /// <param name="flags">The registration flags.</param>
+        /// <param name="instance">The singleton instance.</param>
         /// <returns>The <see cref="ComponentRegistration"/>.</returns>
-        public static ComponentRegistration Create<T>(
-            Type contractType,
-            T implementationInstance,
-            ComponentRegistrationFlags flags = ComponentRegistrationFlags.None)
+        public static ComponentRegistration Singleton(Type contractType, object instance)
         {
-            Ensure.Arg.NotNull(contractType, nameof(contractType));
-            Ensure.Arg.NotNull(implementationInstance, nameof(implementationInstance));
-            Ensure.Arg.OfType(typeof(T), contractType, nameof(implementationInstance));
+            return Create(contractType, instance);
+        }
 
-            return new ComponentRegistration(contractType, implementationInstance, flags);
+        /// <summary>
+        /// Creates a singleton <see cref="ComponentRegistration"/> for the specified contract.
+        /// </summary>
+        /// <typeparam name="TContract">The type of the contract.</typeparam>
+        /// <param name="instance">The singleton instance.</param>
+        /// <returns>The <see cref="ComponentRegistration"/>.</returns>
+        public static ComponentRegistration Singleton<TContract>(TContract instance)
+            where TContract : class
+        {
+            return Create(instance);
+        }
+
+        public static ComponentRegistration Singleton(Type contractType, Type implementationType)
+        {
+            return Create(contractType, implementationType, ComponentLifetime.Singleton);
+        }
+
+        public static ComponentRegistration Singleton<TContract, TImplementation>()
+            where TContract : class
+            where TImplementation : class, TContract
+        {
+            return Create<TContract, TImplementation>(ComponentLifetime.Transient);
+        }
+
+        public static ComponentRegistration Singleton(Type contractType, IFactory<object> factory)
+        {
+            return Create(contractType, factory, ComponentLifetime.Singleton);
+        }
+
+        public static ComponentRegistration Singleton<TContract>(IFactory<TContract> factory)
+            where TContract : class
+        {
+            return Create(factory, ComponentLifetime.Transient);
+        }
+
+        public static ComponentRegistration Transient(Type contractType, Type implementationType)
+        {
+            return Create(contractType, implementationType, ComponentLifetime.Transient);
+        }
+
+        public static ComponentRegistration Transient<TContract, TImplementation>()
+            where TContract : class
+            where TImplementation : class, TContract
+        {
+            return Create<TContract, TImplementation>(ComponentLifetime.Transient);
+        }
+
+        public static ComponentRegistration Transient(Type contractType, IFactory<object> factory)
+        {
+            return Create(contractType, factory, ComponentLifetime.Transient);
+        }
+
+        public static ComponentRegistration Transient<TContract>(IFactory<TContract> factory)
+            where TContract : class
+        {
+            return Create(factory, ComponentLifetime.Transient);
+        }
+
+        public static ComponentRegistration Scoped(Type contractType, Type implementationType)
+        {
+            return Create(contractType, implementationType, ComponentLifetime.Scoped);
+        }
+        
+        public static ComponentRegistration Scoped<TContract, TImplementation>()
+            where TContract : class
+            where TImplementation : class, TContract
+        {
+            return Create<TContract, TImplementation>(ComponentLifetime.Scoped);
+        }
+
+        public static ComponentRegistration Scoped(Type contractType, IFactory<object> factory)
+        {
+            return Create(contractType, factory, ComponentLifetime.Scoped);
+        }
+
+        public static ComponentRegistration Scoped<TContract>(IFactory<TContract> factory)
+            where TContract : class
+        {
+            return Create(factory, ComponentLifetime.Scoped);
         }
     }
 }

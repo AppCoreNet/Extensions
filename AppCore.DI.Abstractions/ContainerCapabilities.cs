@@ -1,18 +1,18 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
 
 namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Defines container capibilities.
+    /// Defines container capabilities.
     /// </summary>
     [Flags]
     public enum ContainerCapabilities
     {
         /// <summary>
-        /// No special capbilities.
+        /// No special capabilities.
         /// </summary>
         None,
 

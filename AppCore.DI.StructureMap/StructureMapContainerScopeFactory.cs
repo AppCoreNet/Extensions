@@ -1,4 +1,4 @@
-﻿// Licensed under the MIT License.
+// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
 using AppCore.Diagnostics;
@@ -11,7 +11,7 @@ namespace AppCore.DependencyInjection.StructureMap
     /// </summary>
     public class StructureMapContainerScopeFactory : IContainerScopeFactory
     {
-        private readonly global::StructureMap.IContainer _container;
+        private readonly SM.IContainer _container;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StructureMapContainerScopeFactory"/>.

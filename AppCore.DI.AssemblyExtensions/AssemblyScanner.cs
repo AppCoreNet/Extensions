@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -27,6 +27,11 @@ namespace AppCore.DependencyInjection
         public Type ContractType { get; }
 
         /// <summary>
+        /// Gets or sets a value whether to search for private/internal types.
+        /// </summary>
+        public bool IncludePrivateTypes { get; set; }
+
+        /// <summary>
         /// Gets the <see cref="IList{T}"/> of <see cref="Assembly"/> to scan.
         /// </summary>
         public IList<Assembly> Assemblies { get; }
@@ -37,7 +42,7 @@ namespace AppCore.DependencyInjection
         public IList<Predicate<Type>> Filters { get; } = new List<Predicate<Type>>();
 
         /// <summary>
-        /// Initalizes a new instance of the <see cref="AssemblyScanner"/> class.
+        /// Initializes a new instance of the <see cref="AssemblyScanner"/> class.
         /// </summary>
         /// <param name="contractType">The type being implemented by types to search for.</param>
         /// <param name="assemblies">The list of assemblies to scan.</param>
@@ -55,7 +60,7 @@ namespace AppCore.DependencyInjection
         }
 
         /// <summary>
-        /// Initalizes a new instance of the <see cref="AssemblyScanner"/> class.
+        /// Initializes a new instance of the <see cref="AssemblyScanner"/> class.
         /// </summary>
         /// <param name="contractType">The type being implemented by types to search for.</param>
         /// <exception cref="ArgumentNullException">Argument <paramref name="contractType"/> is <c>null</c>.</exception>
@@ -72,7 +77,11 @@ namespace AppCore.DependencyInjection
 
         private IEnumerable<Type> GetTypes(Assembly assembly)
         {
-            IEnumerable<Type> exportedTypes = assembly.ExportedTypes.Where(
+            IEnumerable<Type> exportedTypes = IncludePrivateTypes
+                ? assembly.GetTypes()
+                : assembly.GetExportedTypes();
+
+            exportedTypes = exportedTypes.Where(
                 t =>
                 {
                     TypeInfo ti = t.GetTypeInfo();
@@ -97,7 +106,7 @@ namespace AppCore.DependencyInjection
                         .Contains(ContractType);
                 });
 
-            foreach (Predicate<Type> registrationFilter in Filters.ToArray())
+            foreach (Predicate<Type> registrationFilter in Filters)
             {
                 exportedTypes = exportedTypes.Where(et => registrationFilter(et));
             }
@@ -111,7 +120,7 @@ namespace AppCore.DependencyInjection
         /// <returns>The <see cref="IEnumerable{T}"/> of types found.</returns>
         public IEnumerable<Type> ScanAssemblies()
         {
-            return Assemblies.ToArray().SelectMany(GetTypes);
+            return Assemblies.SelectMany(GetTypes);
         }
     }
 }

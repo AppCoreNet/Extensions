@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -17,63 +17,118 @@ namespace AppCore.DependencyInjection.Autofac
     /// </summary>
     public class AutofacComponentRegistry : IComponentRegistry
     {
-        private readonly List<Func<IEnumerable<ComponentRegistration>>> _registrationCallbacks =
-            new List<Func<IEnumerable<ComponentRegistration>>>();
+        private readonly ContainerBuilder _builder;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacComponentRegistry"/> class.
         /// </summary>
-        public AutofacComponentRegistry()
+        /// <param name="builder">The <see cref="ContainerBuilder"/>.</param>
+        public AutofacComponentRegistry(ContainerBuilder builder)
         {
+            Ensure.Arg.NotNull(builder, nameof(builder));
+
+            builder.RegisterType<AutofacContainer>()
+                   .As<IContainer>()
+                   .IfNotRegistered(typeof(IContainer));
+
+            builder.RegisterType<AutofacContainerScopeFactory>()
+                   .As<IContainerScopeFactory>()
+                   .IfNotRegistered(typeof(IContainerScopeFactory));
+
+            _builder = builder;
         }
 
-        private void Register(ContainerBuilder builder, ComponentRegistration registration)
+        /// <inheritdoc />
+        public IComponentRegistry Add(IEnumerable<ComponentRegistration> registrations)
         {
+            Ensure.Arg.NotNull(registrations, nameof(registrations));
+
+            foreach (ComponentRegistration registration in registrations)
+            {
+                Register(registration);
+            }
+
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IComponentRegistry TryAdd(IEnumerable<ComponentRegistration> registrations)
+        {
+            Ensure.Arg.NotNull(registrations, nameof(registrations));
+
+            foreach (ComponentRegistration registration in registrations)
+            {
+                Register(registration, false, true);
+            }
+
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IComponentRegistry TryAddEnumerable(IEnumerable<ComponentRegistration> registrations)
+        {
+            Ensure.Arg.NotNull(registrations, nameof(registrations));
+
+            foreach (ComponentRegistration registration in registrations)
+            {
+                Register(registration, true, false);
+            }
+
+            return this;
+        }
+
+        private void Register(
+            ComponentRegistration registration,
+            bool skipIfNotPresent = false,
+            bool skipIfNonePresent = false)
+        {
+            Type implementationType = registration.GetImplementationType();
+
             if (registration.ImplementationFactory != null)
             {
                 IRegistrationBuilder<object, SimpleActivatorData, SingleRegistrationStyle> rb =
                     RegistrationBuilder.ForDelegate(
-                        registration.LimitType,
-                        (ctxt, parameters) => registration.ImplementationFactory(ctxt.Resolve<IContainer>()));
+                        implementationType,
+                        (context, _) =>
+                            registration.ImplementationFactory.Create(context.Resolve<IContainer>()));
 
-                rb.RegistrationData.DeferredCallback = builder.RegisterCallback(
+                rb.RegistrationData.DeferredCallback = _builder.RegisterCallback(
                     cr => RegistrationBuilder.RegisterSingleComponent(cr, rb));
 
                 rb.As(registration.ContractType);
                 ApplyLifetime(rb, registration.Lifetime);
-                ApplyFlags(rb, registration.Flags, registration.ContractType, registration.LimitType);
+                ApplyFlags(rb, registration.ContractType, implementationType, skipIfNotPresent, skipIfNonePresent);
             }
 
             else if (registration.ImplementationInstance != null)
             {
                 IRegistrationBuilder<object, SimpleActivatorData, SingleRegistrationStyle> rb =
-                    builder.RegisterInstance(registration.ImplementationInstance);
+                    _builder.RegisterInstance(registration.ImplementationInstance);
 
                 rb.As(registration.ContractType);
                 ApplyLifetime(rb, registration.Lifetime);
-                ApplyFlags(rb, registration.Flags, registration.ContractType, registration.LimitType);
+                ApplyFlags(rb, registration.ContractType, implementationType, skipIfNotPresent, skipIfNonePresent);
             }
 
             else if (registration.ImplementationType != null)
             {
-                if (registration.ImplementationType.GetTypeInfo()
-                                .IsGenericTypeDefinition)
+                if (registration.ImplementationType.IsGenericTypeDefinition)
                 {
                     IRegistrationBuilder<object, ReflectionActivatorData, DynamicRegistrationStyle> rb =
-                        builder.RegisterGeneric(registration.ImplementationType);
+                        _builder.RegisterGeneric(registration.ImplementationType);
 
                     rb.As(registration.ContractType);
                     ApplyLifetime(rb, registration.Lifetime);
-                    ApplyFlags(rb, registration.Flags, registration.ContractType, registration.LimitType);
+                    ApplyFlags(rb, registration.ContractType, implementationType, skipIfNotPresent, skipIfNonePresent);
                 }
                 else
                 {
                     IRegistrationBuilder<object, ConcreteReflectionActivatorData, SingleRegistrationStyle> rb =
-                        builder.RegisterType(registration.ImplementationType);
+                        _builder.RegisterType(registration.ImplementationType);
 
                     rb.As(registration.ContractType);
                     ApplyLifetime(rb, registration.Lifetime);
-                    ApplyFlags(rb, registration.Flags, registration.ContractType, registration.LimitType);
+                    ApplyFlags(rb, registration.ContractType, implementationType, skipIfNotPresent, skipIfNonePresent);
                 }
             }
         }
@@ -100,32 +155,33 @@ namespace AppCore.DependencyInjection.Autofac
 
         private void ApplyFlags<TLimit, TActivatorData, TRegistrationStyle>(
             IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> rb,
-            ComponentRegistrationFlags flags, Type serviceType, Type limitType)
+            Type serviceType,
+            Type limitType,
+            bool skipIfNotPresent = false,
+            bool skipIfNonePresent = false)
         {
-            if ((flags & ComponentRegistrationFlags.IfNoneRegistered)
-                == ComponentRegistrationFlags.IfNoneRegistered)
-            {
-                rb.OnlyIf(
-                    r =>
+            if (!skipIfNotPresent && !skipIfNonePresent)
+                return;
+
+            rb.OnlyIf(
+                r =>
+                {
+                    // in case of open generic services we need to check against closed
+                    // generic service type. See https://github.com/autofac/Autofac/issues/958
+                    serviceType = ConstructOpenGenericType(serviceType);
+
+                    IEnumerable<IInstanceActivator> instanceActivators =
+                        r.RegistrationsFor(new TypedService(serviceType))
+                         .Select(cr => cr.Activator);
+
+                    if (skipIfNotPresent)
                     {
-                        // in case of open generic services we need to check against closed
-                        // generic service type. See https://github.com/autofac/Autofac/issues/958
-                        serviceType = ConstructOpenGenericType(serviceType);
+                        limitType = ConstructOpenGenericType(limitType);
+                        return instanceActivators.All(a => a.LimitType != limitType);
+                    }
 
-                        IEnumerable<IInstanceActivator> instanceActivators =
-                            r.RegistrationsFor(new TypedService(serviceType))
-                             .Select(cr => cr.Activator);
-
-                        if ((flags & ComponentRegistrationFlags.IfNotRegistered)
-                            == ComponentRegistrationFlags.IfNotRegistered)
-                        {
-                            limitType = ConstructOpenGenericType(limitType);
-                            return instanceActivators.All(a => a.LimitType != limitType);
-                        }
-
-                        return !instanceActivators.Any();
-                    });
-            }
+                    return !instanceActivators.Any();
+                });
         }
 
         private static Type ConstructOpenGenericType(Type serviceType)
@@ -154,7 +210,7 @@ namespace AppCore.DependencyInjection.Autofac
                         var genericTypeParameters =
                             new Type[genericTypeArgumentTypeInfo.GenericTypeArguments.Length];
 
-                        for (var i = 0; i < genericTypeArgumentTypeInfo.GenericTypeArguments.Length; i++)
+                        for (int i = 0; i < genericTypeArgumentTypeInfo.GenericTypeArguments.Length; i++)
                         {
                             if (genericTypeArgumentTypeInfo.GenericTypeArguments[i]
                                                            .IsGenericParameter)
@@ -180,35 +236,6 @@ namespace AppCore.DependencyInjection.Autofac
             }
 
             return serviceType;
-        }
-
-        /// <inheritdoc />
-        public void RegisterCallback(Func<IEnumerable<ComponentRegistration>> registrationCallback)
-        {
-            Ensure.Arg.NotNull(registrationCallback, nameof(registrationCallback));
-            _registrationCallbacks.Add(registrationCallback);
-        }
-
-        /// <summary>
-        /// Registers components with the given <see cref="ContainerBuilder"/>.
-        /// </summary>
-        /// <param name="builder">The <see cref="ContainerBuilder"/> where components are registered.</param>
-        public void RegisterComponents(ContainerBuilder builder)
-        {
-            Ensure.Arg.NotNull(builder, nameof(builder));
-
-            builder.RegisterType<AutofacContainer>()
-                   .As<IContainer>()
-                   .IfNotRegistered(typeof(IContainer));
-
-            builder.RegisterType<AutofacContainerScopeFactory>()
-                   .As<IContainerScopeFactory>()
-                   .IfNotRegistered(typeof(IContainerScopeFactory));
-
-            foreach (ComponentRegistration registration in _registrationCallbacks.SelectMany(c => c()))
-            {
-                Register(builder, registration);
-            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// Licensed under the MIT License.
+// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
 using System;
@@ -12,7 +12,7 @@ namespace AppCore.DependencyInjection.StructureMap
     /// </summary>
     public class StructureMapContainerScope : IContainerScope
     {
-        private readonly global::StructureMap.IContainer _internalContainer;
+        private readonly SM.IContainer _internalContainer;
         private readonly IContainer _container;
 
         /// <inheritdoc />

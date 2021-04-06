@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netstandard1.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <RootNamespace>AppCore.DependencyInjection</RootNamespace>
     <Description>Provides AppCore .NET abstractions for dependency injection containers.</Description>
     <AssemblyName>AppCore.DependencyInjection.Abstractions</AssemblyName>

@@ -1,9 +1,7 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace AppCore.DependencyInjection
 {
@@ -14,13 +12,26 @@ namespace AppCore.DependencyInjection
     public interface IComponentRegistry
     {
         /// <summary>
-        /// Registers a callback registering a component with the dependency injection container.
+        /// Adds the specified component registrations to the registry.
         /// </summary>
-        /// <param name="registration">
-        ///     Callback which returns the <see cref="ComponentRegistration"/> describing the component
-        ///     to register.
-        /// </param>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        void RegisterCallback(Func<IEnumerable<ComponentRegistration>> registration);
+        /// <param name="registrations">The enumerable of <see cref="ComponentRegistration"/> to add.</param>
+        /// <returns>The <see cref="IComponentRegistry"/>.</returns>
+        IComponentRegistry Add(IEnumerable<ComponentRegistration> registrations);
+
+        /// <summary>
+        /// Adds the specified component registrations to the registry if the contract of the
+        /// component has not been already added.
+        /// </summary>
+        /// <param name="registrations">The enumerable of <see cref="ComponentRegistration"/> to add.</param>
+        /// <returns>The <see cref="IComponentRegistry"/>.</returns>
+        IComponentRegistry TryAdd(IEnumerable<ComponentRegistration> registrations);
+
+        /// <summary>
+        /// Adds the specified component registrations to the registry if the contract and implementation
+        /// type of the component has not been already added.
+        /// </summary>
+        /// <param name="registrations">The enumerable of <see cref="ComponentRegistration"/> to add.</param>
+        /// <returns>The <see cref="IComponentRegistry"/>.</returns>
+        IComponentRegistry TryAddEnumerable(IEnumerable<ComponentRegistration> registrations);
     }
 }
