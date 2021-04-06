@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)' != 'Unix'">$(TargetFrameworks);net452</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net5</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' != 'Unix'">$(TargetFrameworks);net461</TargetFrameworks>
     <AssemblyName>AppCore.DependencyInjection.Tests</AssemblyName>
     <RootNamespace>AppCore.DependencyInjection</RootNamespace>
   </PropertyGroup>

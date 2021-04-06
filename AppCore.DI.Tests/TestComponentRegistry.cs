@@ -1,7 +1,6 @@
 // Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,18 +8,39 @@ namespace AppCore.DependencyInjection
 {
     public class TestComponentRegistry : IComponentRegistry
     {
-        private readonly List<Func<IEnumerable<ComponentRegistration>>> _registrationCallbacks =
-            new List<Func<IEnumerable<ComponentRegistration>>>();
+        private readonly List<ComponentRegistration> _registrations = new List<ComponentRegistration>();
 
-        public void RegisterCallback(Func<IEnumerable<ComponentRegistration>> registration)
+
+        public IComponentRegistry Add(IEnumerable<ComponentRegistration> registrations)
         {
-            _registrationCallbacks.Add(registration);
+            _registrations.AddRange(registrations);
+            return this;
         }
 
-        public IEnumerable<ComponentRegistration> GetRegistrations()
+        public IComponentRegistry TryAdd(IEnumerable<ComponentRegistration> registrations)
         {
-            return _registrationCallbacks.SelectMany(cb => cb())
-                                         .ToList();
+            foreach (ComponentRegistration registration in registrations)
+            {
+                if (_registrations.All(r => r.ContractType != registration.ContractType))
+                    _registrations.Add(registration);
+            }
+
+            return this;
+        }
+
+        public IComponentRegistry TryAddEnumerable(IEnumerable<ComponentRegistration> registrations)
+        {
+            foreach (ComponentRegistration registration in registrations)
+            {
+                if (!_registrations.Any(
+                    r => r.ContractType == registration.ContractType
+                         && r.GetImplementationType() == registration.GetImplementationType()))
+                {
+                    _registrations.Add(registration);
+                }
+            }
+
+            return this;
         }
     }
 }

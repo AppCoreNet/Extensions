@@ -1,28 +1,27 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018,2019 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using AppCore.DependencyInjection.Builder;
 using FluentAssertions;
 using Xunit;
 
 namespace AppCore.DependencyInjection
 {
-    public class AssemblyScannerExtensionsTests
+    public class AssemblyRegistrationBuilderTests
     {
         [Fact]
         public void FiltersNonDerivableGenericTypes()
         {
             Type contractType = typeof(IContract);
-            var scanner = new AssemblyScanner(contractType);
+            AssemblyRegistrationBuilder scanner =
+                new AssemblyRegistrationBuilder()
+                    .ForType(contractType)
+                    .WithAssembly(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .ClearFilters()
+                    .UseDefaultLifetime(ComponentLifetime.Transient);
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
-
-            IEnumerable<ComponentRegistration> registrations =
-                scanner.CreateRegistrations(new AssemblyRegistrationInfo(contractType));
+            IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
 
             registrations
                 .Should()
@@ -42,13 +41,15 @@ namespace AppCore.DependencyInjection
         {
             Type contractType = typeof(IContract<>);
             Type closedContractType = typeof(IContract<string>);
-            var scanner = new AssemblyScanner(contractType);
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
+            AssemblyRegistrationBuilder scanner =
+                new AssemblyRegistrationBuilder()
+                    .ForType(contractType)
+                    .WithAssembly(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .ClearFilters()
+                    .UseDefaultLifetime(ComponentLifetime.Transient);
 
-            IEnumerable<ComponentRegistration> registrations =
-                scanner.CreateRegistrations(new AssemblyRegistrationInfo(contractType));
+            IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
 
             registrations
                 .Should()
@@ -76,13 +77,15 @@ namespace AppCore.DependencyInjection
         {
             Type contractType = typeof(IContract);
             var lifetime = ComponentLifetime.Scoped;
-            var scanner = new AssemblyScanner(contractType);
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
+            AssemblyRegistrationBuilder scanner =
+                new AssemblyRegistrationBuilder()
+                    .ForType(contractType)
+                    .WithAssembly(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .ClearFilters()
+                    .UseDefaultLifetime(lifetime);
 
-            IEnumerable<ComponentRegistration> registrations =
-                scanner.CreateRegistrations(new AssemblyRegistrationInfo(contractType) { Lifetime = lifetime });
+            IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
 
             registrations.Should()
                          .OnlyContain(cr => cr.Lifetime == lifetime);

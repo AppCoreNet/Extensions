@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using Autofac;
 
@@ -16,17 +16,12 @@ namespace AppCore.DependencyInjection.Autofac
         public AutofacContainerScopeTests()
         {
             Builder = new ContainerBuilder();
-            Registry = new AutofacComponentRegistry();
+            Registry = new AutofacComponentRegistry(Builder);
         }
 
         public override IContainerScope CreateScope()
         {
-            if (_container == null)
-            {
-                ((AutofacComponentRegistry) Registry).RegisterComponents(Builder);
-                _container = Builder.Build();
-            }
-
+            _container ??= Builder.Build();
             return new AutofacContainerScope(_container.BeginLifetimeScope());
         }
     }

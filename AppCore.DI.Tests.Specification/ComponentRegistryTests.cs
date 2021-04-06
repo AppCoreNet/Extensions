@@ -1,4 +1,4 @@
-﻿// Licensed under the MIT License.
+// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
 using System.Collections.Generic;
@@ -20,12 +20,12 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterWithFactory(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
-                sp => new MyService(),
+                Factory.Create(sp => new MyService()),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -43,20 +43,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceWithFactory(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
-                sp => new MyService(),
+                Factory.Create(sp => new MyService()),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                sp => new MyService2(),
-                lifetime,
-                ComponentRegistrationFlags.IfNoneRegistered);
+                Factory.Create(sp => new MyService2()),
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAdd(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -74,20 +73,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceEnumerableWithFactory(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
-                sp => new MyService(),
+                Factory.Create(sp => new MyService()),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                sp => new MyService(),
-                lifetime,
-                ComponentRegistrationFlags.IfNotRegistered);
+                Factory.Create(sp => new MyService()),
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -105,20 +103,18 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterMultipleEnumerableWithFactory(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
-                typeof(IMyService),
-                sp => new MyService(),
+            var registration = ComponentRegistration.Create<IMyService>(
+                Factory.Create(sp => new MyService()),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                sp => new MyService2(),
-                lifetime,
-                ComponentRegistrationFlags.IfNotRegistered);
+                Factory.Create(sp => new MyService2()),
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -143,12 +139,12 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterWithType(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
                 typeof(MyService),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -166,20 +162,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceWithType(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
                 typeof(MyService),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
                 typeof(MyService2),
-                lifetime,
-                ComponentRegistrationFlags.IfNoneRegistered);
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAdd(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -197,20 +192,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceWithOpenGenericType(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IGenericService<>),
                 typeof(GenericService1<>),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IGenericService<>),
                 typeof(GenericService1<>),
-                lifetime,
-                ComponentRegistrationFlags.IfNoneRegistered);
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IGenericService<string>> services = BuildContainer()
                 .ResolveAll<IGenericService<string>>();
@@ -228,20 +222,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceWithOpenGenericType2(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IGenericService<,>),
                 typeof(GenericService1<,>),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IGenericService<,>),
                 typeof(GenericService1<,>),
-                lifetime,
-                ComponentRegistrationFlags.IfNoneRegistered);
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IGenericService<string,IEnumerable<string>>> services = BuildContainer()
                 .ResolveAll<IGenericService<string,IEnumerable<string>>>();
@@ -259,20 +252,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceEnumerableWithType(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
                 typeof(MyService),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
                 typeof(MyService),
-                lifetime,
-                ComponentRegistrationFlags.IfNotRegistered);
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAdd(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -290,20 +282,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceEnumerableWithOpenGenericType(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IGenericService<>),
                 typeof(GenericService1<>),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IGenericService<>),
                 typeof(GenericService1<>),
-                lifetime,
-                ComponentRegistrationFlags.IfNotRegistered);
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IGenericService<string>> services = BuildContainer()
                 .ResolveAll<IGenericService<string>>();
@@ -321,20 +312,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterOnlyOnceEnumerableWithOpenGenericType2(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IGenericService<,>),
                 typeof(GenericService1<,>),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IGenericService<,>),
                 typeof(GenericService1<,>),
-                lifetime,
-                ComponentRegistrationFlags.IfNotRegistered);
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IGenericService<string,IEnumerable<string>>> services = BuildContainer()
                 .ResolveAll<IGenericService<string,IEnumerable<string>>>();
@@ -352,20 +342,19 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void RegisterMultipleEnumerableWithType(ComponentLifetime lifetime)
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
                 typeof(MyService),
                 lifetime);
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
                 typeof(MyService2),
-                lifetime,
-                ComponentRegistrationFlags.IfNotRegistered);
+                lifetime);
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -387,11 +376,11 @@ namespace AppCore.DependencyInjection
         [Fact]
         public void RegisterWithInstance()
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
                 new MyService());
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -406,18 +395,17 @@ namespace AppCore.DependencyInjection
         [Fact]
         public void RegisterOnlyOnceWithInstance()
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
                 new MyService());
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                new MyService2(),
-                ComponentRegistrationFlags.IfNoneRegistered);
+                new MyService2());
 
-            Registry.Register(registration2);
+            Registry.TryAdd(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -432,18 +420,17 @@ namespace AppCore.DependencyInjection
         [Fact]
         public void RegisterOnlyOnceEnumerableWithInstance()
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
                 new MyService());
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                new MyService(),
-                ComponentRegistrationFlags.IfNotRegistered);
+                new MyService());
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();
@@ -458,18 +445,17 @@ namespace AppCore.DependencyInjection
         [Fact]
         public void RegisterMultipleEnumerableWithInstance()
         {
-            ComponentRegistration registration = ComponentRegistration.Create(
+            var registration = ComponentRegistration.Create(
                 typeof(IMyService),
                 new MyService());
 
-            Registry.Register(registration);
+            Registry.Add(registration);
 
-            ComponentRegistration registration2 = ComponentRegistration.Create(
+            var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                new MyService2(),
-                ComponentRegistrationFlags.IfNotRegistered);
+                new MyService2());
 
-            Registry.Register(registration2);
+            Registry.TryAddEnumerable(registration2);
 
             IEnumerable<IMyService> services = BuildContainer()
                 .ResolveAll<IMyService>();

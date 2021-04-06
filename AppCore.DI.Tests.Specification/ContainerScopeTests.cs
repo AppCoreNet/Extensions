@@ -1,4 +1,4 @@
-﻿// Licensed under the MIT License.
+// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
 using FluentAssertions;
@@ -18,10 +18,10 @@ namespace AppCore.DependencyInjection
         {
             var disposable = Substitute.For<IDisposableService>();
 
-            Registry.Register(
+            Registry.Add(
                 ComponentRegistration.Create(
                     typeof(IDisposableService),
-                    c => disposable,
+                    Factory.Create(c => disposable),
                     ComponentLifetime.Scoped));
 
             using (IContainerScope scope = CreateScope())
@@ -36,7 +36,7 @@ namespace AppCore.DependencyInjection
         [Fact]
         public void ResolvesDifferentInstanceFromDifferentScope()
         {
-            Registry.Register(
+            Registry.Add(
                 ComponentRegistration.Create(typeof(IMyService), typeof(MyService), ComponentLifetime.Scoped));
 
             using (IContainerScope scope1 = CreateScope())
@@ -53,7 +53,7 @@ namespace AppCore.DependencyInjection
         [Fact]
         public void ResolvesSameInstanceFromSameScope()
         {
-            Registry.Register(
+            Registry.Add(
                 ComponentRegistration.Create(typeof(IMyService), typeof(MyService), ComponentLifetime.Scoped));
 
             using (IContainerScope scope = CreateScope())
@@ -72,16 +72,16 @@ namespace AppCore.DependencyInjection
             var disposable1 = Substitute.For<IDisposableService>();
             var disposable2 = Substitute.For<IDisposableService>();
 
-            Registry.Register(
+            Registry.Add(
                 ComponentRegistration.Create(
                     typeof(IDisposableService),
-                    c => disposable1,
+                    Factory.Create(c => disposable1),
                     ComponentLifetime.Singleton));
 
-            Registry.Register(
+            Registry.Add(
                 ComponentRegistration.Create(
                     typeof(IDisposableService),
-                    c => disposable2,
+                    Factory.Create(c => disposable2),
                     ComponentLifetime.Scoped));
 
             using (IContainerScope scope = CreateScope())

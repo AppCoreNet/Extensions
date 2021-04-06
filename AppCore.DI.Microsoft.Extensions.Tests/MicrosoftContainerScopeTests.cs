@@ -1,4 +1,4 @@
-﻿// Licensed under the MIT License.
+// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
 using Microsoft.Extensions.DependencyInjection;
@@ -14,13 +14,11 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
         public MicrosoftContainerScopeTests()
         {
             ServiceCollection = new ServiceCollection();
-            Registry = new MicrosoftComponentRegistry();
+            Registry = new MicrosoftComponentRegistry(ServiceCollection);
         }
 
         public override IContainerScope CreateScope()
         {
-            ((MicrosoftComponentRegistry)Registry).RegisterComponents(ServiceCollection);
-
             return new MicrosoftContainerScope(
                 ServiceCollection.BuildServiceProvider()
                                  .GetRequiredService<IServiceScopeFactory>()

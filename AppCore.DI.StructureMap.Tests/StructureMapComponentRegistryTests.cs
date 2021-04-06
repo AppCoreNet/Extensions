@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Licensed under the MIT License.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using StructureMap;
 
@@ -9,16 +9,17 @@ namespace AppCore.DependencyInjection.StructureMap
     {
         public override IComponentRegistry Registry { get; }
 
+        private Registry SMRegistry { get; }
+
         public StructureMapComponentRegistryTests()
         {
-            var registry = new StructureMapComponentRegistry();
-            Registry = registry;
+            SMRegistry = new Registry();
+            Registry = new StructureMapComponentRegistry(SMRegistry);
         }
 
         protected override IContainer BuildContainer()
         {
-            return new StructureMapContainer(
-                new Container(c => ((StructureMapComponentRegistry) Registry).RegisterComponents(c)));
+            return new StructureMapContainer(new Container(SMRegistry));
         }
     }
 }
