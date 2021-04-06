@@ -14,7 +14,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// <summary>
         /// Gets the static instance of the <see cref="DefaultFacilityActivator"/>.
         /// </summary>
-        public static DefaultFacilityActivator Instance { get; } = new DefaultFacilityActivator();
+        public static DefaultFacilityActivator Instance { get; } = new();
 
         /// <inheritdoc />
         public Facility CreateInstance(Type facilityType)

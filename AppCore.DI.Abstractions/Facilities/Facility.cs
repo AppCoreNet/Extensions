@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection.Facilities
@@ -13,15 +14,36 @@ namespace AppCore.DependencyInjection.Facilities
     public abstract class Facility
     {
         private readonly List<Action<IComponentRegistry>> _registrations = new();
+        private static IFacilityActivator _activator = DefaultFacilityActivator.Instance;
 
-        public static IFacilityActivator Activator { get; set; } = DefaultFacilityActivator.Instance;
+        /// <summary>
+        /// Gets or sets the activator for facilities.
+        /// </summary>
+        public static IFacilityActivator Activator
+        {
+            get => _activator;
+            set
+            {
+                Ensure.Arg.NotNull(value, nameof(value));
+                _activator = value;
+            }
+        }
 
-        public void Configure(Action<IComponentRegistry> callback)
+        /// <summary>
+        /// Registers a callback which is invoked when the facility is built.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public void Register(Action<IComponentRegistry> callback)
         {
             Ensure.Arg.NotNull(callback, nameof(callback));
             _registrations.Add(callback);
         }
 
+        /// <summary>
+        /// Can be overridden to register components with the <see cref="IComponentRegistry"/>.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
         protected internal virtual void Build(IComponentRegistry registry)
         {
             foreach (Action<IComponentRegistry> registration in _registrations)

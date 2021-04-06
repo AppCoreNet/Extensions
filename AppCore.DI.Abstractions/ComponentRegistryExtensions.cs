@@ -57,15 +57,13 @@ namespace AppCore.DependencyInjection
         /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
         /// <param name="configure">The delegate to configure the facility.</param>
         /// <returns>The <see cref="IComponentRegistry"/>.</returns>
-        public static IComponentRegistry Add<T>(this IComponentRegistry registry, Action<IFacilityBuilder<T>> configure = null)
+        public static IComponentRegistry Add<T>(this IComponentRegistry registry, Action<T> configure = null)
             where T : Facility
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
-
             var facility = (T) Facility.Activator.CreateInstance(typeof(T));
-            var builder = new FacilityBuilder<T>(registry, facility);
-            configure?.Invoke(builder);
-            builder.Build();
+            configure?.Invoke(facility);
+            facility.Build(registry);
             return registry;
         }
     }
