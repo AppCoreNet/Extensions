@@ -11,10 +11,10 @@ namespace AppCore.DependencyInjection.Facilities
     public interface IFacilityActivator
     {
         /// <summary>
-        /// Creates an instance of a <see cref="Facility"/>.
+        /// Creates an instance of a <see cref="Facility"/> or <see cref="FacilityExtension"/>.
         /// </summary>
-        /// <param name="facilityType">The type of the <see cref="Facility"/>.</param>
+        /// <param name="facilityType">The type of the <see cref="Facility"/> or <see cref="FacilityExtension"/>.</param>
         /// <returns>The instance of the facility.</returns>
-        Facility CreateInstance(Type facilityType);
+        object CreateInstance(Type facilityType);
     }
 }

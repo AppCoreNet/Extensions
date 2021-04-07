@@ -17,12 +17,18 @@ namespace AppCore.DependencyInjection.Facilities
         public static DefaultFacilityActivator Instance { get; } = new();
 
         /// <inheritdoc />
-        public Facility CreateInstance(Type facilityType)
+        public object CreateInstance(Type facilityType)
         {
             Ensure.Arg.NotNull(facilityType, nameof(facilityType));
-            Ensure.Arg.OfType(facilityType, typeof(Facility), nameof(facilityType));
 
-            return (Facility) Activator.CreateInstance(facilityType);
+            if (!typeof(Facility).IsAssignableFrom(facilityType)
+                && !typeof(FacilityExtension).IsAssignableFrom(facilityType))
+            {
+                throw new ArgumentException(
+                    $"The type must either derive from '{typeof(Facility)}' or '{typeof(FacilityExtension)}'.");
+            }
+
+            return Activator.CreateInstance(facilityType);
         }
     }
 }
