@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection.Facilities
@@ -46,12 +47,19 @@ namespace AppCore.DependencyInjection.Facilities
         /// </summary>
         /// <param name="extensionType">The type of the facility extension.</param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void AddExtension(Type extensionType)
+        public FacilityExtension AddExtension(Type extensionType)
         {
             Ensure.Arg.NotNull(extensionType, nameof(extensionType));
             Ensure.Arg.OfType(extensionType, typeof(FacilityExtension), nameof(extensionType));
 
-            _extensions.Add((FacilityExtension) Activator.CreateInstance(extensionType));
+            FacilityExtension extension = _extensions.FirstOrDefault(e => e.GetType() == extensionType);
+            if (extension == null)
+            {
+                extension = (FacilityExtension)Activator.CreateInstance(extensionType);
+                _extensions.Add(extension);
+            }
+
+            return extension;
         }
 
         /// <summary>
@@ -59,10 +67,10 @@ namespace AppCore.DependencyInjection.Facilities
         /// </summary>
         /// <typeparam name="T">The type of the facility extension.</typeparam>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void AddExtension<T>()
+        public T AddExtension<T>()
             where T : FacilityExtension
         {
-            AddExtension(typeof(T));
+            return (T) AddExtension(typeof(T));
         }
 
         /// <summary>
