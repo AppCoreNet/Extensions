@@ -57,7 +57,7 @@ namespace AppCore.DependencyInjection
         /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
         /// <param name="configure">The delegate to configure the facility.</param>
         /// <returns>The <see cref="IComponentRegistry"/>.</returns>
-        public static IComponentRegistry Add<T>(this IComponentRegistry registry, Action<T> configure = null)
+        public static IComponentRegistry AddFacility<T>(this IComponentRegistry registry, Action<T> configure = null)
             where T : Facility
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
