@@ -9,56 +9,72 @@ using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/> by scanning assemblies.
+    /// </summary>
     public class AssemblyRegistrationBuilder
     {
-        private Type _contractType;
+        private readonly Type _contractType;
         private ComponentLifetime _defaultLifetime = ComponentLifetime.Transient;
         private readonly List<Assembly> _assemblies = new List<Assembly>();
         private readonly List<Predicate<Type>> _filters = new List<Predicate<Type>>();
         private bool _clearFilters;
 
-        public AssemblyRegistrationBuilder ForType(Type contractType)
+        internal AssemblyRegistrationBuilder(Type contractType)
+        {
+            _contractType = contractType;
+        }
+
+        public static AssemblyRegistrationBuilder ForContract(Type contractType)
         {
             Ensure.Arg.NotNull(contractType, nameof(contractType));
-            _contractType = contractType;
-            return this;
+            return new AssemblyRegistrationBuilder(contractType);
         }
 
-        public AssemblyRegistrationBuilder ForType<TContract>()
+        public static AssemblyRegistrationBuilder ForContract<TContract>()
             where TContract : class
         {
-            _contractType = typeof(TContract);
-            return this;
+            return new AssemblyRegistrationBuilder(typeof(TContract));
         }
 
-        public AssemblyRegistrationBuilder WithAssembly(Assembly assembly)
+        public AssemblyRegistrationBuilder From(Assembly assembly)
         {
             Ensure.Arg.NotNull(assembly, nameof(assembly));
             _assemblies.Add(assembly);
             return this;
         }
 
-        public AssemblyRegistrationBuilder WithAssemblies(IEnumerable<Assembly> assemblies)
+        public AssemblyRegistrationBuilder From(IEnumerable<Assembly> assemblies)
         {
             Ensure.Arg.NotNull(assemblies, nameof(assemblies));
             _assemblies.AddRange(assemblies);
             return this;
         }
 
-        public AssemblyRegistrationBuilder WithFilter(Predicate<Type> filter)
+        public AssemblyRegistrationBuilder Filter(Predicate<Type> filter)
         {
+            Ensure.Arg.NotNull(filter, nameof(filter));
             _filters.Add(filter);
             return this;
         }
 
         public AssemblyRegistrationBuilder ClearFilters()
         {
-            _clearFilters = true;
             _filters.Clear();
             return this;
         }
 
-        public AssemblyRegistrationBuilder UseDefaultLifetime(ComponentLifetime lifetime)
+        /// <summary>
+        /// Clears the assembly scanner default type filters.
+        /// </summary>
+        /// <returns>The <see cref="AssemblyRegistrationBuilder"/>.</returns>
+        public AssemblyRegistrationBuilder ClearDefaultFilters()
+        {
+            _clearFilters = true;
+            return this;
+        }
+        
+        public AssemblyRegistrationBuilder WithDefaultLifetime(ComponentLifetime lifetime)
         {
             _defaultLifetime = lifetime;
             return this;

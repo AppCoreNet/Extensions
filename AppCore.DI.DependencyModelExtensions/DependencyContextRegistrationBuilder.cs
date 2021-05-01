@@ -11,49 +11,66 @@ using Microsoft.Extensions.DependencyModel;
 
 namespace AppCore.DependencyInjection
 {
+    /// <summary>
+    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/> by scanning assemblies in a
+    /// <see cref="DependencyContext"/>.
+    /// </summary>
     public class DependencyContextRegistrationBuilder
     {
-        private readonly AssemblyRegistrationBuilder _builder = new AssemblyRegistrationBuilder();
+        private readonly AssemblyRegistrationBuilder _builder;
 
-        public DependencyContextRegistrationBuilder ForType(Type contractType)
+        internal DependencyContextRegistrationBuilder(Type contractType)
         {
-            _builder.ForType(contractType);
-            return this;
+            _builder = AssemblyRegistrationBuilder.ForContract(contractType);
         }
 
-        public DependencyContextRegistrationBuilder ForType<TContract>()
+        public static DependencyContextRegistrationBuilder ForContract(Type contractType)
+        {
+            return new DependencyContextRegistrationBuilder(contractType);
+        }
+
+        public static DependencyContextRegistrationBuilder ForContract<TContract>()
             where TContract : class
         {
-            _builder.ForType<TContract>();
-            return this;
+            return new DependencyContextRegistrationBuilder(typeof(TContract));
         }
 
-        public DependencyContextRegistrationBuilder WithDependencyContext(DependencyContext dependencyContext)
+        public DependencyContextRegistrationBuilder From(DependencyContext dependencyContext)
         {
             Ensure.Arg.NotNull(dependencyContext, nameof(dependencyContext));
 
-            _builder.WithAssemblies(
+            _builder.From(
                 dependencyContext.GetDefaultAssemblyNames()
                                  .Select(Assembly.Load));
 
             return this;
         }
 
-        public DependencyContextRegistrationBuilder UseDefaultLifetime(ComponentLifetime lifetime)
+        public DependencyContextRegistrationBuilder WithDefaultLifetime(ComponentLifetime lifetime)
         {
-            _builder.UseDefaultLifetime(lifetime);
+            _builder.WithDefaultLifetime(lifetime);
             return this;
         }
 
-        public DependencyContextRegistrationBuilder WithFilter(Predicate<Type> filter)
+        public DependencyContextRegistrationBuilder Filter(Predicate<Type> filter)
         {
-            _builder.WithFilter(filter);
+            _builder.Filter(filter);
             return this;
         }
 
         public DependencyContextRegistrationBuilder ClearFilters()
         {
             _builder.ClearFilters();
+            return this;
+        }
+
+        /// <summary>
+        /// Clears the assembly scanner default type filters.
+        /// </summary>
+        /// <returns>The <see cref="DependencyContextRegistrationBuilder"/>.</returns>
+        public DependencyContextRegistrationBuilder ClearDefaultFilters()
+        {
+            _builder.ClearDefaultFilters();
             return this;
         }
 
