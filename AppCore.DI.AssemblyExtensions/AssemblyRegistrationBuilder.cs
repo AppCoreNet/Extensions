@@ -25,18 +25,33 @@ namespace AppCore.DependencyInjection
             _contractType = contractType;
         }
 
+        /// <summary>
+        /// Creates a <see cref="AssemblyRegistrationBuilder"/> for the specified contract.
+        /// </summary>
+        /// <param name="contractType">The type of the contract.</param>
+        /// <returns>The <see cref="AssemblyRegistrationBuilder"/>.</returns>
         public static AssemblyRegistrationBuilder ForContract(Type contractType)
         {
             Ensure.Arg.NotNull(contractType, nameof(contractType));
             return new AssemblyRegistrationBuilder(contractType);
         }
 
+        /// <summary>
+        /// Creates a <see cref="AssemblyRegistrationBuilder"/> for the specified contract.
+        /// </summary>
+        /// <typeparam name="TContract">The type of the contract.</typeparam>
+        /// <returns>The <see cref="AssemblyRegistrationBuilder"/>.</returns>
         public static AssemblyRegistrationBuilder ForContract<TContract>()
             where TContract : class
         {
             return new AssemblyRegistrationBuilder(typeof(TContract));
         }
 
+        /// <summary>
+        /// Adds an <see cref="Assembly"/> to be scanned for components.
+        /// </summary>
+        /// <param name="assembly">The <see cref="Assembly"/>.</param>
+        /// <returns>The <see cref="AssemblyRegistrationBuilder"/>.</returns>
         public AssemblyRegistrationBuilder From(Assembly assembly)
         {
             Ensure.Arg.NotNull(assembly, nameof(assembly));
@@ -44,6 +59,11 @@ namespace AppCore.DependencyInjection
             return this;
         }
 
+        /// <summary>
+        /// Adds an <see cref="IEnumerable{T}"/> of <see cref="Assembly"/> to be scanned for components.
+        /// </summary>
+        /// <param name="assemblies">The <see cref="IEnumerable{T}"/> of <see cref="Assembly"/>.</param>
+        /// <returns>The <see cref="AssemblyRegistrationBuilder"/>.</returns>
         public AssemblyRegistrationBuilder From(IEnumerable<Assembly> assemblies)
         {
             Ensure.Arg.NotNull(assemblies, nameof(assemblies));
@@ -51,6 +71,11 @@ namespace AppCore.DependencyInjection
             return this;
         }
 
+        /// <summary>
+        /// Adds a type filter.
+        /// </summary>
+        /// <param name="filter">The type filter.</param>
+        /// <returns>The <see cref="AssemblyRegistrationBuilder"/>.</returns>
         public AssemblyRegistrationBuilder Filter(Predicate<Type> filter)
         {
             Ensure.Arg.NotNull(filter, nameof(filter));
@@ -58,6 +83,10 @@ namespace AppCore.DependencyInjection
             return this;
         }
 
+        /// <summary>
+        /// Clears the current type filters.
+        /// </summary>
+        /// <returns>The <see cref="AssemblyRegistrationBuilder"/>.</returns>
         public AssemblyRegistrationBuilder ClearFilters()
         {
             _filters.Clear();
@@ -73,13 +102,22 @@ namespace AppCore.DependencyInjection
             _clearFilters = true;
             return this;
         }
-        
+
+        /// <summary>
+        /// Specifies the default lifetime for components.
+        /// </summary>
+        /// <param name="lifetime">The default lifetime.</param>
+        /// <returns>The <see cref="AssemblyRegistrationBuilder"/>.</returns>
         public AssemblyRegistrationBuilder WithDefaultLifetime(ComponentLifetime lifetime)
         {
             _defaultLifetime = lifetime;
             return this;
         }
 
+        /// <summary>
+        /// Builds the component registrations.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public IEnumerable<ComponentRegistration> BuildRegistrations()
         {
