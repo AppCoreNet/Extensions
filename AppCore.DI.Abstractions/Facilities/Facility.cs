@@ -12,7 +12,7 @@ namespace AppCore.DependencyInjection.Facilities
     /// <summary>
     /// Represents a facility.
     /// </summary>
-    public abstract class Facility : IFacility
+    public abstract class Facility
     {
         private static IFacilityActivator _activator = DefaultFacilityActivator.Instance;
         private readonly List<Action<IComponentRegistry>> _registrations = new();
@@ -31,7 +31,10 @@ namespace AppCore.DependencyInjection.Facilities
             }
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Registers a callback which is invoked when the facility is built.
+        /// </summary>
+        /// <param name="callback">The callback.</param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void ConfigureRegistry(Action<IComponentRegistry> callback)
         {
@@ -39,7 +42,10 @@ namespace AppCore.DependencyInjection.Facilities
             _registrations.Add(callback);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Adds an extension to the facility.
+        /// </summary>
+        /// <param name="extensionType">The type of the facility extension.</param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public FacilityExtension AddExtension(Type extensionType)
         {
@@ -56,7 +62,10 @@ namespace AppCore.DependencyInjection.Facilities
             return extension;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Adds an extension to the facility.
+        /// </summary>
+        /// <typeparam name="T">The type of the facility extension.</typeparam>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public T AddExtension<T>()
             where T : FacilityExtension
