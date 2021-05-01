@@ -15,11 +15,10 @@ namespace AppCore.DependencyInjection
         {
             Type contractType = typeof(IContract);
             AssemblyRegistrationBuilder scanner =
-                new AssemblyRegistrationBuilder()
-                    .ForType(contractType)
-                    .WithAssembly(typeof(AssemblyRegistrationBuilderTests).Assembly)
-                    .ClearFilters()
-                    .UseDefaultLifetime(ComponentLifetime.Transient);
+                new AssemblyRegistrationBuilder(contractType)
+                    .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .ClearDefaultFilters()
+                    .WithDefaultLifetime(ComponentLifetime.Transient);
 
             IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
 
@@ -43,11 +42,10 @@ namespace AppCore.DependencyInjection
             Type closedContractType = typeof(IContract<string>);
 
             AssemblyRegistrationBuilder scanner =
-                new AssemblyRegistrationBuilder()
-                    .ForType(contractType)
-                    .WithAssembly(typeof(AssemblyRegistrationBuilderTests).Assembly)
-                    .ClearFilters()
-                    .UseDefaultLifetime(ComponentLifetime.Transient);
+                new AssemblyRegistrationBuilder(contractType)
+                    .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .ClearDefaultFilters()
+                    .WithDefaultLifetime(ComponentLifetime.Transient);
 
             IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
 
@@ -79,11 +77,10 @@ namespace AppCore.DependencyInjection
             var lifetime = ComponentLifetime.Scoped;
 
             AssemblyRegistrationBuilder scanner =
-                new AssemblyRegistrationBuilder()
-                    .ForType(contractType)
-                    .WithAssembly(typeof(AssemblyRegistrationBuilderTests).Assembly)
-                    .ClearFilters()
-                    .UseDefaultLifetime(lifetime);
+                new AssemblyRegistrationBuilder(contractType)
+                    .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .ClearDefaultFilters()
+                    .WithDefaultLifetime(lifetime);
 
             IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
 
