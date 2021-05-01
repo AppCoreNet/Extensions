@@ -36,7 +36,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// </summary>
         /// <param name="callback">The callback.</param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void Register(Action<IComponentRegistry> callback)
+        public void ConfigureRegistry(Action<IComponentRegistry> callback)
         {
             Ensure.Arg.NotNull(callback, nameof(callback));
             _registrations.Add(callback);
