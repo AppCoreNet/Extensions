@@ -209,7 +209,7 @@ namespace AppCore.DependencyInjection
             where TContract : class
             where TImplementation : class, TContract
         {
-            return Create<TContract, TImplementation>(ComponentLifetime.Transient);
+            return Create<TContract, TImplementation>(ComponentLifetime.Singleton);
         }
 
         public static ComponentRegistration Singleton(Type contractType, IFactory<object> factory)
@@ -220,7 +220,7 @@ namespace AppCore.DependencyInjection
         public static ComponentRegistration Singleton<TContract>(IFactory<TContract> factory)
             where TContract : class
         {
-            return Create(factory, ComponentLifetime.Transient);
+            return Create(factory, ComponentLifetime.Singleton);
         }
 
         public static ComponentRegistration Transient(Type contractType, Type implementationType)
