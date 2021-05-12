@@ -25,6 +25,22 @@ namespace AppCore.DependencyInjection
         }
 
         /// <summary>
+        /// Adds component registrations from <see cref="IComponentRegistrationSource"/>'s to the registry.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        /// <param name="configure">The delegate used to configure the registration sources.</param>
+        /// <returns>The <see cref="IComponentRegistry"/>.</returns>
+        public static IComponentRegistry AddFrom(this IComponentRegistry registry, Action<IComponentRegistrationSources> configure)
+        {
+            Ensure.Arg.NotNull(registry, nameof(registry));
+            Ensure.Arg.NotNull(configure, nameof(configure));
+
+            var sources = new ComponentRegistrationSources();
+            configure(sources);
+            return registry.Add(sources.BuildRegistrations());
+        }
+
+        /// <summary>
         /// Adds the specified component registrations to the registry if the contract of the
         /// component has not been already added.
         /// </summary>
@@ -38,6 +54,23 @@ namespace AppCore.DependencyInjection
         }
 
         /// <summary>
+        /// Adds component registrations from <see cref="IComponentRegistrationSource"/>'s to the registry
+        /// if the contract of the component has not been already added.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        /// <param name="configure">The delegate used to configure the registration sources.</param>
+        /// <returns>The <see cref="IComponentRegistry"/>.</returns>
+        public static IComponentRegistry TryAddFrom(this IComponentRegistry registry, Action<IComponentRegistrationSources> configure)
+        {
+            Ensure.Arg.NotNull(registry, nameof(registry));
+            Ensure.Arg.NotNull(configure, nameof(configure));
+
+            var sources = new ComponentRegistrationSources();
+            configure(sources);
+            return registry.TryAdd(sources.BuildRegistrations());
+        }
+
+        /// <summary>
         /// Adds the specified component registrations to the registry if the contract and implementation
         /// type of the component has not been already added.
         /// </summary>
@@ -48,6 +81,23 @@ namespace AppCore.DependencyInjection
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
             return registry.TryAddEnumerable(new[] { registration });
+        }
+
+        /// <summary>
+        /// Adds component registrations from <see cref="IComponentRegistrationSource"/>'s to the registry
+        /// if the contract and implementation type of the component has not been already added.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        /// <param name="configure">The delegate used to configure the registration sources.</param>
+        /// <returns>The <see cref="IComponentRegistry"/>.</returns>
+        public static IComponentRegistry TryAddEnumerableFrom(this IComponentRegistry registry, Action<IComponentRegistrationSources> configure)
+        {
+            Ensure.Arg.NotNull(registry, nameof(registry));
+            Ensure.Arg.NotNull(configure, nameof(configure));
+
+            var sources = new ComponentRegistrationSources();
+            configure(sources);
+            return registry.TryAddEnumerable(sources.BuildRegistrations());
         }
 
         /// <summary>
