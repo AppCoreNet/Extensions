@@ -8,7 +8,7 @@ using Xunit;
 
 namespace AppCore.DependencyInjection
 {
-    public class AssemblyRegistrationBuilderTests
+    public class AssemblyRegistrationSourceTests
     {
         [Fact]
         public void FiltersNonDerivableGenericTypes()
@@ -17,7 +17,7 @@ namespace AppCore.DependencyInjection
             AssemblyRegistrationSource scanner =
                 new AssemblyRegistrationSource()
                     .WithContract(contractType)
-                    .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .From(typeof(AssemblyRegistrationSourceTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(ComponentLifetime.Transient);
 
@@ -45,7 +45,7 @@ namespace AppCore.DependencyInjection
             AssemblyRegistrationSource scanner =
                 new AssemblyRegistrationSource()
                     .WithContract(contractType)
-                    .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .From(typeof(AssemblyRegistrationSourceTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(ComponentLifetime.Transient);
 
@@ -81,7 +81,7 @@ namespace AppCore.DependencyInjection
             AssemblyRegistrationSource scanner =
                 new AssemblyRegistrationSource()
                     .WithContract(contractType)
-                    .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
+                    .From(typeof(AssemblyRegistrationSourceTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(lifetime);
 
