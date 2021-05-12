@@ -14,8 +14,9 @@ namespace AppCore.DependencyInjection
         public void FiltersNonDerivableGenericTypes()
         {
             Type contractType = typeof(IContract);
-            AssemblyRegistrationBuilder scanner =
-                new AssemblyRegistrationBuilder(contractType)
+            AssemblyRegistrationSource scanner =
+                new AssemblyRegistrationSource()
+                    .WithContract(contractType)
                     .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(ComponentLifetime.Transient);
@@ -41,8 +42,9 @@ namespace AppCore.DependencyInjection
             Type contractType = typeof(IContract<>);
             Type closedContractType = typeof(IContract<string>);
 
-            AssemblyRegistrationBuilder scanner =
-                new AssemblyRegistrationBuilder(contractType)
+            AssemblyRegistrationSource scanner =
+                new AssemblyRegistrationSource()
+                    .WithContract(contractType)
                     .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(ComponentLifetime.Transient);
@@ -76,8 +78,9 @@ namespace AppCore.DependencyInjection
             Type contractType = typeof(IContract);
             var lifetime = ComponentLifetime.Scoped;
 
-            AssemblyRegistrationBuilder scanner =
-                new AssemblyRegistrationBuilder(contractType)
+            AssemblyRegistrationSource scanner =
+                new AssemblyRegistrationSource()
+                    .WithContract(contractType)
                     .From(typeof(AssemblyRegistrationBuilderTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(lifetime);
