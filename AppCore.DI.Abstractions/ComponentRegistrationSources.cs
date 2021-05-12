@@ -14,24 +14,48 @@ namespace AppCore.DependencyInjection
     /// </summary>
     public class ComponentRegistrationSources : IComponentRegistrationSources
     {
-        private readonly Type _contractType;
         private readonly List<IComponentRegistrationSource> _sources = new();
+        private Type _contractType;
+        private ComponentLifetime _defaultLifetime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComponentRegistrationSources"/> class.
         /// </summary>
         public ComponentRegistrationSources()
-        : this(null)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ComponentRegistrationSources"/> class.
+        /// Sets the contract type which is being registered.
         /// </summary>
-        /// <param name="contractType">The contract of the registered components.</param>
-        public ComponentRegistrationSources(Type contractType)
+        /// <param name="contractType">The type of the contract.</param>
+        /// <returns>The <see cref="ComponentRegistrationSources"/>.</returns>
+        public ComponentRegistrationSources WithContract(Type contractType)
         {
             _contractType = contractType;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the contract type which is being registered.
+        /// </summary>
+        /// <typeparam name="TContract">The type of the contract.</typeparam>
+        /// <returns>The <see cref="ComponentRegistrationSources"/>.</returns>
+        public ComponentRegistrationSources WithContract<TContract>()
+            where TContract : class
+        {
+            return WithContract(typeof(TContract));
+        }
+
+        /// <summary>
+        /// Specifies the default lifetime for components.
+        /// </summary>
+        /// <param name="lifetime">The default lifetime.</param>
+        /// <returns>The <see cref="ComponentRegistrationSources"/>.</returns>
+        public ComponentRegistrationSources WithDefaultLifetime(ComponentLifetime lifetime)
+        {
+            _defaultLifetime = lifetime;
+            return this;
         }
 
         /// <inheritdoc />
@@ -42,6 +66,8 @@ namespace AppCore.DependencyInjection
             Ensure.Arg.NotNull(configure, nameof(configure));
 
             var source = new T();
+            source.WithDefaultLifetime(_defaultLifetime);
+
             if (_contractType != null)
                 source.WithContract(_contractType);
 

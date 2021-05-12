@@ -82,6 +82,12 @@ namespace AppCore.DependencyInjection
             return this;
         }
 
+        /// <inheritdoc />
+        void IComponentRegistrationSource.WithDefaultLifetime(ComponentLifetime lifetime)
+        {
+            WithDefaultLifetime(lifetime);
+        }
+
         /// <summary>
         /// Adds a type filter.
         /// </summary>

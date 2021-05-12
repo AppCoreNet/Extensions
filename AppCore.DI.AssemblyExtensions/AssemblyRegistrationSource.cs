@@ -52,6 +52,7 @@ namespace AppCore.DependencyInjection
             return WithContract(typeof(TContract));
         }
 
+        /// <inheritdoc />
         void IComponentRegistrationSource.WithContract(Type contractType)
         {
             WithContract(contractType);
@@ -66,6 +67,12 @@ namespace AppCore.DependencyInjection
         {
             _defaultLifetime = lifetime;
             return this;
+        }
+
+        /// <inheritdoc />
+        void IComponentRegistrationSource.WithDefaultLifetime(ComponentLifetime lifetime)
+        {
+            WithDefaultLifetime(lifetime);
         }
 
         /// <summary>

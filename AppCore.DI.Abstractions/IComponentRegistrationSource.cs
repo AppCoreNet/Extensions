@@ -19,6 +19,12 @@ namespace AppCore.DependencyInjection
         void WithContract(Type contractType);
 
         /// <summary>
+        /// Specifies the default lifetime for components.
+        /// </summary>
+        /// <param name="lifetime">The default lifetime.</param>
+        void WithDefaultLifetime(ComponentLifetime lifetime);
+
+        /// <summary>
         /// Builds the component registrations.
         /// </summary>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/>.</returns>
