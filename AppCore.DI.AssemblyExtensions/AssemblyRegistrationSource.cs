@@ -34,6 +34,9 @@ namespace AppCore.DependencyInjection
         /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
         public AssemblyRegistrationSource WithContract(Type contractType)
         {
+            if (_contractType != null)
+                throw new InvalidOperationException("The contract type cannot be changed.");
+
             _contractType = contractType;
             return this;
         }
