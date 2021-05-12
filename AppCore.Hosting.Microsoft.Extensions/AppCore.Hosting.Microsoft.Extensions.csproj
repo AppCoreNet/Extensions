@@ -9,9 +9,16 @@
     <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[2.1.0,5.0.0)" />
     <PackageReference Include="AppCore.DependencyInjection.Microsoft.Extensions" Version="$(AppCore_DI_Version)" />
     <PackageReference Include="AppCore.Logging.Microsoft.Extensions" Version="$(AppCore_Logging_Version)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net461'">
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[5.0.0,6.0.0)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'!='net461'">
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="[2.1.0,5.0.0)" />
   </ItemGroup>
 
   <ItemGroup>

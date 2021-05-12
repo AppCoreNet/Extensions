@@ -1,5 +1,5 @@
 // Licensed under the MIT License.
-// Copyright (c) 2020 the AppCore .NET project.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
 using AppCore.DependencyInjection;
@@ -29,16 +29,11 @@ namespace Microsoft.Extensions.Hosting
             return builder.ConfigureServices(
                 (context, services) =>
                 {
-                    var registry = new MicrosoftComponentRegistry();
+                    var registry = new MicrosoftComponentRegistry(services);
                     configureAction?.Invoke(context, registry);
 
-                    registry.RegisterFacility<HostingFacility>()
-                            .UseMicrosoftExtensions();
-
-                    registry.RegisterFacility<LoggingFacility>()
-                            .UseMicrosoftExtensions();
-
-                    registry.RegisterComponents(services);
+                    registry.AddFacility<HostingFacility>(h => h.UseMicrosoftExtensions());
+                    registry.AddFacility<LoggingFacility>(l => l.UseMicrosoftExtensions());
                 });
         }
 

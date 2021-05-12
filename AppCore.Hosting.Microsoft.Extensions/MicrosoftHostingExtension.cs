@@ -1,5 +1,5 @@
 // Licensed under the MIT License.
-// Copyright (c) 2018 the AppCore .NET project.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Facilities;
@@ -10,20 +10,14 @@ namespace AppCore.Hosting.Microsoft.Extensions
     /// <summary>
     /// Implements Microsoft.Extensions.Hosting facility extension.
     /// </summary>
-    public class MicrosoftHostingExtension : FacilityExtension<IHostingFacility>
+    public class MicrosoftHostingExtension : FacilityExtension
     {
-        /// <inheritdoc />
-        protected override void RegisterComponents(IComponentRegistry registry, IHostingFacility facility)
+        protected override void Build(IComponentRegistry registry)
         {
-            registry.Register<IApplicationLifetime>()
-                    .Add<MicrosoftHostingApplicationLifetime>()
-                    .IfNoneRegistered()
-                    .PerDependency();
+            base.Build(registry);
 
-            registry.Register<IHostedService>()
-                    .Add<MicrosoftHostingAdapter>()
-                    .IfNotRegistered()
-                    .PerDependency();
+            registry.TryAdd(ComponentRegistration.Transient<IApplicationLifetime, MicrosoftHostingApplicationLifetime>());
+            registry.TryAdd(ComponentRegistration.Transient<IHostedService, MicrosoftHostingAdapter>());
         }
     }
 }
