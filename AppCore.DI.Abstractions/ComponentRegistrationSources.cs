@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using AppCore.Diagnostics;
 
@@ -34,6 +35,7 @@ namespace AppCore.DependencyInjection
         }
 
         /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IComponentRegistrationSources Add<T>(Action<T> configure)
             where T : IComponentRegistrationSource, new()
         {
@@ -50,6 +52,7 @@ namespace AppCore.DependencyInjection
         }
 
         /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IEnumerable<ComponentRegistration> BuildRegistrations()
         {
             return _sources.SelectMany(s => s.BuildRegistrations());

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AppCore.DependencyInjection
 {
@@ -21,6 +22,7 @@ namespace AppCore.DependencyInjection
         /// Builds the component registrations.
         /// </summary>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/>.</returns>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         IEnumerable<ComponentRegistration> BuildRegistrations();
     }
 }

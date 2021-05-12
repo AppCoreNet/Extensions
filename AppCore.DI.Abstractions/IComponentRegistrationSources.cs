@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AppCore.DependencyInjection
 {
@@ -17,6 +18,7 @@ namespace AppCore.DependencyInjection
         /// <typeparam name="T">The type of the <see cref="IComponentRegistrationSource"/>.</typeparam>
         /// <param name="configure">The configuration delegate.</param>
         /// <returns>The <see cref="IComponentRegistrationSources"/> to allow chaining.</returns>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         IComponentRegistrationSources Add<T>(Action<T> configure)
             where T : IComponentRegistrationSource, new();
 
@@ -24,6 +26,7 @@ namespace AppCore.DependencyInjection
         /// Builds the component registrations from all registered sources.
         /// </summary>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/>.</returns>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         IEnumerable<ComponentRegistration> BuildRegistrations();
     }
 }
