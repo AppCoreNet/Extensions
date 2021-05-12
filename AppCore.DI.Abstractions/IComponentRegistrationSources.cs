@@ -15,6 +15,14 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Adds a registration source to the collection.
         /// </summary>
+        /// <param name="source">The component registration source.</param>
+        /// <returns>The <see cref="IComponentRegistrationSources"/> to allow chaining.</returns>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        IComponentRegistrationSources Add(IComponentRegistrationSource source);
+
+        /// <summary>
+        /// Adds a registration source to the collection.
+        /// </summary>
         /// <typeparam name="T">The type of the <see cref="IComponentRegistrationSource"/>.</typeparam>
         /// <param name="configure">The configuration delegate.</param>
         /// <returns>The <see cref="IComponentRegistrationSources"/> to allow chaining.</returns>

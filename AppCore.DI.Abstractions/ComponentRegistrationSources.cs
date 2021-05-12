@@ -32,6 +32,7 @@ namespace AppCore.DependencyInjection
         /// <returns>The <see cref="ComponentRegistrationSources"/>.</returns>
         public ComponentRegistrationSources WithContract(Type contractType)
         {
+            Ensure.Arg.NotNull(contractType, nameof(contractType));
             _contractType = contractType;
             return this;
         }
@@ -59,21 +60,27 @@ namespace AppCore.DependencyInjection
         }
 
         /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IComponentRegistrationSources Add<T>(Action<T> configure)
-            where T : IComponentRegistrationSource, new()
+        public IComponentRegistrationSources Add(IComponentRegistrationSource source)
         {
-            Ensure.Arg.NotNull(configure, nameof(configure));
+            Ensure.Arg.NotNull(source, nameof(source));
 
-            var source = new T();
+            // configure the source
             source.WithDefaultLifetime(_defaultLifetime);
-
             if (_contractType != null)
                 source.WithContract(_contractType);
 
-            configure(source);
             _sources.Add(source);
+            return this;
+        }
 
+        /// <inheritdoc />
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public IComponentRegistrationSources Add<T>(Action<T> configure = null)
+            where T : IComponentRegistrationSource, new()
+        {
+            var source = new T();
+            Add(source);
+            configure?.Invoke(source);
             return this;
         }
 
