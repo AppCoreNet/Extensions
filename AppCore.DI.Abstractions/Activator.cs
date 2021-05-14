@@ -26,6 +26,9 @@ namespace AppCore.DependencyInjection
         /// <inheritdoc />
         public object CreateInstance(Type instanceType, params object[] parameters)
         {
+            Ensure.Arg.NotNull(instanceType, nameof(instanceType));
+            Ensure.Arg.NotNull(parameters, nameof(parameters));
+
             int bestLength = -1;
 
             ConstructorMatcher bestMatcher = default;
@@ -57,6 +60,7 @@ namespace AppCore.DependencyInjection
         /// <inheritdoc />
         public object ResolveOrCreateInstance(Type type)
         {
+            Ensure.Arg.NotNull(type, nameof(type));
             return _container.ResolveOptional(type) ?? CreateInstance(type);
         }
 
