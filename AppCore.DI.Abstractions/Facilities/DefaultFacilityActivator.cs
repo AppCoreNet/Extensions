@@ -28,7 +28,7 @@ namespace AppCore.DependencyInjection.Facilities
                     $"The type must either derive from '{typeof(Facility)}' or '{typeof(FacilityExtension)}'.");
             }
 
-            return Activator.CreateInstance(facilityType);
+            return System.Activator.CreateInstance(facilityType);
         }
     }
 }

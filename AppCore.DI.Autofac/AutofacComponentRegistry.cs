@@ -35,6 +35,10 @@ namespace AppCore.DependencyInjection.Autofac
                    .As<IContainerScopeFactory>()
                    .IfNotRegistered(typeof(IContainerScopeFactory));
 
+            builder.RegisterType<Activator>()
+                   .As<IActivator>()
+                   .IfNotRegistered(typeof(IActivator));
+
             _builder = builder;
         }
 

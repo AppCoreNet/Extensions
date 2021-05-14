@@ -26,6 +26,7 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
 
             services.TryAddTransient<IContainer, MicrosoftContainer>();
             services.TryAddScoped<IContainerScopeFactory, MicrosoftContainerScopeFactory>();
+            services.TryAddTransient<IActivator, Activator>();
 
             _services = services;
         }
@@ -90,7 +91,7 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
             if (registration.ImplementationFactory != null)
             {
                 Type factoryWrapperType = typeof(FactoryWrapper<>).MakeGenericType(registration.GetImplementationType());
-                var factoryWrapper = (IFactoryWrapper) Activator.CreateInstance(
+                var factoryWrapper = (IFactoryWrapper) System.Activator.CreateInstance(
                     factoryWrapperType,
                     registration.ImplementationFactory);
 

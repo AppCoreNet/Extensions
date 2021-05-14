@@ -33,6 +33,10 @@ namespace AppCore.DependencyInjection.StructureMap
                     .LifecycleIs(Lifecycles.Container)
                     .UseIfNone<StructureMapContainerScopeFactory>();
 
+            registry.For<IActivator>()
+                    .LifecycleIs(Lifecycles.Transient)
+                    .UseIfNone<Activator>();
+
             _registry = registry;
         }
 
@@ -109,7 +113,7 @@ namespace AppCore.DependencyInjection.StructureMap
                             implementationType,
                             registration.ContractType);
 
-                        instance = (Instance) Activator.CreateInstance(instanceType, registration.ImplementationFactory);
+                        instance = (Instance) System.Activator.CreateInstance(instanceType, registration.ImplementationFactory);
                     }
 
                     else if (registration.ImplementationInstance != null)

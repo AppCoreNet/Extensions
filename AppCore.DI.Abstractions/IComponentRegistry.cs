@@ -1,7 +1,6 @@
 // Licensed under the MIT License.
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
-using System;
 using System.Collections.Generic;
 
 namespace AppCore.DependencyInjection
