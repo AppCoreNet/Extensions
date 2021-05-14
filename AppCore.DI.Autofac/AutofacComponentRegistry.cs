@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 using Autofac;
 using Autofac.Builder;
@@ -35,7 +36,7 @@ namespace AppCore.DependencyInjection.Autofac
                    .As<IContainerScopeFactory>()
                    .IfNotRegistered(typeof(IContainerScopeFactory));
 
-            builder.RegisterType<Activator>()
+            builder.RegisterType<ContainerActivator>()
                    .As<IActivator>()
                    .IfNotRegistered(typeof(IActivator));
 

@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 using StructureMap;
 using StructureMap.Graph;
@@ -35,7 +36,7 @@ namespace AppCore.DependencyInjection.StructureMap
 
             registry.For<IActivator>()
                     .LifecycleIs(Lifecycles.Transient)
-                    .UseIfNone<Activator>();
+                    .UseIfNone<ContainerActivator>();
 
             _registry = registry;
         }

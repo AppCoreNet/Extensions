@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 
 namespace AppCore.DependencyInjection.Facilities
@@ -14,14 +15,14 @@ namespace AppCore.DependencyInjection.Facilities
     /// </summary>
     public abstract class Facility
     {
-        private static IFacilityActivator _activator = DefaultFacilityActivator.Instance;
+        private static IActivator _activator = DefaultActivator.Instance;
         private readonly List<Action<IComponentRegistry>> _registrations = new();
         private readonly List<FacilityExtension> _extensions = new();
 
         /// <summary>
         /// Gets or sets the activator for facilities.
         /// </summary>
-        public static IFacilityActivator Activator
+        public static IActivator Activator
         {
             get => _activator;
             set

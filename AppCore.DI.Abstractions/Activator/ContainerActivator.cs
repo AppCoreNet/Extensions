@@ -6,18 +6,21 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.DependencyInjection.Activator
 {
-    /// <inheritdoc />
-    public class Activator : IActivator
+    /// <summary>
+    /// Provides an implementation of <see cref="IActivator"/> which uses <see cref="IContainer"/> to
+    /// resolve services.
+    /// </summary>
+    public class ContainerActivator : IActivator
     {
         private readonly IContainer _container;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Activator"/> class.
+        /// Initializes a new instance of the <see cref="ContainerActivator"/> class.
         /// </summary>
         /// <param name="container">The <see cref="IContainer"/> used to resolve services.</param>
-        public Activator(IContainer container)
+        public ContainerActivator(IContainer container)
         {
             Ensure.Arg.NotNull(container, nameof(container));
             _container = container;

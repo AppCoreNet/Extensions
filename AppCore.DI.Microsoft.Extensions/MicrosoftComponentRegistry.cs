@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -26,7 +27,7 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
 
             services.TryAddTransient<IContainer, MicrosoftContainer>();
             services.TryAddScoped<IContainerScopeFactory, MicrosoftContainerScopeFactory>();
-            services.TryAddTransient<IActivator, Activator>();
+            services.TryAddTransient<IActivator, ContainerActivator>();
 
             _services = services;
         }
