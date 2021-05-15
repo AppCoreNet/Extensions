@@ -112,6 +112,21 @@ namespace AppCore.DependencyInjection
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
             var facility = (T) Facility.Activator.CreateInstance(typeof(T));
+            return registry.AddFacility(facility, f => configure?.Invoke((T) f));
+        }
+
+        /// <summary>
+        /// Adds the facility with the specified type to the registry.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        /// <param name="facility">The <see cref="Facility"/>.</param>
+        /// <param name="configure">The delegate to configure the facility.</param>
+        /// <returns>The <see cref="IComponentRegistry"/>.</returns>
+        public static IComponentRegistry AddFacility(this IComponentRegistry registry, Facility facility, Action<Facility> configure = null)
+        {
+            Ensure.Arg.NotNull(registry, nameof(registry));
+            Ensure.Arg.NotNull(facility, nameof(facility));
+
             configure?.Invoke(facility);
             facility.Build(registry);
             return registry;
