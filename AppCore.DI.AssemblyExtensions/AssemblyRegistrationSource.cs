@@ -19,6 +19,7 @@ namespace AppCore.DependencyInjection
         private readonly List<Assembly> _assemblies = new();
         private readonly List<Predicate<Type>> _filters = new();
         private bool _clearFilters;
+        private bool _withPrivateTypes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyRegistrationSource"/> class.
@@ -73,6 +74,17 @@ namespace AppCore.DependencyInjection
         void IComponentRegistrationSource.WithDefaultLifetime(ComponentLifetime lifetime)
         {
             WithDefaultLifetime(lifetime);
+        }
+
+        /// <summary>
+        /// Specifies whether to include private types when scanning for components.
+        /// </summary>
+        /// <param name="value">A value indicating whether to include private types.</param>
+        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
+        public AssemblyRegistrationSource WithPrivateTypes(bool value = true)
+        {
+            _withPrivateTypes = value;
+            return this;
         }
 
         /// <summary>
@@ -150,7 +162,10 @@ namespace AppCore.DependencyInjection
                 return lifetimeAttribute?.Lifetime ?? _defaultLifetime;
             }
 
-            var scanner = new AssemblyScanner(_contractType, _assemblies);
+            var scanner = new AssemblyScanner(_contractType, _assemblies)
+            {
+                IncludePrivateTypes = _withPrivateTypes
+            };
 
             if (_clearFilters)
                 scanner.Filters.Clear();

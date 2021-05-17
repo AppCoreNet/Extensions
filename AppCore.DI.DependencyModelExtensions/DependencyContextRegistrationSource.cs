@@ -32,7 +32,7 @@ namespace AppCore.DependencyInjection
         /// </summary>
         /// <param name="contractType">The type of the contract.</param>
         /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource ForContract(Type contractType)
+        public DependencyContextRegistrationSource WithContract(Type contractType)
         {
             _source.WithContract(contractType);
             return this;
@@ -43,7 +43,7 @@ namespace AppCore.DependencyInjection
         /// </summary>
         /// <typeparam name="TContract">The type of the contract.</typeparam>
         /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource ForContract<TContract>()
+        public DependencyContextRegistrationSource WithContract<TContract>()
             where TContract : class
         {
             _source.WithContract<TContract>();
@@ -52,7 +52,18 @@ namespace AppCore.DependencyInjection
 
         void IComponentRegistrationSource.WithContract(Type contractType)
         {
-            ForContract(contractType);
+            WithContract(contractType);
+        }
+
+        /// <summary>
+        /// Specifies whether to include private types when scanning for components.
+        /// </summary>
+        /// <param name="value">A value indicating whether to include private types.</param>
+        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
+        public DependencyContextRegistrationSource WithPrivateTypes(bool value = true)
+        {
+            _source.WithPrivateTypes(value);
+            return this;
         }
 
         /// <summary>
