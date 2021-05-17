@@ -26,7 +26,7 @@ namespace AppCore.DependencyInjection
                 DefaultLifetime = lifetime;
             }
 
-            public IEnumerable<ComponentRegistration> BuildRegistrations()
+            public IEnumerable<ComponentRegistration> GetRegistrations()
             {
                 throw new NotImplementedException();
             }
@@ -37,8 +37,7 @@ namespace AppCore.DependencyInjection
         {
             Type contractType = typeof(IComparable);
 
-            var sources = new ComponentRegistrationSources()
-                .WithContract(contractType);
+            var sources = new ComponentRegistrationSources(contractType);
 
             var source = new RegistrationSource();
             sources.Add(source);
@@ -53,8 +52,7 @@ namespace AppCore.DependencyInjection
         [InlineData(ComponentLifetime.Singleton)]
         public void AddSetsDefaultLifetimeOnSource(ComponentLifetime lifetime)
         {
-            var sources = new ComponentRegistrationSources()
-                .WithDefaultLifetime(lifetime);
+            var sources = new ComponentRegistrationSources(null, lifetime);
 
             var source = new RegistrationSource();
             sources.Add(source);

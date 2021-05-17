@@ -21,7 +21,7 @@ namespace AppCore.DependencyInjection
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(ComponentLifetime.Transient);
 
-            IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
+            IEnumerable<ComponentRegistration> registrations = scanner.GetRegistrations();
 
             registrations
                 .Should()
@@ -49,7 +49,7 @@ namespace AppCore.DependencyInjection
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(ComponentLifetime.Transient);
 
-            IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
+            IEnumerable<ComponentRegistration> registrations = scanner.GetRegistrations();
 
             registrations
                 .Should()
@@ -85,7 +85,7 @@ namespace AppCore.DependencyInjection
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(lifetime);
 
-            IEnumerable<ComponentRegistration> registrations = scanner.BuildRegistrations();
+            IEnumerable<ComponentRegistration> registrations = scanner.GetRegistrations();
 
             registrations.Should()
                          .OnlyContain(cr => cr.Lifetime == lifetime);
