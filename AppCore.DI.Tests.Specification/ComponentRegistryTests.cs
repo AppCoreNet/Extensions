@@ -22,7 +22,7 @@ namespace AppCore.DependencyInjection
         {
             var registration = ComponentRegistration.Create(
                 typeof(IMyService),
-                Factory.Create(sp => new MyService()),
+                ComponentFactory.Create(sp => new MyService()),
                 lifetime);
 
             Registry.Add(registration);
@@ -45,14 +45,14 @@ namespace AppCore.DependencyInjection
         {
             var registration = ComponentRegistration.Create(
                 typeof(IMyService),
-                Factory.Create(sp => new MyService()),
+                ComponentFactory.Create(sp => new MyService()),
                 lifetime);
 
             Registry.Add(registration);
 
             var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                Factory.Create(sp => new MyService2()),
+                ComponentFactory.Create(sp => new MyService2()),
                 lifetime);
 
             Registry.TryAdd(registration2);
@@ -75,14 +75,14 @@ namespace AppCore.DependencyInjection
         {
             var registration = ComponentRegistration.Create(
                 typeof(IMyService),
-                Factory.Create(sp => new MyService()),
+                ComponentFactory.Create(sp => new MyService()),
                 lifetime);
 
             Registry.Add(registration);
 
             var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                Factory.Create(sp => new MyService()),
+                ComponentFactory.Create(sp => new MyService()),
                 lifetime);
 
             Registry.TryAddEnumerable(registration2);
@@ -104,14 +104,14 @@ namespace AppCore.DependencyInjection
         public void RegisterMultipleEnumerableWithFactory(ComponentLifetime lifetime)
         {
             var registration = ComponentRegistration.Create<IMyService>(
-                Factory.Create(sp => new MyService()),
+                ComponentFactory.Create(sp => new MyService()),
                 lifetime);
 
             Registry.Add(registration);
 
             var registration2 = ComponentRegistration.Create(
                 typeof(IMyService),
-                Factory.Create(sp => new MyService2()),
+                ComponentFactory.Create(sp => new MyService2()),
                 lifetime);
 
             Registry.TryAddEnumerable(registration2);

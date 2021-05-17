@@ -21,7 +21,7 @@ namespace AppCore.DependencyInjection
             Registry.Add(
                 ComponentRegistration.Create(
                     typeof(IDisposableService),
-                    Factory.Create(c => disposable),
+                    ComponentFactory.Create(c => disposable),
                     ComponentLifetime.Scoped));
 
             using (IContainerScope scope = CreateScope())
@@ -75,13 +75,13 @@ namespace AppCore.DependencyInjection
             Registry.Add(
                 ComponentRegistration.Create(
                     typeof(IDisposableService),
-                    Factory.Create(c => disposable1),
+                    ComponentFactory.Create(c => disposable1),
                     ComponentLifetime.Singleton));
 
             Registry.Add(
                 ComponentRegistration.Create(
                     typeof(IDisposableService),
-                    Factory.Create(c => disposable2),
+                    ComponentFactory.Create(c => disposable2),
                     ComponentLifetime.Scoped));
 
             using (IContainerScope scope = CreateScope())
