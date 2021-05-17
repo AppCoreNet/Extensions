@@ -47,8 +47,9 @@ namespace AppCore.DependencyInjection.Facilities
         /// Adds an extension to the facility.
         /// </summary>
         /// <param name="extensionType">The type of the facility extension.</param>
+        /// <param name="configure">The configuration delegate.</param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public FacilityExtension AddExtension(Type extensionType)
+        public FacilityExtension AddExtension(Type extensionType, Action<FacilityExtension> configure = null)
         {
             Ensure.Arg.NotNull(extensionType, nameof(extensionType));
             Ensure.Arg.OfType(extensionType, typeof(FacilityExtension), nameof(extensionType));
@@ -60,6 +61,7 @@ namespace AppCore.DependencyInjection.Facilities
                 _extensions.Add(extension);
             }
 
+            configure?.Invoke(extension);
             return extension;
         }
 
@@ -68,10 +70,10 @@ namespace AppCore.DependencyInjection.Facilities
         /// </summary>
         /// <typeparam name="T">The type of the facility extension.</typeparam>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public T AddExtension<T>()
+        public T AddExtension<T>(Action<T> configure = null)
             where T : FacilityExtension
         {
-            return (T) AddExtension(typeof(T));
+            return (T) AddExtension(typeof(T), f => configure?.Invoke((T) f));
         }
 
         /// <summary>
