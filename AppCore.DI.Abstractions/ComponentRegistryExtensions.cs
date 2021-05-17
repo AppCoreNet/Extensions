@@ -135,5 +135,29 @@ namespace AppCore.DependencyInjection
             facility.Build(registry);
             return registry;
         }
+
+        /// <summary>
+        /// Adds facility registrations from <see cref="IFacilityRegistrationSource"/>'s to the registry.
+        /// </summary>
+        /// <param name="registry">The <see cref="IComponentRegistry"/>.</param>
+        /// <param name="configure">The delegate used to configure the registration sources.</param>
+        /// <returns>The <see cref="IComponentRegistry"/>.</returns>
+        public static IComponentRegistry AddFacilitiesFrom(
+            this IComponentRegistry registry,
+            Action<IFacilityRegistrationSources> configure)
+        {
+            Ensure.Arg.NotNull(registry, nameof(registry));
+            Ensure.Arg.NotNull(configure, nameof(configure));
+
+            var sources = new FacilityRegistrationSources();
+            configure(sources);
+
+            foreach (Facility facility in sources.GetFacilities())
+            {
+                AddFacility(registry, facility);
+            }
+
+            return registry;
+        }
     }
 }
