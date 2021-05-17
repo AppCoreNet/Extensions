@@ -9,7 +9,7 @@ namespace AppCore.DependencyInjection.StructureMap
     internal class ContainerLambdaInstance<T, TPluginType> : LambdaInstance<T, TPluginType>
         where T : TPluginType
     {
-        public ContainerLambdaInstance(IFactory<object> factory)
+        public ContainerLambdaInstance(IComponentFactory<object> factory)
             : base(context => (T) factory.Create(context.GetInstance<IContainer>()))
         {
         }

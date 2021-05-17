@@ -42,7 +42,7 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
         {
             private readonly Func<IServiceProvider, TImplementation> _factory;
 
-            public FactoryWrapper(IFactory<TImplementation> factory)
+            public FactoryWrapper(IComponentFactory<TImplementation> factory)
             {
                 _factory = sp => factory.Create(sp.GetRequiredService<IContainer>());
             }

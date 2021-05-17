@@ -7,7 +7,7 @@ namespace AppCore.DependencyInjection
     /// Represents a factory for components.
     /// </summary>
     /// <typeparam name="T">The type of the component.</typeparam>
-    public interface IFactory<out T>
+    public interface IComponentFactory<out T>
         where T : class
     {
         /// <summary>

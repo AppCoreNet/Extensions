@@ -25,7 +25,7 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Gets the factory method used to instantiate the component.
         /// </summary>
-        public IFactory<object> ImplementationFactory { get; }
+        public IComponentFactory<object> ImplementationFactory { get; }
 
         /// <summary>
         /// Gets the singleton instance of the component.
@@ -53,7 +53,7 @@ namespace AppCore.DependencyInjection
 
         private ComponentRegistration(
             Type contractType,
-            IFactory<object> implementationFactory,
+            IComponentFactory<object> implementationFactory,
             ComponentLifetime lifetime)
         {
             Ensure.Arg.NotNull(contractType, nameof(contractType));
@@ -156,7 +156,7 @@ namespace AppCore.DependencyInjection
         /// <returns>The <see cref="ComponentRegistration"/>.</returns>
         public static ComponentRegistration Create(
             Type contractType,
-            IFactory<object> factory,
+            IComponentFactory<object> factory,
             ComponentLifetime lifetime)
         {
             return new ComponentRegistration(contractType, factory, lifetime);
@@ -170,7 +170,7 @@ namespace AppCore.DependencyInjection
         /// <param name="lifetime">The component lifetime.</param>
         /// <returns>The <see cref="ComponentRegistration"/>.</returns>
         public static ComponentRegistration Create<TContract>(
-            IFactory<TContract> factory,
+            IComponentFactory<TContract> factory,
             ComponentLifetime lifetime)
             where TContract : class
         {
@@ -212,12 +212,12 @@ namespace AppCore.DependencyInjection
             return Create<TContract, TImplementation>(ComponentLifetime.Singleton);
         }
 
-        public static ComponentRegistration Singleton(Type contractType, IFactory<object> factory)
+        public static ComponentRegistration Singleton(Type contractType, IComponentFactory<object> factory)
         {
             return Create(contractType, factory, ComponentLifetime.Singleton);
         }
 
-        public static ComponentRegistration Singleton<TContract>(IFactory<TContract> factory)
+        public static ComponentRegistration Singleton<TContract>(IComponentFactory<TContract> factory)
             where TContract : class
         {
             return Create(factory, ComponentLifetime.Singleton);
@@ -235,12 +235,12 @@ namespace AppCore.DependencyInjection
             return Create<TContract, TImplementation>(ComponentLifetime.Transient);
         }
 
-        public static ComponentRegistration Transient(Type contractType, IFactory<object> factory)
+        public static ComponentRegistration Transient(Type contractType, IComponentFactory<object> factory)
         {
             return Create(contractType, factory, ComponentLifetime.Transient);
         }
 
-        public static ComponentRegistration Transient<TContract>(IFactory<TContract> factory)
+        public static ComponentRegistration Transient<TContract>(IComponentFactory<TContract> factory)
             where TContract : class
         {
             return Create(factory, ComponentLifetime.Transient);
@@ -258,12 +258,12 @@ namespace AppCore.DependencyInjection
             return Create<TContract, TImplementation>(ComponentLifetime.Scoped);
         }
 
-        public static ComponentRegistration Scoped(Type contractType, IFactory<object> factory)
+        public static ComponentRegistration Scoped(Type contractType, IComponentFactory<object> factory)
         {
             return Create(contractType, factory, ComponentLifetime.Scoped);
         }
 
-        public static ComponentRegistration Scoped<TContract>(IFactory<TContract> factory)
+        public static ComponentRegistration Scoped<TContract>(IComponentFactory<TContract> factory)
             where TContract : class
         {
             return Create(factory, ComponentLifetime.Scoped);
