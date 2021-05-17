@@ -2,7 +2,6 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace AppCore.DependencyInjection
@@ -29,12 +28,5 @@ namespace AppCore.DependencyInjection
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         IComponentRegistrationSources Add<T>(Action<T> configure)
             where T : IComponentRegistrationSource, new();
-
-        /// <summary>
-        /// Builds the component registrations from all registered sources.
-        /// </summary>
-        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/>.</returns>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        IEnumerable<ComponentRegistration> GetRegistrations();
     }
 }

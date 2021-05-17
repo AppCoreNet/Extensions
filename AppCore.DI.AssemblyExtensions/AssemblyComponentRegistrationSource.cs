@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reflection;
 using AppCore.Diagnostics;
 
@@ -12,7 +11,7 @@ namespace AppCore.DependencyInjection
     /// <summary>
     /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/> by scanning assemblies.
     /// </summary>
-    public class AssemblyRegistrationSource : IComponentRegistrationSource
+    public class AssemblyComponentRegistrationSource : IComponentRegistrationSource
     {
         private Type _contractType;
         private ComponentLifetime _defaultLifetime = ComponentLifetime.Transient;
@@ -22,9 +21,9 @@ namespace AppCore.DependencyInjection
         private bool _withPrivateTypes;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyRegistrationSource"/> class.
+        /// Initializes a new instance of the <see cref="AssemblyComponentRegistrationSource"/> class.
         /// </summary>
-        public AssemblyRegistrationSource()
+        public AssemblyComponentRegistrationSource()
         {
         }
 
@@ -32,8 +31,8 @@ namespace AppCore.DependencyInjection
         /// Sets the contract type which is being registered.
         /// </summary>
         /// <param name="contractType">The type of the contract.</param>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource WithContract(Type contractType)
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource WithContract(Type contractType)
         {
             if (_contractType != null)
                 throw new InvalidOperationException("The contract type cannot be changed.");
@@ -46,8 +45,8 @@ namespace AppCore.DependencyInjection
         /// Sets the contract type which is being registered.
         /// </summary>
         /// <typeparam name="TContract">The type of the contract.</typeparam>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource WithContract<TContract>()
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource WithContract<TContract>()
             where TContract : class
         {
             return WithContract(typeof(TContract));
@@ -63,8 +62,8 @@ namespace AppCore.DependencyInjection
         /// Specifies the default lifetime for components.
         /// </summary>
         /// <param name="lifetime">The default lifetime.</param>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource WithDefaultLifetime(ComponentLifetime lifetime)
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource WithDefaultLifetime(ComponentLifetime lifetime)
         {
             _defaultLifetime = lifetime;
             return this;
@@ -80,8 +79,8 @@ namespace AppCore.DependencyInjection
         /// Specifies whether to include private types when scanning for components.
         /// </summary>
         /// <param name="value">A value indicating whether to include private types.</param>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource WithPrivateTypes(bool value = true)
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource WithPrivateTypes(bool value = true)
         {
             _withPrivateTypes = value;
             return this;
@@ -91,8 +90,8 @@ namespace AppCore.DependencyInjection
         /// Adds an <see cref="Assembly"/> to be scanned for components.
         /// </summary>
         /// <param name="assembly">The <see cref="Assembly"/>.</param>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource From(Assembly assembly)
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource From(Assembly assembly)
         {
             Ensure.Arg.NotNull(assembly, nameof(assembly));
             _assemblies.Add(assembly);
@@ -103,8 +102,8 @@ namespace AppCore.DependencyInjection
         /// Adds an <see cref="IEnumerable{T}"/> of <see cref="Assembly"/> to be scanned for components.
         /// </summary>
         /// <param name="assemblies">The <see cref="IEnumerable{T}"/> of <see cref="Assembly"/>.</param>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource From(IEnumerable<Assembly> assemblies)
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource From(IEnumerable<Assembly> assemblies)
         {
             Ensure.Arg.NotNull(assemblies, nameof(assemblies));
             _assemblies.AddRange(assemblies);
@@ -115,8 +114,8 @@ namespace AppCore.DependencyInjection
         /// Adds a type filter.
         /// </summary>
         /// <param name="filter">The type filter.</param>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource Filter(Predicate<Type> filter)
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource Filter(Predicate<Type> filter)
         {
             Ensure.Arg.NotNull(filter, nameof(filter));
             _filters.Add(filter);
@@ -126,8 +125,8 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Clears the current type filters.
         /// </summary>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource ClearFilters()
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource ClearFilters()
         {
             _filters.Clear();
             return this;
@@ -136,16 +135,15 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Clears the assembly scanner default type filters.
         /// </summary>
-        /// <returns>The <see cref="AssemblyRegistrationSource"/>.</returns>
-        public AssemblyRegistrationSource ClearDefaultFilters()
+        /// <returns>The <see cref="AssemblyComponentRegistrationSource"/>.</returns>
+        public AssemblyComponentRegistrationSource ClearDefaultFilters()
         {
             _clearFilters = true;
             return this;
         }
 
         /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IEnumerable<ComponentRegistration> GetRegistrations()
+        IEnumerable<ComponentRegistration> IComponentRegistrationSource.GetRegistrations()
         {
             if (_contractType == null)
             {

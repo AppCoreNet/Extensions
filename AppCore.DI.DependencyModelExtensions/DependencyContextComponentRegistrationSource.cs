@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using AppCore.Diagnostics;
@@ -15,24 +14,24 @@ namespace AppCore.DependencyInjection
     /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/> by scanning assemblies in a
     /// <see cref="DependencyContext"/>.
     /// </summary>
-    public class DependencyContextRegistrationSource : IComponentRegistrationSource
+    public class DependencyContextComponentRegistrationSource : IComponentRegistrationSource
     {
-        private readonly AssemblyRegistrationSource _source;
+        private readonly AssemblyComponentRegistrationSource _source;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DependencyContextRegistrationSource"/> class.
+        /// Initializes a new instance of the <see cref="DependencyContextComponentRegistrationSource"/> class.
         /// </summary>
-        public DependencyContextRegistrationSource()
+        public DependencyContextComponentRegistrationSource()
         {
-            _source = new AssemblyRegistrationSource();
+            _source = new AssemblyComponentRegistrationSource();
         }
 
         /// <summary>
         /// Sets the contract type which is being registered.
         /// </summary>
         /// <param name="contractType">The type of the contract.</param>
-        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource WithContract(Type contractType)
+        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
+        public DependencyContextComponentRegistrationSource WithContract(Type contractType)
         {
             _source.WithContract(contractType);
             return this;
@@ -42,8 +41,8 @@ namespace AppCore.DependencyInjection
         /// Sets the contract type which is being registered.
         /// </summary>
         /// <typeparam name="TContract">The type of the contract.</typeparam>
-        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource WithContract<TContract>()
+        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
+        public DependencyContextComponentRegistrationSource WithContract<TContract>()
             where TContract : class
         {
             _source.WithContract<TContract>();
@@ -59,8 +58,8 @@ namespace AppCore.DependencyInjection
         /// Specifies whether to include private types when scanning for components.
         /// </summary>
         /// <param name="value">A value indicating whether to include private types.</param>
-        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource WithPrivateTypes(bool value = true)
+        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
+        public DependencyContextComponentRegistrationSource WithPrivateTypes(bool value = true)
         {
             _source.WithPrivateTypes(value);
             return this;
@@ -70,8 +69,8 @@ namespace AppCore.DependencyInjection
         /// Adds an <see cref="DependencyContext"/> to be scanned for components.
         /// </summary>
         /// <param name="dependencyContext">The <see cref="DependencyContext"/>.</param>
-        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource From(DependencyContext dependencyContext)
+        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
+        public DependencyContextComponentRegistrationSource From(DependencyContext dependencyContext)
         {
             Ensure.Arg.NotNull(dependencyContext, nameof(dependencyContext));
 
@@ -86,8 +85,8 @@ namespace AppCore.DependencyInjection
         /// Specifies the default lifetime for components.
         /// </summary>
         /// <param name="lifetime">The default lifetime.</param>
-        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource WithDefaultLifetime(ComponentLifetime lifetime)
+        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
+        public DependencyContextComponentRegistrationSource WithDefaultLifetime(ComponentLifetime lifetime)
         {
             _source.WithDefaultLifetime(lifetime);
             return this;
@@ -103,8 +102,8 @@ namespace AppCore.DependencyInjection
         /// Adds a type filter.
         /// </summary>
         /// <param name="filter">The type filter.</param>
-        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource Filter(Predicate<Type> filter)
+        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
+        public DependencyContextComponentRegistrationSource Filter(Predicate<Type> filter)
         {
             _source.Filter(filter);
             return this;
@@ -113,8 +112,8 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Clears the current type filters.
         /// </summary>
-        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource ClearFilters()
+        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
+        public DependencyContextComponentRegistrationSource ClearFilters()
         {
             _source.ClearFilters();
             return this;
@@ -123,16 +122,15 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Clears the assembly scanner default type filters.
         /// </summary>
-        /// <returns>The <see cref="DependencyContextRegistrationSource"/>.</returns>
-        public DependencyContextRegistrationSource ClearDefaultFilters()
+        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
+        public DependencyContextComponentRegistrationSource ClearDefaultFilters()
         {
             _source.ClearDefaultFilters();
             return this;
         }
 
         /// <inheritdoc />
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IEnumerable<ComponentRegistration> GetRegistrations()
+        IEnumerable<ComponentRegistration> IComponentRegistrationSource.GetRegistrations()
         {
             return ((IComponentRegistrationSource) _source).GetRegistrations();
         }

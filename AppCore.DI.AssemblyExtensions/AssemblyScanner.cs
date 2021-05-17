@@ -87,9 +87,7 @@ namespace AppCore.DependencyInjection
                     TypeInfo ti = t.GetTypeInfo();
                     return ti.IsClass
                            && !ti.IsAbstract
-                           && ti.DeclaredConstructors.Any(
-                               ci => ci.IsPublic && !ci
-                                         .IsStatic);
+                           && ti.DeclaredConstructors.Any(ci => ci.IsPublic && !ci.IsStatic);
                 });
 
             exportedTypes = exportedTypes.Where(

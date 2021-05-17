@@ -55,7 +55,10 @@ namespace AppCore.DependencyInjection
             return this;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Builds the component registrations from all registered sources.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IEnumerable<ComponentRegistration> GetRegistrations()
         {

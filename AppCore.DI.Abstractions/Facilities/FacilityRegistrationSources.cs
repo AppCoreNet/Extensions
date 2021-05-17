@@ -43,7 +43,10 @@ namespace AppCore.DependencyInjection.Facilities
             return this;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets the facilities which will be registered.
+        /// </summary>
+        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Facility"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IEnumerable<Facility> GetFacilities()
         {

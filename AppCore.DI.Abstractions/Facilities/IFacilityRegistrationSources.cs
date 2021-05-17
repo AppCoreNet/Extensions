@@ -2,7 +2,6 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace AppCore.DependencyInjection.Facilities
@@ -29,12 +28,5 @@ namespace AppCore.DependencyInjection.Facilities
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         IFacilityRegistrationSources Add<T>(Action<T> configure)
             where T : IFacilityRegistrationSource, new();
-
-        /// <summary>
-        /// Gets the facilities which will be registered.
-        /// </summary>
-        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Facility"/>.</returns>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        IEnumerable<Facility> GetFacilities();
     }
 }

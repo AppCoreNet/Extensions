@@ -15,12 +15,12 @@ namespace AppCore.DependencyInjection
         /// Adds components by scanning assemblies all assemblies included in a <see cref="DependencyContext"/>.
         /// </summary>
         /// <param name="builder">The <see cref="IComponentRegistrationSources"/>.</param>
-        /// <param name="configure">The delegate to configure the <see cref="DependencyContextRegistrationSource"/>.</param>
+        /// <param name="configure">The delegate to configure the <see cref="DependencyContextComponentRegistrationSource"/>.</param>
         /// <returns>The <see cref="IComponentRegistrationSources"/>.</returns>
         /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
         public static IComponentRegistrationSources DependencyContext(
             this IComponentRegistrationSources builder,
-            Action<DependencyContextRegistrationSource> configure)
+            Action<DependencyContextComponentRegistrationSource> configure)
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
             Ensure.Arg.NotNull(configure, nameof(configure));
