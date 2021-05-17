@@ -145,7 +145,7 @@ namespace AppCore.DependencyInjection
 
         /// <inheritdoc />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IEnumerable<ComponentRegistration> BuildRegistrations()
+        public IEnumerable<ComponentRegistration> GetRegistrations()
         {
             if (_contractType == null)
             {

@@ -2,6 +2,7 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
+using System.Runtime.CompilerServices;
 using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
 
@@ -37,7 +38,7 @@ namespace AppCore.DependencyInjection
 
             var sources = new ComponentRegistrationSources();
             configure(sources);
-            return registry.Add(sources.BuildRegistrations());
+            return registry.Add(sources.GetRegistrations());
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace AppCore.DependencyInjection
 
             var sources = new ComponentRegistrationSources();
             configure(sources);
-            return registry.TryAdd(sources.BuildRegistrations());
+            return registry.TryAdd(sources.GetRegistrations());
         }
 
         /// <summary>
@@ -97,7 +98,7 @@ namespace AppCore.DependencyInjection
 
             var sources = new ComponentRegistrationSources();
             configure(sources);
-            return registry.TryAddEnumerable(sources.BuildRegistrations());
+            return registry.TryAddEnumerable(sources.GetRegistrations());
         }
 
         /// <summary>
@@ -122,7 +123,10 @@ namespace AppCore.DependencyInjection
         /// <param name="facility">The <see cref="Facility"/>.</param>
         /// <param name="configure">The delegate to configure the facility.</param>
         /// <returns>The <see cref="IComponentRegistry"/>.</returns>
-        public static IComponentRegistry AddFacility(this IComponentRegistry registry, Facility facility, Action<Facility> configure = null)
+        public static IComponentRegistry AddFacility(
+            this IComponentRegistry registry,
+            Facility facility,
+            Action<Facility> configure = null)
         {
             Ensure.Arg.NotNull(registry, nameof(registry));
             Ensure.Arg.NotNull(facility, nameof(facility));

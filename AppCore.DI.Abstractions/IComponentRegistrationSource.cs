@@ -29,6 +29,6 @@ namespace AppCore.DependencyInjection
         /// </summary>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        IEnumerable<ComponentRegistration> BuildRegistrations();
+        IEnumerable<ComponentRegistration> GetRegistrations();
     }
 }

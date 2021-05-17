@@ -132,9 +132,9 @@ namespace AppCore.DependencyInjection
 
         /// <inheritdoc />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IEnumerable<ComponentRegistration> BuildRegistrations()
+        public IEnumerable<ComponentRegistration> GetRegistrations()
         {
-            return ((IComponentRegistrationSource) _source).BuildRegistrations();
+            return ((IComponentRegistrationSource) _source).GetRegistrations();
         }
     }
 }
