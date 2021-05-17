@@ -14,14 +14,14 @@ namespace AppCore.DependencyInjection
         public void FiltersNonDerivableGenericTypes()
         {
             Type contractType = typeof(IContract);
-            AssemblyRegistrationSource scanner =
-                new AssemblyRegistrationSource()
+            AssemblyComponentRegistrationSource scanner =
+                new AssemblyComponentRegistrationSource()
                     .WithContract(contractType)
                     .From(typeof(AssemblyRegistrationSourceTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(ComponentLifetime.Transient);
 
-            IEnumerable<ComponentRegistration> registrations = scanner.GetRegistrations();
+            IEnumerable<ComponentRegistration> registrations = ((IComponentRegistrationSource) scanner).GetRegistrations();
 
             registrations
                 .Should()
@@ -42,14 +42,14 @@ namespace AppCore.DependencyInjection
             Type contractType = typeof(IContract<>);
             Type closedContractType = typeof(IContract<string>);
 
-            AssemblyRegistrationSource scanner =
-                new AssemblyRegistrationSource()
+            AssemblyComponentRegistrationSource scanner =
+                new AssemblyComponentRegistrationSource()
                     .WithContract(contractType)
                     .From(typeof(AssemblyRegistrationSourceTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(ComponentLifetime.Transient);
 
-            IEnumerable<ComponentRegistration> registrations = scanner.GetRegistrations();
+            IEnumerable<ComponentRegistration> registrations = ((IComponentRegistrationSource) scanner).GetRegistrations();
 
             registrations
                 .Should()
@@ -78,14 +78,14 @@ namespace AppCore.DependencyInjection
             Type contractType = typeof(IContract);
             var lifetime = ComponentLifetime.Scoped;
 
-            AssemblyRegistrationSource scanner =
-                new AssemblyRegistrationSource()
+            AssemblyComponentRegistrationSource scanner =
+                new AssemblyComponentRegistrationSource()
                     .WithContract(contractType)
                     .From(typeof(AssemblyRegistrationSourceTests).Assembly)
                     .ClearDefaultFilters()
                     .WithDefaultLifetime(lifetime);
 
-            IEnumerable<ComponentRegistration> registrations = scanner.GetRegistrations();
+            IEnumerable<ComponentRegistration> registrations = ((IComponentRegistrationSource) scanner).GetRegistrations();
 
             registrations.Should()
                          .OnlyContain(cr => cr.Lifetime == lifetime);
