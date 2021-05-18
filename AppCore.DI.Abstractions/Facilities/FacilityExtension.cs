@@ -16,6 +16,11 @@ namespace AppCore.DependencyInjection.Facilities
         private readonly List<Action<IComponentRegistry>> _registrations = new();
 
         /// <summary>
+        /// Gets the <see cref="Facility"/> of the extensions.
+        /// </summary>
+        public Facility Facility { get; internal set; }
+
+        /// <summary>
         /// Registers a callback which is invoked when the facility is built.
         /// </summary>
         /// <param name="callback">The callback.</param>

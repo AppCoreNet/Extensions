@@ -58,6 +58,7 @@ namespace AppCore.DependencyInjection.Facilities
             if (extension == null)
             {
                 extension = (FacilityExtension)Activator.CreateInstance(extensionType);
+                extension.Facility = this;
                 _extensions.Add(extension);
             }
 
