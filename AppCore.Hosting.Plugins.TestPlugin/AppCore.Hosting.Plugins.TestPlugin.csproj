@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;net5</TargetFrameworks>
+    <InformationalVersion>11.10.0</InformationalVersion>
+    <Description>Plugin1 Description</Description>
+    <Copyright>Plugin1 Copyright</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AppCore.DependencyInjection.Abstractions" Version="$(AppCore_DI_Version)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Remove="Microsoft.NET.Test.Sdk" />
+    <PackageReference Remove="xunit.runner.console" />
+    <PackageReference Remove="xunit.runner.visualstudio" />
+    <PackageReference Remove="coverlet.msbuild" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AppCore.Hosting.Abstractions\AppCore.Hosting.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
