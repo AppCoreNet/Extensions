@@ -26,7 +26,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// <param name="configure">The configuration delegate.</param>
         /// <returns>The <see cref="IFacilityRegistrationSources"/> to allow chaining.</returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        IFacilityRegistrationSources Add<T>(Action<T> configure)
+        IFacilityRegistrationSources Add<T>(Action<T> configure = null)
             where T : IFacilityRegistrationSource, new();
     }
 }
