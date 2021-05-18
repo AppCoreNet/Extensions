@@ -1,14 +1,14 @@
 // Licensed under the MIT License.
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
-using AppCore.DependencyInjection;
-using AppCore.DependencyInjection.Facilities;
 using AppCore.Hosting.Microsoft.Extensions;
 using Microsoft.Extensions.Hosting;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Hosting
+namespace AppCore.DependencyInjection.Facilities
 {
+    using IApplicationLifetime = AppCore.Hosting.IApplicationLifetime;
+
     /// <summary>
     /// Implements Microsoft.Extensions.Hosting facility extension.
     /// </summary>
@@ -19,8 +19,12 @@ namespace AppCore.Hosting
         {
             base.Build(registry);
 
-            registry.TryAdd(ComponentRegistration.Transient<IApplicationLifetime, MicrosoftHostingApplicationLifetime>());
-            registry.TryAdd(ComponentRegistration.Transient<IHostedService, MicrosoftHostingAdapter>());
+            registry.TryAdd(
+                new[]
+                {
+                    ComponentRegistration.Transient<IApplicationLifetime, MicrosoftHostingApplicationLifetime>(),
+                    ComponentRegistration.Transient<IHostedService, MicrosoftHostingAdapter>()
+                });
         }
     }
 }

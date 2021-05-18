@@ -4,8 +4,6 @@
 using System;
 using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
-using AppCore.Hosting;
-using AppCore.Hosting.Plugins;
 
 // ReSharper disable once CheckNamespace
 namespace AppCore.DependencyInjection

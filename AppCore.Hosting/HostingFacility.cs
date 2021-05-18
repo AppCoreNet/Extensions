@@ -2,11 +2,11 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using AppCore.DependencyInjection;
-using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
+using AppCore.Hosting;
 
-namespace AppCore.Hosting
+// ReSharper disable once CheckNamespace
+namespace AppCore.DependencyInjection.Facilities
 {
     /// <summary>
     /// Represents the facility for the application host.
@@ -19,8 +19,13 @@ namespace AppCore.Hosting
             base.Build(registry);
 
             registry.AddLogging();
-            registry.TryAdd(ComponentRegistration.Transient<IBackgroundServiceHost, BackgroundServiceHost>());
-            registry.TryAdd(ComponentRegistration.Transient<IStartupTaskExecutor, StartupTaskExecutor>());
+
+            registry.TryAdd(
+                new[]
+                {
+                    ComponentRegistration.Transient<IBackgroundServiceHost, BackgroundServiceHost>(),
+                    ComponentRegistration.Transient<IStartupTaskExecutor, StartupTaskExecutor>()
+                });
         }
 
         /// <summary>
