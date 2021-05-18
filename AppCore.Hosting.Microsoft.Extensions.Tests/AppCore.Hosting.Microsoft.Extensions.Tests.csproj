@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net5</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net5</TargetFrameworks>
     <RootNamespace>AppCore.Hosting.Microsoft.Extensions</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AppCore.Hosting.Microsoft.Extensions\AppCore.Hosting.Microsoft.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\AppCore.Hosting.Plugins\AppCore.Hosting.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>
