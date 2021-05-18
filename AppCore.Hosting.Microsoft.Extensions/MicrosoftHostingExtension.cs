@@ -3,15 +3,18 @@
 
 using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Facilities;
+using AppCore.Hosting.Microsoft.Extensions;
 using Microsoft.Extensions.Hosting;
 
-namespace AppCore.Hosting.Microsoft.Extensions
+// ReSharper disable once CheckNamespace
+namespace AppCore.Hosting
 {
     /// <summary>
     /// Implements Microsoft.Extensions.Hosting facility extension.
     /// </summary>
     public class MicrosoftHostingExtension : FacilityExtension
     {
+        /// <inheritdoc/>
         protected override void Build(IComponentRegistry registry)
         {
             base.Build(registry);

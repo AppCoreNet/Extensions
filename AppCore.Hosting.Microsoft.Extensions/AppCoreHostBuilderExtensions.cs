@@ -3,8 +3,12 @@
 
 using System;
 using AppCore.DependencyInjection;
+using AppCore.DependencyInjection.Activator;
+using AppCore.DependencyInjection.Facilities;
 using AppCore.DependencyInjection.Microsoft.Extensions;
 using AppCore.Diagnostics;
+using AppCore.Hosting;
+using AppCore.Hosting.Microsoft.Extensions;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.Hosting
@@ -14,6 +18,18 @@ namespace Microsoft.Extensions.Hosting
     /// </summary>
     public static class AppCoreHostBuilderExtensions
     {
+        private static void InitFacilityActivator(HostBuilderContext context)
+        {
+            Type key = typeof(IActivator);
+            if (!context.Properties.TryGetValue(key, out object _))
+            {
+                IContainer container = new StartupContainer(context.HostingEnvironment, context.Configuration);
+                var activator = container.Resolve<IActivator>();
+                context.Properties.Add(key, activator);
+                Facility.Activator = activator;
+            }
+        }
+
         /// <summary>
         /// Configures the host to register AppCore components with the DI container. This can be called multiple times.
         /// </summary>
@@ -29,11 +45,13 @@ namespace Microsoft.Extensions.Hosting
             return builder.ConfigureServices(
                 (context, services) =>
                 {
+                    InitFacilityActivator(context);
+
                     var registry = new MicrosoftComponentRegistry(services);
                     configureAction?.Invoke(context, registry);
 
-                    registry.AddFacility<HostingFacility>(h => h.UseMicrosoftExtensions());
-                    registry.AddFacility<LoggingFacility>(l => l.UseMicrosoftExtensions());
+                    registry.AddLogging(l => l.UseMicrosoftExtensions());
+                    registry.AddHosting(h => h.UseMicrosoftExtensions());
                 });
         }
 

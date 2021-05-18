@@ -13,6 +13,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="AppCore.Logging" Version="$(AppCore_Logging_Version)" />
+    <PackageReference Include="AppCore.DependencyInjection.Abstractions" Version="$(AppCore_DI_Version)" />
   </ItemGroup>
 
   <ItemGroup>

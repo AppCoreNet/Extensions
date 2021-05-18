@@ -3,7 +3,7 @@
 
 using System;
 using AppCore.Diagnostics;
-using AppCore.Hosting.Microsoft.Extensions;
+using AppCore.Hosting;
 
 // ReSharper disable once CheckNamespace
 namespace AppCore.DependencyInjection
@@ -25,9 +25,7 @@ namespace AppCore.DependencyInjection
         {
             Ensure.Arg.NotNull(facility, nameof(facility));
 
-            var extension = facility.AddExtension<MicrosoftHostingExtension>();
-            configure?.Invoke(extension);
-
+            facility.AddExtension(configure);
             return facility;
         }
     }

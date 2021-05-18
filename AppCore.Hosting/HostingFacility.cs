@@ -2,12 +2,11 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
+using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
-using AppCore.Hosting;
 
-// ReSharper disable once CheckNamespace
-namespace AppCore.DependencyInjection
+namespace AppCore.Hosting
 {
     /// <summary>
     /// Represents the facility for the application host.
@@ -19,7 +18,7 @@ namespace AppCore.DependencyInjection
         {
             base.Build(registry);
 
-            registry.AddFacility<LoggingFacility>();
+            registry.AddLogging();
             registry.TryAdd(ComponentRegistration.Transient<IBackgroundServiceHost, BackgroundServiceHost>());
             registry.TryAdd(ComponentRegistration.Transient<IStartupTaskExecutor, StartupTaskExecutor>());
         }
@@ -64,12 +63,9 @@ namespace AppCore.DependencyInjection
 
             ConfigureRegistry(r =>
             {
-                var sources = new ComponentRegistrationSources()
-                              .WithContract(typeof(IBackgroundService))
-                              .WithDefaultLifetime(ComponentLifetime.Transient);
-
+                var sources = new ComponentRegistrationSources(typeof(IBackgroundService));
                 configure(sources);
-                r.TryAddEnumerable(sources.BuildRegistrations());
+                r.TryAddEnumerable(sources.GetRegistrations());
             });
 
             return this;
@@ -115,12 +111,9 @@ namespace AppCore.DependencyInjection
 
             ConfigureRegistry(r =>
             {
-                var sources = new ComponentRegistrationSources()
-                              .WithContract(typeof(IStartupTask))
-                              .WithDefaultLifetime(ComponentLifetime.Transient);
-
+                var sources = new ComponentRegistrationSources(typeof(IStartupTask));
                 configure(sources);
-                r.TryAddEnumerable(sources.BuildRegistrations());
+                r.TryAddEnumerable(sources.GetRegistrations());
             });
 
             return this;
