@@ -2,8 +2,8 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
+using AppCore.Hosting;
 
 // ReSharper disable once CheckNamespace
 namespace AppCore.DependencyInjection
@@ -11,7 +11,7 @@ namespace AppCore.DependencyInjection
     /// <summary>
     /// Provides extension methods to register Microsoft.Extensions.Hosting facility extension.
     /// </summary>
-    public static class MicrosoftHostingFacilityExtensions
+    public static class HostingFacilityExtensions
     {
         /// <summary>
         /// Adds hosting adapter using Microsoft.Extensions.
@@ -21,7 +21,7 @@ namespace AppCore.DependencyInjection
         /// <returns>The <see cref="HostingFacility"/>.</returns>
         public static HostingFacility UseMicrosoftExtensions(
             this HostingFacility facility,
-            Action<MicrosoftHostingExtension> configure = null)
+            Action<MicrosoftHostingFacilityExtension> configure = null)
         {
             Ensure.Arg.NotNull(facility, nameof(facility));
 

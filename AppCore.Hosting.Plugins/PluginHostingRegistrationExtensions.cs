@@ -4,6 +4,8 @@
 using System;
 using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
+using AppCore.Hosting;
+using AppCore.Hosting.Plugins;
 
 // ReSharper disable once CheckNamespace
 namespace AppCore.DependencyInjection
@@ -11,7 +13,7 @@ namespace AppCore.DependencyInjection
     /// <summary>
     /// Provides extension methods to register plugins.
     /// </summary>
-    public static class PluginRegistrationExtensions
+    public static class PluginHostingRegistrationExtensions
     {
         /// <summary>
         /// Adds plugins.

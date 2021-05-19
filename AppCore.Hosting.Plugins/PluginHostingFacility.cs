@@ -3,12 +3,12 @@
 
 using System;
 using System.Collections.Generic;
+using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Activator;
+using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
-using AppCore.Hosting.Plugins;
 
-// ReSharper disable once CheckNamespace
-namespace AppCore.DependencyInjection.Facilities
+namespace AppCore.Hosting.Plugins
 {
     public class PluginHostingFacility : Facility
     {
