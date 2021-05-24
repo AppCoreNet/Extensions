@@ -19,6 +19,11 @@ namespace AppCore.DependencyInjection.Microsoft.Extensions
         private readonly IServiceCollection _services;
 
         /// <summary>
+        /// Gets the <see cref="IServiceCollection"/> managed by this instance.
+        /// </summary>
+        public IServiceCollection Services => _services;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MicrosoftComponentRegistry"/> class.
         /// </summary>
         public MicrosoftComponentRegistry(IServiceCollection services)
