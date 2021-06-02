@@ -18,10 +18,10 @@ namespace AppCore.DependencyInjection
         /// <param name="sources">The <see cref="IComponentRegistrationSources"/>.</param>
         /// <param name="configure">The delegate to configure the <see cref="AssemblyComponentRegistrationSource"/>.</param>
         /// <returns>The <see cref="IComponentRegistrationSources"/>.</returns>
-        /// <exception cref="ArgumentNullException">Argument <paramref name="sources"/> or <paramref name="configure"/> is <c>null</c>. </exception>
+        /// <exception cref="ArgumentNullException">Argument <paramref name="sources"/> is <c>null</c>. </exception>
         public static IComponentRegistrationSources Assemblies(
             this IComponentRegistrationSources sources,
-            Action<AssemblyComponentRegistrationSource> configure)
+            Action<AssemblyComponentRegistrationSource> configure = null)
         {
             Ensure.Arg.NotNull(sources, nameof(sources));
             Ensure.Arg.NotNull(configure, nameof(configure));
