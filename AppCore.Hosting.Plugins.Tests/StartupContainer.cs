@@ -2,6 +2,8 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Activator;
 
@@ -10,12 +12,14 @@ namespace AppCore.Hosting.Plugins
     internal class StartupContainer : IContainer
     {
         private readonly ContainerActivator _activator;
+        private IEnumerable<KeyValuePair<Type, object>> _services;
 
         public ContainerCapabilities Capabilities { get; } = ContainerCapabilities.None;
 
-        public StartupContainer()
+        public StartupContainer(IEnumerable<KeyValuePair<Type, object>> services = null)
         {
             _activator = new ContainerActivator(this);
+            _services = services ?? Enumerable.Empty<KeyValuePair<Type, object>>();
         }
 
         public object Resolve(Type contractType)
@@ -37,7 +41,7 @@ namespace AppCore.Hosting.Plugins
             if (contractType == typeof(IActivator))
                 return _activator;
 
-            return null;
+            return _services.FirstOrDefault(kv => kv.Key == contractType).Value;
         }
     }
 }

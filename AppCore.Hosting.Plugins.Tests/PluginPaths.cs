@@ -24,5 +24,12 @@ namespace AppCore.Hosting.Plugins
             + "/"
             + FrameworkPath
             + "/AppCore.Hosting.Plugins.TestPlugin.dll";
+
+        public const string TestPlugin2 =
+            "../../../../AppCore.Hosting.Plugins.TestPlugin2/bin/"
+            + BuildConfigPath
+            + "/"
+            + FrameworkPath
+            + "/AppCore.Hosting.Plugins.TestPlugin2.dll";
     }
 }

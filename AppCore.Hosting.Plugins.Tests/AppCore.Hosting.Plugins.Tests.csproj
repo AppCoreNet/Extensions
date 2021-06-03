@@ -10,6 +10,9 @@
     <ProjectReference Include="..\AppCore.Hosting.Plugins.TestPlugin\AppCore.Hosting.Plugins.TestPlugin.csproj">
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
+    <ProjectReference Include="..\AppCore.Hosting.Plugins.TestPlugin2\AppCore.Hosting.Plugins.TestPlugin2.csproj">
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

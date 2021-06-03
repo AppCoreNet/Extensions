@@ -4,7 +4,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Hosting.Plugins.TestPlugin
+namespace AppCore.Hosting.Plugins.TestPlugin2
 {
     public class TestFacilityService : IBackgroundService
     {
