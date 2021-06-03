@@ -13,7 +13,7 @@ namespace AppCore.Hosting.Plugins
     public class PluginHostingFacility : Facility
     {
         private readonly IActivator _activator;
-        private List<Action<PluginOptions>> _configureActions = new();
+        private readonly List<Action<PluginOptions>> _configureActions = new();
 
         public PluginHostingFacility(IActivator activator)
         {

@@ -100,11 +100,11 @@ namespace AppCore.Hosting.Plugins
         private IEnumerable<(string assemblyName,PluginLoader loader)> GetPluginLoaders()
         {
             // load plugins
-            foreach (string plugin in _options.PluginAssemblies)
+            foreach (string plugin in _options.Assemblies)
             {
                 string pluginDll = plugin;
                 if (!Path.IsPathRooted(pluginDll))
-                    pluginDll = Path.GetFullPath(pluginDll, _options.PluginBasePath);
+                    pluginDll = Path.GetFullPath(pluginDll, _options.BasePath);
 
                 if (!File.Exists(pluginDll))
                 {
@@ -120,11 +120,11 @@ namespace AppCore.Hosting.Plugins
             }
 
             // find and load plugins in directories
-            foreach (string pluginDirectory in _options.PluginDirectories)
+            foreach (string pluginDirectory in _options.Directories)
             {
                 string pluginsDir = pluginDirectory;
                 if (!Path.IsPathRooted(pluginsDir))
-                    pluginsDir = Path.GetFullPath(pluginDirectory, _options.PluginBasePath);
+                    pluginsDir = Path.GetFullPath(pluginDirectory, _options.BasePath);
 
                 if (!Directory.Exists(pluginsDir))
                     continue;

@@ -19,7 +19,7 @@ namespace AppCore.Hosting.Plugins
         /// <summary>
         /// Gets or sets the base path when loading plugins with relative paths.
         /// </summary>
-        public string PluginBasePath { get; set; } = AppContext.BaseDirectory;
+        public string BasePath { get; set; } = AppContext.BaseDirectory;
 
         /// <summary>
         /// Gets the directories that are searched for plugins.
@@ -29,7 +29,7 @@ namespace AppCore.Hosting.Plugins
         /// name must be equal to the plugin assembly.
         /// Relative paths are allowed.
         /// </remarks>
-        public IList<string> PluginDirectories { get; } = new List<string> { "plugins" };
+        public IList<string> Directories { get; } = new List<string> { "plugins" };
 
         /// <summary>
         /// Gets the list of plugin assembly files.
@@ -38,6 +38,6 @@ namespace AppCore.Hosting.Plugins
         /// Each entry must point to an assembly file path (including the extension .dll).
         /// Relative paths are allowed.
         /// </remarks>
-        public IList<string> PluginAssemblies { get; } = new List<string>();
+        public IList<string> Assemblies { get; } = new List<string>();
     }
 }
