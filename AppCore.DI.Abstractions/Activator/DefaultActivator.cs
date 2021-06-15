@@ -22,11 +22,5 @@ namespace AppCore.DependencyInjection.Activator
             Ensure.Arg.NotNull(instanceType, nameof(instanceType));
             return System.Activator.CreateInstance(instanceType, parameters);
         }
-
-        /// <inheritdoc />
-        public object ResolveOrCreateInstance(Type type)
-        {
-            return CreateInstance(type);
-        }
     }
 }

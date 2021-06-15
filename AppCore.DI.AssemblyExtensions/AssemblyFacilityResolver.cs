@@ -10,9 +10,9 @@ using AppCore.Diagnostics;
 namespace AppCore.DependencyInjection.Facilities
 {
     /// <summary>
-    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/> by scanning assemblies.
+    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning assemblies.
     /// </summary>
-    public class AssemblyFacilityRegistrationSource : IFacilityRegistrationSource
+    public class AssemblyFacilityResolver : IFacilityResolver
     {
         private readonly List<Assembly> _assemblies = new();
         private readonly List<Predicate<Type>> _filters = new();
@@ -20,29 +20,29 @@ namespace AppCore.DependencyInjection.Facilities
         private bool _withPrivateTypes;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyFacilityRegistrationSource"/> class.
+        /// Initializes a new instance of the <see cref="AssemblyFacilityResolver"/> class.
         /// </summary>
-        public AssemblyFacilityRegistrationSource()
+        public AssemblyFacilityResolver()
         {
         }
 
         /// <summary>
-        /// Specifies whether to include private types when scanning for components.
+        /// Specifies whether to include private types when scanning for facilities.
         /// </summary>
         /// <param name="value">A value indicating whether to include private types.</param>
-        /// <returns>The <see cref="AssemblyFacilityRegistrationSource"/>.</returns>
-        public AssemblyFacilityRegistrationSource WithPrivateTypes(bool value = true)
+        /// <returns>The <see cref="AssemblyFacilityResolver"/>.</returns>
+        public AssemblyFacilityResolver WithPrivateTypes(bool value = true)
         {
             _withPrivateTypes = value;
             return this;
         }
 
         /// <summary>
-        /// Adds an <see cref="Assembly"/> to be scanned for components.
+        /// Adds an <see cref="Assembly"/> to be scanned for facilities.
         /// </summary>
         /// <param name="assembly">The <see cref="Assembly"/>.</param>
-        /// <returns>The <see cref="AssemblyFacilityRegistrationSource"/>.</returns>
-        public AssemblyFacilityRegistrationSource From(Assembly assembly)
+        /// <returns>The <see cref="AssemblyFacilityResolver"/>.</returns>
+        public AssemblyFacilityResolver From(Assembly assembly)
         {
             Ensure.Arg.NotNull(assembly, nameof(assembly));
             _assemblies.Add(assembly);
@@ -50,11 +50,11 @@ namespace AppCore.DependencyInjection.Facilities
         }
 
         /// <summary>
-        /// Adds an <see cref="IEnumerable{T}"/> of <see cref="Assembly"/> to be scanned for components.
+        /// Adds an <see cref="IEnumerable{T}"/> of <see cref="Assembly"/> to be scanned for facilities.
         /// </summary>
         /// <param name="assemblies">The <see cref="IEnumerable{T}"/> of <see cref="Assembly"/>.</param>
-        /// <returns>The <see cref="AssemblyFacilityRegistrationSource"/>.</returns>
-        public AssemblyFacilityRegistrationSource From(IEnumerable<Assembly> assemblies)
+        /// <returns>The <see cref="AssemblyFacilityResolver"/>.</returns>
+        public AssemblyFacilityResolver From(IEnumerable<Assembly> assemblies)
         {
             Ensure.Arg.NotNull(assemblies, nameof(assemblies));
             _assemblies.AddRange(assemblies);
@@ -65,8 +65,8 @@ namespace AppCore.DependencyInjection.Facilities
         /// Adds a type filter.
         /// </summary>
         /// <param name="filter">The type filter.</param>
-        /// <returns>The <see cref="AssemblyFacilityRegistrationSource"/>.</returns>
-        public AssemblyFacilityRegistrationSource Filter(Predicate<Type> filter)
+        /// <returns>The <see cref="AssemblyFacilityResolver"/>.</returns>
+        public AssemblyFacilityResolver Filter(Predicate<Type> filter)
         {
             Ensure.Arg.NotNull(filter, nameof(filter));
             _filters.Add(filter);
@@ -76,8 +76,8 @@ namespace AppCore.DependencyInjection.Facilities
         /// <summary>
         /// Clears the current type filters.
         /// </summary>
-        /// <returns>The <see cref="AssemblyFacilityRegistrationSource"/>.</returns>
-        public AssemblyFacilityRegistrationSource ClearFilters()
+        /// <returns>The <see cref="AssemblyFacilityResolver"/>.</returns>
+        public AssemblyFacilityResolver ClearFilters()
         {
             _filters.Clear();
             return this;
@@ -86,15 +86,15 @@ namespace AppCore.DependencyInjection.Facilities
         /// <summary>
         /// Clears the assembly scanner default type filters.
         /// </summary>
-        /// <returns>The <see cref="AssemblyFacilityRegistrationSource"/>.</returns>
-        public AssemblyFacilityRegistrationSource ClearDefaultFilters()
+        /// <returns>The <see cref="AssemblyFacilityResolver"/>.</returns>
+        public AssemblyFacilityResolver ClearDefaultFilters()
         {
             _clearFilters = true;
             return this;
         }
 
         /// <inheritdoc />
-        IEnumerable<Facility> IFacilityRegistrationSource.GetFacilities()
+        IEnumerable<Type> IFacilityResolver.Resolve()
         {
             var scanner = new AssemblyScanner(typeof(Facility), _assemblies)
             {
@@ -107,12 +107,7 @@ namespace AppCore.DependencyInjection.Facilities
             foreach (Predicate<Type> filter in _filters)
                 scanner.Filters.Add(filter);
             
-            IEnumerable<Type> facilityTypes = scanner.ScanAssemblies();
-
-            foreach (Type facilityType in facilityTypes)
-            {
-                yield return (Facility) Facility.Activator.CreateInstance(facilityType);
-            }
+            return scanner.ScanAssemblies();
         }
     }
 }

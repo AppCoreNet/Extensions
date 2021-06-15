@@ -6,34 +6,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AppCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 
 namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ComponentRegistration"/> by scanning assemblies in a
+    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning assemblies in a
     /// <see cref="DependencyContext"/>.
     /// </summary>
-    public class DependencyContextComponentRegistrationSource : IComponentRegistrationSource
+    public class DependencyContextServiceDescriptorResolver : IServiceDescriptorResolver
     {
-        private readonly AssemblyComponentRegistrationSource _source;
+        private readonly AssemblyServiceDescriptorResolver _source;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DependencyContextComponentRegistrationSource"/> class.
+        /// Initializes a new instance of the <see cref="DependencyContextServiceDescriptorResolver"/> class.
         /// </summary>
-        public DependencyContextComponentRegistrationSource()
+        public DependencyContextServiceDescriptorResolver()
         {
-            _source = new AssemblyComponentRegistrationSource();
+            _source = new AssemblyServiceDescriptorResolver();
         }
 
         /// <summary>
         /// Sets the contract type which is being registered.
         /// </summary>
-        /// <param name="contractType">The type of the contract.</param>
-        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
-        public DependencyContextComponentRegistrationSource WithContract(Type contractType)
+        /// <param name="serviceType">The type of the contract.</param>
+        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
+        public DependencyContextServiceDescriptorResolver WithServiceType(Type serviceType)
         {
-            _source.WithContract(contractType);
+            _source.WithServiceType(serviceType);
             return this;
         }
 
@@ -41,25 +42,25 @@ namespace AppCore.DependencyInjection
         /// Sets the contract type which is being registered.
         /// </summary>
         /// <typeparam name="TContract">The type of the contract.</typeparam>
-        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
-        public DependencyContextComponentRegistrationSource WithContract<TContract>()
+        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
+        public DependencyContextServiceDescriptorResolver WithServiceType<TContract>()
             where TContract : class
         {
-            _source.WithContract<TContract>();
+            _source.WithServiceType<TContract>();
             return this;
         }
 
-        void IComponentRegistrationSource.WithContract(Type contractType)
+        void IServiceDescriptorResolver.WithServiceType(Type serviceType)
         {
-            WithContract(contractType);
+            WithServiceType(serviceType);
         }
 
         /// <summary>
         /// Specifies whether to include private types when scanning for components.
         /// </summary>
         /// <param name="value">A value indicating whether to include private types.</param>
-        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
-        public DependencyContextComponentRegistrationSource WithPrivateTypes(bool value = true)
+        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
+        public DependencyContextServiceDescriptorResolver WithPrivateTypes(bool value = true)
         {
             _source.WithPrivateTypes(value);
             return this;
@@ -69,8 +70,8 @@ namespace AppCore.DependencyInjection
         /// Adds an <see cref="DependencyContext"/> to be scanned for components.
         /// </summary>
         /// <param name="dependencyContext">The <see cref="DependencyContext"/>.</param>
-        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
-        public DependencyContextComponentRegistrationSource From(DependencyContext dependencyContext)
+        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
+        public DependencyContextServiceDescriptorResolver From(DependencyContext dependencyContext)
         {
             Ensure.Arg.NotNull(dependencyContext, nameof(dependencyContext));
 
@@ -85,15 +86,15 @@ namespace AppCore.DependencyInjection
         /// Specifies the default lifetime for components.
         /// </summary>
         /// <param name="lifetime">The default lifetime.</param>
-        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
-        public DependencyContextComponentRegistrationSource WithDefaultLifetime(ComponentLifetime lifetime)
+        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
+        public DependencyContextServiceDescriptorResolver WithDefaultLifetime(ServiceLifetime lifetime)
         {
             _source.WithDefaultLifetime(lifetime);
             return this;
         }
 
         /// <inheritdoc />
-        void IComponentRegistrationSource.WithDefaultLifetime(ComponentLifetime lifetime)
+        void IServiceDescriptorResolver.WithDefaultLifetime(ServiceLifetime lifetime)
         {
             WithDefaultLifetime(lifetime);
         }
@@ -102,8 +103,8 @@ namespace AppCore.DependencyInjection
         /// Adds a type filter.
         /// </summary>
         /// <param name="filter">The type filter.</param>
-        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
-        public DependencyContextComponentRegistrationSource Filter(Predicate<Type> filter)
+        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
+        public DependencyContextServiceDescriptorResolver Filter(Predicate<Type> filter)
         {
             _source.Filter(filter);
             return this;
@@ -112,8 +113,8 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Clears the current type filters.
         /// </summary>
-        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
-        public DependencyContextComponentRegistrationSource ClearFilters()
+        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
+        public DependencyContextServiceDescriptorResolver ClearFilters()
         {
             _source.ClearFilters();
             return this;
@@ -122,17 +123,17 @@ namespace AppCore.DependencyInjection
         /// <summary>
         /// Clears the assembly scanner default type filters.
         /// </summary>
-        /// <returns>The <see cref="DependencyContextComponentRegistrationSource"/>.</returns>
-        public DependencyContextComponentRegistrationSource ClearDefaultFilters()
+        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
+        public DependencyContextServiceDescriptorResolver ClearDefaultFilters()
         {
             _source.ClearDefaultFilters();
             return this;
         }
 
         /// <inheritdoc />
-        IEnumerable<ComponentRegistration> IComponentRegistrationSource.GetRegistrations()
+        IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve()
         {
-            return ((IComponentRegistrationSource) _source).GetRegistrations();
+            return ((IServiceDescriptorResolver) _source).Resolve();
         }
     }
 }
