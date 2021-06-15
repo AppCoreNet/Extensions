@@ -4,7 +4,7 @@
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net5</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' != 'Unix'">$(TargetFrameworks);net461</TargetFrameworks>
     <RootNamespace>AppCore.Extensions.DependencyInjection</RootNamespace>
-    <AssemblyName>AppCore.Extensions.DependencyInjection.Tests</AssemblyName>
+    <AssemblyName>AppCore.Extensions.DependencyInjection.Abstractions.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
