@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AppCore.DI.Abstractions\Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Abstractions\Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
