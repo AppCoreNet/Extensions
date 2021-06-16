@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;

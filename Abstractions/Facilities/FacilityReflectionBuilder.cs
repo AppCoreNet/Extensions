@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AppCore.DependencyInjection.Activator;
 
 namespace AppCore.DependencyInjection.Facilities
 {
@@ -25,11 +26,11 @@ namespace AppCore.DependencyInjection.Facilities
             return AddResolver(source);
         }
 
-        public IReadOnlyCollection<Type> Resolve()
+        public IReadOnlyCollection<Facility> Resolve(IActivator activator)
         {
-            return _resolvers.SelectMany(s => s.Resolve())
-                           .ToList()
-                           .AsReadOnly();
+            return _resolvers.SelectMany(s => s.Resolve(activator))
+                             .ToList()
+                             .AsReadOnly();
         }
     }
 }

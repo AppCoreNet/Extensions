@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyModel;
 
@@ -86,9 +87,9 @@ namespace AppCore.DependencyInjection.Facilities
         }
 
         /// <inheritdoc />
-        IEnumerable<Type> IFacilityResolver.Resolve()
+        IEnumerable<Facility> IFacilityResolver.Resolve(IActivator activator)
         {
-            return ((IFacilityResolver)_resolver).Resolve();
+            return ((IFacilityResolver)_resolver).Resolve(activator);
         }
     }
 }

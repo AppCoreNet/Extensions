@@ -87,9 +87,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var facilities = new FacilityReflectionBuilder();
             configure(facilities);
 
-            foreach (Type facilityType in facilities.Resolve())
+            foreach (Facility facility in facilities.Resolve(activator))
             {
-                services.AddFacility(activator, facilityType);
+                facility.ConfigureServices(activator, services);
             }
 
             return services;

@@ -3,7 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 
 // ReSharper disable once CheckNamespace
@@ -94,7 +96,7 @@ namespace AppCore.DependencyInjection.Facilities
         }
 
         /// <inheritdoc />
-        IEnumerable<Type> IFacilityResolver.Resolve()
+        IEnumerable<Facility> IFacilityResolver.Resolve(IActivator activator)
         {
             var scanner = new AssemblyScanner(typeof(Facility), _assemblies)
             {
@@ -107,7 +109,8 @@ namespace AppCore.DependencyInjection.Facilities
             foreach (Predicate<Type> filter in _filters)
                 scanner.Filters.Add(filter);
             
-            return scanner.ScanAssemblies();
+            return scanner.ScanAssemblies()
+                          .Select(facilityType => (Facility) activator.CreateInstance(facilityType));
         }
     }
 }

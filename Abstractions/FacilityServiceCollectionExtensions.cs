@@ -47,15 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var serviceProvider = new ServiceCollectionServiceProvider(services);
             var activator = new ServiceProviderActivator(serviceProvider);
-            return services.AddFacility(activator, facilityType, configure);
-        }
 
-        internal static IServiceCollection AddFacility(
-            this IServiceCollection services,
-            IActivator activator,
-            Type facilityType,
-            Action<Facility> configure = null)
-        {
             var facility = (Facility)activator.CreateInstance(facilityType);
             configure?.Invoke(facility);
             facility.ConfigureServices(activator, services);
