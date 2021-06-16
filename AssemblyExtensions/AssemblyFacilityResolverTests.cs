@@ -17,16 +17,15 @@ namespace AppCore.DependencyInjection
         [Fact]
         public void ResolvesAllFacilities()
         {
-            AssemblyFacilityResolver resolver = new AssemblyFacilityResolver()
-                                                .From(typeof(AssemblyFacilityResolverTests).Assembly)
-                                                .ClearDefaultFilters();
-
             var activator = Substitute.For<IActivator>();
             activator.CreateInstance(Arg.Any<Type>(), Arg.Any<object[]>())
                      .Returns(ci => System.Activator.CreateInstance(ci.ArgAt<Type>(0)));
 
+            AssemblyFacilityResolver resolver = new AssemblyFacilityResolver(activator)
+                                                .From(typeof(AssemblyFacilityResolverTests).Assembly)
+                                                .ClearDefaultFilters();
 
-            IEnumerable<Facility> facilities = ((IFacilityResolver) resolver).Resolve(activator);
+            IEnumerable<Facility> facilities = ((IFacilityResolver) resolver).Resolve();
 
             facilities.Select(f => f.GetType())
                       .Should()
