@@ -3,8 +3,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using AppCore.DependencyInjection.Activator;
 using AppCore.DependencyInjection.Facilities;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace AppCore.DependencyInjection
@@ -18,9 +21,15 @@ namespace AppCore.DependencyInjection
                                                 .From(typeof(AssemblyFacilityResolverTests).Assembly)
                                                 .ClearDefaultFilters();
 
-            IEnumerable<Type> facilities = ((IFacilityResolver) resolver).Resolve();
+            var activator = Substitute.For<IActivator>();
+            activator.CreateInstance(Arg.Any<Type>(), Arg.Any<object[]>())
+                     .Returns(ci => System.Activator.CreateInstance(ci.ArgAt<Type>(0)));
 
-            facilities.Should()
+
+            IEnumerable<Facility> facilities = ((IFacilityResolver) resolver).Resolve(activator);
+
+            facilities.Select(f => f.GetType())
+                      .Should()
                       .BeEquivalentTo(typeof(Facility1), typeof(Facility2));
         }
     }
