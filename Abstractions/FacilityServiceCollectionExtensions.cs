@@ -47,6 +47,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var serviceProvider = new ServiceCollectionServiceProvider(services);
             var activator = new ServiceProviderActivator(serviceProvider);
+            serviceProvider.AddService(typeof(IActivator), activator);
 
             var facility = (Facility)activator.CreateInstance(facilityType);
             configure?.Invoke(facility);

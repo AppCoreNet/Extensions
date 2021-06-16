@@ -16,7 +16,8 @@ namespace AppCore.DependencyInjection.Facilities
     public abstract class Facility
     {
         private readonly List<Action<IServiceCollection>> _callbacks = new();
-        private readonly Dictionary<Type, List<Action<FacilityExtension>>> _extensions = new();
+        private readonly Dictionary<Type, List<Action<FacilityExtension>>> _extensionTypes = new();
+        private readonly List<FacilityExtension> _extensions = new();
 
         /// <summary>
         /// Registers a callback which is invoked when the facility is built.
@@ -40,9 +41,9 @@ namespace AppCore.DependencyInjection.Facilities
             Ensure.Arg.NotNull(extensionType, nameof(extensionType));
             Ensure.Arg.OfType(extensionType, typeof(FacilityExtension), nameof(extensionType));
 
-            if (!_extensions.TryGetValue(extensionType, out List<Action<FacilityExtension>> callbacks))
+            if (!_extensionTypes.TryGetValue(extensionType, out List<Action<FacilityExtension>> callbacks))
             {
-                _extensions.Add(extensionType, new List<Action<FacilityExtension>>(new []{configure}));
+                _extensionTypes.Add(extensionType, new List<Action<FacilityExtension>>(new []{configure}));
             }
             else
             {
@@ -61,25 +62,27 @@ namespace AppCore.DependencyInjection.Facilities
             AddExtension(typeof(T), f => configure?.Invoke((T) f));
         }
 
+        private void ConfigureExtensions(IActivator activator)
+        {
+            if (_extensions.Count == 0)
+            {
+                foreach (KeyValuePair<Type, List<Action<FacilityExtension>>> extensionTypeCallback in _extensionTypes)
+                {
+                    var extension = (FacilityExtension) activator.CreateInstance(extensionTypeCallback.Key);
+                    extension.Facility = this;
+                    foreach (Action<FacilityExtension> extensionCallback in extensionTypeCallback.Value)
+                    {
+                        extensionCallback?.Invoke(extension);
+                    }
+
+                    _extensions.Add(extension);
+                }
+            }
+        }
+
         internal void ConfigureServices(IActivator activator, IServiceCollection services)
         {
-            foreach (Action<IServiceCollection> callback in _callbacks)
-            {
-                callback(services);
-            }
-
-            foreach (KeyValuePair<Type, List<Action<FacilityExtension>>> extensionTypeCallback in _extensions)
-            {
-                var extension = (FacilityExtension) activator.CreateInstance(extensionTypeCallback.Key);
-                extension.Facility = this;
-                foreach (Action<FacilityExtension> extensionCallback in extensionTypeCallback.Value)
-                {
-                    extensionCallback?.Invoke(extension);
-                }
-
-                extension.ConfigureServices(services);
-            }
-
+            ConfigureExtensions(activator);
             ConfigureServices(services);
         }
 
@@ -89,6 +92,15 @@ namespace AppCore.DependencyInjection.Facilities
         /// <param name="services">The <see cref="IServiceCollection"/>.</param>
         protected virtual void ConfigureServices(IServiceCollection services)
         {
+            foreach (Action<IServiceCollection> callback in _callbacks)
+            {
+                callback(services);
+            }
+
+            foreach (FacilityExtension extension in _extensions)
+            {
+                extension.ConfigureServices(services);
+            }
         }
     }
 }

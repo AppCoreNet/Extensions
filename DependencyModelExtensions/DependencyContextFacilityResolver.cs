@@ -23,9 +23,9 @@ namespace AppCore.DependencyInjection.Facilities
         /// <summary>
         /// Initializes a new instance of the <see cref="DependencyContextFacilityResolver"/> class.
         /// </summary>
-        public DependencyContextFacilityResolver()
+        public DependencyContextFacilityResolver(IActivator activator)
         {
-            _resolver = new AssemblyFacilityResolver();
+            _resolver = new AssemblyFacilityResolver(activator);
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace AppCore.DependencyInjection.Facilities
         }
 
         /// <inheritdoc />
-        IEnumerable<Facility> IFacilityResolver.Resolve(IActivator activator)
+        IEnumerable<Facility> IFacilityResolver.Resolve()
         {
-            return ((IFacilityResolver)_resolver).Resolve(activator);
+            return ((IFacilityResolver)_resolver).Resolve();
         }
     }
 }

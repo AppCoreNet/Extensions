@@ -83,11 +83,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var serviceProvider = new ServiceCollectionServiceProvider(services);
             var activator = new ServiceProviderActivator(serviceProvider);
+            serviceProvider.AddService(typeof(IActivator), activator);
 
-            var facilities = new FacilityReflectionBuilder();
+            var facilities = new FacilityReflectionBuilder(activator);
             configure(facilities);
 
-            foreach (Facility facility in facilities.Resolve(activator))
+            foreach (Facility facility in facilities.Resolve())
             {
                 facility.ConfigureServices(activator, services);
             }

@@ -27,6 +27,6 @@ namespace AppCore.DependencyInjection.Facilities
         /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IFacilityReflectionBuilder AddResolver<T>(Action<T> configure = null)
-            where T : IFacilityResolver, new();
+            where T : IFacilityResolver;
     }
 }

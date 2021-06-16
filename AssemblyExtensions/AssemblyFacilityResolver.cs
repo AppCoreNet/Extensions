@@ -16,6 +16,7 @@ namespace AppCore.DependencyInjection.Facilities
     /// </summary>
     public class AssemblyFacilityResolver : IFacilityResolver
     {
+        private readonly IActivator _activator;
         private readonly List<Assembly> _assemblies = new();
         private readonly List<Predicate<Type>> _filters = new();
         private bool _clearFilters;
@@ -24,8 +25,9 @@ namespace AppCore.DependencyInjection.Facilities
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyFacilityResolver"/> class.
         /// </summary>
-        public AssemblyFacilityResolver()
+        public AssemblyFacilityResolver(IActivator activator)
         {
+            _activator = activator;
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace AppCore.DependencyInjection.Facilities
         }
 
         /// <inheritdoc />
-        IEnumerable<Facility> IFacilityResolver.Resolve(IActivator activator)
+        IEnumerable<Facility> IFacilityResolver.Resolve()
         {
             var scanner = new AssemblyScanner(typeof(Facility), _assemblies)
             {
@@ -110,7 +112,7 @@ namespace AppCore.DependencyInjection.Facilities
                 scanner.Filters.Add(filter);
             
             return scanner.ScanAssemblies()
-                          .Select(facilityType => (Facility) activator.CreateInstance(facilityType));
+                          .Select(facilityType => (Facility) _activator.CreateInstance(facilityType));
         }
     }
 }

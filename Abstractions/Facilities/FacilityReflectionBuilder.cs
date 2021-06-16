@@ -10,7 +10,13 @@ namespace AppCore.DependencyInjection.Facilities
 {
     internal class FacilityReflectionBuilder : IFacilityReflectionBuilder
     {
+        private readonly IActivator _activator;
         private readonly List<IFacilityResolver> _resolvers = new();
+
+        public FacilityReflectionBuilder(IActivator activator)
+        {
+            _activator = activator;
+        }
 
         public IFacilityReflectionBuilder AddResolver(IFacilityResolver resolver)
         {
@@ -19,16 +25,16 @@ namespace AppCore.DependencyInjection.Facilities
         }
 
         public IFacilityReflectionBuilder AddResolver<T>(Action<T> configure = null)
-            where T : IFacilityResolver, new()
+            where T : IFacilityResolver
         {
-            var source = new T();
-            configure?.Invoke(source);
-            return AddResolver(source);
+            var resolver = _activator.CreateInstance<T>();
+            configure?.Invoke(resolver);
+            return AddResolver(resolver);
         }
 
-        public IReadOnlyCollection<Facility> Resolve(IActivator activator)
+        public IReadOnlyCollection<Facility> Resolve()
         {
-            return _resolvers.SelectMany(s => s.Resolve(activator))
+            return _resolvers.SelectMany(s => s.Resolve())
                              .ToList()
                              .AsReadOnly();
         }
