@@ -12,8 +12,7 @@
     <PackageReference Include="AppCore.TypeHelpers.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="AppCore.Logging" Version="$(AppCore_Logging_Version)" />
-    <PackageReference Include="AppCore.DependencyInjection.Abstractions" Version="$(AppCore_DI_Version)" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="[2.1.0,7.0.0)" />
   </ItemGroup>
 
   <ItemGroup>

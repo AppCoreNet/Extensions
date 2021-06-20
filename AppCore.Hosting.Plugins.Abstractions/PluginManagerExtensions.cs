@@ -1,8 +1,6 @@
 // Licensed under the MIT License.
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
-using System.Collections.Generic;
-using System.Linq;
 using AppCore.Diagnostics;
 
 namespace AppCore.Hosting.Plugins
@@ -17,11 +15,21 @@ namespace AppCore.Hosting.Plugins
         /// </summary>
         /// <typeparam name="T">The type of the service to resolve.</typeparam>
         /// <returns>An enumerable of plugin instances.</returns>
-        public static IEnumerable<IPluginService<T>> ResolveAll<T>(this IPluginManager manager)
+        public static IPluginServiceCollection<T> GetServices<T>(this IPluginManager manager)
         {
             Ensure.Arg.NotNull(manager, nameof(manager));
-            return manager.ResolveAll(typeof(T))
-                          .Select(p => (IPluginService<T>)p);
+            return (IPluginServiceCollection<T>) manager.GetServices(typeof(T));
+        }
+
+        /// <summary>
+        /// Gets the first instance of specified type <typeparamref name="T"/> exported from registered plugins.
+        /// </summary>
+        /// <typeparam name="T">The type of the service to resolve.</typeparam>
+        /// <returns>An enumerable of plugin instances.</returns>
+        public static IPluginService<T> GetService<T>(this IPluginManager manager)
+        {
+            Ensure.Arg.NotNull(manager, nameof(manager));
+            return (IPluginService<T>)manager.GetService(typeof(T));
         }
     }
 }

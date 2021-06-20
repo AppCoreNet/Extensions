@@ -1,116 +1,37 @@
 // Licensed under the MIT License.
-// Copyright (c) 2018-2020 the AppCore .NET project.
+// Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using AppCore.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace AppCore.Hosting
 {
     internal static class LoggerExtensions
     {
-        private static readonly LoggerEventDelegate<string> _serviceStarting =
-            LoggerEvent.Define<string>(
-                LogLevel.Trace,
-                LogEventIds.ServiceStarting,
-                "Starting service {serviceType} ...");
-
-        private static readonly LoggerEventDelegate<string, long> _serviceStarted =
-            LoggerEvent.Define<string, long>(
-                LogLevel.Debug,
-                LogEventIds.ServiceStarted,
-                "Started service {serviceType} in {elapsedTime} ms.");
-
-        private static readonly LoggerEventDelegate<string, long> _serviceStartFailed =
-            LoggerEvent.Define<string, long>(
-                LogLevel.Error,
-                LogEventIds.ServiceStartFailed,
-                "Failed to start service {serviceType} after {elapsedTime} ms.");
-
-        private static readonly LoggerEventDelegate<string> _serviceStopping =
-            LoggerEvent.Define<string>(
-                LogLevel.Trace,
-                LogEventIds.ServiceStopping,
-                "Stopping service {serviceType} ...");
-
-        private static readonly LoggerEventDelegate<string, long> _serviceStopped =
-            LoggerEvent.Define<string, long>(
-                LogLevel.Debug,
-                LogEventIds.ServiceStopped,
-                "Stopped service {serviceType} in {elapsedTime} ms.");
-
-        private static readonly LoggerEventDelegate<string, long> _serviceStopFailed =
-            LoggerEvent.Define<string, long>(
-                LogLevel.Error,
-                LogEventIds.ServiceStopFailed,
-                "Failed to stop service {serviceType} after {elapsedTime} ms.");
-
-        private static readonly LoggerEventDelegate<string> _taskExecuting =
-            LoggerEvent.Define<string>(
+        private static readonly Action<ILogger, string, Exception> _taskExecuting =
+            LoggerMessage.Define<string>(
                 LogLevel.Trace,
                 LogEventIds.TaskExecuting,
                 "Executing startup task {startupTaskType}...");
 
-        private static readonly LoggerEventDelegate<string, long> _taskExecuted =
-            LoggerEvent.Define<string, long>(
+        private static readonly Action<ILogger, string, long, Exception> _taskExecuted =
+            LoggerMessage.Define<string, long>(
                 LogLevel.Debug,
                 LogEventIds.TaskExecuted,
                 "Startup task {startupTaskType} finished in {elapsedTime} ms.");
 
-        private static readonly LoggerEventDelegate<string, long> _taskFailed =
-            LoggerEvent.Define<string, long>(
+        private static readonly Action<ILogger, string, long, Exception> _taskFailed =
+            LoggerMessage.Define<string, long>(
                 LogLevel.Error,
-                LogEventIds.ServiceStartFailed,
+                LogEventIds.TaskFailed,
                 "Failed to execute {startupTaskType} after {elapsedTime} ms.");
-
-        public static void ServiceStarting(this ILogger logger, IBackgroundService service)
-        {
-            _serviceStarting(logger, service.GetType().GetDisplayName());
-        }
-
-        public static void ServiceStarted(this ILogger logger, IBackgroundService service, TimeSpan elapsed)
-        {
-            _serviceStarted(
-                logger,
-                service.GetType().GetDisplayName(),
-                (long) elapsed.TotalMilliseconds);
-        }
-
-        public static void ServiceStartFailed(this ILogger logger, IBackgroundService service, TimeSpan elapsed, Exception exception)
-        {
-            _serviceStartFailed(
-                logger,
-                service.GetType().GetDisplayName(),
-                (long) elapsed.TotalMilliseconds,
-                exception: exception);
-        }
-
-        public static void ServiceStopping(this ILogger logger, IBackgroundService service)
-        {
-            _serviceStopping(logger, service.GetType().GetDisplayName());
-        }
-
-        public static void ServiceStopped(this ILogger logger, IBackgroundService service, TimeSpan elapsed)
-        {
-            _serviceStopped(
-                logger,
-                service.GetType().GetDisplayName(),
-                (long) elapsed.TotalMilliseconds);
-        }
-
-        public static void ServiceStopFailed(this ILogger logger, IBackgroundService service, TimeSpan elapsed, Exception exception)
-        {
-            _serviceStopFailed(
-                logger,
-                service.GetType().GetDisplayName(),
-                (long) elapsed.TotalMilliseconds,
-                exception: exception);
-        }
 
         public static void TaskExecuting(this ILogger logger, IStartupTask task)
         {
             _taskExecuting(
                 logger,
-                task.GetType().GetDisplayName());
+                task.GetType().GetDisplayName(),
+                null);
         }
 
         public static void TaskExecuted(this ILogger logger, IStartupTask task, TimeSpan elapsed)
@@ -118,7 +39,8 @@ namespace AppCore.Hosting
             _taskExecuted(
                 logger,
                 task.GetType().GetDisplayName(),
-                (long) elapsed.TotalMilliseconds);
+                (long) elapsed.TotalMilliseconds,
+                null);
         }
 
         public static void TaskFailed(this ILogger logger, IStartupTask task, TimeSpan elapsed, Exception exception)
@@ -127,7 +49,7 @@ namespace AppCore.Hosting
                 logger,
                 task.GetType().GetDisplayName(),
                 (long) elapsed.TotalMilliseconds,
-                exception: exception);
+                exception);
         }
     }
 }

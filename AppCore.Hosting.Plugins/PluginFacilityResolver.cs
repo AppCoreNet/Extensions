@@ -11,23 +11,23 @@ namespace AppCore.DependencyInjection.Facilities
     /// <summary>
     /// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning plugin assemblies. 
     /// </summary>
-    public class PluginFacilityRegistrationSource : IFacilityRegistrationSource
+    public class PluginFacilityResolver : IFacilityResolver
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginFacilityRegistrationSource"/> class.
+        /// Initializes a new instance of the <see cref="PluginFacilityResolver"/> class.
         /// </summary>
-        public PluginFacilityRegistrationSource()
+        public PluginFacilityResolver()
         {
         }
 
         /// <inheritdoc />
-        IEnumerable<Facility> IFacilityRegistrationSource.GetFacilities()
+        IEnumerable<Facility> IFacilityResolver.Resolve()
         {
-            var pluginManager = PluginManager.Instance;
+            PluginManager pluginManager = PluginFacility.PluginManager;
             if (pluginManager == null)
-                throw new InvalidOperationException("Please add the 'PluginHostingFacility' to the DI container before registering components.");
+                throw new InvalidOperationException("Please add the 'PluginFacility' to the DI container before registering components.");
 
-            foreach (IPluginService<Facility> facility in pluginManager.ResolveAll<Facility>())
+            foreach (IPluginService<Facility> facility in pluginManager.GetServices<Facility>())
             {
                 yield return facility.Instance;
             }

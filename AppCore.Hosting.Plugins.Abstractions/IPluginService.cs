@@ -14,7 +14,7 @@ namespace AppCore.Hosting.Plugins
         T Instance { get; }
 
         /// <summary>
-        /// Gets the plugin instance.,
+        /// Gets the plugin instance.
         /// </summary>
         IPlugin Plugin { get; }
     }

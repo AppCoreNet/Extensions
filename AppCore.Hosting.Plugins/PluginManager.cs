@@ -2,6 +2,7 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -9,6 +10,8 @@ using System.Linq;
 using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 using McMaster.NETCore.Plugins;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace AppCore.Hosting.Plugins
 {
@@ -20,8 +23,7 @@ namespace AppCore.Hosting.Plugins
         private readonly IActivator _activator;
         private readonly PluginOptions _options;
         private readonly Lazy<IReadOnlyCollection<IPlugin>> _plugins;
-
-        internal static PluginManager Instance { get; set; }
+        private static readonly ConcurrentDictionary<Type, Type> _pluginServiceTypeCache = new();
 
         internal PluginOptions Options => _options;
 
@@ -33,26 +35,26 @@ namespace AppCore.Hosting.Plugins
         /// </summary>
         /// <param name="activator"></param>
         /// <param name="options"></param>
-        public PluginManager(IActivator activator, PluginOptions options)
+        public PluginManager(IActivator activator, IOptions<PluginOptions> options)
         {
             Ensure.Arg.NotNull(activator, nameof(activator));
             Ensure.Arg.NotNull(options, nameof(options));
 
             _activator = activator;
-            _options = options;
+            _options = options.Value;
             _plugins = new Lazy<IReadOnlyCollection<IPlugin>>(() => LoadPluginsCore().AsReadOnly());
         }
 
-        internal PluginManager(PluginManager parent, IActivator activator, PluginOptions options)
+        internal PluginManager(PluginManager parent, IActivator activator, IOptions<PluginOptions> options)
         {
             _activator = activator;
-            _options = options;
+            _options = options.Value;
 
             if (parent._plugins.IsValueCreated)
             {
                 _plugins = new Lazy<IReadOnlyCollection<IPlugin>>(
                     parent._plugins.Value.OfType<Plugin>()
-                          .Select(p => new Plugin(p.Loader, activator, options))
+                          .Select(p => new Plugin(p.Loader, activator, _options))
                           .ToArray);
             }
             else
@@ -63,10 +65,41 @@ namespace AppCore.Hosting.Plugins
         }
 
         /// <inheritdoc />
-        public IEnumerable<IPluginService<object>> ResolveAll(Type contractType)
+        public IPluginServiceCollection<object> GetServices(Type serviceType)
         {
-            Ensure.Arg.NotNull(contractType, nameof(contractType));
-            return Plugins.SelectMany(p => p.ResolveAll(contractType));
+            Ensure.Arg.NotNull(serviceType, nameof(serviceType));
+
+            IInternalPluginServiceCollection<object> result = PluginServiceCollection.Create(serviceType);
+            foreach (IPlugin plugin in Plugins)
+            {
+                foreach (object service in plugin.GetServices(serviceType))
+                {
+                    result.Add(plugin, service);
+                }
+            }
+
+            return result;
+        }
+
+        /// <inheritdoc />
+        public IPluginService<object> GetService(Type serviceType)
+        {
+            Type pluginServiceType = _pluginServiceTypeCache.GetOrAdd(
+                serviceType,
+                t => typeof(PluginService<>).MakeGenericType(t));
+
+            IPluginService<object> result = null;
+
+            foreach (IPlugin plugin in Plugins)
+            {
+                object service = plugin.GetService(serviceType);
+                if (service != null)
+                {
+                    result = (IPluginService<object>) Activator.CreateInstance(pluginServiceType, plugin, service);
+                }
+            }
+
+            return result;
         }
 
         /// <inheritdoc />

@@ -22,10 +22,17 @@ namespace AppCore.Hosting.Plugins
         void LoadPlugins();
 
         /// <summary>
-        /// Gets all instances of specified <paramref name="contractType"/> exported from registered plugins.
+        /// Gets the first instance of specified <paramref name="serviceType"/> exported from registered plugins.
         /// </summary>
-        /// <param name="contractType">The type of the service to resolve.</param>
+        /// <param name="serviceType">The type of the service to resolve.</param>
         /// <returns>An enumerable of plugin instances.</returns>
-        IEnumerable<IPluginService<object>> ResolveAll(Type contractType);
+        IPluginService<object> GetService(Type serviceType);
+
+        /// <summary>
+        /// Gets all instances of specified <paramref name="serviceType"/> exported from registered plugins.
+        /// </summary>
+        /// <param name="serviceType">The type of the service to resolve.</param>
+        /// <returns>An enumerable of plugin instances.</returns>
+        IPluginServiceCollection<object> GetServices(Type serviceType);
     }
 }
