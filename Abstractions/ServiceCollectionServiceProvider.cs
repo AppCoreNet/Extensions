@@ -11,7 +11,7 @@ namespace AppCore.DependencyInjection
     internal class ServiceCollectionServiceProvider : IServiceProvider
     {
         private readonly IServiceCollection _services;
-        private readonly Dictionary<Type, object> _additionalServices = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _additionalServices = new();
 
         public ServiceCollectionServiceProvider(IServiceCollection services)
         {
@@ -28,11 +28,19 @@ namespace AppCore.DependencyInjection
             if (_additionalServices.TryGetValue(serviceType, out object instance))
                 return instance;
 
-            return _services.FirstOrDefault(
-                                sd => sd.ServiceType == serviceType
-                                      && sd.Lifetime == ServiceLifetime.Singleton
-                                      && sd.ImplementationInstance != null)
-                            ?.ImplementationInstance;
+            ServiceDescriptor serviceDescriptor = _services.FirstOrDefault(
+                sd => sd.ServiceType == serviceType && sd.Lifetime == ServiceLifetime.Singleton);
+
+            if (serviceDescriptor != null)
+            {
+                instance = serviceDescriptor.ImplementationInstance;
+                if (instance == null && serviceDescriptor.ImplementationFactory != null)
+                {
+                    instance = serviceDescriptor.ImplementationFactory(this);
+                }
+            }
+
+            return instance;
         }
     }
 }
