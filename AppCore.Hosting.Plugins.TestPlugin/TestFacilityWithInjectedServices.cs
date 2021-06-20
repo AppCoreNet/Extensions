@@ -2,24 +2,25 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using AppCore.DependencyInjection;
+using AppCore.DependencyInjection.Activator;
 using AppCore.DependencyInjection.Facilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Hosting.Plugins.TestPlugin
 {
     public class TestFacilityWithInjectedServices : Facility
     {
-        public TestFacilityWithInjectedServices(IBackgroundServiceHost host)
+        public TestFacilityWithInjectedServices(IActivator activator)
         {
-            if (host == null)
-                throw new ArgumentNullException(nameof(host));
+            if (activator == null)
+                throw new ArgumentNullException(nameof(activator));
         }
 
-        protected override void Build(IComponentRegistry registry)
+        protected override void ConfigureServices(IServiceCollection services)
         {
-            base.Build(registry);
+            base.ConfigureServices(services);
 
-            registry.Add(ComponentRegistration.Transient<TestFacilityService, TestFacilityService>());
+            services.AddTransient<TestFacilityService>();
         }
     }
 }

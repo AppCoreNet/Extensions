@@ -1,27 +1,27 @@
 // Licensed under the MIT License.
-// Copyright (c) 2020 the AppCore .NET project.
+// Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AppCore.Logging;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
 
 namespace AppCore.Hosting
 {
-    public class StartupTaskExecutorTests
+    public class StartupTaskHostedServiceTests
     {
         [Fact]
         public async Task ExecutesAll()
         {
             var task1 = Substitute.For<IStartupTask>();
             var task2 = Substitute.For<IStartupTask>();
-            var logger = Substitute.For<ILogger<StartupTaskExecutor>>();
+            var logger = Substitute.For<ILogger<StartupTaskHostedService>>();
 
-            var executor = new StartupTaskExecutor(new []{task1,task2}, logger);
-            await executor.ExecuteAsync(CancellationToken.None);
+            var executor = new StartupTaskHostedService(new []{task1,task2}, logger);
+            await executor.StartAsync(CancellationToken.None);
 
             await task1.Received(1)
                        .ExecuteAsync(Arg.Any<CancellationToken>());
@@ -39,11 +39,11 @@ namespace AppCore.Hosting
             task2.ExecuteAsync(Arg.Any<CancellationToken>())
                  .Throws(new InvalidOperationException());
 
-            var logger = Substitute.For<ILogger<StartupTaskExecutor>>();
+            var logger = Substitute.For<ILogger<StartupTaskHostedService>>();
 
-            var executor = new StartupTaskExecutor(new[] {task1, task2}, logger);
+            var executor = new StartupTaskHostedService(new[] {task1, task2}, logger);
             await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await executor.ExecuteAsync(CancellationToken.None));
+                async () => await executor.StartAsync(CancellationToken.None));
         }
     }
 }

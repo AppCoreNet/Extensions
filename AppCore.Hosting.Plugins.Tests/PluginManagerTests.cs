@@ -1,11 +1,13 @@
 // Licensed under the MIT License.
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Activator;
 using FluentAssertions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
@@ -21,11 +23,11 @@ namespace AppCore.Hosting.Plugins
                 Assemblies = { PluginPaths.TestPlugin, PluginPaths.TestPlugin2 }
             };
 
-            var manager = new PluginManager(new DefaultActivator(), pluginOptions);
+            var manager = new PluginManager(new DefaultActivator(), Options.Create(pluginOptions));
             manager.LoadPlugins();
 
             List<IPluginService<IStartupTask>> instances =
-                manager.ResolveAll<IStartupTask>()
+                manager.GetServices<IStartupTask>()
                        .ToList();
 
             instances.Should()
@@ -47,11 +49,11 @@ namespace AppCore.Hosting.Plugins
                 Assemblies = {PluginPaths.TestPlugin, PluginPaths.TestPlugin2}
             };
 
-            var manager = new PluginManager(new DefaultActivator(), pluginOptions);
+            var manager = new PluginManager(new DefaultActivator(), Options.Create(pluginOptions));
             manager.LoadPlugins();
 
             List<IPluginService<IStartupTask>> instances =
-                manager.ResolveAll<IStartupTask>()
+                manager.GetServices<IStartupTask>()
                        .ToList();
 
             instances.Should()
@@ -74,7 +76,7 @@ namespace AppCore.Hosting.Plugins
             options.Assemblies.Add(PluginPaths.TestPlugin);
             options.Assemblies.Add(PluginPaths.TestPlugin2);
 
-            var manager = new PluginManager(new DefaultActivator(), options);
+            var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
             manager.Plugins.Select(p => p.Info)
                    .Should()
                    .BeEquivalentTo(
@@ -98,7 +100,7 @@ namespace AppCore.Hosting.Plugins
             options.Assemblies.Add(PluginPaths.TestPlugin2);
             options.Assemblies.Add("ThisPluginDoesNotExist.dll");
 
-            var manager = new PluginManager(new DefaultActivator(), options);
+            var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
             manager.LoadPlugins();
 
             manager.Plugins.Should()
@@ -114,13 +116,13 @@ namespace AppCore.Hosting.Plugins
 
             var lifetime = Substitute.For<IApplicationLifetime>();
 
-            var container = Substitute.For<IContainer>();
-            container.ResolveOptional(typeof(IApplicationLifetime))
+            var serviceProvider = Substitute.For<IServiceProvider>();
+            serviceProvider.GetService(typeof(IApplicationLifetime))
                      .Returns(lifetime);
             
-            var manager = new PluginManager(new ContainerActivator(container), options);
-            List<IPluginService<IBackgroundService>> instances =
-                manager.ResolveAll<IBackgroundService>()
+            var manager = new PluginManager(new ServiceProviderActivator(serviceProvider), Options.Create(options));
+            List<IPluginService<IHostedService>> instances =
+                manager.GetServices<IHostedService>()
                        .ToList();
 
             instances.Select(

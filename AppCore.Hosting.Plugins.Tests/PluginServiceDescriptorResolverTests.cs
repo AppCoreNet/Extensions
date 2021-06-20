@@ -1,26 +1,26 @@
 // Licensed under the MIT License.
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
-using AppCore.DependencyInjection;
-using AppCore.DependencyInjection.Activator;
-using AppCore.DependencyInjection.Facilities;
+using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace AppCore.Hosting.Plugins
 {
-    public class PluginComponentRegistrationSourceTests
+    public class PluginServiceDescriptorResolverTests
     {
+        private class ServiceCollection : List<ServiceDescriptor>, IServiceCollection
+        {
+        }
+
         [Fact]
         public void RegistersServices()
         {
-            PluginManager.Instance = null;
+            PluginFacility.PluginManager = null;
 
-            Facility.Activator = new StartupContainer()
-                .Resolve<IActivator>();
-
-            var registry = new TestComponentRegistry();
-            registry.AddPlugins(
+            var services = new ServiceCollection();
+            services.AddPlugins(
                 p =>
                 {
                     p.Configure(o =>
@@ -30,23 +30,23 @@ namespace AppCore.Hosting.Plugins
                     });
                 });
 
-            registry.TryAddEnumerableFrom(
+            services.TryAddEnumerableFrom(
                 s =>
                     s.Plugins(
                         p =>
-                            p.WithContract<IStartupTask>()));
+                            p.WithServiceType<IStartupTask>()));
 
-            registry.Should()
+            services.Should()
                     .Contain(
                         r =>
-                            r.ContractType.FullName == "AppCore.Hosting.IStartupTask"
+                            r.ServiceType.FullName == "AppCore.Hosting.IStartupTask"
                             && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin.PublicStartupTask"
                     );
 
-            registry.Should()
+            services.Should()
                     .Contain(
                         r =>
-                            r.ContractType.FullName == "AppCore.Hosting.IStartupTask"
+                            r.ServiceType.FullName == "AppCore.Hosting.IStartupTask"
                             && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin2.PublicStartupTask"
                     );
         }

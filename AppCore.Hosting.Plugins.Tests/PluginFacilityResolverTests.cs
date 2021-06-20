@@ -1,29 +1,26 @@
 // Licensed under the MIT License.
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
-using System;
 using System.Collections.Generic;
-using AppCore.DependencyInjection;
-using AppCore.DependencyInjection.Activator;
-using AppCore.DependencyInjection.Facilities;
 using FluentAssertions;
-using NSubstitute;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace AppCore.Hosting.Plugins
 {
-    public class PluginFacilityRegistrationSourceTests
+    public class PluginFacilityResolverTests
     {
+        private class ServiceCollection : List<ServiceDescriptor>, IServiceCollection
+        {
+        }
+
         [Fact]
         public void RegistersFacilities()
         {
-            PluginManager.Instance = null;
+            PluginFacility.PluginManager = null;
 
-            Facility.Activator = new StartupContainer()
-                .Resolve<IActivator>();
-
-            var registry = new TestComponentRegistry();
-            registry.AddPlugins(
+            var services = new ServiceCollection();
+            services.AddPlugins(
                 p =>
                 {
                     p.Configure(o =>
@@ -33,19 +30,19 @@ namespace AppCore.Hosting.Plugins
                     });
                 });
 
-            registry.AddFacilitiesFrom(s => s.Plugins());
+            services.AddFacilitiesFrom(s => s.Plugins());
 
-            registry.Should()
+            services.Should()
                     .Contain(
                         r =>
-                            r.ContractType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
+                            r.ServiceType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
                             && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
                     );
 
-            registry.Should()
+            services.Should()
                     .Contain(
                         r =>
-                            r.ContractType.FullName == "AppCore.Hosting.Plugins.TestPlugin2.TestFacilityService"
+                            r.ServiceType.FullName == "AppCore.Hosting.Plugins.TestPlugin2.TestFacilityService"
                             && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin2.TestFacilityService"
                     );
         }
@@ -53,16 +50,10 @@ namespace AppCore.Hosting.Plugins
         [Fact]
         public void RegistersFacilityWithServices()
         {
-            PluginManager.Instance = null;
+            PluginFacility.PluginManager = null;
 
-            var serviceHost = Substitute.For<IBackgroundServiceHost>();
-
-            Facility.Activator = new StartupContainer(
-                    new[] {new KeyValuePair<Type, object>(typeof(IBackgroundServiceHost), serviceHost)})
-                .Resolve<IActivator>();
-
-            var registry = new TestComponentRegistry();
-            registry.AddPlugins(
+            var services = new ServiceCollection();
+            services.AddPlugins(
                 p =>
                 {
                     p.Configure(o =>
@@ -71,15 +62,15 @@ namespace AppCore.Hosting.Plugins
                     });
                 });
 
-            registry.AddFacilitiesFrom(s => s.Plugins());
+            services.AddFacilitiesFrom(s => s.Plugins());
 
-            registry.Should()
+            services.Should()
                     .Contain(
                         r =>
-                            r.ContractType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
+                            r.ServiceType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
                             && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
                     )
-                    .And.HaveCount(3);
+                    .And.HaveCount(6);
         }
     }
 }
