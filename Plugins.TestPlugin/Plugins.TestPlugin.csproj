@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AppCore.Hosting.Abstractions\Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Abstractions\Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

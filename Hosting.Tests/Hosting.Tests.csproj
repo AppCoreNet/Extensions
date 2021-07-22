@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AppCore.Hosting\Hosting.csproj" />
+    <ProjectReference Include="..\..\src\Hosting\Hosting.csproj" />
   </ItemGroup>
 
 </Project>
