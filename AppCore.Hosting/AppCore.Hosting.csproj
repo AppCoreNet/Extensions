@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
+    <RootNamespace>AppCore.Hosting</RootNamespace>
+    <AssemblyName>AppCore.Hosting</AssemblyName>
     <Description>Provides default AppCore .NET hosting implementations.</Description>
   </PropertyGroup>
 

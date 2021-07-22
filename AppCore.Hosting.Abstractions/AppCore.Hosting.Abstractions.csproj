@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netstandard2.0;net461</TargetFrameworks>
-    <Description>Provides AppCore .NET abstractions for hosting.</Description>
     <RootNamespace>AppCore.Hosting</RootNamespace>
+    <AssemblyName>AppCore.Hosting.Abstractions</AssemblyName>
+    <Description>Provides AppCore .NET abstractions for hosting.</Description>
   </PropertyGroup>
 
   <ItemGroup>
