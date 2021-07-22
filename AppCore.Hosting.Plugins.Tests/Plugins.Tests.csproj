@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\AppCore.Hosting.Plugins\AppCore.Hosting.Plugins.csproj" />
+    <ProjectReference Include="..\..\src\AppCore.Hosting.Plugins\Plugins.csproj" />
     <ProjectReference Include="..\AppCore.Hosting.Plugins.TestPlugin\AppCore.Hosting.Plugins.TestPlugin.csproj">
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
-    <ProjectReference Include="..\AppCore.Hosting.Plugins.TestPlugin2\AppCore.Hosting.Plugins.TestPlugin2.csproj">
+    <ProjectReference Include="..\AppCore.Hosting.Plugins.TestPlugin2\Plugins.TestPlugin2.csproj">
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
   </ItemGroup>
