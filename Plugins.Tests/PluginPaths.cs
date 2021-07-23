@@ -19,14 +19,14 @@ namespace AppCore.Hosting.Plugins
 #endif
 
         public const string TestPlugin =
-            "../../../../AppCore.Hosting.Plugins.TestPlugin/bin/"
+            "../../../../Plugins.TestPlugin/bin/"
             + BuildConfigPath
             + "/"
             + FrameworkPath
             + "/AppCore.Hosting.Plugins.TestPlugin.dll";
 
         public const string TestPlugin2 =
-            "../../../../AppCore.Hosting.Plugins.TestPlugin2/bin/"
+            "../../../../Plugins.TestPlugin2/bin/"
             + BuildConfigPath
             + "/"
             + FrameworkPath
