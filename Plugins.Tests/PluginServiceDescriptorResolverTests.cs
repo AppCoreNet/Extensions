@@ -2,6 +2,7 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System.Collections.Generic;
+using AppCore.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -20,7 +21,7 @@ namespace AppCore.Hosting.Plugins
             PluginFacility.PluginManager = null;
 
             var services = new ServiceCollection();
-            services.AddPlugins(
+            services.AddAppCore().AddPlugins(
                 p =>
                 {
                     p.Configure(o =>
@@ -30,11 +31,7 @@ namespace AppCore.Hosting.Plugins
                     });
                 });
 
-            services.TryAddEnumerableFrom(
-                s =>
-                    s.Plugins(
-                        p =>
-                            p.WithServiceType<IStartupTask>()));
+            services.TryAddEnumerableFrom<IStartupTask>(s => s.Plugins());
 
             services.Should()
                     .Contain(
