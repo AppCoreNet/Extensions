@@ -35,51 +35,6 @@ namespace AppCore.DependencyInjection
         }
 
         /// <summary>
-        /// Sets the contract type which is being registered.
-        /// </summary>
-        /// <param name="contractType">The type of the contract.</param>
-        /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
-        public PluginServiceDescriptorResolver WithServiceType(Type contractType)
-        {
-            _resolver.WithServiceType(contractType);
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the contract type which is being registered.
-        /// </summary>
-        /// <typeparam name="TContract">The type of the contract.</typeparam>
-        /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
-        public PluginServiceDescriptorResolver WithServiceType<TContract>()
-            where TContract : class
-        {
-            _resolver.WithServiceType<TContract>();
-            return this;
-        }
-
-        void IServiceDescriptorResolver.WithServiceType(Type contractType)
-        {
-            WithServiceType(contractType);
-        }
-
-        /// <summary>
-        /// Specifies the default lifetime for components.
-        /// </summary>
-        /// <param name="lifetime">The default lifetime.</param>
-        /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
-        public PluginServiceDescriptorResolver WithDefaultLifetime(ServiceLifetime lifetime)
-        {
-            _resolver.WithDefaultLifetime(lifetime);
-            return this;
-        }
-
-        /// <inheritdoc />
-        void IServiceDescriptorResolver.WithDefaultLifetime(ServiceLifetime lifetime)
-        {
-            WithDefaultLifetime(lifetime);
-        }
-
-        /// <summary>
         /// Adds a type filter.
         /// </summary>
         /// <param name="filter">The type filter.</param>
@@ -101,9 +56,9 @@ namespace AppCore.DependencyInjection
         }
 
         /// <inheritdoc />
-        IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve()
+        IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve(Type serviceType, ServiceLifetime defaultLifetime)
         {
-            return ((IServiceDescriptorResolver)_resolver).Resolve();
+            return ((IServiceDescriptorResolver)_resolver).Resolve(serviceType, defaultLifetime);
         }
     }
 }

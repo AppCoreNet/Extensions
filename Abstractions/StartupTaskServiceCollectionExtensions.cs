@@ -51,11 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The passed <see cref="IServiceCollection"/> to allow chaining.</returns>
         public static IServiceCollection AddStartupTasksFrom(this IServiceCollection services, Action<IServiceDescriptorReflectionBuilder> configure)
         {
-            Ensure.Arg.NotNull(configure, nameof(configure));
-
-            var builder = new ServiceDescriptorReflectionBuilder(typeof(IStartupTask));
-            services.TryAddEnumerable(builder.Resolve());
-            return services;
+            return services.TryAddEnumerableFrom<IStartupTask>(configure);
         }
     }
 }

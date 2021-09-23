@@ -3,8 +3,6 @@
 
 using System;
 using AppCore.DependencyInjection;
-using AppCore.Diagnostics;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 // ReSharper disable once CheckNamespace
@@ -23,12 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>The passed <see cref="IServiceCollection"/> to allow chaining.</returns>
         public static IServiceCollection AddHostedServicesFrom(this IServiceCollection services, Action<IServiceDescriptorReflectionBuilder> configure)
         {
-            Ensure.Arg.NotNull(configure, nameof(configure));
-
-            var builder = new ServiceDescriptorReflectionBuilder(typeof(IHostedService));
-            configure(builder);
-            services.TryAddEnumerable(builder.Resolve());
-            return services;
+            return services.TryAddEnumerableFrom<IHostedService>(configure);
         }
     }
 }
