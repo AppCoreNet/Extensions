@@ -13,7 +13,7 @@ namespace AppCore.DependencyInjection
     /// <summary>
     /// Provides a default implementation of the <see cref="IServiceDescriptorReflectionBuilder"/> interface.
     /// </summary>
-    public class ServiceDescriptorReflectionBuilder : IServiceDescriptorReflectionBuilder
+    internal class ServiceDescriptorReflectionBuilder : IServiceDescriptorReflectionBuilder
     {
         private readonly List<IServiceDescriptorResolver> _resolvers = new();
         private readonly Type _serviceType;

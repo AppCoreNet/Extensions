@@ -25,8 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddFacility<T>(this IServiceCollection services, Action<T> configure = null)
             where T : Facility
         {
-            Ensure.Arg.NotNull(services, nameof(services));
-            return services.AddFacility(typeof(T), f => configure?.Invoke((T) f));
+            return AddFacility(services, typeof(T), f => configure?.Invoke((T) f));
         }
 
         /// <summary>
