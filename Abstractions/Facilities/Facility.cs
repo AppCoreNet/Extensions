@@ -20,11 +20,11 @@ namespace AppCore.DependencyInjection.Facilities
         private readonly List<FacilityExtension> _extensions = new();
 
         /// <summary>
-        /// Registers a callback which is invoked when the facility is built.
+        /// Registers a callback which is invoked when the services are configured.
         /// </summary>
         /// <param name="callback">The callback.</param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void AddCallback(Action<IServiceCollection> callback)
+        protected void ConfigureServices(Action<IServiceCollection> callback)
         {
             Ensure.Arg.NotNull(callback, nameof(callback));
             _callbacks.Add(callback);
