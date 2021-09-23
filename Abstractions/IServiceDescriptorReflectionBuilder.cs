@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.DependencyInjection
 {
@@ -11,6 +12,12 @@ namespace AppCore.DependencyInjection
     /// </summary>
     public interface IServiceDescriptorReflectionBuilder
     {
+        /// <summary>
+        /// Specifies the default lifetime for resolved services.
+        /// </summary>
+        /// <param name="lifetime">The default lifetime.</param>
+        IServiceDescriptorReflectionBuilder WithDefaultLifetime(ServiceLifetime lifetime);
+
         /// <summary>
         /// Adds a service resolver to the builder.
         /// </summary>

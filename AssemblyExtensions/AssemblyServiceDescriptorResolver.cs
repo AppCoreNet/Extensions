@@ -14,8 +14,6 @@ namespace AppCore.DependencyInjection
     /// </summary>
     public class AssemblyServiceDescriptorResolver : IServiceDescriptorResolver
     {
-        private Type _serviceType;
-        private ServiceLifetime _defaultLifetime = ServiceLifetime.Transient;
         private readonly List<Assembly> _assemblies = new();
         private readonly List<Predicate<Type>> _filters = new();
         private bool _clearFilters;
@@ -26,54 +24,6 @@ namespace AppCore.DependencyInjection
         /// </summary>
         public AssemblyServiceDescriptorResolver()
         {
-        }
-
-        /// <summary>
-        /// Sets the service type which should be resolved.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <returns>The <see cref="AssemblyServiceDescriptorResolver"/>.</returns>
-        public AssemblyServiceDescriptorResolver WithServiceType(Type serviceType)
-        {
-            if (_serviceType != null)
-                throw new InvalidOperationException("The service type cannot be changed.");
-
-            _serviceType = serviceType;
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the service type which is being registered.
-        /// </summary>
-        /// <typeparam name="TContract">The type of the service.</typeparam>
-        /// <returns>The <see cref="AssemblyServiceDescriptorResolver"/>.</returns>
-        public AssemblyServiceDescriptorResolver WithServiceType<TContract>()
-            where TContract : class
-        {
-            return WithServiceType(typeof(TContract));
-        }
-
-        /// <inheritdoc />
-        void IServiceDescriptorResolver.WithServiceType(Type serviceType)
-        {
-            WithServiceType(serviceType);
-        }
-
-        /// <summary>
-        /// Specifies the default lifetime for services.
-        /// </summary>
-        /// <param name="lifetime">The default lifetime.</param>
-        /// <returns>The <see cref="AssemblyServiceDescriptorResolver"/>.</returns>
-        public AssemblyServiceDescriptorResolver WithDefaultLifetime(ServiceLifetime lifetime)
-        {
-            _defaultLifetime = lifetime;
-            return this;
-        }
-
-        /// <inheritdoc />
-        void IServiceDescriptorResolver.WithDefaultLifetime(ServiceLifetime lifetime)
-        {
-            WithDefaultLifetime(lifetime);
         }
 
         /// <summary>
@@ -144,24 +94,18 @@ namespace AppCore.DependencyInjection
         }
 
         /// <inheritdoc />
-        IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve()
+        IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve(Type serviceType, ServiceLifetime defaultLifetime)
         {
-            if (_serviceType == null)
-            {
-                throw new InvalidOperationException(
-                    "No service type has been specified for the assembly service descriptor resolver.");
-            }
-
             ServiceLifetime GetServiceLifetime(Type implementationType)
             {
                 var lifetimeAttribute =
                     implementationType.GetTypeInfo()
                                       .GetCustomAttribute<LifetimeAttribute>();
 
-                return lifetimeAttribute?.Lifetime ?? _defaultLifetime;
+                return lifetimeAttribute?.Lifetime ?? defaultLifetime;
             }
 
-            var scanner = new AssemblyScanner(_serviceType, _assemblies)
+            var scanner = new AssemblyScanner(serviceType, _assemblies)
             {
                 IncludePrivateTypes = _withPrivateTypes
             };
@@ -185,12 +129,12 @@ namespace AppCore.DependencyInjection
                     continue;
 
                 // need to register closed types with closed generic contract type
-                Type serviceType = _serviceType;
+                Type currentServiceType = serviceType;
                 if (isOpenGenericContractType && !isOpenGenericType)
-                    serviceType = implementationType.GetClosedTypeOf(serviceType);
+                    currentServiceType = implementationType.GetClosedTypeOf(currentServiceType);
 
                 yield return ServiceDescriptor.Describe(
-                    serviceType,
+                    currentServiceType,
                     implementationType,
                     GetServiceLifetime(implementationType));
             }

@@ -28,34 +28,6 @@ namespace AppCore.DependencyInjection
         }
 
         /// <summary>
-        /// Sets the contract type which is being registered.
-        /// </summary>
-        /// <param name="serviceType">The type of the contract.</param>
-        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
-        public DependencyContextServiceDescriptorResolver WithServiceType(Type serviceType)
-        {
-            _source.WithServiceType(serviceType);
-            return this;
-        }
-
-        /// <summary>
-        /// Sets the contract type which is being registered.
-        /// </summary>
-        /// <typeparam name="TContract">The type of the contract.</typeparam>
-        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
-        public DependencyContextServiceDescriptorResolver WithServiceType<TContract>()
-            where TContract : class
-        {
-            _source.WithServiceType<TContract>();
-            return this;
-        }
-
-        void IServiceDescriptorResolver.WithServiceType(Type serviceType)
-        {
-            WithServiceType(serviceType);
-        }
-
-        /// <summary>
         /// Specifies whether to include private types when scanning for components.
         /// </summary>
         /// <param name="value">A value indicating whether to include private types.</param>
@@ -80,23 +52,6 @@ namespace AppCore.DependencyInjection
                                  .Select(Assembly.Load));
 
             return this;
-        }
-
-        /// <summary>
-        /// Specifies the default lifetime for components.
-        /// </summary>
-        /// <param name="lifetime">The default lifetime.</param>
-        /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
-        public DependencyContextServiceDescriptorResolver WithDefaultLifetime(ServiceLifetime lifetime)
-        {
-            _source.WithDefaultLifetime(lifetime);
-            return this;
-        }
-
-        /// <inheritdoc />
-        void IServiceDescriptorResolver.WithDefaultLifetime(ServiceLifetime lifetime)
-        {
-            WithDefaultLifetime(lifetime);
         }
 
         /// <summary>
@@ -131,9 +86,9 @@ namespace AppCore.DependencyInjection
         }
 
         /// <inheritdoc />
-        IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve()
+        IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve(Type serviceType, ServiceLifetime defaultLifetime)
         {
-            return ((IServiceDescriptorResolver) _source).Resolve();
+            return ((IServiceDescriptorResolver) _source).Resolve(serviceType, defaultLifetime);
         }
     }
 }

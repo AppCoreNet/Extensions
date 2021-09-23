@@ -14,22 +14,12 @@ namespace AppCore.DependencyInjection
     public interface IServiceDescriptorResolver
     {
         /// <summary>
-        /// Sets the service type of the services which will be resolved.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        void WithServiceType(Type serviceType);
-
-        /// <summary>
-        /// Specifies the default lifetime for services.
-        /// </summary>
-        /// <param name="lifetime">The default lifetime.</param>
-        void WithDefaultLifetime(ServiceLifetime lifetime);
-
-        /// <summary>
         /// Resolves the service descriptors.
         /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <param name="defaultLifetime">The default lifetime.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/>.</returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        IEnumerable<ServiceDescriptor> Resolve();
+        IEnumerable<ServiceDescriptor> Resolve(Type serviceType, ServiceLifetime defaultLifetime);
     }
 }
