@@ -17,12 +17,10 @@ namespace AppCore.DependencyInjection
             Type contractType = typeof(IContract);
             AssemblyServiceDescriptorResolver resolver =
                 new AssemblyServiceDescriptorResolver()
-                    .WithServiceType(contractType)
                     .From(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
-                    .ClearDefaultFilters()
-                    .WithDefaultLifetime(ServiceLifetime.Transient);
+                    .ClearDefaultFilters();
 
-            IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve();
+            IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
 
             serviceDescriptors
                 .Should()
@@ -45,12 +43,10 @@ namespace AppCore.DependencyInjection
 
             AssemblyServiceDescriptorResolver resolver =
                 new AssemblyServiceDescriptorResolver()
-                    .WithServiceType(contractType)
                     .From(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
-                    .ClearDefaultFilters()
-                    .WithDefaultLifetime(ServiceLifetime.Transient);
+                    .ClearDefaultFilters();
 
-            IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve();
+            IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
 
             serviceDescriptors
                 .Should()
@@ -81,12 +77,10 @@ namespace AppCore.DependencyInjection
 
             AssemblyServiceDescriptorResolver resolver =
                 new AssemblyServiceDescriptorResolver()
-                    .WithServiceType(contractType)
                     .From(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
-                    .ClearDefaultFilters()
-                    .WithDefaultLifetime(lifetime);
+                    .ClearDefaultFilters();
 
-            IEnumerable<ServiceDescriptor> registrations = ((IServiceDescriptorResolver) resolver).Resolve();
+            IEnumerable<ServiceDescriptor> registrations = ((IServiceDescriptorResolver) resolver).Resolve(contractType, lifetime);
 
             registrations.Should()
                          .OnlyContain(cr => cr.Lifetime == lifetime);

@@ -25,35 +25,11 @@ namespace AppCore.DependencyInjection
                 ServiceLifetime.Transient);
 
             var resolver = Substitute.For<IServiceDescriptorResolver>();
-            resolver.Resolve()
+            resolver.Resolve(typeof(string), ServiceLifetime.Transient)
                     .Returns(new[] {service1, service2});
 
             var services = new ServiceCollection();
-            services.AddFrom(r => r.AddResolver(resolver));
-
-            services.Should()
-                    .BeEquivalentTo(service1, service2);
-        }
-
-        [Fact]
-        public void TryAddFromAddsAllServices()
-        {
-            ServiceDescriptor service1 = ServiceDescriptor.Describe(
-                typeof(string),
-                typeof(string),
-                ServiceLifetime.Transient);
-
-            ServiceDescriptor service2 = ServiceDescriptor.Describe(
-                typeof(char),
-                typeof(char),
-                ServiceLifetime.Transient);
-
-            var resolver = Substitute.For<IServiceDescriptorResolver>();
-            resolver.Resolve()
-                    .Returns(new[] { service1, service2 });
-
-            var services = new ServiceCollection();
-            services.TryAddFrom(r => r.AddResolver(resolver));
+            services.AddFrom<string>(r => r.AddResolver(resolver));
 
             services.Should()
                     .BeEquivalentTo(service1, service2);
@@ -63,21 +39,21 @@ namespace AppCore.DependencyInjection
         public void TryAddFromAddsOnlyFirstService()
         {
             ServiceDescriptor service1 = ServiceDescriptor.Describe(
-                typeof(string),
-                typeof(string),
+                typeof(Encoding),
+                typeof(UTF8Encoding),
                 ServiceLifetime.Transient);
 
             ServiceDescriptor service2 = ServiceDescriptor.Describe(
-                typeof(string),
-                typeof(string),
+                typeof(Encoding),
+                typeof(ASCIIEncoding),
                 ServiceLifetime.Transient);
 
             var resolver = Substitute.For<IServiceDescriptorResolver>();
-            resolver.Resolve()
+            resolver.Resolve(typeof(Encoding), ServiceLifetime.Transient)
                     .Returns(new[] { service1, service2 });
 
             var services = new ServiceCollection();
-            services.TryAddFrom(r => r.AddResolver(resolver));
+            services.TryAddFrom<Encoding>(r => r.AddResolver(resolver));
 
             services.Should()
                     .BeEquivalentTo(service1);
@@ -97,11 +73,11 @@ namespace AppCore.DependencyInjection
                 ServiceLifetime.Transient);
 
             var resolver = Substitute.For<IServiceDescriptorResolver>();
-            resolver.Resolve()
+            resolver.Resolve(typeof(Encoding), ServiceLifetime.Transient)
                     .Returns(new[] { service1, service2 });
 
             var services = new ServiceCollection();
-            services.TryAddEnumerableFrom(r => r.AddResolver(resolver));
+            services.TryAddEnumerableFrom<Encoding>(r => r.AddResolver(resolver));
 
             services.Should()
                     .BeEquivalentTo(service1, service2);
@@ -121,11 +97,11 @@ namespace AppCore.DependencyInjection
                 ServiceLifetime.Transient);
 
             var resolver = Substitute.For<IServiceDescriptorResolver>();
-            resolver.Resolve()
+            resolver.Resolve(typeof(Encoding), ServiceLifetime.Transient)
                     .Returns(new[] { service1, service2 });
 
             var services = new ServiceCollection();
-            services.TryAddEnumerableFrom(r => r.AddResolver(resolver));
+            services.TryAddEnumerableFrom<Encoding>(r => r.AddResolver(resolver));
 
             services.Should()
                     .BeEquivalentTo(service1);
