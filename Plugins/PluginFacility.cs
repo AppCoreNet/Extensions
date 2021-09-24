@@ -8,11 +8,13 @@ using System.Linq;
 using AppCore.DependencyInjection.Activator;
 using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
+using AppCore.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Hosting.Plugins
+// ReSharper disable once CheckNamespace
+namespace AppCore.DependencyInjection
 {
     public class PluginFacility : Facility
     {
@@ -30,6 +32,7 @@ namespace AppCore.Hosting.Plugins
         public PluginFacility Configure(Action<PluginOptions> configure)
         {
             _configureOptions.Add(new ConfigureOptions<PluginOptions>(configure));
+            ConfigureServices(s => s.Configure(configure));
             return this;
         }
 
@@ -49,8 +52,6 @@ namespace AppCore.Hosting.Plugins
             PluginManager ??= new PluginManager(_activator, CreateOptions());
 
             base.ConfigureServices(services);
-
-            services.TryAddTransient<IActivator, ServiceProviderActivator>();
 
             services.TryAddSingleton<IPluginManager>(
                 sp => new PluginManager(

@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
