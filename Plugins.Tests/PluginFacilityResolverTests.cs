@@ -2,9 +2,11 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System.Collections.Generic;
+using System.Linq;
 using AppCore.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 using Xunit;
 
 namespace AppCore.Hosting.Plugins
@@ -65,13 +67,14 @@ namespace AppCore.Hosting.Plugins
 
             services.AddFacilitiesFrom(s => s.Plugins());
 
-            services.Should()
-                    .Contain(
-                        r =>
-                            r.ServiceType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
-                            && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
-                    )
-                    .And.HaveCount(6);
+            IEnumerable<ServiceDescriptor> facilityServices =
+                services.Where(
+                    r =>
+                        r.ServiceType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
+                        && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService");
+
+            facilityServices.Should()
+                            .HaveCount(2);
         }
     }
 }
