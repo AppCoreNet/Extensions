@@ -27,7 +27,7 @@ namespace AppCore.DependencyInjection
             if (pluginManager == null)
                 throw new InvalidOperationException("Please add 'PluginFacility' to the DI container before registering components.");
 
-            _resolver.From(pluginManager.Plugins.Select(p => p.Assembly));
+            _resolver.Add(pluginManager.Plugins.Select(p => p.Assembly));
             _resolver.WithPrivateTypes(pluginManager.Options.ResolvePrivateTypes);
             _resolver.ClearDefaultFilters();
 
