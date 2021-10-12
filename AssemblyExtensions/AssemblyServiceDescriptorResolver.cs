@@ -42,7 +42,7 @@ namespace AppCore.DependencyInjection
         /// </summary>
         /// <param name="assembly">The <see cref="Assembly"/>.</param>
         /// <returns>The <see cref="AssemblyServiceDescriptorResolver"/>.</returns>
-        public AssemblyServiceDescriptorResolver From(Assembly assembly)
+        public AssemblyServiceDescriptorResolver Add(Assembly assembly)
         {
             Ensure.Arg.NotNull(assembly, nameof(assembly));
             _assemblies.Add(assembly);
@@ -54,7 +54,7 @@ namespace AppCore.DependencyInjection
         /// </summary>
         /// <param name="assemblies">The <see cref="IEnumerable{T}"/> of <see cref="Assembly"/>.</param>
         /// <returns>The <see cref="AssemblyServiceDescriptorResolver"/>.</returns>
-        public AssemblyServiceDescriptorResolver From(IEnumerable<Assembly> assemblies)
+        public AssemblyServiceDescriptorResolver Add(IEnumerable<Assembly> assemblies)
         {
             Ensure.Arg.NotNull(assemblies, nameof(assemblies));
             _assemblies.AddRange(assemblies);

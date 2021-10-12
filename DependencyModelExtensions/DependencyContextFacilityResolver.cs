@@ -48,7 +48,7 @@ namespace AppCore.DependencyInjection.Facilities
         {
             Ensure.Arg.NotNull(dependencyContext, nameof(dependencyContext));
 
-            _resolver.From(
+            _resolver.Add(
                 dependencyContext.GetDefaultAssemblyNames()
                                  .Select(Assembly.Load));
 

@@ -43,11 +43,11 @@ namespace AppCore.DependencyInjection
         /// </summary>
         /// <param name="dependencyContext">The <see cref="DependencyContext"/>.</param>
         /// <returns>The <see cref="DependencyContextServiceDescriptorResolver"/>.</returns>
-        public DependencyContextServiceDescriptorResolver From(DependencyContext dependencyContext)
+        public DependencyContextServiceDescriptorResolver Add(DependencyContext dependencyContext)
         {
             Ensure.Arg.NotNull(dependencyContext, nameof(dependencyContext));
 
-            _source.From(
+            _source.Add(
                 dependencyContext.GetDefaultAssemblyNames()
                                  .Select(Assembly.Load));
 

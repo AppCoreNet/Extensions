@@ -46,7 +46,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// </summary>
         /// <param name="assembly">The <see cref="Assembly"/>.</param>
         /// <returns>The <see cref="AssemblyFacilityResolver"/>.</returns>
-        public AssemblyFacilityResolver From(Assembly assembly)
+        public AssemblyFacilityResolver Add(Assembly assembly)
         {
             Ensure.Arg.NotNull(assembly, nameof(assembly));
             _assemblies.Add(assembly);
@@ -58,7 +58,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// </summary>
         /// <param name="assemblies">The <see cref="IEnumerable{T}"/> of <see cref="Assembly"/>.</param>
         /// <returns>The <see cref="AssemblyFacilityResolver"/>.</returns>
-        public AssemblyFacilityResolver From(IEnumerable<Assembly> assemblies)
+        public AssemblyFacilityResolver Add(IEnumerable<Assembly> assemblies)
         {
             Ensure.Arg.NotNull(assemblies, nameof(assemblies));
             _assemblies.AddRange(assemblies);
