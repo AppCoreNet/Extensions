@@ -22,7 +22,7 @@ namespace AppCore.DependencyInjection
                      .Returns(ci => System.Activator.CreateInstance(ci.ArgAt<Type>(0)));
 
             AssemblyFacilityResolver resolver = new AssemblyFacilityResolver(activator)
-                                                .From(typeof(AssemblyFacilityResolverTests).Assembly)
+                                                .Add(typeof(AssemblyFacilityResolverTests).Assembly)
                                                 .ClearDefaultFilters();
 
             IEnumerable<Facility> facilities = ((IFacilityResolver) resolver).Resolve();

@@ -17,7 +17,7 @@ namespace AppCore.DependencyInjection
             Type contractType = typeof(IContract);
             AssemblyServiceDescriptorResolver resolver =
                 new AssemblyServiceDescriptorResolver()
-                    .From(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
+                    .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
                     .ClearDefaultFilters();
 
             IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
@@ -43,7 +43,7 @@ namespace AppCore.DependencyInjection
 
             AssemblyServiceDescriptorResolver resolver =
                 new AssemblyServiceDescriptorResolver()
-                    .From(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
+                    .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
                     .ClearDefaultFilters();
 
             IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
@@ -77,7 +77,7 @@ namespace AppCore.DependencyInjection
 
             AssemblyServiceDescriptorResolver resolver =
                 new AssemblyServiceDescriptorResolver()
-                    .From(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
+                    .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
                     .ClearDefaultFilters();
 
             IEnumerable<ServiceDescriptor> registrations = ((IServiceDescriptorResolver) resolver).Resolve(contractType, lifetime);
