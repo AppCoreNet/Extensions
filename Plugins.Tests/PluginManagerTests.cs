@@ -133,5 +133,20 @@ namespace AppCore.Hosting.Plugins
                      .Should()
                      .AllBeEquivalentTo(lifetime);
         }
+
+        [Fact]
+        public void LoadDoesNotLoadDisabled()
+        {
+            var options = new PluginOptions();
+            options.Assemblies.Add(PluginPaths.TestPlugin);
+            options.Assemblies.Add(PluginPaths.TestPlugin2);
+            options.Disabled.Add("AppCore.Hosting.Plugins.TestPlugin2");
+
+            var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
+            manager.LoadPlugins();
+
+            manager.Plugins.Should()
+                   .HaveCount(1);
+        }
     }
 }
