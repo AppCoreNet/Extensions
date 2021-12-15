@@ -39,5 +39,13 @@ namespace AppCore.Hosting.Plugins
         /// Relative paths are allowed.
         /// </remarks>
         public IList<string> Assemblies { get; } = new List<string>();
+
+        /// <summary>
+        /// Gets the list of disabled plugins.
+        /// </summary>
+        /// <remarks>
+        /// Entries must have the name of the plugin assembly (excluding the path and extension).
+        /// </remarks>
+        public IList<string> Disabled { get; } = new List<string>();
     }
 }

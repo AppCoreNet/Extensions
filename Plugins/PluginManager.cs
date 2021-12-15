@@ -132,6 +132,21 @@ namespace AppCore.Hosting.Plugins
 
         private IEnumerable<(string assemblyName,PluginLoader loader)> GetPluginLoaders()
         {
+            PluginLoader GetPluginLoader(string assemblyPath)
+            {
+                if (!File.Exists(assemblyPath))
+                {
+                    Console.Error.WriteLine($"Plugin assembly '{assemblyPath}' was not found.");
+                    return null;
+                }
+
+                string pluginName = Path.GetFileNameWithoutExtension(assemblyPath);
+                if (_options.Disabled.Contains(pluginName, StringComparer.OrdinalIgnoreCase))
+                    return null;
+
+                return PluginLoader.CreateFromAssemblyFile(assemblyPath, ConfigurePlugin);
+            }
+
             // load plugins
             foreach (string plugin in _options.Assemblies)
             {
@@ -139,17 +154,9 @@ namespace AppCore.Hosting.Plugins
                 if (!Path.IsPathRooted(pluginDll))
                     pluginDll = Path.GetFullPath(pluginDll, _options.BasePath);
 
-                if (!File.Exists(pluginDll))
-                {
-                    Console.Error.WriteLine($"Plugin assembly '{pluginDll}' was not found.");
-                    continue;
-                }
-
-                var loader = PluginLoader.CreateFromAssemblyFile(
-                    pluginDll,
-                    ConfigurePlugin);
-
-                yield return (pluginDll, loader);
+                PluginLoader loader = GetPluginLoader(pluginDll);
+                if (loader != null)
+                    yield return (pluginDll, loader);
             }
 
             // find and load plugins in directories
@@ -167,18 +174,9 @@ namespace AppCore.Hosting.Plugins
                     string dirName = Path.GetFileName(dir);
                     string pluginDll = Path.Combine(dir, dirName + ".dll");
 
-                    if (File.Exists(pluginDll))
-                    {
-                        var loader = PluginLoader.CreateFromAssemblyFile(
-                            pluginDll,
-                            ConfigurePlugin);
-
+                    PluginLoader loader = GetPluginLoader(pluginDll);
+                    if (loader != null)
                         yield return (pluginDll, loader);
-                    }
-                    else
-                    {
-                        Console.Error.WriteLine($"Plugin assembly '{pluginDll}' was not found.");
-                    }
                 }
             }
         }
