@@ -29,7 +29,7 @@ namespace AppCore.DependencyInjection
 
             facilities.Select(f => f.GetType())
                       .Should()
-                      .BeEquivalentTo(typeof(Facility1), typeof(Facility2));
+                      .BeEquivalentTo(new [] { typeof(Facility1), typeof(Facility2) });
         }
     }
 }

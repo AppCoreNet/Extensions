@@ -21,9 +21,12 @@ namespace AppCore.DependencyInjection
             scanner.ScanAssemblies()
                    .Should()
                    .BeEquivalentTo(
-                       typeof(ContractImpl1),
-                       typeof(ContractImpl2),
-                       typeof(ContractImplOpenGeneric<>));
+                       new[]
+                       {
+                           typeof(ContractImpl1),
+                           typeof(ContractImpl2),
+                           typeof(ContractImplOpenGeneric<>)
+                       });
         }
 
         [Fact]
@@ -38,10 +41,13 @@ namespace AppCore.DependencyInjection
             scanner.ScanAssemblies()
                    .Should()
                    .BeEquivalentTo(
-                       typeof(ContractImpl1<>),
-                       typeof(ContractImpl2<>),
-                       typeof(ContractImpl1String),
-                       typeof(ContractImpl2String));
+                       new[]
+                       {
+                           typeof(ContractImpl1<>),
+                           typeof(ContractImpl2<>),
+                           typeof(ContractImpl1String),
+                           typeof(ContractImpl2String)
+                       });
         }
 
         [Fact]
@@ -56,8 +62,11 @@ namespace AppCore.DependencyInjection
             scanner.ScanAssemblies()
                    .Should()
                    .BeEquivalentTo(
-                       typeof(ContractImpl1String),
-                       typeof(ContractImpl2String));
+                       new[]
+                       {
+                           typeof(ContractImpl1String),
+                           typeof(ContractImpl2String)
+                       });
         }
 
         [Fact]
@@ -72,8 +81,11 @@ namespace AppCore.DependencyInjection
             scanner.ScanAssemblies()
                    .Should()
                    .BeEquivalentTo(
-                       typeof(ContractImpl1),
-                       typeof(ContractImpl2));
+                       new[]
+                       {
+                           typeof(ContractImpl1),
+                           typeof(ContractImpl2)
+                       });
         }
 
         [Fact]
@@ -88,10 +100,13 @@ namespace AppCore.DependencyInjection
             scanner.ScanAssemblies()
                    .Should()
                    .BeEquivalentTo(
-                       typeof(ContractImpl1<>),
-                       typeof(ContractImpl2<>),
-                       typeof(ContractImpl1String),
-                       typeof(ContractImpl2String));
+                       new[]
+                       {
+                           typeof(ContractImpl1<>),
+                           typeof(ContractImpl2<>),
+                           typeof(ContractImpl1String),
+                           typeof(ContractImpl2String)
+                       });
         }
 
         [Fact]
@@ -106,8 +121,11 @@ namespace AppCore.DependencyInjection
             scanner.ScanAssemblies()
                    .Should()
                    .BeEquivalentTo(
-                       typeof(ContractImpl1String),
-                       typeof(ContractImpl2String));
+                       new[]
+                       {
+                           typeof(ContractImpl1String),
+                           typeof(ContractImpl2String)
+                       });
         }
     }
 }

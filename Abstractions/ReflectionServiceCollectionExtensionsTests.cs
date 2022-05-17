@@ -32,7 +32,7 @@ namespace AppCore.DependencyInjection
             services.AddFrom<string>(r => r.AddResolver(resolver));
 
             services.Should()
-                    .BeEquivalentTo(service1, service2);
+                    .BeEquivalentTo(new [] { service1, service2 });
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace AppCore.DependencyInjection
             services.TryAddFrom<Encoding>(r => r.AddResolver(resolver));
 
             services.Should()
-                    .BeEquivalentTo(service1);
+                    .BeEquivalentTo(new [] { service1 });
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace AppCore.DependencyInjection
             services.TryAddEnumerableFrom<Encoding>(r => r.AddResolver(resolver));
 
             services.Should()
-                    .BeEquivalentTo(service1, service2);
+                    .BeEquivalentTo(new [] { service1, service2 });
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace AppCore.DependencyInjection
             services.TryAddEnumerableFrom<Encoding>(r => r.AddResolver(resolver));
 
             services.Should()
-                    .BeEquivalentTo(service1);
+                    .BeEquivalentTo(new [] { service1 });
         }
 
         [Fact]

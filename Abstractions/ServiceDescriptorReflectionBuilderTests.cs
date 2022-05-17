@@ -41,7 +41,7 @@ namespace AppCore.DependencyInjection
             IReadOnlyCollection<ServiceDescriptor> serviceDescriptors = builder.Resolve();
 
             serviceDescriptors.Should()
-                              .BeEquivalentTo(serviceDescriptor1, serviceDescriptor2);
+                              .BeEquivalentTo(new [] { serviceDescriptor1, serviceDescriptor2 });
         }
     }
 }

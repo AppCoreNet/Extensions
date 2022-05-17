@@ -25,14 +25,17 @@ namespace AppCore.DependencyInjection
             serviceDescriptors
                 .Should()
                 .BeEquivalentTo(
-                    ServiceDescriptor.Describe(
-                        contractType,
-                        typeof(ContractImpl1),
-                        ServiceLifetime.Transient),
-                    ServiceDescriptor.Describe(
-                        contractType,
-                        typeof(ContractImpl2),
-                        ServiceLifetime.Transient));
+                    new[]
+                    {
+                        ServiceDescriptor.Describe(
+                            contractType,
+                            typeof(ContractImpl1),
+                            ServiceLifetime.Transient),
+                        ServiceDescriptor.Describe(
+                            contractType,
+                            typeof(ContractImpl2),
+                            ServiceLifetime.Transient)
+                    });
         }
 
         [Fact]
@@ -51,22 +54,25 @@ namespace AppCore.DependencyInjection
             serviceDescriptors
                 .Should()
                 .BeEquivalentTo(
-                    ServiceDescriptor.Describe(
-                        contractType,
-                        typeof(ContractImpl1<>),
-                        ServiceLifetime.Transient),
-                    ServiceDescriptor.Describe(
-                        contractType,
-                        typeof(ContractImpl2<>),
-                        ServiceLifetime.Transient),
-                    ServiceDescriptor.Describe(
-                        closedContractType,
-                        typeof(ContractImpl1String),
-                        ServiceLifetime.Transient),
-                    ServiceDescriptor.Describe(
-                        closedContractType,
-                        typeof(ContractImpl2String),
-                        ServiceLifetime.Transient));
+                    new[]
+                    {
+                        ServiceDescriptor.Describe(
+                            contractType,
+                            typeof(ContractImpl1<>),
+                            ServiceLifetime.Transient),
+                        ServiceDescriptor.Describe(
+                            contractType,
+                            typeof(ContractImpl2<>),
+                            ServiceLifetime.Transient),
+                        ServiceDescriptor.Describe(
+                            closedContractType,
+                            typeof(ContractImpl1String),
+                            ServiceLifetime.Transient),
+                        ServiceDescriptor.Describe(
+                            closedContractType,
+                            typeof(ContractImpl2String),
+                            ServiceLifetime.Transient)
+                    });
         }
 
         [Fact]
