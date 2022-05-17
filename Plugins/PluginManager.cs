@@ -82,20 +82,20 @@ namespace AppCore.Hosting.Plugins
         }
 
         /// <inheritdoc />
-        public IPluginService<object> GetService(Type serviceType)
+        public IPluginService<object>? GetService(Type serviceType)
         {
             Type pluginServiceType = _pluginServiceTypeCache.GetOrAdd(
                 serviceType,
                 t => typeof(PluginService<>).MakeGenericType(t));
 
-            IPluginService<object> result = null;
+            IPluginService<object>? result = null;
 
             foreach (IPlugin plugin in Plugins)
             {
-                object service = plugin.GetService(serviceType);
+                object? service = plugin.GetService(serviceType);
                 if (service != null)
                 {
-                    result = (IPluginService<object>) Activator.CreateInstance(pluginServiceType, plugin, service);
+                    result = (IPluginService<object>) Activator.CreateInstance(pluginServiceType, plugin, service)!;
                 }
             }
 
@@ -132,7 +132,7 @@ namespace AppCore.Hosting.Plugins
 
         private IEnumerable<(string assemblyName,PluginLoader loader)> GetPluginLoaders()
         {
-            PluginLoader GetPluginLoader(string assemblyPath)
+            PluginLoader? GetPluginLoader(string assemblyPath)
             {
                 if (!File.Exists(assemblyPath))
                 {
@@ -154,7 +154,7 @@ namespace AppCore.Hosting.Plugins
                 if (!Path.IsPathRooted(pluginDll))
                     pluginDll = Path.GetFullPath(pluginDll, _options.BasePath);
 
-                PluginLoader loader = GetPluginLoader(pluginDll);
+                PluginLoader? loader = GetPluginLoader(pluginDll);
                 if (loader != null)
                     yield return (pluginDll, loader);
             }
@@ -174,7 +174,7 @@ namespace AppCore.Hosting.Plugins
                     string dirName = Path.GetFileName(dir);
                     string pluginDll = Path.Combine(dir, dirName + ".dll");
 
-                    PluginLoader loader = GetPluginLoader(pluginDll);
+                    PluginLoader? loader = GetPluginLoader(pluginDll);
                     if (loader != null)
                         yield return (pluginDll, loader);
                 }

@@ -21,8 +21,8 @@ namespace AppCore.DependencyInjection
         private readonly IActivator _activator;
         private readonly List<IConfigureOptions<PluginOptions>> _configureOptions = new();
 
-        internal static PluginManager PluginManager { get; set; }
-        
+        internal static PluginManager? PluginManager { get; set; }
+
         public PluginFacility(IActivator activator)
         {
             Ensure.Arg.NotNull(activator, nameof(activator));
@@ -73,7 +73,9 @@ namespace AppCore.DependencyInjection
 
             public PluginServiceWrapper(IPluginManager pluginManager)
             {
-                _service = pluginManager.GetService<T>();
+                IPluginService<T>? service = pluginManager.GetService<T>();
+                _service = service ?? throw new InvalidOperationException(
+                    $"The service {typeof(T)} is not known to the plugin manager.");
             }
         }
 

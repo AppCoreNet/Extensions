@@ -26,10 +26,10 @@ namespace AppCore.Hosting.Plugins
         /// </summary>
         /// <typeparam name="T">The type of the service to resolve.</typeparam>
         /// <returns>An enumerable of plugin instances.</returns>
-        public static IPluginService<T> GetService<T>(this IPluginManager manager)
+        public static IPluginService<T>? GetService<T>(this IPluginManager manager)
         {
             Ensure.Arg.NotNull(manager, nameof(manager));
-            return (IPluginService<T>)manager.GetService(typeof(T));
+            return (IPluginService<T>?)manager.GetService(typeof(T));
         }
     }
 }

@@ -4,13 +4,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AppCore.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
 namespace AppCore.DependencyInjection
 {
     /// <summary>
-    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning plugin assemblies. 
+    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning plugin assemblies.
     /// </summary>
     public class PluginServiceDescriptorResolver : IServiceDescriptorResolver
     {
@@ -23,7 +24,7 @@ namespace AppCore.DependencyInjection
         {
             _resolver = new AssemblyServiceDescriptorResolver();
 
-            var pluginManager = PluginFacility.PluginManager;
+            PluginManager? pluginManager = PluginFacility.PluginManager;
             if (pluginManager == null)
                 throw new InvalidOperationException("Please add 'PluginFacility' to the DI container before registering components.");
 

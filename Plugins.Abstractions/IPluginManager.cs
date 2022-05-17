@@ -26,7 +26,7 @@ namespace AppCore.Hosting.Plugins
         /// </summary>
         /// <param name="serviceType">The type of the service to resolve.</param>
         /// <returns>An enumerable of plugin instances.</returns>
-        IPluginService<object> GetService(Type serviceType);
+        IPluginService<object>? GetService(Type serviceType);
 
         /// <summary>
         /// Gets all instances of specified <paramref name="serviceType"/> exported from registered plugins.

@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException">Argument <paramref name="sources"/> or <paramref name="configure"/> is <c>null</c>. </exception>
         public static IServiceDescriptorReflectionBuilder Plugins(
             this IServiceDescriptorReflectionBuilder sources,
-            Action<PluginServiceDescriptorResolver> configure = null)
+            Action<PluginServiceDescriptorResolver>? configure = null)
         {
             Ensure.Arg.NotNull(sources, nameof(sources));
             return sources.AddResolver(configure);

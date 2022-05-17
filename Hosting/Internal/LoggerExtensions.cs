@@ -8,19 +8,19 @@ namespace AppCore.Hosting
 {
     internal static class LoggerExtensions
     {
-        private static readonly Action<ILogger, string, Exception> _taskExecuting =
+        private static readonly Action<ILogger, string, Exception?> _taskExecuting =
             LoggerMessage.Define<string>(
                 LogLevel.Trace,
                 LogEventIds.TaskExecuting,
                 "Executing startup task {startupTaskType}...");
 
-        private static readonly Action<ILogger, string, long, Exception> _taskExecuted =
+        private static readonly Action<ILogger, string, long, Exception?> _taskExecuted =
             LoggerMessage.Define<string, long>(
                 LogLevel.Debug,
                 LogEventIds.TaskExecuted,
                 "Startup task {startupTaskType} finished in {elapsedTime} ms.");
 
-        private static readonly Action<ILogger, string, long, Exception> _taskFailed =
+        private static readonly Action<ILogger, string, long, Exception?> _taskFailed =
             LoggerMessage.Define<string, long>(
                 LogLevel.Error,
                 LogEventIds.TaskFailed,

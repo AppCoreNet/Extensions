@@ -35,7 +35,7 @@ namespace AppCore.Hosting.Plugins
         public static IInternalPluginServiceCollection<object> Create(Type serviceType)
         {
             Type type = _typeCache.GetOrAdd(serviceType, t => typeof(InternalCollection<>).MakeGenericType(serviceType));
-            return (IInternalPluginServiceCollection<object>) Activator.CreateInstance(type);
+            return (IInternalPluginServiceCollection<object>) Activator.CreateInstance(type)!;
         }
     }
 }

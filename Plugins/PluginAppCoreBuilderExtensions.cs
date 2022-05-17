@@ -21,7 +21,7 @@ namespace AppCore.DependencyInjection
         /// <returns>The passed <see cref="IAppCoreBuilder"/> to allow chaining.</returns>
         public static IAppCoreBuilder AddPlugins(
             this IAppCoreBuilder builder,
-            Action<PluginFacility> configure = null)
+            Action<PluginFacility>? configure = null)
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
             builder.Services.AddFacility(configure);

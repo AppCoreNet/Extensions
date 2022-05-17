@@ -9,7 +9,7 @@ using AppCore.Hosting.Plugins;
 namespace AppCore.DependencyInjection.Facilities
 {
     /// <summary>
-    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning plugin assemblies. 
+    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning plugin assemblies.
     /// </summary>
     public class PluginFacilityResolver : IFacilityResolver
     {
@@ -23,7 +23,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// <inheritdoc />
         IEnumerable<Facility> IFacilityResolver.Resolve()
         {
-            PluginManager pluginManager = PluginFacility.PluginManager;
+            PluginManager? pluginManager = PluginFacility.PluginManager;
             if (pluginManager == null)
                 throw new InvalidOperationException("Please add the 'PluginFacility' to the DI container before registering components.");
 

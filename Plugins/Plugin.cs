@@ -21,7 +21,7 @@ namespace AppCore.Hosting.Plugins
 
         private static readonly MethodInfo _enumerableOfTypeMethod = typeof(Enumerable).GetMethod(
             nameof(Enumerable.OfType),
-            BindingFlags.Public | BindingFlags.Static);
+            BindingFlags.Public | BindingFlags.Static)!;
 
         private static readonly ConcurrentDictionary<Type, Func<IEnumerable, IEnumerable>> _enumerableOfTypeMethodCache = new();
 
@@ -65,7 +65,7 @@ namespace AppCore.Hosting.Plugins
             return action(list);
         }
 
-        public object GetService(Type serviceType)
+        public object? GetService(Type serviceType)
         {
             Ensure.Arg.NotNull(serviceType, nameof(serviceType));
 
@@ -80,7 +80,7 @@ namespace AppCore.Hosting.Plugins
             scanner.IncludePrivateTypes = _options.ResolvePrivateTypes;
             scanner.Filters.Clear();
 
-            object instance = null;
+            object? instance = null;
             if (isEnumerable)
             {
                 var result = new List<object>();
