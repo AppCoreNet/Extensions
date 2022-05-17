@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
         public static IServiceDescriptorReflectionBuilder DependencyContext(
             this IServiceDescriptorReflectionBuilder builder,
-            Action<DependencyContextServiceDescriptorResolver> configure = null)
+            Action<DependencyContextServiceDescriptorResolver>? configure = null)
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
             Ensure.Arg.NotNull(configure, nameof(configure));

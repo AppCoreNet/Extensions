@@ -37,7 +37,7 @@ namespace AppCore.DependencyInjection
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T> configure = null)
+        public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T>? configure = null)
             where T : IServiceDescriptorResolver, new()
         {
             var source = new T();

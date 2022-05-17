@@ -19,7 +19,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// <summary>
         /// Gets the <see cref="Facility"/> of the extensions.
         /// </summary>
-        public Facility Facility { get; internal set; }
+        public Facility? Facility { get; internal set; }
 
         /// <summary>
         /// Registers a callback which is invoked when the services are configured.

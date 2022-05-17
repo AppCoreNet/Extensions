@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
         public static IServiceDescriptorReflectionBuilder Assemblies(
             this IServiceDescriptorReflectionBuilder builder,
-            Action<AssemblyServiceDescriptorResolver> configure = null)
+            Action<AssemblyServiceDescriptorResolver>? configure = null)
         {
             Ensure.Arg.NotNull(builder, nameof(builder));
             Ensure.Arg.NotNull(configure, nameof(configure));
@@ -35,7 +35,6 @@ namespace Microsoft.Extensions.DependencyInjection
         /// Adds service descriptors from the calling assembly by reflection.
         /// </summary>
         /// <param name="builder">The <see cref="IServiceDescriptorReflectionBuilder"/>.</param>
-        /// <param name="configure">The delegate to configure the <see cref="AssemblyServiceDescriptorResolver"/>.</param>
         /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/>.</returns>
         /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
         public static IServiceDescriptorReflectionBuilder Assembly(this IServiceDescriptorReflectionBuilder builder)

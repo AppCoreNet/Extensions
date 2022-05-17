@@ -23,12 +23,12 @@ namespace AppCore.DependencyInjection
             _additionalServices.Add(serviceType, instance);
         }
 
-        public object GetService(Type serviceType)
+        public object? GetService(Type serviceType)
         {
             if (_additionalServices.TryGetValue(serviceType, out object instance))
                 return instance;
 
-            ServiceDescriptor serviceDescriptor = _services.FirstOrDefault(
+            ServiceDescriptor? serviceDescriptor = _services.FirstOrDefault(
                 sd => sd.ServiceType == serviceType && sd.Lifetime == ServiceLifetime.Singleton);
 
             if (serviceDescriptor != null)

@@ -33,7 +33,7 @@ namespace AppCore.DependencyInjection
         /// <param name="configure">The configuration delegate.</param>
         /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T> configure = null)
+        public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T>? configure = null)
             where T : IServiceDescriptorResolver, new();
     }
 }

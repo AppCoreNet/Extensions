@@ -24,7 +24,7 @@ namespace AppCore.DependencyInjection.Facilities
             return this;
         }
 
-        public IFacilityReflectionBuilder AddResolver<T>(Action<T> configure = null)
+        public IFacilityReflectionBuilder AddResolver<T>(Action<T>? configure = null)
             where T : IFacilityResolver
         {
             var resolver = _activator.CreateInstance<T>();

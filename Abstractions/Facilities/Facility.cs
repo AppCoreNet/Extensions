@@ -18,11 +18,11 @@ namespace AppCore.DependencyInjection.Facilities
     {
         private class ExtensionCallback
         {
-            public Action<FacilityExtension> Configure { get; }
+            public Action<FacilityExtension>? Configure { get; }
 
             public bool Invoked { get; set; }
 
-            public ExtensionCallback(Action<FacilityExtension> configure)
+            public ExtensionCallback(Action<FacilityExtension>? configure)
             {
                 Configure = configure;
             }
@@ -50,7 +50,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// <param name="extensionType">The type of the facility extension.</param>
         /// <param name="configure">The configuration delegate.</param>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void AddExtension(Type extensionType, Action<FacilityExtension> configure = null)
+        public void AddExtension(Type extensionType, Action<FacilityExtension>? configure = null)
         {
             Ensure.Arg.NotNull(extensionType, nameof(extensionType));
             Ensure.Arg.OfType(extensionType, typeof(FacilityExtension), nameof(extensionType));
@@ -73,7 +73,7 @@ namespace AppCore.DependencyInjection.Facilities
         /// </summary>
         /// <typeparam name="T">The type of the facility extension.</typeparam>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public void AddExtension<T>(Action<T> configure = null)
+        public void AddExtension<T>(Action<T>? configure = null)
             where T : FacilityExtension
         {
             AddExtension(typeof(T), f => configure?.Invoke((T) f));
@@ -87,7 +87,7 @@ namespace AppCore.DependencyInjection.Facilities
 
                 foreach (KeyValuePair<Type, List<ExtensionCallback>> extensionTypeCallback in _extensionTypes.ToArray())
                 {
-                    FacilityExtension extension =
+                    FacilityExtension? extension =
                         _extensions.FirstOrDefault(e => e.GetType() == extensionTypeCallback.Key);
 
                     if (extension == null)

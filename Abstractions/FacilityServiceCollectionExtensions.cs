@@ -22,7 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">The <see cref="IServiceCollection"/>.</param>
         /// <param name="configure">The delegate to configure the facility.</param>
         /// <returns>The <see cref="IServiceCollection"/>.</returns>
-        public static IServiceCollection AddFacility<T>(this IServiceCollection services, Action<T> configure = null)
+        public static IServiceCollection AddFacility<T>(this IServiceCollection services, Action<T>? configure = null)
             where T : Facility
         {
             return AddFacility(services, typeof(T), f => configure?.Invoke((T) f));
@@ -38,7 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddFacility(
             this IServiceCollection services,
             Type facilityType,
-            Action<Facility> configure = null)
+            Action<Facility>? configure = null)
         {
             Ensure.Arg.NotNull(services, nameof(services));
             Ensure.Arg.NotNull(facilityType, nameof(facilityType));
