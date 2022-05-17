@@ -8,8 +8,8 @@ namespace AppCore.Hosting.Plugins
 #if NETCOREAPP3_1
         private const string FrameworkPath = "netcoreapp3.1";
 #endif
-#if NET5_0
-        private const string FrameworkPath = "net5";
+#if NET6_0
+        private const string FrameworkPath = "net6";
 #endif
 
 #if DEBUG

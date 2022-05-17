@@ -13,9 +13,11 @@ namespace AppCore.Hosting.Plugins
 {
     public class PluginFacilityResolverTests
     {
+        #nullable disable
         private class ServiceCollection : List<ServiceDescriptor>, IServiceCollection
         {
         }
+        #nullable restore
 
         [Fact]
         public void RegistersFacilities()

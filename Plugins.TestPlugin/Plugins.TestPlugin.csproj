@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net5</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
     <InformationalVersion>11.10.0</InformationalVersion>
     <Description>Plugin1 Description</Description>
     <Copyright>Plugin1 Copyright</Copyright>

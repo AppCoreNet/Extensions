@@ -80,16 +80,19 @@ namespace AppCore.Hosting.Plugins
             manager.Plugins.Select(p => p.Info)
                    .Should()
                    .BeEquivalentTo(
-                       new PluginInfo(
-                           "AppCore.Hosting.Plugins.TestPlugin",
-                           "11.10.0",
-                           "Plugin1 Description",
-                           "Plugin1 Copyright"),
-                       new PluginInfo(
-                           "AppCore.Hosting.Plugins.TestPlugin2",
-                           "12.10.0",
-                           "Plugin2 Description",
-                           "Plugin2 Copyright"));
+                       new[]
+                       {
+                           new PluginInfo(
+                               "AppCore.Hosting.Plugins.TestPlugin",
+                               "11.10.0",
+                               "Plugin1 Description",
+                               "Plugin1 Copyright"),
+                           new PluginInfo(
+                               "AppCore.Hosting.Plugins.TestPlugin2",
+                               "12.10.0",
+                               "Plugin2 Description",
+                               "Plugin2 Copyright")
+                       });
         }
 
         [Fact]
@@ -114,12 +117,12 @@ namespace AppCore.Hosting.Plugins
             options.Assemblies.Add(PluginPaths.TestPlugin);
             options.Assemblies.Add(PluginPaths.TestPlugin2);
 
-            var lifetime = Substitute.For<IApplicationLifetime>();
+            var lifetime = Substitute.For<IHostApplicationLifetime>();
 
             var serviceProvider = Substitute.For<IServiceProvider>();
-            serviceProvider.GetService(typeof(IApplicationLifetime))
+            serviceProvider.GetService(typeof(IHostApplicationLifetime))
                      .Returns(lifetime);
-            
+
             var manager = new PluginManager(new ServiceProviderActivator(serviceProvider), Options.Create(options));
             List<IPluginService<IHostedService>> instances =
                 manager.GetServices<IHostedService>()
@@ -128,7 +131,7 @@ namespace AppCore.Hosting.Plugins
             instances.Select(
                          i =>
                              i.Instance.GetType()
-                              .GetProperty("Lifetime")
+                              .GetProperty("Lifetime")!
                               .GetValue(i.Instance))
                      .Should()
                      .AllBeEquivalentTo(lifetime);

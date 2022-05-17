@@ -10,9 +10,9 @@ namespace AppCore.Hosting.Plugins.TestPlugin2
 {
     public class TestFacilityService : IHostedService
     {
-        public IApplicationLifetime Lifetime { get; }
+        public IHostApplicationLifetime Lifetime { get; }
 
-        public TestFacilityService(IApplicationLifetime lifetime)
+        public TestFacilityService(IHostApplicationLifetime lifetime)
         {
             Lifetime = lifetime;
         }

@@ -10,13 +10,13 @@ namespace AppCore.Hosting.Plugins.TestPlugin
 {
     public class TestFacilityService : IHostedService
     {
-        public IApplicationLifetime Lifetime { get; }
+        public IHostApplicationLifetime Lifetime { get; }
 
-        public TestFacilityService(IApplicationLifetime lifetime)
+        public TestFacilityService(IHostApplicationLifetime lifetime)
         {
             Lifetime = lifetime;
         }
-        
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
