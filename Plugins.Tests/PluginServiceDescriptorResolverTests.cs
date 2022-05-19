@@ -20,18 +20,14 @@ namespace AppCore.Hosting.Plugins
         [Fact]
         public void RegistersServices()
         {
-            PluginFacility.PluginManager = null;
-
             var services = new ServiceCollection();
-            services.AddAppCore().AddPlugins(
-                p =>
-                {
-                    p.Configure(o =>
-                    {
-                        o.Assemblies.Add(PluginPaths.TestPlugin);
-                        o.Assemblies.Add(PluginPaths.TestPlugin2);
-                    });
-                });
+            services.AddAppCore()
+                    .AddPlugins(
+                        o =>
+                        {
+                            o.Assemblies.Add(PluginPaths.TestPlugin);
+                            o.Assemblies.Add(PluginPaths.TestPlugin2);
+                        });
 
             services.TryAddEnumerableFrom<IStartupTask>(s => s.Plugins());
 

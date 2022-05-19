@@ -6,7 +6,6 @@ using System.Linq;
 using AppCore.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using NSubstitute;
 using Xunit;
 
 namespace AppCore.Hosting.Plugins
@@ -22,18 +21,14 @@ namespace AppCore.Hosting.Plugins
         [Fact]
         public void RegistersFacilities()
         {
-            PluginFacility.PluginManager = null;
-
             var services = new ServiceCollection();
-            services.AddAppCore().AddPlugins(
-                p =>
-                {
-                    p.Configure(o =>
-                    {
-                        o.Assemblies.Add(PluginPaths.TestPlugin);
-                        o.Assemblies.Add(PluginPaths.TestPlugin2);
-                    });
-                });
+            services.AddAppCore()
+                    .AddPlugins(
+                        o =>
+                        {
+                            o.Assemblies.Add(PluginPaths.TestPlugin);
+                            o.Assemblies.Add(PluginPaths.TestPlugin2);
+                        });
 
             services.AddFacilitiesFrom(s => s.Plugins());
 
@@ -55,17 +50,13 @@ namespace AppCore.Hosting.Plugins
         [Fact]
         public void RegistersFacilityWithServices()
         {
-            PluginFacility.PluginManager = null;
-
             var services = new ServiceCollection();
-            services.AddAppCore().AddPlugins(
-                p =>
-                {
-                    p.Configure(o =>
-                    {
-                        o.Assemblies.Add(PluginPaths.TestPlugin);
-                    });
-                });
+            services.AddAppCore()
+                    .AddPlugins(
+                        o =>
+                        {
+                            o.Assemblies.Add(PluginPaths.TestPlugin);
+                        });
 
             services.AddFacilitiesFrom(s => s.Plugins());
 
