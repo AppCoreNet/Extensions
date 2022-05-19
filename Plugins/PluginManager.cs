@@ -42,7 +42,7 @@ namespace AppCore.Hosting.Plugins
 
             _activator = activator;
             _options = options.Value;
-            _plugins = new Lazy<IReadOnlyCollection<IPlugin>>(() => LoadPluginsCore().AsReadOnly());
+            _plugins = new Lazy<IReadOnlyCollection<IPlugin>>(() => LoadPluginsCore(new HashSet<string>()));
         }
 
         internal PluginManager(PluginManager parent, IActivator activator, IOptions<PluginOptions> options)
@@ -53,14 +53,27 @@ namespace AppCore.Hosting.Plugins
             if (parent._plugins.IsValueCreated)
             {
                 _plugins = new Lazy<IReadOnlyCollection<IPlugin>>(
-                    parent._plugins.Value.OfType<Plugin>()
-                          .Select(p => new Plugin(p.Loader, activator, _options))
-                          .ToArray);
+                    () =>
+                    {
+                        // use already existing plugin instances from parent
+                        var plugins = new List<Plugin>(
+                            parent._plugins.Value.OfType<Plugin>()
+                                  .Select(p => new Plugin(p.Loader, activator, _options)));
+
+                        // add not already loaded plugins
+                        plugins.AddRange(
+                            LoadPluginsCore(
+                                new HashSet<string>(
+                                    plugins.Select(p => p.Assembly.GetName().Name!),
+                                    StringComparer.InvariantCultureIgnoreCase)));
+
+                        return plugins;
+                    });
             }
             else
             {
                 _plugins = new Lazy<IReadOnlyCollection<IPlugin>>(
-                    () => LoadPluginsCore().AsReadOnly());
+                    () => LoadPluginsCore(new HashSet<string>()));
             }
         }
 
@@ -108,11 +121,11 @@ namespace AppCore.Hosting.Plugins
             _ = _plugins.Value;
         }
 
-        private List<IPlugin> LoadPluginsCore()
+        private List<Plugin> LoadPluginsCore(HashSet<string> loadedPlugins)
         {
-            List<IPlugin> result = new();
+            List<Plugin> result = new();
 
-            IEnumerable<(string assemblyName, PluginLoader loader)> plugins = GetPluginLoaders();
+            IEnumerable<(string assemblyName, PluginLoader loader)> plugins = GetPluginLoaders(loadedPlugins);
 
             foreach ((string assemblyName, PluginLoader loader) plugin in plugins)
             {
@@ -130,7 +143,7 @@ namespace AppCore.Hosting.Plugins
             return result;
         }
 
-        private IEnumerable<(string assemblyName,PluginLoader loader)> GetPluginLoaders()
+        private IEnumerable<(string assemblyName, PluginLoader loader)> GetPluginLoaders(HashSet<string> loadedPlugins)
         {
             PluginLoader? GetPluginLoader(string assemblyPath)
             {
@@ -154,6 +167,10 @@ namespace AppCore.Hosting.Plugins
                 if (!Path.IsPathRooted(pluginDll))
                     pluginDll = Path.GetFullPath(pluginDll, _options.BasePath);
 
+                string pluginName = Path.GetFileNameWithoutExtension(pluginDll);
+                if (loadedPlugins.Contains(pluginName))
+                    continue;
+
                 PluginLoader? loader = GetPluginLoader(pluginDll);
                 if (loader != null)
                     yield return (pluginDll, loader);
@@ -173,6 +190,10 @@ namespace AppCore.Hosting.Plugins
                 {
                     string dirName = Path.GetFileName(dir);
                     string pluginDll = Path.Combine(dir, dirName + ".dll");
+
+                    string pluginName = Path.GetFileNameWithoutExtension(pluginDll);
+                    if (loadedPlugins.Contains(pluginName))
+                        continue;
 
                     PluginLoader? loader = GetPluginLoader(pluginDll);
                     if (loader != null)

@@ -3,6 +3,7 @@
 
 using System;
 using AppCore.DependencyInjection;
+using AppCore.Diagnostics;
 using Microsoft.Extensions.Hosting;
 
 // ReSharper disable once CheckNamespace

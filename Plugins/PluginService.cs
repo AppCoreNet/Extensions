@@ -3,7 +3,7 @@
 
 namespace AppCore.Hosting.Plugins
 {
-    internal class PluginService<T> : IPluginService<T>
+    internal sealed class PluginService<T> : IPluginService<T>
     {
         public T Instance { get; }
 

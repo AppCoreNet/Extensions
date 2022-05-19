@@ -1,8 +1,8 @@
 // Licensed under the MIT License.
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
-using System;
 using System.Collections.Generic;
+using AppCore.Diagnostics;
 using AppCore.Hosting.Plugins;
 
 // ReSharper disable once CheckNamespace
@@ -13,21 +13,22 @@ namespace AppCore.DependencyInjection.Facilities
     /// </summary>
     public class PluginFacilityResolver : IFacilityResolver
     {
+        private readonly IPluginManager _pluginManager;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginFacilityResolver"/> class.
         /// </summary>
-        public PluginFacilityResolver()
+        /// <param name="pluginManager">The <see cref="IPluginManager"/>.</param>
+        public PluginFacilityResolver(IPluginManager pluginManager)
         {
+            Ensure.Arg.NotNull(pluginManager);
+            _pluginManager = pluginManager;
         }
 
         /// <inheritdoc />
         IEnumerable<Facility> IFacilityResolver.Resolve()
         {
-            PluginManager? pluginManager = PluginFacility.PluginManager;
-            if (pluginManager == null)
-                throw new InvalidOperationException("Please add the 'PluginFacility' to the DI container before registering components.");
-
-            foreach (IPluginService<Facility> facility in pluginManager.GetServices<Facility>())
+            foreach (IPluginService<Facility> facility in _pluginManager.GetServices<Facility>())
             {
                 yield return facility.Instance;
             }

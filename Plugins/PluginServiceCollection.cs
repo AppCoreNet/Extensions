@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AppCore.Hosting.Plugins
 {
-    internal class PluginServiceCollection
+    internal sealed class PluginServiceCollection
     {
         private static readonly ConcurrentDictionary<Type, Type> _typeCache = new();
 

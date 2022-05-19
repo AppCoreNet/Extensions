@@ -14,7 +14,7 @@ using McMaster.NETCore.Plugins;
 
 namespace AppCore.Hosting.Plugins
 {
-    internal class Plugin : IPlugin
+    internal sealed class Plugin : IPlugin
     {
         private readonly IActivator _activator;
         private readonly PluginOptions _options;

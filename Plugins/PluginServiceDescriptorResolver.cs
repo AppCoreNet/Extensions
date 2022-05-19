@@ -4,8 +4,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AppCore.Diagnostics;
 using AppCore.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
 namespace AppCore.DependencyInjection
@@ -15,23 +17,20 @@ namespace AppCore.DependencyInjection
     /// </summary>
     public class PluginServiceDescriptorResolver : IServiceDescriptorResolver
     {
-        private readonly AssemblyServiceDescriptorResolver _resolver;
+        private readonly List<Predicate<Type>> _filters = new();
+        private readonly IPluginManager _pluginManager;
+        private readonly IOptions<PluginOptions> _pluginOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginServiceDescriptorResolver"/> class.
         /// </summary>
-        public PluginServiceDescriptorResolver()
+        /// <param name="pluginManager">The <see cref="IPluginManager"/>.</param>
+        /// <param name="pluginOptions">The plugin options.</param>
+        public PluginServiceDescriptorResolver(IPluginManager pluginManager, IOptions<PluginOptions> pluginOptions)
         {
-            _resolver = new AssemblyServiceDescriptorResolver();
-
-            PluginManager? pluginManager = PluginFacility.PluginManager;
-            if (pluginManager == null)
-                throw new InvalidOperationException("Please add 'PluginFacility' to the DI container before registering components.");
-
-            _resolver.Add(pluginManager.Plugins.Select(p => p.Assembly));
-            _resolver.WithPrivateTypes(pluginManager.Options.ResolvePrivateTypes);
-            _resolver.ClearDefaultFilters();
-
+            Ensure.Arg.NotNull(pluginManager);
+            _pluginManager = pluginManager;
+            _pluginOptions = pluginOptions;
         }
 
         /// <summary>
@@ -41,7 +40,8 @@ namespace AppCore.DependencyInjection
         /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
         public PluginServiceDescriptorResolver Filter(Predicate<Type> filter)
         {
-            _resolver.Filter(filter);
+            Ensure.Arg.NotNull(filter);
+            _filters.Add(filter);
             return this;
         }
 
@@ -51,14 +51,24 @@ namespace AppCore.DependencyInjection
         /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
         public PluginServiceDescriptorResolver ClearFilters()
         {
-            _resolver.ClearFilters();
+            _filters.Clear();
             return this;
         }
 
         /// <inheritdoc />
         IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve(Type serviceType, ServiceLifetime defaultLifetime)
         {
-            return ((IServiceDescriptorResolver)_resolver).Resolve(serviceType, defaultLifetime);
+            var resolver = new AssemblyServiceDescriptorResolver();
+
+            resolver.Add(_pluginManager.Plugins.Select(p => p.Assembly));
+            resolver.WithPrivateTypes(_pluginOptions.Value.ResolvePrivateTypes);
+            resolver.ClearDefaultFilters();
+            foreach (Predicate<Type> filter in _filters)
+            {
+                resolver.Filter(filter);
+            }
+
+            return ((IServiceDescriptorResolver)resolver).Resolve(serviceType, defaultLifetime);
         }
     }
 }
