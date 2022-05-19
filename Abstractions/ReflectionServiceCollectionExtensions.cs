@@ -16,6 +16,17 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class ReflectionServiceCollectionExtensions
     {
+        private static ServiceDescriptorReflectionBuilder CreateBuilder(this IServiceCollection services, Type serviceType)
+        {
+            services.TryAddTransient<IActivator, ServiceProviderActivator>();
+            var serviceProvider = new ServiceCollectionServiceProvider(services);
+            var builder = new ServiceDescriptorReflectionBuilder(
+                serviceProvider.GetRequiredService<IActivator>(),
+                serviceType);
+
+            return builder;
+        }
+
         /// <summary>
         /// Adds services by resolving them from <see cref="IServiceDescriptorResolver"/>'s.
         /// </summary>
@@ -31,7 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Ensure.Arg.NotNull(services, nameof(services));
             Ensure.Arg.NotNull(configure, nameof(configure));
 
-            var sources = new ServiceDescriptorReflectionBuilder(serviceType);
+            ServiceDescriptorReflectionBuilder sources = services.CreateBuilder(serviceType);
             configure(sources);
             return services.Add(sources.Resolve());
         }
@@ -65,7 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Ensure.Arg.NotNull(services, nameof(services));
             Ensure.Arg.NotNull(configure, nameof(configure));
 
-            var sources = new ServiceDescriptorReflectionBuilder(serviceType);
+            ServiceDescriptorReflectionBuilder sources = services.CreateBuilder(serviceType);
             configure(sources);
             services.TryAdd(sources.Resolve());
             return services;
@@ -104,7 +115,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Ensure.Arg.NotNull(services, nameof(services));
             Ensure.Arg.NotNull(configure, nameof(configure));
 
-            var sources = new ServiceDescriptorReflectionBuilder(serviceType);
+            ServiceDescriptorReflectionBuilder sources = services.CreateBuilder(serviceType);
             configure(sources);
             services.TryAddEnumerable(sources.Resolve());
             return services;
@@ -140,14 +151,14 @@ namespace Microsoft.Extensions.DependencyInjection
             Ensure.Arg.NotNull(services, nameof(services));
             Ensure.Arg.NotNull(configure, nameof(configure));
 
+            services.TryAddTransient<IActivator, ServiceProviderActivator>();
             var serviceProvider = new ServiceCollectionServiceProvider(services);
-            var activator = new ServiceProviderActivator(serviceProvider);
-            serviceProvider.AddService(typeof(IActivator), activator);
+            var activator = serviceProvider.GetRequiredService<IActivator>();
+            var builder = new FacilityReflectionBuilder(activator);
 
-            var facilities = new FacilityReflectionBuilder(activator);
-            configure(facilities);
+            configure(builder);
 
-            foreach (Facility facility in facilities.Resolve())
+            foreach (Facility facility in builder.Resolve())
             {
                 facility.ConfigureServices(activator, services);
             }

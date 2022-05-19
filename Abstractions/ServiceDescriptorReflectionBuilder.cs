@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,12 +14,16 @@ namespace AppCore.DependencyInjection
     internal class ServiceDescriptorReflectionBuilder : IServiceDescriptorReflectionBuilder
     {
         private readonly List<IServiceDescriptorResolver> _resolvers = new();
+        private readonly IActivator _activator;
         private readonly Type _serviceType;
         private ServiceLifetime _defaultLifetime = ServiceLifetime.Transient;
 
-        public ServiceDescriptorReflectionBuilder(Type serviceType)
+        public ServiceDescriptorReflectionBuilder(IActivator activator, Type serviceType)
         {
-            Ensure.Arg.NotNull(serviceType, nameof(serviceType));
+            Ensure.Arg.NotNull(activator);
+            Ensure.Arg.NotNull(serviceType);
+
+            _activator = activator;
             _serviceType = serviceType;
         }
 
@@ -38,9 +43,9 @@ namespace AppCore.DependencyInjection
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T>? configure = null)
-            where T : IServiceDescriptorResolver, new()
+            where T : IServiceDescriptorResolver
         {
-            var source = new T();
+            var source = _activator.CreateInstance<T>();
             configure?.Invoke(source);
             return AddResolver(source);
         }

@@ -6,6 +6,7 @@ using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Activator;
 using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
@@ -44,13 +45,15 @@ namespace Microsoft.Extensions.DependencyInjection
             Ensure.Arg.NotNull(facilityType, nameof(facilityType));
             Ensure.Arg.OfType(facilityType, typeof(Facility), nameof(facilityType));
 
+            services.TryAddTransient<IActivator, ServiceProviderActivator>();
+
             var serviceProvider = new ServiceCollectionServiceProvider(services);
-            var activator = new ServiceProviderActivator(serviceProvider);
-            serviceProvider.AddService(typeof(IActivator), activator);
+            var activator = serviceProvider.GetRequiredService<IActivator>();
 
             var facility = (Facility)activator.CreateInstance(facilityType);
             configure?.Invoke(facility);
             facility.ConfigureServices(activator, services);
+
             return services;
         }
     }

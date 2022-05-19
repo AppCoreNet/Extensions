@@ -34,6 +34,6 @@ namespace AppCore.DependencyInjection
         /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T>? configure = null)
-            where T : IServiceDescriptorResolver, new();
+            where T : IServiceDescriptorResolver;
     }
 }
