@@ -2,6 +2,7 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System.Collections.Generic;
+using AppCore.DependencyInjection.Activator;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -14,7 +15,7 @@ namespace AppCore.DependencyInjection
         [Fact]
         public void ResolveAddsAllServiceDescriptors()
         {
-            var builder = new ServiceDescriptorReflectionBuilder(typeof(string));
+            var builder = new ServiceDescriptorReflectionBuilder(Substitute.For<IActivator>(), typeof(string));
 
             ServiceDescriptor serviceDescriptor1 = ServiceDescriptor.Describe(
                 typeof(string),
