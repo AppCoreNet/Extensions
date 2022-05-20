@@ -22,6 +22,13 @@ namespace AppCore.Hosting.Plugins
         Assembly Assembly { get; }
 
         /// <summary>
+        /// Loads a plugin assembly.
+        /// </summary>
+        /// <param name="fileName">The file name of the assembly.</param>
+        /// <returns>The assembly (if found).</returns>
+        Assembly LoadAssembly(string fileName);
+
+        /// <summary>
         /// Enters the contextual reflection scope.
         /// </summary>
         /// <returns>The <see cref="IDisposable"/>.</returns>

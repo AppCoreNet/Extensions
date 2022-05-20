@@ -117,6 +117,11 @@ namespace AppCore.Hosting.Plugins
             return instance;
         }
 
+        public Assembly LoadAssembly(string fileName)
+        {
+            return Loader.LoadAssembly(fileName);
+        }
+
         public IDisposable EnterContextualReflection()
         {
             return Loader.EnterContextualReflection();

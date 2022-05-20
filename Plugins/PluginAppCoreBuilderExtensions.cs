@@ -18,6 +18,7 @@ namespace AppCore.DependencyInjection
     public static class PluginAppCoreBuilderExtensions
     {
         private static Func<IServiceProvider, PluginManager>? _pluginManagerFactory;
+        private static PluginManager? _pluginManager;
 
         /// <summary>
         /// Adds plugins.
@@ -40,9 +41,10 @@ namespace AppCore.DependencyInjection
                 // plugin manager was already created, re-create with possible options
                 if (_pluginManagerFactory != null)
                 {
-                    Func<IServiceProvider, PluginManager> parentFactory = _pluginManagerFactory;
-                    _pluginManagerFactory = sp => new PluginManager(
-                        parentFactory(sp),
+                    PluginManager pluginManager = _pluginManager!;
+                    _pluginManager = null;
+                    _pluginManagerFactory = sp => _pluginManager ??= new PluginManager(
+                        pluginManager!,
                         sp.GetRequiredService<IActivator>(),
                         sp.GetRequiredService<IOptions<PluginOptions>>());
                 }
@@ -52,8 +54,8 @@ namespace AppCore.DependencyInjection
             services.TryAddTransient(typeof(IPluginService<>), typeof(PluginServiceWrapper<>));
             services.TryAddTransient(typeof(IPluginServiceCollection<>), typeof(PluginServiceCollectionWrapper<>));
 
-            // resolve plugin manager via delegate
-            services.TryAddSingleton(GetOrCreatePluginManager);
+            // resolve plugin manager via delegate, effectively it's a singleton
+            services.TryAddTransient(GetOrCreatePluginManager);
 
             return builder;
         }
@@ -61,7 +63,7 @@ namespace AppCore.DependencyInjection
         private static IPluginManager GetOrCreatePluginManager(IServiceProvider serviceProvider)
         {
             // plugin manager is resolved for the first time, create it directly ...
-            _pluginManagerFactory ??= sp => new PluginManager(
+            _pluginManagerFactory ??= sp => _pluginManager ??= new PluginManager(
                 sp.GetRequiredService<IActivator>(),
                 sp.GetRequiredService<IOptions<PluginOptions>>());
 
