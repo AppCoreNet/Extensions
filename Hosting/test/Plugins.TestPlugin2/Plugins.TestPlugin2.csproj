@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
+    <InformationalVersion>12.10.0</InformationalVersion>
+    <Description>Plugin2 Description</Description>
+    <Copyright>Plugin2 Copyright</Copyright>
+    <IsTestProject>false</IsTestProject>
+    <RootNamespace>AppCore.Hosting.Plugins</RootNamespace>
+    <AssemblyName>AppCore.Hosting.Plugins.TestPlugin2</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AppCore.DependencyInjection.Abstractions" Version="$(AppCore_DI_Version)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Remove="Microsoft.NET.Test.Sdk" />
+    <PackageReference Remove="xunit.runner.console" />
+    <PackageReference Remove="xunit.runner.visualstudio" />
+    <PackageReference Remove="coverlet.msbuild" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Abstractions\Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
