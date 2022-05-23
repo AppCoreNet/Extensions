@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' != 'Unix'">$(TargetFrameworks);net462</TargetFrameworks>
+    <RootNamespace>AppCore.DependencyInjection</RootNamespace>
+    <AssemblyName>AppCore.DependencyInjection.AssemblyExtensions.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AssemblyExtensions\AssemblyExtensions.csproj" />
+  </ItemGroup>
+
+</Project>
