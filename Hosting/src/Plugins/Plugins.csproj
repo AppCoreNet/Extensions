@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
+    <RootNamespace>AppCore.Hosting.Plugins</RootNamespace>
+    <AssemblyName>AppCore.Hosting.Plugins</AssemblyName>
+    <Description>Provides AppCore .NET plugin hosting implementations.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="AppCore.TypeHelpers.Sources" Version="$(AppCore_Shared_Version)">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="AppCore.DependencyInjection.AssemblyExtensions" Version="$(AppCore_DI_Version)" />
+    <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Plugins.Abstractions\Plugins.Abstractions.csproj" />
+    <ProjectReference Include="..\Hosting\Hosting.csproj" />
+  </ItemGroup>
+
+</Project>
