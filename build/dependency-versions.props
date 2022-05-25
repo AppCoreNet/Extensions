@@ -1,8 +1,6 @@
 <Project>
   <PropertyGroup>
-    <AppCore_Shared_Version>0.1.0-alpha*</AppCore_Shared_Version>
-    <AppCore_DI_Version>0.1.0-alpha*</AppCore_DI_Version>
-    <AppCore_Logging_Version>0.1.0-alpha*</AppCore_Logging_Version>
-    <AppCore_Validation_Version>0.1.0-alpha*</AppCore_Validation_Version>
+    <Microsoft_Extensions_Version>3.1.0</Microsoft_Extensions_Version>
+    <AppCore_Shared_Version>0.4.0-alpha.*</AppCore_Shared_Version>
   </PropertyGroup>
 </Project>
