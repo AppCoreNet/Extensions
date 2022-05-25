@@ -8,7 +8,7 @@ Setup<BuildParameters>(context =>
    var parameters = BuildParameters.Create(Context);
    parameters.Initialize();
    
-   Information(Figlet("AppCore.XYZ"));
+   Information(Figlet("AppCore.Extensions"));
    Information($"Version: {parameters.Version.InformationalVersion}");
    
    return parameters;
