@@ -15,8 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
-    <ProjectReference Include="..\AssemblyExtensions\AssemblyExtensions.csproj" />
+    <ProjectReference Include="..\AppCore.Extensions.DependencyInjection.AssemblyExtensions\AppCore.Extensions.DependencyInjection.AssemblyExtensions.csproj" />
   </ItemGroup>
 
 </Project>

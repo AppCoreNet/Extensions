@@ -11,10 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AppCore.DependencyInjection.Abstractions" Version="$(AppCore_DI_Version)" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Remove="Microsoft.NET.Test.Sdk" />
     <PackageReference Remove="xunit.runner.console" />
     <PackageReference Remove="xunit.runner.visualstudio" />
@@ -22,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Abstractions\Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\AppCore.Extensions.Hosting.Abstractions\AppCore.Extensions.Hosting.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

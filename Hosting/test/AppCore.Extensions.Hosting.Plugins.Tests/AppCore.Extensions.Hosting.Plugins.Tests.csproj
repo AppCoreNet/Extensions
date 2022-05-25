@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
+    <RootNamespace>AppCore.Hosting.Plugins</RootNamespace>
+    <AssemblyName>AppCore.Hosting.Plugins.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AppCore.Extensions.Hosting.Plugins\AppCore.Extensions.Hosting.Plugins.csproj" />
+  </ItemGroup>
+
+</Project>

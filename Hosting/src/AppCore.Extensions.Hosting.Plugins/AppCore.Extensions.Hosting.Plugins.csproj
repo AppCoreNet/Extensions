@@ -14,13 +14,13 @@
     <PackageReference Include="AppCore.TypeHelpers.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="AppCore.DependencyInjection.AssemblyExtensions" Version="$(AppCore_DI_Version)" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Plugins.Abstractions\Plugins.Abstractions.csproj" />
-    <ProjectReference Include="..\Hosting\Hosting.csproj" />
+    <ProjectReference Include="..\..\..\DependencyInjection\src\AppCore.Extensions.DependencyInjection.AssemblyExtensions\AppCore.Extensions.DependencyInjection.AssemblyExtensions.csproj" />
+    <ProjectReference Include="..\AppCore.Extensions.Hosting.Plugins.Abstractions\AppCore.Extensions.Hosting.Plugins.Abstractions.csproj" />
+    <ProjectReference Include="..\AppCore.Extensions.Hosting\AppCore.Extensions.Hosting.csproj" />
   </ItemGroup>
 
 </Project>

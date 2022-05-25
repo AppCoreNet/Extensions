@@ -9,6 +9,7 @@
     <RepositoryUrl>https://github.com/AppCoreNet/Extensions</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <!--
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <RestoreLockedMode Condition="'$(CI)' == 'true'">true</RestoreLockedMode>
