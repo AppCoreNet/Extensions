@@ -4,7 +4,8 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace AppCore.Hosting
+// ReSharper disable once CheckNamespace
+namespace AppCore.Extensions.Hosting
 {
     internal static class LoggerExtensions
     {

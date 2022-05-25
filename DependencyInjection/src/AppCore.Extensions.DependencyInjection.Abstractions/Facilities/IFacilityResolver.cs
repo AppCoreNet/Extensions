@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace AppCore.DependencyInjection.Facilities
+namespace AppCore.Extensions.DependencyInjection.Facilities
 {
     /// <summary>
     /// Represents a dynamic resolver for facilities.

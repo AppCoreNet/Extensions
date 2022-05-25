@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     public class ReflectionServiceCollectionExtensionsTests
     {

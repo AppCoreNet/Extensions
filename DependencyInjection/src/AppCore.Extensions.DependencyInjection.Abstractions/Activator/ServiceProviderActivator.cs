@@ -5,7 +5,7 @@ using System;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection.Activator
+namespace AppCore.Extensions.DependencyInjection.Activator
 {
     /// <summary>
     /// Provides an implementation of <see cref="IActivator"/> which uses <see cref="IServiceProvider"/> to

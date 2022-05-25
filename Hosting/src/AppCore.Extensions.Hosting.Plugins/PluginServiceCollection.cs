@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
     internal sealed class PluginServiceCollection
     {

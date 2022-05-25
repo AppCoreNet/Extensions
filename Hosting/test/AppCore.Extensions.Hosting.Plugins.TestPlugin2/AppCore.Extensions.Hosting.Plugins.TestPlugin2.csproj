@@ -6,8 +6,6 @@
     <Description>Plugin2 Description</Description>
     <Copyright>Plugin2 Copyright</Copyright>
     <IsTestProject>false</IsTestProject>
-    <RootNamespace>AppCore.Hosting.Plugins</RootNamespace>
-    <AssemblyName>AppCore.Hosting.Plugins.TestPlugin2</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

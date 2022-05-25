@@ -3,4 +3,4 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("AppCore.DependencyInjection.Abstractions.Tests")]
+[assembly: InternalsVisibleTo("AppCore.Extensions.DependencyInjection.Tests")]

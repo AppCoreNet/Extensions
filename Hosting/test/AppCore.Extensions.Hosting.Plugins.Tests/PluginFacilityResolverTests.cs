@@ -3,12 +3,12 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.DependencyInjection;
+using AppCore.Extensions.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
     public class PluginFacilityResolverTests
     {
@@ -35,15 +35,15 @@ namespace AppCore.Hosting.Plugins
             services.Should()
                     .Contain(
                         r =>
-                            r.ServiceType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
-                            && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
+                            r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
+                            && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
                     );
 
             services.Should()
                     .Contain(
                         r =>
-                            r.ServiceType.FullName == "AppCore.Hosting.Plugins.TestPlugin2.TestFacilityService"
-                            && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin2.TestFacilityService"
+                            r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
+                            && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
                     );
         }
 
@@ -63,8 +63,8 @@ namespace AppCore.Hosting.Plugins
             IEnumerable<ServiceDescriptor> facilityServices =
                 services.Where(
                     r =>
-                        r.ServiceType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService"
-                        && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin.TestFacilityService");
+                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService");
 
             facilityServices.Should()
                             .HaveCount(2);

@@ -4,7 +4,7 @@
 using System;
 using System.ComponentModel;
 
-namespace AppCore.DependencyInjection.Facilities
+namespace AppCore.Extensions.DependencyInjection.Facilities
 {
     /// <summary>
     /// Represents a builder for resolving facilities by reflection.

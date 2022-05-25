@@ -5,7 +5,7 @@ using System.Reflection;
 using FluentAssertions;
 using Xunit;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     public class AssemblyScannerTests
     {

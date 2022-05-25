@@ -5,8 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
+using AppCore.Extensions.DependencyInjection.Activator;
+using AppCore.Extensions.DependencyInjection.Facilities;
 using Microsoft.Extensions.DependencyModel;
 
 // ReSharper disable once CheckNamespace

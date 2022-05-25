@@ -7,7 +7,7 @@ using System.Reflection;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     /// <summary>
     /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning assemblies.
@@ -115,7 +115,7 @@ namespace AppCore.DependencyInjection
 
             foreach (Predicate<Type> filter in _filters)
                 scanner.Filters.Add(filter);
-            
+
             IEnumerable<Type> implementationTypes = scanner.ScanAssemblies();
             bool isOpenGenericContractType = scanner.ContractType.IsGenericTypeDefinition;
 

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     internal class ServiceCollectionServiceProvider : IServiceProvider
     {

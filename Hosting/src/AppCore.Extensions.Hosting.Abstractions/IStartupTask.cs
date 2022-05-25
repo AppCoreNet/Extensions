@@ -4,7 +4,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Hosting
+namespace AppCore.Extensions.Hosting
 {
     /// <summary>
     /// Represents a task that is executed during application startup.

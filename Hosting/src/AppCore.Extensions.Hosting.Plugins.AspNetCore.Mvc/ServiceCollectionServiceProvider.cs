@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Hosting.Plugins.AspNetCore.Mvc
+namespace AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc
 {
     internal sealed class ServiceCollectionServiceProvider : IServiceProvider
     {

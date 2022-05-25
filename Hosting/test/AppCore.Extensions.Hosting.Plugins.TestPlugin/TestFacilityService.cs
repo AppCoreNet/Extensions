@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace AppCore.Hosting.Plugins.TestPlugin
+namespace AppCore.Extensions.Hosting.Plugins.TestPlugin
 {
     public class TestFacilityService : IHostedService
     {

@@ -7,13 +7,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
+using AppCore.Extensions.DependencyInjection.Activator;
 using McMaster.NETCore.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
     /// <summary>
     /// Provides default implementation of the <see cref="IPluginManager"/> interface.

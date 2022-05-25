@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     /// <summary>
     /// Represents a resolver for service descriptors.

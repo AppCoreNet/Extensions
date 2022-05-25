@@ -3,11 +3,10 @@
 
 using System.Collections.Generic;
 using System.Reflection;
-using AppCore.DependencyInjection;
 using AppCore.Diagnostics;
-using AppCore.Hosting.Plugins;
-using AppCore.Hosting.Plugins.AspNetCore;
-using AppCore.Hosting.Plugins.AspNetCore.Mvc;
+using AppCore.Extensions.DependencyInjection;
+using AppCore.Extensions.Hosting.Plugins;
+using AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 // ReSharper disable once CheckNamespace

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     /// <summary>
     /// Represents a type used to scan assemblies for exported types.

@@ -1,15 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
-    <RootNamespace>AppCore.Hosting.Plugins.AspNetCore.Mvc</RootNamespace>
-    <AssemblyName>AppCore.Hosting.Plugins.AspNetCore.Mvc</AssemblyName>
-    <Description>Provides AppCore .NET plugin hosting implementations for ASP .NET Core MVC.</Description>
-    <OutputType>library</OutputType>
-    <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
-    <IsPackable>true</IsPackable>
+    <Description>Provides MVC plugin extensions to the Microsoft.Extensions.Hosting framework.</Description>
   </PropertyGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>

@@ -4,9 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.DependencyInjection.Activator;
+using AppCore.Extensions.DependencyInjection.Activator;
 
-namespace AppCore.DependencyInjection.Facilities
+namespace AppCore.Extensions.DependencyInjection.Facilities
 {
     internal class FacilityReflectionBuilder : IFacilityReflectionBuilder
     {

@@ -5,11 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
+using AppCore.Extensions.DependencyInjection.Activator;
+using AppCore.Extensions.DependencyInjection.Facilities;
 
-// ReSharper disable once CheckNamespace
-namespace AppCore.DependencyInjection.Facilities
+namespace AppCore.Extensions.DependencyInjection.Facilities
 {
     /// <summary>
     /// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning assemblies.
@@ -110,7 +110,7 @@ namespace AppCore.DependencyInjection.Facilities
 
             foreach (Predicate<Type> filter in _filters)
                 scanner.Filters.Add(filter);
-            
+
             return scanner.ScanAssemblies()
                           .Select(facilityType => (Facility) _activator.CreateInstance(facilityType));
         }

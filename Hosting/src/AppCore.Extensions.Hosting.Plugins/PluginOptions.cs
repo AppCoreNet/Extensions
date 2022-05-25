@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
     /// <summary>
     /// Provides options for loading plugins.

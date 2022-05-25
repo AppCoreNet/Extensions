@@ -4,7 +4,7 @@
 using System;
 using AppCore.Diagnostics;
 
-namespace AppCore.DependencyInjection.Activator
+namespace AppCore.Extensions.DependencyInjection.Activator
 {
     /// <summary>
     /// Provides extension methods for the <see cref="IActivator"/> interface.

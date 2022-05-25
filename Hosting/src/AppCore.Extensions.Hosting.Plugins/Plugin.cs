@@ -7,12 +7,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AppCore.DependencyInjection;
-using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
+using AppCore.Extensions.DependencyInjection;
+using AppCore.Extensions.DependencyInjection.Activator;
 using McMaster.NETCore.Plugins;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
     internal sealed class Plugin : IPlugin
     {

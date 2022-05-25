@@ -3,10 +3,10 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using AppCore.Hosting.Plugins;
+using AppCore.Extensions.Hosting.Plugins;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     internal sealed class PluginServiceCollectionWrapper<T> : IPluginServiceCollection<T>
     {

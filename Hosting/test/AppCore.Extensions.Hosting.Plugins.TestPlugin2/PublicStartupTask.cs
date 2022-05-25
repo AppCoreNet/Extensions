@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Hosting.Plugins.TestPlugin2
+namespace AppCore.Extensions.Hosting.Plugins.TestPlugin2
 {
     public class PublicStartupTask : IStartupTask
     {

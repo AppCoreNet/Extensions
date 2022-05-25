@@ -2,15 +2,15 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
-using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
-using AppCore.Hosting.Plugins;
+using AppCore.Extensions.DependencyInjection.Activator;
+using AppCore.Extensions.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     /// <summary>
     /// Provides extension methods to register plugins.

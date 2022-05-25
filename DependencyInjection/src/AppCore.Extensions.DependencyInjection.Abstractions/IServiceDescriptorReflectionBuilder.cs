@@ -5,7 +5,7 @@ using System;
 using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     /// <summary>
     /// Represents a builder for resolving service descriptors by reflection.

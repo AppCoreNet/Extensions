@@ -2,9 +2,9 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using AppCore.DependencyInjection;
 using AppCore.Diagnostics;
-using AppCore.Hosting;
+using AppCore.Extensions.DependencyInjection;
+using AppCore.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 

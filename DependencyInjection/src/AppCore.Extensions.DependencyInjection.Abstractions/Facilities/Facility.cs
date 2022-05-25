@@ -5,11 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using AppCore.DependencyInjection.Activator;
 using AppCore.Diagnostics;
+using AppCore.Extensions.DependencyInjection.Activator;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection.Facilities
+namespace AppCore.Extensions.DependencyInjection.Facilities
 {
     /// <summary>
     /// Represents a facility.

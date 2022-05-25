@@ -4,13 +4,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.DependencyInjection.Activator;
-using AppCore.DependencyInjection.Facilities;
+using AppCore.Extensions.DependencyInjection.Activator;
+using AppCore.Extensions.DependencyInjection.Facilities;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     public class AssemblyFacilityResolverTests
     {

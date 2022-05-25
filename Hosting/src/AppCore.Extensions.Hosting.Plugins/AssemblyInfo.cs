@@ -4,9 +4,9 @@
 using System.Reflection;
 using AppCore.Diagnostics;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
-    internal class AssemblyInfo
+    internal sealed class AssemblyInfo
     {
         public string Title { get; }
 

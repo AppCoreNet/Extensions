@@ -11,7 +11,7 @@ using AppCore.Diagnostics;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace AppCore.Hosting
+namespace AppCore.Extensions.Hosting
 {
     /// <summary>
     /// Provides an implementation of <see cref="IHostedService"/> which runs startup tasks.

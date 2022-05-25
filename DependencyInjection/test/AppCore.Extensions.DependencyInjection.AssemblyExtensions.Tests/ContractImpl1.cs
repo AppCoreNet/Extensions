@@ -1,7 +1,7 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018,2019 the AppCore .NET project.
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     public class ContractImplOpenGeneric<T> : IContract
     {

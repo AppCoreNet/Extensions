@@ -7,7 +7,7 @@ using System.ComponentModel;
 using AppCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.DependencyInjection.Facilities
+namespace AppCore.Extensions.DependencyInjection.Facilities
 {
     /// <summary>
     /// Represents an extension for a facility.

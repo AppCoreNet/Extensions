@@ -2,10 +2,10 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
-using AppCore.Hosting.Plugins;
+using AppCore.Extensions.Hosting.Plugins;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     internal sealed class PluginServiceWrapper<T> : IPluginService<T>
     {

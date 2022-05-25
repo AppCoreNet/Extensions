@@ -2,12 +2,12 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System.Collections.Generic;
-using AppCore.DependencyInjection;
+using AppCore.Extensions.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
     public class PluginServiceDescriptorResolverTests
     {
@@ -34,15 +34,15 @@ namespace AppCore.Hosting.Plugins
             services.Should()
                     .Contain(
                         r =>
-                            r.ServiceType.FullName == "AppCore.Hosting.IStartupTask"
-                            && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin.PublicStartupTask"
+                            r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
+                            && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask"
                     );
 
             services.Should()
                     .Contain(
                         r =>
-                            r.ServiceType.FullName == "AppCore.Hosting.IStartupTask"
-                            && r.ImplementationType.FullName == "AppCore.Hosting.Plugins.TestPlugin2.PublicStartupTask"
+                            r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
+                            && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask"
                     );
         }
     }

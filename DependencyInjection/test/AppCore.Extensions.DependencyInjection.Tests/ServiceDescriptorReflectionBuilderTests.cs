@@ -2,13 +2,13 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System.Collections.Generic;
-using AppCore.DependencyInjection.Activator;
+using AppCore.Extensions.DependencyInjection.Activator;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;
 
-namespace AppCore.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection
 {
     public class ServiceDescriptorReflectionBuilderTests
     {

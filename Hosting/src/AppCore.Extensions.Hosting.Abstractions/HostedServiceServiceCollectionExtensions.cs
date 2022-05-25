@@ -2,8 +2,8 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using AppCore.DependencyInjection;
 using AppCore.Diagnostics;
+using AppCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 // ReSharper disable once CheckNamespace

@@ -3,7 +3,7 @@
 
 using AppCore.Diagnostics;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
     /// <summary>
     /// Provides extensions methods for the <seealso cref="IPluginManager"/>.

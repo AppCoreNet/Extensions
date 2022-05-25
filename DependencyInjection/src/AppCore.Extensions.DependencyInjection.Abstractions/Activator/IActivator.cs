@@ -3,7 +3,7 @@
 
 using System;
 
-namespace AppCore.DependencyInjection.Activator
+namespace AppCore.Extensions.DependencyInjection.Activator
 {
     /// <summary>
     /// Helper code for the various activator services.

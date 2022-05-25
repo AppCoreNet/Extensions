@@ -4,14 +4,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.DependencyInjection.Activator;
+using AppCore.Extensions.DependencyInjection.Activator;
 using FluentAssertions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
-namespace AppCore.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins
 {
     public class PluginManagerTests
     {
@@ -36,8 +36,8 @@ namespace AppCore.Hosting.Plugins
             instances.Select(i => i.Instance.GetType().FullName)
                      .Should()
                      .BeEquivalentTo(
-                         "AppCore.Hosting.Plugins.TestPlugin.PublicStartupTask",
-                         "AppCore.Hosting.Plugins.TestPlugin2.PublicStartupTask");
+                         "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask",
+                         "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask");
         }
 
         [Fact]
@@ -62,10 +62,10 @@ namespace AppCore.Hosting.Plugins
             instances.Select(i => i.Instance.GetType().FullName)
                      .Should()
                      .BeEquivalentTo(
-                         "AppCore.Hosting.Plugins.TestPlugin.PublicStartupTask",
-                         "AppCore.Hosting.Plugins.TestPlugin2.PublicStartupTask",
-                         "AppCore.Hosting.Plugins.TestPlugin.InternalStartupTask",
-                         "AppCore.Hosting.Plugins.TestPlugin2.InternalStartupTask"
+                         "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask",
+                         "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask",
+                         "AppCore.Extensions.Hosting.Plugins.TestPlugin.InternalStartupTask",
+                         "AppCore.Extensions.Hosting.Plugins.TestPlugin2.InternalStartupTask"
                          );
         }
 
@@ -83,12 +83,12 @@ namespace AppCore.Hosting.Plugins
                        new[]
                        {
                            new PluginInfo(
-                               "AppCore.Hosting.Plugins.TestPlugin",
+                               "AppCore.Extensions.Hosting.Plugins.TestPlugin",
                                "11.10.0",
                                "Plugin1 Description",
                                "Plugin1 Copyright"),
                            new PluginInfo(
-                               "AppCore.Hosting.Plugins.TestPlugin2",
+                               "AppCore.Extensions.Hosting.Plugins.TestPlugin2",
                                "12.10.0",
                                "Plugin2 Description",
                                "Plugin2 Copyright")
@@ -143,7 +143,7 @@ namespace AppCore.Hosting.Plugins
             var options = new PluginOptions();
             options.Assemblies.Add(PluginPaths.TestPlugin);
             options.Assemblies.Add(PluginPaths.TestPlugin2);
-            options.Disabled.Add("AppCore.Hosting.Plugins.TestPlugin2");
+            options.Disabled.Add("AppCore.Extensions.Hosting.Plugins.TestPlugin2");
 
             var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
             manager.LoadPlugins();
