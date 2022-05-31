@@ -5,7 +5,7 @@
     <Product>AppCore .NET Microsoft Extensions Add-ons</Product>
     <Copyright>Copyright (c) 2018-2022 the AppCore .NET project</Copyright>
     <Version>1.0.0</Version>
-    <PackageLicenseUrl>https://github.com/AppCoreNet/Extensions/blob/dev/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/AppCoreNet/Extensions</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <LangVersion>latest</LangVersion>
@@ -18,7 +18,7 @@
 
   <Import Project="./build/shared/dotnet/common.props" />
   <Import Project="./build/shared/dotnet/netfx.props" />
-  
+
   <Import Project="./build/sources.props" />
   <Import Project="./build/dependency-versions.props" />
 
