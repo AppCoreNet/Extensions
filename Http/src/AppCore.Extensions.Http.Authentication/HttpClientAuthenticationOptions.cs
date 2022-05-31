@@ -1,0 +1,27 @@
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018-2022 the AppCore .NET project.
+
+using System;
+using System.Collections.Generic;
+
+namespace AppCore.Extensions.Http.Authentication;
+
+/// <summary>
+/// Represents the options for HTTP client authentication.
+/// </summary>
+public sealed class HttpClientAuthenticationOptions
+{
+    /// <summary>
+    /// Gets the dictionary of registered authentication schemes.
+    /// </summary>
+    public IDictionary<string, AuthenticationScheme> SchemeMap { get; }
+        = new Dictionary<string, AuthenticationScheme>(StringComparer.Ordinal);
+
+    /// <summary>
+    /// Adds a authentication scheme.
+    /// </summary>
+    /// <param name="name">The name of the authentication scheme.</param>
+    /// <param name="handlerType">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/>.</param>
+    public void AddScheme(string name, Type handlerType)
+        => SchemeMap.Add(name, new AuthenticationScheme(name, handlerType));
+}

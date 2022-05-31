@@ -1,10 +1,11 @@
 AppCore .NET add-ons for Microsoft.Extensions
 --------------------
 
-[![Build Status](https://dev.azure.com/AppCoreNet/Extensions/_apis/build/status/AppCoreNet.Extensions%20CI?branchName=dev)](https://dev.azure.com/AppCoreNet/Extensions/_build/latest?definitionId=7&branchName=dev)
-![Azure DevOps tests (compact)](https://img.shields.io/azure-devops/tests/AppCoreNet/Extensions/7?compact_message)
-![Azure DevOps coverage (branch)](https://img.shields.io/azure-devops/coverage/AppCoreNet/Extensions/7/dev)
+[![Build Status](https://dev.azure.com/AppCoreNet/Extensions/_apis/build/status/AppCore.Extensions%20CI?branchName=dev)](https://dev.azure.com/AppCoreNet/Extensions/_build/latest?definitionId=19&branchName=dev)
+![Azure DevOps tests (compact)](https://img.shields.io/azure-devops/tests/AppCoreNet/Extensions/19?compact_message)
+![Azure DevOps coverage (branch)](https://img.shields.io/azure-devops/coverage/AppCoreNet/Extensions/19/dev)
 ![Nuget](https://img.shields.io/nuget/v/AppCore.Extensions.DependencyInjection.Abstractions)
+![MyGet](https://img.shields.io/myget/appcorenet/vpre/AppCore.Extensions.DependencyInjection.Abstractions?label=myget)
 
 This repository contains add-ons for the various `Microsoft.Extensions` libraries. It targets the .NET Framework and .NET Core.
 

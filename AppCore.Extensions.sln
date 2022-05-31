@@ -43,6 +43,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins.TestPlugin2", "Hosting\test\AppCore.Extensions.Hosting.Plugins.TestPlugin2\AppCore.Extensions.Hosting.Plugins.TestPlugin2.csproj", "{C74E308B-B96F-473F-AE4B-6117FDBACF4E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Http", "Http", "{9416DF99-18D3-4373-A517-00A65E7CC32A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B2F9DC67-6D7B-4070-8580-F401050445A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A038B60C-C6C4-4487-A0CC-1591E3D48601}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication", "Http\src\AppCore.Extensions.Http.Authentication\AppCore.Extensions.Http.Authentication.csproj", "{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth", "Http\src\AppCore.Extensions.Http.Authentication.OAuth\AppCore.Extensions.Http.Authentication.OAuth.csproj", "{DCEFCF02-50A5-433D-BB40-CA321E75F354}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +115,14 @@ Global
 		{C74E308B-B96F-473F-AE4B-6117FDBACF4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C74E308B-B96F-473F-AE4B-6117FDBACF4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C74E308B-B96F-473F-AE4B-6117FDBACF4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCEFCF02-50A5-433D-BB40-CA321E75F354}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCEFCF02-50A5-433D-BB40-CA321E75F354}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCEFCF02-50A5-433D-BB40-CA321E75F354}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCEFCF02-50A5-433D-BB40-CA321E75F354}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,5 +149,9 @@ Global
 		{0257CC4F-A7A1-46FC-846F-29DFC258D6FA} = {E2C71AB4-DF09-4961-82EC-916A08650A86}
 		{BE6CCD51-F598-4368-99E3-29E1AA10ACC8} = {E2C71AB4-DF09-4961-82EC-916A08650A86}
 		{C74E308B-B96F-473F-AE4B-6117FDBACF4E} = {E2C71AB4-DF09-4961-82EC-916A08650A86}
+		{B2F9DC67-6D7B-4070-8580-F401050445A9} = {9416DF99-18D3-4373-A517-00A65E7CC32A}
+		{A038B60C-C6C4-4487-A0CC-1591E3D48601} = {9416DF99-18D3-4373-A517-00A65E7CC32A}
+		{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C} = {B2F9DC67-6D7B-4070-8580-F401050445A9}
+		{DCEFCF02-50A5-433D-BB40-CA321E75F354} = {B2F9DC67-6D7B-4070-8580-F401050445A9}
 	EndGlobalSection
 EndGlobal
