@@ -17,6 +17,7 @@ namespace AppCore.Extensions.DependencyInjection
     /// </summary>
     public static class PluginAppCoreBuilderExtensions
     {
+        private static object _pluginManagerFactorySyncRoot = new();
         private static Func<IServiceProvider, PluginManager>? _pluginManagerFactory;
         private static PluginManager? _pluginManager;
 
@@ -39,14 +40,17 @@ namespace AppCore.Extensions.DependencyInjection
                 services.Configure(configure);
 
                 // plugin manager was already created, re-create with possible options
-                if (_pluginManagerFactory != null)
+                lock (_pluginManagerFactorySyncRoot)
                 {
-                    PluginManager pluginManager = _pluginManager!;
-                    _pluginManager = null;
-                    _pluginManagerFactory = sp => _pluginManager ??= new PluginManager(
-                        pluginManager!,
-                        sp.GetRequiredService<IActivator>(),
-                        sp.GetRequiredService<IOptions<PluginOptions>>());
+                    if (_pluginManagerFactory != null)
+                    {
+                        PluginManager pluginManager = _pluginManager!;
+                        _pluginManager = null;
+                        _pluginManagerFactory = sp => _pluginManager ??= new PluginManager(
+                            pluginManager!,
+                            sp.GetRequiredService<IActivator>(),
+                            sp.GetRequiredService<IOptions<PluginOptions>>());
+                    }
                 }
             }
 
@@ -62,12 +66,15 @@ namespace AppCore.Extensions.DependencyInjection
 
         private static IPluginManager GetOrCreatePluginManager(IServiceProvider serviceProvider)
         {
-            // plugin manager is resolved for the first time, create it directly ...
-            _pluginManagerFactory ??= sp => _pluginManager ??= new PluginManager(
-                sp.GetRequiredService<IActivator>(),
-                sp.GetRequiredService<IOptions<PluginOptions>>());
+            lock (_pluginManagerFactorySyncRoot)
+            {
+                // plugin manager is resolved for the first time, create it directly ...
+                _pluginManagerFactory ??= sp => _pluginManager ??= new PluginManager(
+                    sp.GetRequiredService<IActivator>(),
+                    sp.GetRequiredService<IOptions<PluginOptions>>());
 
-            return _pluginManagerFactory(serviceProvider);
+                return _pluginManagerFactory(serviceProvider);
+            }
         }
     }
 }
