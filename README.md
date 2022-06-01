@@ -11,20 +11,15 @@ This repository contains add-ons for the various `Microsoft.Extensions` librarie
 
 All artifacts are licensed under the [MIT license](LICENSE). You are free to use them in open-source or commercial projects as long as you keep the copyright notice intact when redistributing or otherwise reusing our artifacts.
 
-## Packages
-
 Latest development packages can be found on [MyGet](https://www.myget.org/gallery/appcorenet).
 
-| Package                                                 | Description                                                                  |
-|---------------------------------------------------------|------------------------------------------------------------------------------|
-| `AppCore.DependencyInjection.Abstractions`              | Provides add-ons for `Microsoft.DependencyInjection.Abstractions`            |
-| `AppCore.DependencyInjection.AssemblyExtensions`        | Provides extensions to register services via assembly reflection.            |
-| `AppCore.DependencyInjection.DependencyModelExtensions` | Provides extensions to register services via `DependencyContext` reflection. |
-| `AppCore.Hosting.Abstractions`                          | Provides add-ons for `Microsoft.Extensions.Hosting`                          |
-| `AppCore.Hosting`                                       |                                                                              |
-| `AppCore.Hosting.Plugins.Abstractions`                  | Provides the public API for hosting plugins.                                 |
-| `AppCore.Hosting.Plugins`                               | Default implementation of the plugins hosting API.                           |
+## Projects
 
+| Project                                                                 | Description                                                                                                                         |
+|-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| [AppCore.Extensions.DependencyInjection](DependencyInjection/README.md) | Provides add-ons for `Microsoft.Extensions.DependencyInjection`. It contains extension methods to register services via reflection. |
+| [AppCore.Extensions.Hosting](Hosting/README.md)                         | Add-ons for `Microsoft.Extensions.Hosting`. Provides support for dynamically loading plugins and registering services.              |
+| [AppCore.Extensions.Http](Http/README.md)                               | Extends `Microsoft.Extensions.Http` adding support for client authentication.                                                       |
 
 ## Contributing
 
