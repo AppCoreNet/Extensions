@@ -49,8 +49,11 @@ public class AuthenticationParameters
     public T Clone<T>()
         where T : AuthenticationParameters, new()
     {
-        var clone = new T();
-        clone._parameters = new Dictionary<string, object>(clone._parameters, StringComparer.Ordinal);
+        var clone = new T
+        {
+            _parameters = new Dictionary<string, object>(_parameters, StringComparer.Ordinal)
+        };
+
         return clone;
     }
 

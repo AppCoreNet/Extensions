@@ -17,7 +17,7 @@ namespace AppCore.Extensions.DependencyInjection
     /// </summary>
     public static class PluginAppCoreBuilderExtensions
     {
-        private static object _pluginManagerFactorySyncRoot = new();
+        private static readonly object _pluginManagerFactorySyncRoot = new();
         private static Func<IServiceProvider, PluginManager>? _pluginManagerFactory;
         private static PluginManager? _pluginManager;
 

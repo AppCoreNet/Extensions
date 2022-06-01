@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Aut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth", "Http\src\AppCore.Extensions.Http.Authentication.OAuth\AppCore.Extensions.Http.Authentication.OAuth.csproj", "{DCEFCF02-50A5-433D-BB40-CA321E75F354}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.Tests", "Http\test\AppCore.Extensions.Http.Authentication.Tests\AppCore.Extensions.Http.Authentication.Tests.csproj", "{5AD02E91-D970-402E-8958-6B33C86FFD4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,10 @@ Global
 		{DCEFCF02-50A5-433D-BB40-CA321E75F354}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCEFCF02-50A5-433D-BB40-CA321E75F354}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCEFCF02-50A5-433D-BB40-CA321E75F354}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AD02E91-D970-402E-8958-6B33C86FFD4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD02E91-D970-402E-8958-6B33C86FFD4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD02E91-D970-402E-8958-6B33C86FFD4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD02E91-D970-402E-8958-6B33C86FFD4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,5 +159,6 @@ Global
 		{A038B60C-C6C4-4487-A0CC-1591E3D48601} = {9416DF99-18D3-4373-A517-00A65E7CC32A}
 		{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C} = {B2F9DC67-6D7B-4070-8580-F401050445A9}
 		{DCEFCF02-50A5-433D-BB40-CA321E75F354} = {B2F9DC67-6D7B-4070-8580-F401050445A9}
+		{5AD02E91-D970-402E-8958-6B33C86FFD4C} = {A038B60C-C6C4-4487-A0CC-1591E3D48601}
 	EndGlobalSection
 EndGlobal

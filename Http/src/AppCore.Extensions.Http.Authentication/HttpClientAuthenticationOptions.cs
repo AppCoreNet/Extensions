@@ -24,4 +24,11 @@ public sealed class HttpClientAuthenticationOptions
     /// <param name="handlerType">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/>.</param>
     public void AddScheme(string name, Type handlerType)
         => SchemeMap.Add(name, new AuthenticationScheme(name, handlerType));
+
+    /// <summary>
+    /// Adds a authentication scheme.
+    /// </summary>
+    /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
+    public void AddScheme(AuthenticationScheme scheme)
+        => SchemeMap.Add(scheme.Name, scheme);
 }

@@ -2,9 +2,9 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using AppCore.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.Http.Authentication;
+// ReSharper disable once CheckNamespace
+namespace Microsoft.Extensions.DependencyInjection;
 
 internal sealed class HttpClientAuthenticationBuilder : IHttpClientAuthenticationBuilder
 {

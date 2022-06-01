@@ -6,8 +6,8 @@ using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
-internal sealed class ValidateOAuthClientAuthenticationOptions
-    : ValidateOAuthAuthenticationOptions,
+internal sealed class OAuthClientAuthenticationOptionsValidator
+    : OAuthAuthenticationOptionsValidator,
       IValidateOptions<OAuthClientAuthenticationOptions>
 {
     public ValidateOptionsResult Validate(string name, OAuthClientAuthenticationOptions options)

@@ -6,8 +6,8 @@ using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
-internal sealed class ValidateOAuthPasswordAuthenticationOptions
-    : ValidateOAuthAuthenticationOptions,
+internal sealed class OAuthPasswordAuthenticationOptionsValidator
+    : OAuthAuthenticationOptionsValidator,
       IValidateOptions<OAuthPasswordAuthenticationOptions>
 {
     public ValidateOptionsResult Validate(string name, OAuthPasswordAuthenticationOptions options)

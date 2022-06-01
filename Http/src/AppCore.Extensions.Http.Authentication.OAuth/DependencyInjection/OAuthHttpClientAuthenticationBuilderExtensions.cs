@@ -47,7 +47,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
 
         services.TryAddEnumerable(
             ServiceDescriptor
-                .Transient<IValidateOptions<OAuthClientAuthenticationOptions>, ValidateOAuthClientAuthenticationOptions>());
+                .Transient<IValidateOptions<OAuthClientAuthenticationOptions>, OAuthClientAuthenticationOptionsValidator>());
 
         return builder.AddScheme<
             OAuthClientAuthenticationOptions,
@@ -77,7 +77,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
 
         services.TryAddEnumerable(
             ServiceDescriptor
-                .Transient<IValidateOptions<OAuthPasswordAuthenticationOptions>, ValidateOAuthPasswordAuthenticationOptions>());
+                .Transient<IValidateOptions<OAuthPasswordAuthenticationOptions>, OAuthPasswordAuthenticationOptionsValidator>());
 
         return builder.AddScheme<
             OAuthPasswordAuthenticationOptions,
