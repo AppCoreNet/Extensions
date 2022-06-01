@@ -3,6 +3,7 @@
 
 using AppCore.Diagnostics;
 using AppCore.Extensions.Http.Authentication;
+using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,11 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class AuthenticationHttpClientBuilderExtensions
 {
+    private static string GetLoggerName(IHttpClientBuilder builder)
+    {
+        return $"System.Net.Http.HttpClient.{builder.Name}.AuthenticationHandler";
+    }
+
     /// <summary>
     /// Adds authentication to the specified <see cref="IHttpClientBuilder"/>.
     /// </summary>
@@ -31,12 +37,16 @@ public static class AuthenticationHttpClientBuilderExtensions
         Ensure.Arg.NotNull(builder);
         Ensure.Arg.NotNull(scheme);
 
+        string loggerName = GetLoggerName(builder);
+
         return builder.AddHttpMessageHandler(
             sp =>
-                new AuthenticationDelegatingHandler<TParameters, THandler>(
+                new AuthenticationHandler<TParameters, THandler>(
                     scheme,
                     sp.GetRequiredService<IAuthenticationSchemeProvider>(),
                     sp.GetRequiredService<THandler>(),
-                    parameters));
+                    parameters,
+                    sp.GetRequiredService<ILoggerFactory>()
+                      .CreateLogger(loggerName)));
     }
 }

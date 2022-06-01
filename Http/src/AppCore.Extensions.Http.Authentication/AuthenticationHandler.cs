@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCore.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace AppCore.Extensions.Http.Authentication;
 
@@ -16,7 +17,7 @@ namespace AppCore.Extensions.Http.Authentication;
 /// </summary>
 /// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
 /// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/>.</typeparam>
-public class AuthenticationDelegatingHandler<TParameters, THandler> : DelegatingHandler
+public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
     where TParameters : AuthenticationParameters, new()
     where THandler : IAuthenticationSchemeHandler<TParameters>
 {
@@ -24,28 +25,33 @@ public class AuthenticationDelegatingHandler<TParameters, THandler> : Delegating
     private readonly IAuthenticationSchemeProvider _schemes;
     private readonly IAuthenticationSchemeHandler<TParameters> _schemeHandler;
     private readonly TParameters? _parameters;
+    private readonly ILogger _logger;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AuthenticationDelegatingHandler{TParameters,THandler}"/> class.
+    /// Initializes a new instance of the <see cref="AuthenticationHandler{TParameters,THandler}"/> class.
     /// </summary>
     /// <param name="scheme">The authentication scheme.</param>
     /// <param name="schemes">The available authentication schemes.</param>
     /// <param name="schemeHandler">The authentication scheme handler.</param>
     /// <param name="parameters">Additional authentication parameters.</param>
-    public AuthenticationDelegatingHandler(
+    /// <param name="logger"></param>
+    public AuthenticationHandler(
         string scheme,
         IAuthenticationSchemeProvider schemes,
         THandler schemeHandler,
-        TParameters? parameters)
+        TParameters? parameters,
+        ILogger logger)
     {
         Ensure.Arg.NotNull(scheme);
         Ensure.Arg.NotNull(schemes);
         Ensure.Arg.NotNull(schemeHandler);
+        Ensure.Arg.NotNull(logger);
 
         _scheme = scheme;
         _schemes = schemes;
         _schemeHandler = schemeHandler;
         _parameters = parameters;
+        _logger = logger;
     }
 
     private async Task<AuthenticationScheme> GetSchemeAsync()
@@ -71,12 +77,16 @@ public class AuthenticationDelegatingHandler<TParameters, THandler> : Delegating
     {
         AuthenticationScheme scheme = await GetSchemeAsync();
 
+        _logger.LogDebug("Authenticating HTTP request with scheme {schemeName}.", scheme.Name);
+
         await AuthenticateAsync(scheme, request, forceRenewal: false, cancellationToken);
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
         // retry if 401
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
+            _logger.LogDebug("Received 401 response, forcing renewal of authentication for scheme {schemeName}.", scheme.Name);
+
             response.Dispose();
 
             await AuthenticateAsync(scheme, request, forceRenewal: true, cancellationToken);

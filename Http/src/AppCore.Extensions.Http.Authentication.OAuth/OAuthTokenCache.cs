@@ -2,9 +2,12 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
+using System.Globalization;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCore.Diagnostics;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,7 +19,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 /// </summary>
 public class OAuthTokenCache : IOAuthTokenCache
 {
-    private readonly IMemoryCache _cache;
+    private readonly IDistributedCache _cache;
     private readonly IOptionsMonitor<OAuthTokenCacheOptions> _optionsMonitor;
     private readonly ILogger<OAuthTokenCache> _logger;
 
@@ -26,15 +29,54 @@ public class OAuthTokenCache : IOAuthTokenCache
     /// <param name="cache">The <see cref="IMemoryCache"/>.</param>
     /// <param name="optionsMonitor">The options.</param>
     /// <param name="logger">The <see cref="ILogger{TCategoryName}"/>.</param>
-    public OAuthTokenCache(IMemoryCache cache, IOptionsMonitor<OAuthTokenCacheOptions> optionsMonitor, ILogger<OAuthTokenCache> logger)
+    public OAuthTokenCache(IDistributedCache cache, IOptionsMonitor<OAuthTokenCacheOptions> optionsMonitor, ILogger<OAuthTokenCache> logger)
     {
         _cache = cache;
         _optionsMonitor = optionsMonitor;
         _logger = logger;
     }
 
+    private static byte[] SerializeAccessToken(OAuthAccessToken token)
+    {
+        var builder = new StringBuilder();
+        builder.Append(token.AccessToken);
+        if (token.Expires.HasValue)
+        {
+            builder.Append(':');
+            builder.Append(
+                token.Expires.Value.ToUnixTimeSeconds()
+                     .ToString("D"));
+        }
+
+        return Encoding.UTF8.GetBytes(builder.ToString());
+    }
+
+    private static OAuthAccessToken? DeserializeAccessToken(byte[]? bytes)
+    {
+        if (bytes == null)
+            return null;
+
+        string[] values = Encoding.UTF8.GetString(bytes).Split(new [] { ':' });
+
+        if (values.Length == 0)
+            return null;
+
+        string accessToken = values[0];
+        DateTimeOffset? expires = null;
+
+        if (values.Length > 1)
+        {
+            if (!long.TryParse(values[1], out long expiresSeconds))
+                return null;
+
+            expires = DateTimeOffset.FromUnixTimeSeconds(expiresSeconds);
+        }
+
+        return new OAuthAccessToken(accessToken, expires);
+    }
+
     /// <inheritdoc />
-    public Task SetAsync(
+    public async Task SetAsync(
         AuthenticationScheme scheme,
         OAuthAccessToken accessToken,
         OAuthAuthenticationParameters? parameters = null,
@@ -50,14 +92,15 @@ public class OAuthTokenCache : IOAuthTokenCache
             scheme.Name,
             cacheExpiration);
 
-        string cacheKey = GenerateCacheKey(scheme, options, parameters);
-        _cache.Set(cacheKey, accessToken, cacheExpiration);
-
-        return Task.CompletedTask;
+        await _cache.SetAsync(
+            GenerateCacheKey(scheme, options, parameters),
+            SerializeAccessToken(accessToken),
+            new DistributedCacheEntryOptions { AbsoluteExpiration = cacheExpiration },
+            cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task<OAuthAccessToken?> GetAsync(
+    public async Task<OAuthAccessToken?> GetAsync(
         AuthenticationScheme scheme,
         OAuthAuthenticationParameters? parameters = null,
         CancellationToken cancellationToken = default)
@@ -67,7 +110,7 @@ public class OAuthTokenCache : IOAuthTokenCache
         OAuthTokenCacheOptions options = _optionsMonitor.CurrentValue;
 
         string cacheKey = GenerateCacheKey(scheme, options, parameters);
-        var result = _cache.Get<OAuthAccessToken?>(cacheKey);
+        OAuthAccessToken? result = DeserializeAccessToken(await _cache.GetAsync(cacheKey, cancellationToken));
 
         if (result != null)
         {
@@ -78,7 +121,7 @@ public class OAuthTokenCache : IOAuthTokenCache
             _logger.LogDebug("Cache miss for access token for scheme: {schemeName}", scheme.Name);
         }
 
-        return Task.FromResult(result);
+        return result;
     }
 
     /// <inheritdoc />

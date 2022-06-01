@@ -2,8 +2,10 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
+using System.Linq;
 using AppCore.Diagnostics;
 using AppCore.Extensions.Http.Authentication.OAuth;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
@@ -19,7 +21,10 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     {
         IServiceCollection services = builder.Services;
 
+        services.AddDistributedMemoryCache();
+
         services.AddOptions<OAuthTokenCacheOptions>();
+        services.TryAddTransient<IOAuthAuthenticationOptionsProvider, OAuthAuthenticationOptionsProvider>();
         services.TryAddTransient<IOAuthTokenCache, OAuthTokenCache>();
         services.TryAddTransient<IOAuthTokenService, OAuthTokenService>();
         services.AddHttpClient<IOAuthTokenClient, OAuthTokenClient>();

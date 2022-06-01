@@ -13,19 +13,25 @@ namespace AppCore.Extensions.Http.Authentication;
 
 public class AuthenticationSchemeProviderTests
 {
+    private static AuthenticationSchemeProvider CreateAuthenticationSchemeProvider(HttpClientAuthenticationOptions? options = null)
+    {
+        options ??= new HttpClientAuthenticationOptions();
+        var optionsMonitor = Substitute.For<IOptionsMonitor<HttpClientAuthenticationOptions>>();
+        optionsMonitor.CurrentValue.Returns(options);
+        var provider = new AuthenticationSchemeProvider(optionsMonitor);
+        return provider;
+    }
+
     [Fact]
     public async Task AddsSchemesFromOptions()
     {
         var scheme1 = new AuthenticationScheme("scheme1", typeof(IAuthenticationSchemeHandler<>));
         var scheme2 = new AuthenticationScheme("scheme2", typeof(IAuthenticationSchemeHandler<>));
-
-        var optionsMonitor = Substitute.For<IOptionsMonitor<HttpClientAuthenticationOptions>>();
         var options = new HttpClientAuthenticationOptions();
         options.AddScheme(scheme1);
         options.AddScheme(scheme2);
-        optionsMonitor.CurrentValue.Returns(options);
 
-        var provider = new AuthenticationSchemeProvider(optionsMonitor);
+        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider(options);
 
         IReadOnlyCollection<AuthenticationScheme> schemes = await provider.GetAllSchemesAsync();
         schemes.Should()
@@ -35,10 +41,7 @@ public class AuthenticationSchemeProviderTests
     [Fact]
     public void AddSchemeThrowsOnDuplicateScheme()
     {
-        var options = Substitute.For<IOptionsMonitor<HttpClientAuthenticationOptions>>();
-        options.CurrentValue.Returns(new HttpClientAuthenticationOptions());
-
-        var provider = new AuthenticationSchemeProvider(options);
+        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
 
         var scheme = new AuthenticationScheme("scheme", typeof(IAuthenticationSchemeHandler<>));
         provider.AddScheme(scheme);
@@ -47,5 +50,48 @@ public class AuthenticationSchemeProviderTests
 
         func.Should()
             .Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public async Task GetAllSchemesReturnsSchemes()
+    {
+        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
+
+        var scheme1 = new AuthenticationScheme("scheme1", typeof(IAuthenticationSchemeHandler<>));
+        var scheme2 = new AuthenticationScheme("scheme2", typeof(IAuthenticationSchemeHandler<>));
+        provider.AddScheme(scheme1);
+        provider.AddScheme(scheme2);
+
+        IReadOnlyCollection<AuthenticationScheme> schemes = await provider.GetAllSchemesAsync();
+        schemes.Should()
+               .BeEquivalentTo(new[] { scheme1, scheme2 });
+    }
+
+    [Fact]
+    public async Task FindSchemeReturnsScheme()
+    {
+        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
+
+        var scheme1 = new AuthenticationScheme("scheme1", typeof(IAuthenticationSchemeHandler<>));
+        var scheme2 = new AuthenticationScheme("scheme2", typeof(IAuthenticationSchemeHandler<>));
+        provider.AddScheme(scheme1);
+        provider.AddScheme(scheme2);
+
+        AuthenticationScheme? result1 = await provider.FindSchemeAsync(scheme1.Name);
+        result1.Should()
+               .BeEquivalentTo(scheme1);
+
+        AuthenticationScheme? result2 = await provider.FindSchemeAsync(scheme2.Name);
+        result2.Should()
+               .BeEquivalentTo(scheme2);
+    }
+
+    [Fact]
+    public async Task FindUnknownSchemeReturnsNull()
+    {
+        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
+        AuthenticationScheme? result = await provider.FindSchemeAsync("scheme1");
+        result.Should()
+              .BeNull();
     }
 }

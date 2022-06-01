@@ -38,7 +38,7 @@ public class AuthenticationParameters
     protected AuthenticationParameters(IDictionary<string, object> parameters)
     {
         Ensure.Arg.NotNull(parameters);
-        _parameters = parameters;
+        _parameters = new Dictionary<string, object>(parameters, StringComparer.Ordinal);
     }
 
     /// <summary>

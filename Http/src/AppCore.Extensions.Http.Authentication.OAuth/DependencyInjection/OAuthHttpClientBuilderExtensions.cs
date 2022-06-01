@@ -22,7 +22,7 @@ public static class OAuthHttpClientBuilderExtensions
     public static IHttpClientBuilder AddOAuthClientAuthentication(
         this IHttpClientBuilder builder,
         string scheme,
-        OAuthAuthenticationParameters? parameters)
+        OAuthAuthenticationParameters? parameters = null)
     {
         Ensure.Arg.NotNull(builder);
         return builder.AddAuthentication<OAuthAuthenticationParameters, OAuthClientAuthenticationHandler>(scheme, parameters);
@@ -38,7 +38,7 @@ public static class OAuthHttpClientBuilderExtensions
     public static IHttpClientBuilder AddOAuthPasswordAuthentication(
         this IHttpClientBuilder builder,
         string scheme,
-        OAuthAuthenticationParameters? parameters)
+        OAuthAuthenticationParameters? parameters = null)
     {
         Ensure.Arg.NotNull(builder);
         return builder.AddAuthentication<OAuthAuthenticationParameters, OAuthPasswordAuthenticationHandler>(scheme, parameters);

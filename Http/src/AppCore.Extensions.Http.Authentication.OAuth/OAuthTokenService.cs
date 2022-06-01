@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AppCore.Diagnostics;
 using IdentityModel.Client;
-using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
@@ -21,7 +20,6 @@ public class OAuthTokenService : IOAuthTokenService
     private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthAccessToken>>> _sync = new();
     private readonly IOAuthTokenClient _client;
     private readonly IOAuthTokenCache _cache;
-    private readonly ISystemClock _clock;
     private readonly ILogger<OAuthTokenService> _logger;
 
     /// <summary>
@@ -29,18 +27,15 @@ public class OAuthTokenService : IOAuthTokenService
     /// </summary>
     /// <param name="client"></param>
     /// <param name="cache"></param>
-    /// <param name="clock"></param>
     /// <param name="logger"></param>
-    public OAuthTokenService(IOAuthTokenClient client, IOAuthTokenCache cache, ISystemClock clock, ILogger<OAuthTokenService> logger)
+    public OAuthTokenService(IOAuthTokenClient client, IOAuthTokenCache cache, ILogger<OAuthTokenService> logger)
     {
         Ensure.Arg.NotNull(client);
         Ensure.Arg.NotNull(cache);
-        Ensure.Arg.NotNull(clock);
         Ensure.Arg.NotNull(logger);
 
         _client = client;
         _cache = cache;
-        _clock = clock;
         _logger = logger;
     }
 
@@ -82,6 +77,8 @@ public class OAuthTokenService : IOAuthTokenService
             scheme,
             async () =>
             {
+                _logger.LogDebug("Requesting access token for client scheme {schemeName} ...", scheme.Name);
+
                 TokenResponse response = await _client.RequestClientAccessToken(scheme, parameters, cancellationToken);
                 if (response.IsError)
                 {
@@ -98,8 +95,13 @@ public class OAuthTokenService : IOAuthTokenService
                 OAuthAccessToken token = new(
                     response.AccessToken,
                     response.ExpiresIn > 0
-                        ? _clock.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
+                        ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
                         : null);
+
+                _logger.LogDebug(
+                    "Received access token for client scheme {schemeName}. Expiration: {expiration}",
+                    scheme.Name,
+                    token.Expires);
 
                 await _cache.SetAsync(scheme, token, parameters, cancellationToken);
                 return token;
@@ -129,6 +131,8 @@ public class OAuthTokenService : IOAuthTokenService
             scheme,
             async () =>
             {
+                _logger.LogDebug("Requesting access token for password scheme {schemeName} ...", scheme.Name);
+
                 TokenResponse response = await _client.RequestPasswordAccessToken(scheme, parameters, cancellationToken);
                 if (response.IsError)
                 {
@@ -145,8 +149,13 @@ public class OAuthTokenService : IOAuthTokenService
                 OAuthAccessToken token = new(
                     response.AccessToken,
                     response.ExpiresIn > 0
-                        ? _clock.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
+                        ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
                         : null);
+
+                _logger.LogDebug(
+                    "Received access token for password scheme {schemeName}. Expiration: {expiration}",
+                    scheme.Name,
+                    token.Expires);
 
                 await _cache.SetAsync(scheme, token, parameters, cancellationToken);
                 return token;
