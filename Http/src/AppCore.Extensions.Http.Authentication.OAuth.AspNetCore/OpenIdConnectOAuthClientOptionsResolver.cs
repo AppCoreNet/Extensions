@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
 
-internal sealed class OpenIdConnectOAuthClientOptionsResolver : IOAuthAuthenticationOptionsResolver
+internal sealed class OpenIdConnectOAuthClientOptionsResolver : IOAuthOptionsResolver
 {
     private readonly Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider _authenticationSchemeProvider;
     private readonly IOptionsMonitor<OpenIdConnectOAuthClientOptions> _inferredClientOptions;
@@ -33,7 +33,7 @@ internal sealed class OpenIdConnectOAuthClientOptionsResolver : IOAuthAuthentica
         T? result = null;
 
         if (scheme.OptionsType == typeof(OpenIdConnectOAuthClientOptions)
-            && typeof(T) == typeof(OAuthClientAuthenticationOptions))
+            && typeof(T) == typeof(OAuthClientOptions))
         {
             result = (T)(object)await GetOptionsFromOpenIdConnectScheme(_inferredClientOptions.Get(scheme.Name));
         }
@@ -70,11 +70,11 @@ internal sealed class OpenIdConnectOAuthClientOptionsResolver : IOAuthAuthentica
         return (options, configuration);
     }
 
-    private async Task<OAuthClientAuthenticationOptions> GetOptionsFromOpenIdConnectScheme(OpenIdConnectOAuthClientOptions options)
+    private async Task<OAuthClientOptions> GetOptionsFromOpenIdConnectScheme(OpenIdConnectOAuthClientOptions options)
     {
         (OpenIdConnectOptions oidcOptions, OpenIdConnectConfiguration oidcConfig) = await GetOpenIdConnectSettings(options.Scheme);
 
-        var result = new OAuthClientAuthenticationOptions
+        var result = new OAuthClientOptions
         {
             TokenEndpoint = new Uri(oidcConfig.TokenEndpoint),
             ClientId = oidcOptions.ClientId,

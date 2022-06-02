@@ -7,12 +7,12 @@ using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
-internal sealed class OAuthAuthenticationOptionsResolver<TOptions> : IOAuthAuthenticationOptionsResolver
-    where TOptions : OAuthAuthenticationOptions
+internal sealed class OAuthOptionsResolver<TOptions> : IOAuthOptionsResolver
+    where TOptions : OAuthOptions
 {
     private readonly IOptionsMonitor<TOptions> _options;
 
-    public OAuthAuthenticationOptionsResolver(IOptionsMonitor<TOptions> options)
+    public OAuthOptionsResolver(IOptionsMonitor<TOptions> options)
     {
         _options = options;
     }

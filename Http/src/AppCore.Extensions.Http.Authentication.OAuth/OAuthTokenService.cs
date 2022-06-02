@@ -57,7 +57,7 @@ public class OAuthTokenService : IOAuthTokenService
     /// <inheritdoc />
     public async Task<OAuthAccessToken> GetClientAccessTokenAsync(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme);
@@ -111,7 +111,7 @@ public class OAuthTokenService : IOAuthTokenService
     /// <inheritdoc />
     public async Task<OAuthAccessToken> GetPasswordAccessTokenAsync(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme);
@@ -165,7 +165,7 @@ public class OAuthTokenService : IOAuthTokenService
     /// <inheritdoc />
     public async Task DeleteAccessTokenAsync(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme);

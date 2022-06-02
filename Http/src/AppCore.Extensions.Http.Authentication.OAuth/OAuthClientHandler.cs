@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018-2022 the AppCore .NET project.
+
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,17 +10,17 @@ using AppCore.Diagnostics;
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
-/// Provides a OAuth password authentication handler.
+/// Provides a OAuth client authentication handler.
 /// </summary>
-public class OAuthPasswordAuthenticationHandler : IAuthenticationSchemeHandler<OAuthAuthenticationParameters>
+public class OAuthClientHandler : IAuthenticationSchemeHandler<OAuthParameters>
 {
     private readonly IOAuthTokenService _authTokenService;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OAuthPasswordAuthenticationHandler"/> class.
+    /// Initializes a new instance of the <see cref="OAuthClientHandler"/> class.
     /// </summary>
     /// <param name="authTokenService">The <see cref="IOAuthTokenService"/>.</param>
-    public OAuthPasswordAuthenticationHandler(IOAuthTokenService authTokenService)
+    public OAuthClientHandler(IOAuthTokenService authTokenService)
     {
         Ensure.Arg.NotNull(authTokenService);
         _authTokenService = authTokenService;
@@ -26,12 +29,12 @@ public class OAuthPasswordAuthenticationHandler : IAuthenticationSchemeHandler<O
     /// <inheritdoc />
     public async Task AuthenticateAsync(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters,
+        OAuthParameters? parameters,
         HttpRequestMessage request,
         CancellationToken cancellationToken = default)
     {
         OAuthAccessToken accessToken =
-            await _authTokenService.GetPasswordAccessTokenAsync(scheme, parameters, cancellationToken);
+            await _authTokenService.GetClientAccessTokenAsync(scheme, parameters, cancellationToken);
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
     }

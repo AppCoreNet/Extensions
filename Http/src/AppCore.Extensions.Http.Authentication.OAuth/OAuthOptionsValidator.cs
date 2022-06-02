@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
-internal abstract class OAuthAuthenticationOptionsValidator
+internal abstract class OAuthOptionsValidator
 {
-    protected List<string> Validate(string name, OAuthAuthenticationOptions options)
+    protected List<string> Validate(string name, OAuthOptions options)
     {
         List<string> errors = new();
 

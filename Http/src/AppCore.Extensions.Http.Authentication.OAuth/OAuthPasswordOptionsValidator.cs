@@ -6,11 +6,11 @@ using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
-internal sealed class OAuthPasswordAuthenticationOptionsValidator
-    : OAuthAuthenticationOptionsValidator,
-      IValidateOptions<OAuthPasswordAuthenticationOptions>
+internal sealed class OAuthPasswordOptionsValidator
+    : OAuthOptionsValidator,
+      IValidateOptions<OAuthPasswordOptions>
 {
-    public ValidateOptionsResult Validate(string name, OAuthPasswordAuthenticationOptions options)
+    public ValidateOptionsResult Validate(string name, OAuthPasswordOptions options)
     {
         List<string> errors = base.Validate(name, options);
 

@@ -9,16 +9,16 @@ using AppCore.Diagnostics;
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
-/// Default implementation of the <see cref="IOAuthAuthenticationOptionsProvider"/>.
+/// Default implementation of the <see cref="IOAuthOptionsProvider"/>.
 /// </summary>
-public class OAuthAuthenticationOptionsProvider : IOAuthAuthenticationOptionsProvider
+public class OAuthOptionsProvider : IOAuthOptionsProvider
 {
-    private readonly IEnumerable<IOAuthAuthenticationOptionsResolver> _resolvers;
+    private readonly IEnumerable<IOAuthOptionsResolver> _resolvers;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OAuthAuthenticationOptionsProvider"/> class.
+    /// Initializes a new instance of the <see cref="OAuthOptionsProvider"/> class.
     /// </summary>
-    public OAuthAuthenticationOptionsProvider(IEnumerable<IOAuthAuthenticationOptionsResolver> resolvers)
+    public OAuthOptionsProvider(IEnumerable<IOAuthOptionsResolver> resolvers)
     {
         Ensure.Arg.NotNull(resolvers);
         _resolvers = resolvers;
@@ -31,7 +31,7 @@ public class OAuthAuthenticationOptionsProvider : IOAuthAuthenticationOptionsPro
         Ensure.Arg.NotNull(scheme);
 
         T? result = null;
-        foreach (IOAuthAuthenticationOptionsResolver resolver in _resolvers)
+        foreach (IOAuthOptionsResolver resolver in _resolvers)
         {
             result = await resolver.TryGetOptionsAsync<T>(scheme);
             if (result != null)

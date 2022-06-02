@@ -16,14 +16,14 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 public class OAuthTokenClient : IOAuthTokenClient
 {
     private readonly HttpClient _client;
-    private readonly IOAuthAuthenticationOptionsProvider _optionsProvider;
+    private readonly IOAuthOptionsProvider _optionsProvider;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OAuthTokenClient"/> class.
     /// </summary>
     /// <param name="client">The underlying <see cref="HttpClient"/>.</param>
     /// <param name="optionsProvider">The options provider.</param>
-    public OAuthTokenClient(HttpClient client, IOAuthAuthenticationOptionsProvider optionsProvider)
+    public OAuthTokenClient(HttpClient client, IOAuthOptionsProvider optionsProvider)
     {
         Ensure.Arg.NotNull(client);
         Ensure.Arg.NotNull(optionsProvider);
@@ -35,10 +35,10 @@ public class OAuthTokenClient : IOAuthTokenClient
     /// <inheritdoc />
     public async Task<TokenResponse> RequestClientAccessToken(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
-        var options = await _optionsProvider.GetOptionsAsync<OAuthClientAuthenticationOptions>(scheme);
+        var options = await _optionsProvider.GetOptionsAsync<OAuthClientOptions>(scheme);
 
         var request = new ClientCredentialsTokenRequest
         {
@@ -60,10 +60,10 @@ public class OAuthTokenClient : IOAuthTokenClient
     /// <inheritdoc />
     public async Task<TokenResponse> RequestPasswordAccessToken(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
-        var options = await _optionsProvider.GetOptionsAsync<OAuthPasswordAuthenticationOptions>(scheme);
+        var options = await _optionsProvider.GetOptionsAsync<OAuthPasswordOptions>(scheme);
 
         var request = new PasswordTokenRequest
         {

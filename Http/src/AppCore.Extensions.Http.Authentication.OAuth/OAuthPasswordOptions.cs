@@ -6,7 +6,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 /// <summary>
 /// Provides the options for the OAuth password authentication scheme.
 /// </summary>
-public class OAuthPasswordAuthenticationOptions : OAuthAuthenticationOptions
+public class OAuthPasswordOptions : OAuthOptions
 {
     /// <summary>
     /// Gets or sets the username.

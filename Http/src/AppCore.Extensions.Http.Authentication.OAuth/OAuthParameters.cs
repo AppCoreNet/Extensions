@@ -8,7 +8,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 /// <summary>
 /// Represents the parameters used during OAuth authentication.
 /// </summary>
-public class OAuthAuthenticationParameters : AuthenticationParameters
+public class OAuthParameters : AuthenticationParameters
 {
     /// <summary>
     /// Specifies the resource parameter.

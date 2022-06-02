@@ -10,7 +10,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 /// <summary>
 /// Provides the options for the OAuth authentication schemes.
 /// </summary>
-public abstract class OAuthAuthenticationOptions : AuthenticationSchemeOptions
+public abstract class OAuthOptions : AuthenticationSchemeOptions
 {
     /// <summary>
     /// Gets or sets the URL of the OAuth token endpoint.

@@ -16,23 +16,23 @@ public interface IOAuthTokenClient
     /// Requests a client access token.
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
-    /// <param name="parameters">The <see cref="OAuthAuthenticationParameters"/>.</param>
+    /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
     /// <returns></returns>
     Task<TokenResponse> RequestClientAccessToken(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Requests a password access token.
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
-    /// <param name="parameters">The <see cref="OAuthAuthenticationParameters"/>.</param>
+    /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
     /// <returns></returns>
     Task<TokenResponse> RequestPasswordAccessToken(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default);
 }

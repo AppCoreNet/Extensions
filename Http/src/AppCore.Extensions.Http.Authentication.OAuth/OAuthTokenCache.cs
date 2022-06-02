@@ -79,7 +79,7 @@ public class OAuthTokenCache : IOAuthTokenCache
     public async Task SetAsync(
         AuthenticationScheme scheme,
         OAuthAccessToken accessToken,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         OAuthTokenCacheOptions options = _optionsMonitor.CurrentValue;
@@ -102,7 +102,7 @@ public class OAuthTokenCache : IOAuthTokenCache
     /// <inheritdoc />
     public async Task<OAuthAccessToken?> GetAsync(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme, nameof(scheme));
@@ -127,7 +127,7 @@ public class OAuthTokenCache : IOAuthTokenCache
     /// <inheritdoc />
     public Task DeleteAsync(
         AuthenticationScheme scheme,
-        OAuthAuthenticationParameters? parameters = null,
+        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme, nameof(scheme));
@@ -145,12 +145,12 @@ public class OAuthTokenCache : IOAuthTokenCache
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="options">The <see cref="OAuthTokenCacheOptions"/>.</param>
-    /// <param name="parameters">The <see cref="OAuthAuthenticationParameters"/>.</param>
+    /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <returns></returns>
     protected virtual string GenerateCacheKey(
         AuthenticationScheme scheme,
         OAuthTokenCacheOptions options,
-        OAuthAuthenticationParameters? parameters = null)
+        OAuthParameters? parameters = null)
     {
         return options.CacheKeyPrefix + "::" + scheme.Name + "::" + parameters?.Resource ?? "";
     }

@@ -8,7 +8,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 /// <summary>
 /// Resolves the authentication options for OAuth schemes.
 /// </summary>
-public interface IOAuthAuthenticationOptionsResolver
+public interface IOAuthOptionsResolver
 {
     /// <summary>
     /// Tries to resolve the options for the specified <paramref name="scheme"/>.

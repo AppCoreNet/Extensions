@@ -20,7 +20,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
     /// <returns></returns>
-    public static void AddOAuthCore(this IHttpClientAuthenticationBuilder builder)
+    public static IHttpClientAuthenticationBuilder AddOAuthCore(this IHttpClientAuthenticationBuilder builder)
     {
         Ensure.Arg.NotNull(builder);
 
@@ -29,10 +29,12 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
         services.AddDistributedMemoryCache();
 
         services.AddOptions<OAuthTokenCacheOptions>();
-        services.TryAddTransient<IOAuthAuthenticationOptionsProvider, OAuthAuthenticationOptionsProvider>();
+        services.TryAddTransient<IOAuthOptionsProvider, OAuthOptionsProvider>();
         services.TryAddTransient<IOAuthTokenCache, OAuthTokenCache>();
         services.TryAddTransient<IOAuthTokenService, OAuthTokenService>();
         services.AddHttpClient<IOAuthTokenClient, OAuthTokenClient>();
+
+        return builder;
     }
 
     /// <summary>
@@ -45,7 +47,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     public static IHttpClientAuthenticationBuilder AddOAuthClient(
         this IHttpClientAuthenticationBuilder builder,
         string scheme,
-        Action<OAuthClientAuthenticationOptions> configure)
+        Action<OAuthClientOptions> configure)
     {
         Ensure.Arg.NotNull(scheme);
         Ensure.Arg.NotNull(configure);
@@ -58,18 +60,18 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
             new[]
             {
                 ServiceDescriptor
-                    .Transient<IOAuthAuthenticationOptionsResolver,
-                        OAuthAuthenticationOptionsResolver<OAuthClientAuthenticationOptions>>(),
+                    .Transient<IOAuthOptionsResolver,
+                        OAuthOptionsResolver<OAuthClientOptions>>(),
 
                 ServiceDescriptor
-                    .Transient<IValidateOptions<OAuthClientAuthenticationOptions>,
-                        OAuthClientAuthenticationOptionsValidator>()
+                    .Transient<IValidateOptions<OAuthClientOptions>,
+                        OAuthClientOptionsValidator>()
             });
 
         return builder.AddScheme<
-            OAuthClientAuthenticationOptions,
-            OAuthAuthenticationParameters,
-            OAuthClientAuthenticationHandler>(scheme, configure);
+            OAuthClientOptions,
+            OAuthParameters,
+            OAuthClientHandler>(scheme, configure);
     }
 
     /// <summary>
@@ -82,7 +84,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     public static IHttpClientAuthenticationBuilder AddOAuthPassword(
         this IHttpClientAuthenticationBuilder builder,
         string scheme,
-        Action<OAuthPasswordAuthenticationOptions> configure)
+        Action<OAuthPasswordOptions> configure)
     {
         Ensure.Arg.NotNull(scheme);
         Ensure.Arg.NotNull(configure);
@@ -95,18 +97,18 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
             new[]
             {
                 ServiceDescriptor
-                    .Transient<IOAuthAuthenticationOptionsResolver,
-                        OAuthAuthenticationOptionsResolver<OAuthPasswordAuthenticationOptions>>(),
+                    .Transient<IOAuthOptionsResolver,
+                        OAuthOptionsResolver<OAuthPasswordOptions>>(),
 
                 ServiceDescriptor
-                    .Transient<IValidateOptions<OAuthPasswordAuthenticationOptions>,
-                        OAuthPasswordAuthenticationOptionsValidator>()
+                    .Transient<IValidateOptions<OAuthPasswordOptions>,
+                        OAuthPasswordOptionsValidator>()
             });
 
         return builder.AddScheme<
-            OAuthPasswordAuthenticationOptions,
-            OAuthAuthenticationParameters,
-            OAuthPasswordAuthenticationHandler>(scheme, configure);
+            OAuthPasswordOptions,
+            OAuthParameters,
+            OAuthPasswordHandler>(scheme, configure);
     }
 
     /// <summary>

@@ -59,12 +59,13 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
         AuthenticationScheme? authenticationScheme = await _schemes.FindSchemeAsync(_scheme);
         if (authenticationScheme == null)
         {
-            throw new InvalidOperationException($"No client authentication scheme registered with name {_scheme}.");
+            throw new InvalidOperationException($"There is no client authentication scheme registered with name {_scheme}.");
         }
 
         if (authenticationScheme.HandlerType != typeof(THandler))
         {
-            throw new InvalidOperationException($"No {typeof(THandler).Name} client authentication scheme registered with name {_scheme}.");
+            throw new InvalidOperationException(
+                $"There is no client authentication scheme registered with name {_scheme} and handler {typeof(THandler).Name}.");
         }
 
         return authenticationScheme;

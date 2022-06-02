@@ -9,13 +9,13 @@ internal static class AuthenticationSchemeExtensions
 {
     public static void EnsureClientScheme(this AuthenticationScheme scheme)
     {
-        if (scheme.HandlerType != typeof(OAuthClientAuthenticationHandler))
+        if (scheme.HandlerType != typeof(OAuthClientHandler))
             throw new InvalidOperationException($"The client authentication scheme {scheme.Name} is not registered for the OAuth client handler.");
     }
 
     public static void EnsurePasswordScheme(this AuthenticationScheme scheme)
     {
-        if (scheme.HandlerType != typeof(OAuthPasswordAuthenticationHandler))
+        if (scheme.HandlerType != typeof(OAuthPasswordHandler))
             throw new InvalidOperationException($"The client authentication scheme {scheme.Name} is not registered for the OAuth password handler.");
     }
 }

@@ -23,7 +23,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// <param name="scheme">The name of the client authentication scheme.</param>
     /// <param name="configure"></param>
     /// <returns></returns>
-    public static IHttpClientAuthenticationBuilder AddOpenIdConnectOAuthClient(
+    public static IHttpClientAuthenticationBuilder AddOAuthClientFromOpenIdConnect(
         this IHttpClientAuthenticationBuilder builder,
         string scheme,
         Action<OpenIdConnectOAuthClientOptions>? configure = null)
@@ -38,7 +38,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
             new[]
             {
                 ServiceDescriptor
-                    .Transient<IOAuthAuthenticationOptionsResolver,
+                    .Transient<IOAuthOptionsResolver,
                         OpenIdConnectOAuthClientOptionsResolver>(),
             });
 
@@ -48,8 +48,8 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
         }
 
         return builder.AddScheme<
-            OAuthClientAuthenticationOptions,
-            OAuthAuthenticationParameters,
-            OAuthClientAuthenticationHandler>(scheme);
+            OAuthClientOptions,
+            OAuthParameters,
+            OAuthClientHandler>(scheme);
     }
 }

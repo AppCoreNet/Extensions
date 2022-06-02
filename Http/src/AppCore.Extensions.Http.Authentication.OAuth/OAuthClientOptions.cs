@@ -6,6 +6,6 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 /// <summary>
 /// Provides the options for the OAuth client credentials authentication scheme.
 /// </summary>
-public class OAuthClientAuthenticationOptions : OAuthAuthenticationOptions
+public class OAuthClientOptions : OAuthOptions
 {
 }
