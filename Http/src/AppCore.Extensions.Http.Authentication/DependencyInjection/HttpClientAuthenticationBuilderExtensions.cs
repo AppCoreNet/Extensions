@@ -27,7 +27,8 @@ public static class HttpClientAuthenticationBuilderExtensions
     public static IHttpClientAuthenticationBuilder AddScheme<TOptions, TParameters, THandler>(
         this IHttpClientAuthenticationBuilder builder,
         string name,
-        Action<TOptions>? configure)
+        Action<TOptions>? configure = null
+        )
         where TOptions : AuthenticationSchemeOptions
         where TParameters : AuthenticationParameters
         where THandler : class, IAuthenticationSchemeHandler<TParameters>
@@ -41,7 +42,9 @@ public static class HttpClientAuthenticationBuilderExtensions
         services.TryAddTransient<IAuthenticationSchemeHandler<TParameters>>(
             sp => sp.GetRequiredService<THandler>());
 
-        services.Configure<HttpClientAuthenticationOptions>(o => o.AddScheme(name, typeof(THandler)));
+        services.Configure<HttpClientAuthenticationOptions>(
+            o => o
+                .AddScheme(name, typeof(THandler), typeof(TOptions)));
 
         if (configure != null)
         {

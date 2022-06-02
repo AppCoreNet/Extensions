@@ -2,10 +2,8 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
-using System.Linq;
 using AppCore.Diagnostics;
 using AppCore.Extensions.Http.Authentication.OAuth;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
@@ -17,8 +15,15 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class OAuthHttpClientAuthenticationBuilderExtensions
 {
-    private static void AddOAuthCore(this IHttpClientAuthenticationBuilder builder)
+    /// <summary>
+    /// Adds OAuth client authentication services.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
+    /// <returns></returns>
+    public static void AddOAuthCore(this IHttpClientAuthenticationBuilder builder)
     {
+        Ensure.Arg.NotNull(builder);
+
         IServiceCollection services = builder.Services;
 
         services.AddDistributedMemoryCache();
@@ -33,61 +38,75 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// <summary>
     /// Adds OAuth client credentials authentication scheme.
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="name"></param>
+    /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
+    /// <param name="scheme">The name of the client authentication scheme.</param>
     /// <param name="configure"></param>
     /// <returns></returns>
     public static IHttpClientAuthenticationBuilder AddOAuthClient(
         this IHttpClientAuthenticationBuilder builder,
-        string name,
+        string scheme,
         Action<OAuthClientAuthenticationOptions> configure)
     {
-        Ensure.Arg.NotNull(builder);
-        Ensure.Arg.NotNull(name);
+        Ensure.Arg.NotNull(scheme);
         Ensure.Arg.NotNull(configure);
-
-        IServiceCollection services = builder.Services;
 
         builder.AddOAuthCore();
 
+        IServiceCollection services = builder.Services;
+
         services.TryAddEnumerable(
-            ServiceDescriptor
-                .Transient<IValidateOptions<OAuthClientAuthenticationOptions>, OAuthClientAuthenticationOptionsValidator>());
+            new[]
+            {
+                ServiceDescriptor
+                    .Transient<IOAuthAuthenticationOptionsResolver,
+                        OAuthAuthenticationOptionsResolver<OAuthClientAuthenticationOptions>>(),
+
+                ServiceDescriptor
+                    .Transient<IValidateOptions<OAuthClientAuthenticationOptions>,
+                        OAuthClientAuthenticationOptionsValidator>()
+            });
 
         return builder.AddScheme<
             OAuthClientAuthenticationOptions,
             OAuthAuthenticationParameters,
-            OAuthClientAuthenticationHandler>(name, configure);
+            OAuthClientAuthenticationHandler>(scheme, configure);
     }
 
     /// <summary>
     /// Adds OAuth password authentication scheme.
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="name"></param>
+    /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
+    /// <param name="scheme">The name of the client authentication scheme.</param>
     /// <param name="configure"></param>
     /// <returns></returns>
     public static IHttpClientAuthenticationBuilder AddOAuthPassword(
         this IHttpClientAuthenticationBuilder builder,
-        string name,
+        string scheme,
         Action<OAuthPasswordAuthenticationOptions> configure)
     {
-        Ensure.Arg.NotNull(builder);
-        Ensure.Arg.NotNull(name);
+        Ensure.Arg.NotNull(scheme);
         Ensure.Arg.NotNull(configure);
-
-        IServiceCollection services = builder.Services;
 
         builder.AddOAuthCore();
 
+        IServiceCollection services = builder.Services;
+
         services.TryAddEnumerable(
-            ServiceDescriptor
-                .Transient<IValidateOptions<OAuthPasswordAuthenticationOptions>, OAuthPasswordAuthenticationOptionsValidator>());
+            new[]
+            {
+                ServiceDescriptor
+                    .Transient<IOAuthAuthenticationOptionsResolver,
+                        OAuthAuthenticationOptionsResolver<OAuthPasswordAuthenticationOptions>>(),
+
+                ServiceDescriptor
+                    .Transient<IValidateOptions<OAuthPasswordAuthenticationOptions>,
+                        OAuthPasswordAuthenticationOptionsValidator>()
+            });
 
         return builder.AddScheme<
             OAuthPasswordAuthenticationOptions,
             OAuthAuthenticationParameters,
-            OAuthPasswordAuthenticationHandler>(name, configure);
+            OAuthPasswordAuthenticationHandler>(scheme, configure);
     }
 
     /// <summary>

@@ -15,8 +15,8 @@ public static class OAuthHttpClientBuilderExtensions
     /// <summary>
     /// Adds OAuth client credentials authentications.
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="scheme"></param>
+    /// <param name="builder">The <see cref="IHttpClientBuilder"/>.</param>
+    /// <param name="scheme">The name of the client authentication scheme.</param>
     /// <param name="parameters"></param>
     /// <returns></returns>
     public static IHttpClientBuilder AddOAuthClientAuthentication(
@@ -31,8 +31,8 @@ public static class OAuthHttpClientBuilderExtensions
     /// <summary>
     /// Adds OAuth password authentications.
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="scheme"></param>
+    /// <param name="builder">The <see cref="IHttpClientBuilder"/>.</param>
+    /// <param name="scheme">The name of the client authentication scheme.</param>
     /// <param name="parameters"></param>
     /// <returns></returns>
     public static IHttpClientBuilder AddOAuthPasswordAuthentication(

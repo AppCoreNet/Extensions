@@ -22,17 +22,26 @@ public class AuthenticationScheme
     public Type HandlerType { get; }
 
     /// <summary>
+    /// The type of the <see cref="AuthenticationSchemeOptions"/>.
+    /// </summary>
+    public Type OptionsType { get; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationScheme"/> class.
     /// </summary>
     /// <param name="name"></param>
     /// <param name="handlerType"></param>
-    public AuthenticationScheme(string name, Type handlerType)
+    /// <param name="optionsType"></param>
+    public AuthenticationScheme(string name, Type handlerType, Type optionsType)
     {
         Ensure.Arg.NotNull(name);
         Ensure.Arg.NotNull(handlerType);
         Ensure.Arg.OfType(handlerType, typeof(IAuthenticationSchemeHandler<>));
+        Ensure.Arg.NotNull(optionsType);
+        Ensure.Arg.OfType(optionsType, typeof(AuthenticationSchemeOptions));
 
         Name = name;
         HandlerType = handlerType;
+        OptionsType = optionsType;
     }
 }

@@ -2,54 +2,48 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AppCore.Diagnostics;
-using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Default implementation of the <see cref="IOAuthAuthenticationOptionsProvider"/>.
 /// </summary>
-public sealed class OAuthAuthenticationOptionsProvider : IOAuthAuthenticationOptionsProvider
+public class OAuthAuthenticationOptionsProvider : IOAuthAuthenticationOptionsProvider
 {
-    private readonly IOptionsMonitor<OAuthClientAuthenticationOptions> _clientOptionsMonitor;
-    private readonly IOptionsMonitor<OAuthPasswordAuthenticationOptions> _passwordOptionsMonitor;
+    private readonly IEnumerable<IOAuthAuthenticationOptionsResolver> _resolvers;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="OAuthAuthenticationOptionsProvider"/> class.
     /// </summary>
-    /// <param name="clientOptionsMonitor"></param>
-    /// <param name="passwordOptionsMonitor"></param>
-    public OAuthAuthenticationOptionsProvider(
-        IOptionsMonitor<OAuthClientAuthenticationOptions> clientOptionsMonitor,
-        IOptionsMonitor<OAuthPasswordAuthenticationOptions> passwordOptionsMonitor)
+    public OAuthAuthenticationOptionsProvider(IEnumerable<IOAuthAuthenticationOptionsResolver> resolvers)
     {
-        Ensure.Arg.NotNull(clientOptionsMonitor);
-        Ensure.Arg.NotNull(passwordOptionsMonitor);
-
-        _clientOptionsMonitor = clientOptionsMonitor;
-        _passwordOptionsMonitor = passwordOptionsMonitor;
+        Ensure.Arg.NotNull(resolvers);
+        _resolvers = resolvers;
     }
 
     /// <inheritdoc />
-    public Task<T> GetOptionsAsync<T>(AuthenticationScheme scheme)
-        where T : OAuthAuthenticationOptions
+    public virtual async Task<T> GetOptionsAsync<T>(AuthenticationScheme scheme)
+        where T : AuthenticationSchemeOptions
     {
         Ensure.Arg.NotNull(scheme);
 
-        if (typeof(T) == typeof(OAuthClientAuthenticationOptions))
+        T? result = null;
+        foreach (IOAuthAuthenticationOptionsResolver resolver in _resolvers)
         {
-            scheme.EnsureClientScheme();
-            return Task.FromResult((T)(object)_clientOptionsMonitor.Get(scheme.Name));
+            result = await resolver.TryGetOptionsAsync<T>(scheme);
+            if (result != null)
+                break;
         }
 
-        if (typeof(T) == typeof(OAuthPasswordAuthenticationOptions))
+        if (result == null)
         {
-            scheme.EnsurePasswordScheme();
-            return Task.FromResult((T)(object)_passwordOptionsMonitor.Get(scheme.Name));
+            throw new InvalidOperationException(
+                $"No options of type {typeof(T)} could be resolved for client authentication scheme {scheme.Name}.");
         }
 
-        throw new ArgumentException($"The options type {typeof(T)} is not handled.");
+        return result;
     }
 }

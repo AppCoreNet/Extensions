@@ -59,6 +59,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{B093
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService", "Http\samples\WorkerService\WorkerService.csproj", "{FCE07DAA-08DC-41E0-B091-4A24F1538551}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth.AspNetCore", "Http\src\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.csproj", "{9301436D-85F6-4845-AAD6-33103F49F018}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +139,10 @@ Global
 		{FCE07DAA-08DC-41E0-B091-4A24F1538551}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCE07DAA-08DC-41E0-B091-4A24F1538551}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCE07DAA-08DC-41E0-B091-4A24F1538551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9301436D-85F6-4845-AAD6-33103F49F018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9301436D-85F6-4845-AAD6-33103F49F018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9301436D-85F6-4845-AAD6-33103F49F018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9301436D-85F6-4845-AAD6-33103F49F018}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,5 +176,6 @@ Global
 		{5AD02E91-D970-402E-8958-6B33C86FFD4C} = {A038B60C-C6C4-4487-A0CC-1591E3D48601}
 		{B093F9C1-5054-4198-AE1D-38510FA0547A} = {9416DF99-18D3-4373-A517-00A65E7CC32A}
 		{FCE07DAA-08DC-41E0-B091-4A24F1538551} = {B093F9C1-5054-4198-AE1D-38510FA0547A}
+		{9301436D-85F6-4845-AAD6-33103F49F018} = {B2F9DC67-6D7B-4070-8580-F401050445A9}
 	EndGlobalSection
 EndGlobal
