@@ -52,4 +52,18 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
             OAuthParameters,
             OAuthClientHandler>(scheme);
     }
+
+    /// <summary>
+    /// Adds OAuth client credentials authentication with default scheme name by inferring the configuration from
+    /// a OpenID connect authentication scheme.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
+    /// <param name="configure"></param>
+    /// <returns></returns>
+    public static IHttpClientAuthenticationBuilder AddOAuthClientFromOpenIdConnect(
+        this IHttpClientAuthenticationBuilder builder,
+        Action<OpenIdConnectOAuthClientOptions>? configure = null)
+    {
+        return builder.AddOAuthClientFromOpenIdConnect(OAuthClientDefaults.AuthenticationScheme, configure);
+    }
 }

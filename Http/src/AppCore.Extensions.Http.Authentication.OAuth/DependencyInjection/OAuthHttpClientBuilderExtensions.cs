@@ -29,6 +29,19 @@ public static class OAuthHttpClientBuilderExtensions
     }
 
     /// <summary>
+    /// Adds OAuth client credentials authentications with the default scheme.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHttpClientBuilder"/>.</param>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public static IHttpClientBuilder AddOAuthClientAuthentication(
+        this IHttpClientBuilder builder,
+        OAuthParameters? parameters = null)
+    {
+        return builder.AddOAuthClientAuthentication(OAuthClientDefaults.AuthenticationScheme, parameters);
+    }
+
+    /// <summary>
     /// Adds OAuth password authentications.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientBuilder"/>.</param>
@@ -42,5 +55,18 @@ public static class OAuthHttpClientBuilderExtensions
     {
         Ensure.Arg.NotNull(builder);
         return builder.AddAuthentication<OAuthParameters, OAuthPasswordHandler>(scheme, parameters);
+    }
+
+    /// <summary>
+    /// Adds OAuth password authentications with the default scheme.
+    /// </summary>
+    /// <param name="builder">The <see cref="IHttpClientBuilder"/>.</param>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public static IHttpClientBuilder AddOAuthPasswordAuthentication(
+        this IHttpClientBuilder builder,
+        OAuthParameters? parameters = null)
+    {
+        return builder.AddOAuthClientAuthentication(OAuthPasswordDefaults.AuthenticationScheme, parameters);
     }
 }
