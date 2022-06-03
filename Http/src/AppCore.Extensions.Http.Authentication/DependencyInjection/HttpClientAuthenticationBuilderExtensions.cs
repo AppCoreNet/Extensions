@@ -2,6 +2,7 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
+using System.ComponentModel;
 using AppCore.Diagnostics;
 using AppCore.Extensions.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -24,6 +25,7 @@ public static class HttpClientAuthenticationBuilderExtensions
     /// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
     /// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/>.</typeparam>
     /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/>.</returns>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static IHttpClientAuthenticationBuilder AddScheme<TOptions, TParameters, THandler>(
         this IHttpClientAuthenticationBuilder builder,
         string name,

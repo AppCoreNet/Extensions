@@ -4,8 +4,6 @@
 using System;
 using AppCore.Diagnostics;
 using AppCore.Extensions.Http.Authentication.OAuth;
-using AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
@@ -16,54 +14,38 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class OAuthHttpClientAuthenticationBuilderExtensions
 {
     /// <summary>
-    /// Adds OAuth client credentials authentication scheme by inferring the configuration from a OpenID connect
+    /// Adds OAuth client credentials authentication scheme by inferring the configuration from a ASP.NET Core
     /// authentication scheme.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
     /// <param name="scheme">The name of the client authentication scheme.</param>
     /// <param name="configure"></param>
     /// <returns></returns>
-    public static IHttpClientAuthenticationBuilder AddOAuthClientFromOpenIdConnect(
+    public static IHttpClientAuthenticationBuilder AddOAuthClientForScheme(
         this IHttpClientAuthenticationBuilder builder,
         string scheme,
-        Action<OpenIdConnectOAuthClientOptions>? configure = null)
+        Action<IOAuthClientFromAuthenticationSchemeBuilder> configure)
     {
         Ensure.Arg.NotNull(scheme);
+        Ensure.Arg.NotNull(configure);
 
         builder.AddOAuthCore();
+        configure(new OAuthClientFromAuthenticationSchemeBuilder(builder.Services, scheme));
 
-        IServiceCollection services = builder.Services;
-
-        services.TryAddEnumerable(
-            new[]
-            {
-                ServiceDescriptor
-                    .Transient<IOAuthOptionsResolver,
-                        OpenIdConnectOAuthClientOptionsResolver>(),
-            });
-
-        if (configure != null)
-        {
-            services.Configure(scheme, configure);
-        }
-
-        return builder.AddScheme<
-            OAuthClientOptions,
-            OAuthParameters,
-            OAuthClientHandler>(scheme);
+        return builder;
     }
 
     /// <summary>
-    /// Adds OAuth client credentials authentication with default scheme name by inferring the configuration from
-    /// a OpenID connect authentication scheme.
+    /// Adds OAuth client credentials authentication scheme by inferring the configuration from a ASP.NET Core
+    /// authentication scheme.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
     /// <param name="configure"></param>
     /// <returns></returns>
-    public static IHttpClientAuthenticationBuilder AddOAuthClientFromOpenIdConnect(
+    public static IHttpClientAuthenticationBuilder AddOAuthClientForScheme(
         this IHttpClientAuthenticationBuilder builder,
-        Action<OpenIdConnectOAuthClientOptions>? configure = null)
+        Action<IOAuthClientFromAuthenticationSchemeBuilder> configure)
     {
-        return builder.AddOAuthClientFromOpenIdConnect(OAuthClientDefaults.AuthenticationScheme, configure);
+        return builder.AddOAuthClientForScheme(OAuthClientDefaults.AuthenticationScheme, configure);
     }
 }

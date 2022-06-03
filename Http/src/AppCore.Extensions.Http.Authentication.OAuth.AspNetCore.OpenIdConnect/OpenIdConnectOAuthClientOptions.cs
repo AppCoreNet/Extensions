@@ -3,19 +3,13 @@
 
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
 
 /// <summary>
 /// Provides the options how to derive <see cref="OAuthClientOptions"/> from <see cref="OpenIdConnectOptions"/>.
 /// </summary>
-public class OpenIdConnectOAuthClientOptions
+public class OpenIdConnectOAuthClientOptions : AuthenticationSchemeOAuthClientOptions
 {
-    /// <summary>
-    /// Sets the scheme name of an OpenID Connect handler, if the client configuration should be derived from it.
-    /// This will fallback to the default challenge scheme if left empty.
-    /// </summary>
-    public string? Scheme { get; set; }
-
     /// <summary>
     /// Scope values as space separated list to use when client configuration is inferred from OpenID Connect scheme.
     /// If not set, token request will omit scope parameter.
