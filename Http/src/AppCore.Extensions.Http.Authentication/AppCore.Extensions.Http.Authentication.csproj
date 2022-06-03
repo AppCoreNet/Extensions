@@ -2,13 +2,17 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
-    <Description>Provides authenticaiton extensions to the Microsoft.Extensions.Http framework.</Description>
+    <Description>
+      Provides extensions to the Microsoft.Extensions.Http framework which adds support for authenticating a HttpClient
+      using different authentication standards.
+    </Description>
+    <PackageTags>$(PackageTags);Security;Authentication</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
       <PrivateAssets>all</PrivateAssets>
-    </PackageReference>    
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Http" Version="$(Microsoft_Extensions_Version)" />
   </ItemGroup>
 

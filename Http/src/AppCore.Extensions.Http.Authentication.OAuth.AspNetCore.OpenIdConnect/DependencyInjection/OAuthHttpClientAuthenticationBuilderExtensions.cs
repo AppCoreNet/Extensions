@@ -34,7 +34,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
                 .AddScheme<
                     OpenIdConnectOAuthClientOptions,
                     OAuthParameters,
-                    OAuthClientHandler>(builder.Scheme);
+                    OAuthClientHandler>(builder.Scheme, configure);
 
         services.TryAddEnumerable(
             new[]
@@ -43,10 +43,5 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
                     .Transient<IOAuthOptionsResolver,
                         OpenIdConnectOAuthClientOptionsResolver>(),
             });
-
-        if (configure != null)
-        {
-            services.Configure(builder.Scheme, configure);
-        }
     }
 }
