@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
     <Microsoft_Extensions_Version>3.1.0</Microsoft_Extensions_Version>
-    <AppCore_Shared_Version>0.4.0-alpha.*</AppCore_Shared_Version>
+    <AppCore_Shared_Version>0.4.3</AppCore_Shared_Version>
   </PropertyGroup>
 </Project>
