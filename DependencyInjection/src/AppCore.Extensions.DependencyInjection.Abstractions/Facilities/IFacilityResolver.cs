@@ -3,17 +3,16 @@
 
 using System.Collections.Generic;
 
-namespace AppCore.Extensions.DependencyInjection.Facilities
+namespace AppCore.Extensions.DependencyInjection.Facilities;
+
+/// <summary>
+/// Represents a dynamic resolver for facilities.
+/// </summary>
+public interface IFacilityResolver
 {
     /// <summary>
-    /// Represents a dynamic resolver for facilities.
+    /// Resolves facilities.
     /// </summary>
-    public interface IFacilityResolver
-    {
-        /// <summary>
-        /// Resolves facilities.
-        /// </summary>
-        /// <returns>The <see cref="IEnumerable{T}"/> of facilities.</returns>
-        IEnumerable<Facility> Resolve();
-    }
+    /// <returns>The <see cref="IEnumerable{T}"/> of facilities.</returns>
+    IEnumerable<Facility> Resolve();
 }

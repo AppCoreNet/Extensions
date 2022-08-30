@@ -6,18 +6,17 @@ using AppCore.Extensions.DependencyInjection.Activator;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+internal class AppCoreBuilder : IAppCoreBuilder
 {
-    internal class AppCoreBuilder : IAppCoreBuilder
+    public IServiceCollection Services { get; }
+
+    public AppCoreBuilder(IServiceCollection services)
     {
-        public IServiceCollection Services { get; }
+        Ensure.Arg.NotNull(services);
+        Services = services;
 
-        public AppCoreBuilder(IServiceCollection services)
-        {
-            Ensure.Arg.NotNull(services, nameof(services));
-            Services = services;
-
-            services.TryAddTransient<IActivator, ServiceProviderActivator>();
-        }
+        services.TryAddTransient<IActivator, ServiceProviderActivator>();
     }
 }

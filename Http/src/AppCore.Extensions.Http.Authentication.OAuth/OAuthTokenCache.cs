@@ -105,7 +105,7 @@ public class OAuthTokenCache : IOAuthTokenCache
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
-        Ensure.Arg.NotNull(scheme, nameof(scheme));
+        Ensure.Arg.NotNull(scheme);
 
         OAuthTokenCacheOptions options = _optionsMonitor.CurrentValue;
 
@@ -130,7 +130,7 @@ public class OAuthTokenCache : IOAuthTokenCache
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
-        Ensure.Arg.NotNull(scheme, nameof(scheme));
+        Ensure.Arg.NotNull(scheme);
 
         OAuthTokenCacheOptions options = _optionsMonitor.CurrentValue;
 

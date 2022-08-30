@@ -10,65 +10,64 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+/// <summary>
+/// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning plugin assemblies.
+/// </summary>
+public class PluginServiceDescriptorResolver : IServiceDescriptorResolver
 {
+    private readonly List<Predicate<Type>> _filters = new();
+    private readonly IPluginManager _pluginManager;
+    private readonly IOptions<PluginOptions> _pluginOptions;
+
     /// <summary>
-    /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning plugin assemblies.
+    /// Initializes a new instance of the <see cref="PluginServiceDescriptorResolver"/> class.
     /// </summary>
-    public class PluginServiceDescriptorResolver : IServiceDescriptorResolver
+    /// <param name="pluginManager">The <see cref="IPluginManager"/>.</param>
+    /// <param name="pluginOptions">The plugin options.</param>
+    public PluginServiceDescriptorResolver(IPluginManager pluginManager, IOptions<PluginOptions> pluginOptions)
     {
-        private readonly List<Predicate<Type>> _filters = new();
-        private readonly IPluginManager _pluginManager;
-        private readonly IOptions<PluginOptions> _pluginOptions;
+        Ensure.Arg.NotNull(pluginManager);
+        _pluginManager = pluginManager;
+        _pluginOptions = pluginOptions;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PluginServiceDescriptorResolver"/> class.
-        /// </summary>
-        /// <param name="pluginManager">The <see cref="IPluginManager"/>.</param>
-        /// <param name="pluginOptions">The plugin options.</param>
-        public PluginServiceDescriptorResolver(IPluginManager pluginManager, IOptions<PluginOptions> pluginOptions)
+    /// <summary>
+    /// Adds a type filter.
+    /// </summary>
+    /// <param name="filter">The type filter.</param>
+    /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
+    public PluginServiceDescriptorResolver Filter(Predicate<Type> filter)
+    {
+        Ensure.Arg.NotNull(filter);
+        _filters.Add(filter);
+        return this;
+    }
+
+    /// <summary>
+    /// Clears the current type filters.
+    /// </summary>
+    /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
+    public PluginServiceDescriptorResolver ClearFilters()
+    {
+        _filters.Clear();
+        return this;
+    }
+
+    /// <inheritdoc />
+    IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve(Type serviceType, ServiceLifetime defaultLifetime)
+    {
+        var resolver = new AssemblyServiceDescriptorResolver();
+
+        resolver.Add(_pluginManager.Plugins.Select(p => p.Assembly));
+        resolver.WithPrivateTypes(_pluginOptions.Value.ResolvePrivateTypes);
+        resolver.ClearDefaultFilters();
+        foreach (Predicate<Type> filter in _filters)
         {
-            Ensure.Arg.NotNull(pluginManager);
-            _pluginManager = pluginManager;
-            _pluginOptions = pluginOptions;
+            resolver.Filter(filter);
         }
 
-        /// <summary>
-        /// Adds a type filter.
-        /// </summary>
-        /// <param name="filter">The type filter.</param>
-        /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
-        public PluginServiceDescriptorResolver Filter(Predicate<Type> filter)
-        {
-            Ensure.Arg.NotNull(filter);
-            _filters.Add(filter);
-            return this;
-        }
-
-        /// <summary>
-        /// Clears the current type filters.
-        /// </summary>
-        /// <returns>The <see cref="PluginServiceDescriptorResolver"/>.</returns>
-        public PluginServiceDescriptorResolver ClearFilters()
-        {
-            _filters.Clear();
-            return this;
-        }
-
-        /// <inheritdoc />
-        IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve(Type serviceType, ServiceLifetime defaultLifetime)
-        {
-            var resolver = new AssemblyServiceDescriptorResolver();
-
-            resolver.Add(_pluginManager.Plugins.Select(p => p.Assembly));
-            resolver.WithPrivateTypes(_pluginOptions.Value.ResolvePrivateTypes);
-            resolver.ClearDefaultFilters();
-            foreach (Predicate<Type> filter in _filters)
-            {
-                resolver.Filter(filter);
-            }
-
-            return ((IServiceDescriptorResolver)resolver).Resolve(serviceType, defaultLifetime);
-        }
+        return ((IServiceDescriptorResolver)resolver).Resolve(serviceType, defaultLifetime);
     }
 }

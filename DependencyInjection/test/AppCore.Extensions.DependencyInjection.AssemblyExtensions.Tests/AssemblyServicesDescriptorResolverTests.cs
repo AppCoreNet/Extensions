@@ -7,89 +7,88 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+public class AssemblyServicesDescriptorResolverTests
 {
-    public class AssemblyServicesDescriptorResolverTests
+    [Fact]
+    public void FiltersNonDerivableGenericTypes()
     {
-        [Fact]
-        public void FiltersNonDerivableGenericTypes()
-        {
-            Type contractType = typeof(IContract);
-            AssemblyServiceDescriptorResolver resolver =
-                new AssemblyServiceDescriptorResolver()
-                    .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
-                    .ClearDefaultFilters();
+        Type contractType = typeof(IContract);
+        AssemblyServiceDescriptorResolver resolver =
+            new AssemblyServiceDescriptorResolver()
+                .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
+                .ClearDefaultFilters();
 
-            IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
+        IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
 
-            serviceDescriptors
-                .Should()
-                .BeEquivalentTo(
-                    new[]
-                    {
-                        ServiceDescriptor.Describe(
-                            contractType,
-                            typeof(ContractImpl1),
-                            ServiceLifetime.Transient),
-                        ServiceDescriptor.Describe(
-                            contractType,
-                            typeof(ContractImpl2),
-                            ServiceLifetime.Transient)
-                    });
-        }
+        serviceDescriptors
+            .Should()
+            .BeEquivalentTo(
+                new[]
+                {
+                    ServiceDescriptor.Describe(
+                        contractType,
+                        typeof(ContractImpl1),
+                        ServiceLifetime.Transient),
+                    ServiceDescriptor.Describe(
+                        contractType,
+                        typeof(ContractImpl2),
+                        ServiceLifetime.Transient)
+                });
+    }
 
-        [Fact]
-        public void ClosesOpenGenericInterfaceForClosedGenerics()
-        {
-            Type contractType = typeof(IContract<>);
-            Type closedContractType = typeof(IContract<string>);
+    [Fact]
+    public void ClosesOpenGenericInterfaceForClosedGenerics()
+    {
+        Type contractType = typeof(IContract<>);
+        Type closedContractType = typeof(IContract<string>);
 
-            AssemblyServiceDescriptorResolver resolver =
-                new AssemblyServiceDescriptorResolver()
-                    .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
-                    .ClearDefaultFilters();
+        AssemblyServiceDescriptorResolver resolver =
+            new AssemblyServiceDescriptorResolver()
+                .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
+                .ClearDefaultFilters();
 
-            IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
+        IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
 
-            serviceDescriptors
-                .Should()
-                .BeEquivalentTo(
-                    new[]
-                    {
-                        ServiceDescriptor.Describe(
-                            contractType,
-                            typeof(ContractImpl1<>),
-                            ServiceLifetime.Transient),
-                        ServiceDescriptor.Describe(
-                            contractType,
-                            typeof(ContractImpl2<>),
-                            ServiceLifetime.Transient),
-                        ServiceDescriptor.Describe(
-                            closedContractType,
-                            typeof(ContractImpl1String),
-                            ServiceLifetime.Transient),
-                        ServiceDescriptor.Describe(
-                            closedContractType,
-                            typeof(ContractImpl2String),
-                            ServiceLifetime.Transient)
-                    });
-        }
+        serviceDescriptors
+            .Should()
+            .BeEquivalentTo(
+                new[]
+                {
+                    ServiceDescriptor.Describe(
+                        contractType,
+                        typeof(ContractImpl1<>),
+                        ServiceLifetime.Transient),
+                    ServiceDescriptor.Describe(
+                        contractType,
+                        typeof(ContractImpl2<>),
+                        ServiceLifetime.Transient),
+                    ServiceDescriptor.Describe(
+                        closedContractType,
+                        typeof(ContractImpl1String),
+                        ServiceLifetime.Transient),
+                    ServiceDescriptor.Describe(
+                        closedContractType,
+                        typeof(ContractImpl2String),
+                        ServiceLifetime.Transient)
+                });
+    }
 
-        [Fact]
-        public void UsesLifetimeFromResolver()
-        {
-            Type contractType = typeof(IContract);
-            var lifetime = ServiceLifetime.Scoped;
+    [Fact]
+    public void UsesLifetimeFromResolver()
+    {
+        Type contractType = typeof(IContract);
+        var lifetime = ServiceLifetime.Scoped;
 
-            AssemblyServiceDescriptorResolver resolver =
-                new AssemblyServiceDescriptorResolver()
-                    .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
-                    .ClearDefaultFilters();
+        AssemblyServiceDescriptorResolver resolver =
+            new AssemblyServiceDescriptorResolver()
+                .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
+                .ClearDefaultFilters();
 
-            IEnumerable<ServiceDescriptor> registrations = ((IServiceDescriptorResolver) resolver).Resolve(contractType, lifetime);
+        IEnumerable<ServiceDescriptor> registrations = ((IServiceDescriptorResolver) resolver).Resolve(contractType, lifetime);
 
-            registrations.Should()
-                         .OnlyContain(cr => cr.Lifetime == lifetime);
-        }
+        registrations.Should()
+                     .OnlyContain(cr => cr.Lifetime == lifetime);
     }
 }

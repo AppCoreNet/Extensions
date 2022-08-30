@@ -3,16 +3,15 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+/// <summary>
+/// Represents the builder for AppCore services.
+/// </summary>
+public interface IAppCoreBuilder
 {
     /// <summary>
-    /// Represents the builder for AppCore services.
+    /// Gets the <see cref="IServiceCollection"/>.
     /// </summary>
-    public interface IAppCoreBuilder
-    {
-        /// <summary>
-        /// Gets the <see cref="IServiceCollection"/>.
-        /// </summary>
-        IServiceCollection Services { get; }
-    }
+    IServiceCollection Services { get; }
 }

@@ -10,26 +10,25 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+public class AssemblyFacilityResolverTests
 {
-    public class AssemblyFacilityResolverTests
+    [Fact]
+    public void ResolvesAllFacilities()
     {
-        [Fact]
-        public void ResolvesAllFacilities()
-        {
-            var activator = Substitute.For<IActivator>();
-            activator.CreateInstance(Arg.Any<Type>(), Arg.Any<object[]>())
-                     .Returns(ci => System.Activator.CreateInstance(ci.ArgAt<Type>(0)));
+        var activator = Substitute.For<IActivator>();
+        activator.CreateInstance(Arg.Any<Type>(), Arg.Any<object[]>())
+                 .Returns(ci => System.Activator.CreateInstance(ci.ArgAt<Type>(0)));
 
-            AssemblyFacilityResolver resolver = new AssemblyFacilityResolver(activator)
-                                                .Add(typeof(AssemblyFacilityResolverTests).Assembly)
-                                                .ClearDefaultFilters();
+        AssemblyFacilityResolver resolver = new AssemblyFacilityResolver(activator)
+                                            .Add(typeof(AssemblyFacilityResolverTests).Assembly)
+                                            .ClearDefaultFilters();
 
-            IEnumerable<Facility> facilities = ((IFacilityResolver) resolver).Resolve();
+        IEnumerable<Facility> facilities = ((IFacilityResolver) resolver).Resolve();
 
-            facilities.Select(f => f.GetType())
-                      .Should()
-                      .BeEquivalentTo(new [] { typeof(Facility1), typeof(Facility2) });
-        }
+        facilities.Select(f => f.GetType())
+                  .Should()
+                  .BeEquivalentTo(new [] { typeof(Facility1), typeof(Facility2) });
     }
 }

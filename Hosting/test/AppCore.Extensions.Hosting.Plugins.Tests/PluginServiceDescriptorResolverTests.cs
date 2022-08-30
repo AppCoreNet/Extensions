@@ -7,43 +7,42 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace AppCore.Extensions.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins;
+
+public class PluginServiceDescriptorResolverTests
 {
-    public class PluginServiceDescriptorResolverTests
+#nullable disable
+    private class ServiceCollection : List<ServiceDescriptor>, IServiceCollection
     {
-        #nullable disable
-        private class ServiceCollection : List<ServiceDescriptor>, IServiceCollection
-        {
-        }
-        #nullable restore
+    }
+#nullable restore
 
-        [Fact]
-        public void RegistersServices()
-        {
-            var services = new ServiceCollection();
-            services.AddAppCore()
-                    .AddPlugins(
-                        o =>
-                        {
-                            o.Assemblies.Add(PluginPaths.TestPlugin);
-                            o.Assemblies.Add(PluginPaths.TestPlugin2);
-                        });
+    [Fact]
+    public void RegistersServices()
+    {
+        var services = new ServiceCollection();
+        services.AddAppCore()
+                .AddPlugins(
+                    o =>
+                    {
+                        o.Assemblies.Add(PluginPaths.TestPlugin);
+                        o.Assemblies.Add(PluginPaths.TestPlugin2);
+                    });
 
-            services.TryAddEnumerableFrom<IStartupTask>(s => s.Plugins());
+        services.TryAddEnumerableFrom<IStartupTask>(s => s.Plugins());
 
-            services.Should()
-                    .Contain(
-                        r =>
-                            r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
-                            && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask"
-                    );
+        services.Should()
+                .Contain(
+                    r =>
+                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask"
+                );
 
-            services.Should()
-                    .Contain(
-                        r =>
-                            r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
-                            && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask"
-                    );
-        }
+        services.Should()
+                .Contain(
+                    r =>
+                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask"
+                );
     }
 }

@@ -5,15 +5,14 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Extensions.Hosting.Plugins.TestPlugin2
-{
-    internal class InternalStartupTask : IStartupTask
-    {
-        public int Order { get; }
+namespace AppCore.Extensions.Hosting.Plugins.TestPlugin2;
 
-        public Task ExecuteAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+internal class InternalStartupTask : IStartupTask
+{
+    public int Order { get; }
+
+    public Task ExecuteAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }

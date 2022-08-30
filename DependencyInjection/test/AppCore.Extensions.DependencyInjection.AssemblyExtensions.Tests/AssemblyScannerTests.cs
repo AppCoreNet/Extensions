@@ -5,127 +5,126 @@ using System.Reflection;
 using FluentAssertions;
 using Xunit;
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+public class AssemblyScannerTests
 {
-    public class AssemblyScannerTests
+    [Fact]
+    public void FindsAllImplementationsOfInterface()
     {
-        [Fact]
-        public void FindsAllImplementationsOfInterface()
-        {
-            var scanner = new AssemblyScanner(
-                typeof(IContract));
+        var scanner = new AssemblyScanner(
+            typeof(IContract));
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
+        scanner.Filters.Clear();
+        scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
-            scanner.ScanAssemblies()
-                   .Should()
-                   .BeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1),
-                           typeof(ContractImpl2),
-                           typeof(ContractImplOpenGeneric<>)
-                       });
-        }
+        scanner.ScanAssemblies()
+               .Should()
+               .BeEquivalentTo(
+                   new[]
+                   {
+                       typeof(ContractImpl1),
+                       typeof(ContractImpl2),
+                       typeof(ContractImplOpenGeneric<>)
+                   });
+    }
 
-        [Fact]
-        public void FindsAllImplementationsOfOpenGenericInterface()
-        {
-            var scanner = new AssemblyScanner(
-                typeof(IContract<>));
+    [Fact]
+    public void FindsAllImplementationsOfOpenGenericInterface()
+    {
+        var scanner = new AssemblyScanner(
+            typeof(IContract<>));
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
+        scanner.Filters.Clear();
+        scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
-            scanner.ScanAssemblies()
-                   .Should()
-                   .BeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1<>),
-                           typeof(ContractImpl2<>),
-                           typeof(ContractImpl1String),
-                           typeof(ContractImpl2String)
-                       });
-        }
+        scanner.ScanAssemblies()
+               .Should()
+               .BeEquivalentTo(
+                   new[]
+                   {
+                       typeof(ContractImpl1<>),
+                       typeof(ContractImpl2<>),
+                       typeof(ContractImpl1String),
+                       typeof(ContractImpl2String)
+                   });
+    }
 
-        [Fact]
-        public void FindsAllImplementationsOfClosedGenericInterface()
-        {
-            var scanner = new AssemblyScanner(
-                typeof(IContract<string>));
+    [Fact]
+    public void FindsAllImplementationsOfClosedGenericInterface()
+    {
+        var scanner = new AssemblyScanner(
+            typeof(IContract<string>));
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
+        scanner.Filters.Clear();
+        scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
-            scanner.ScanAssemblies()
-                   .Should()
-                   .BeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1String),
-                           typeof(ContractImpl2String)
-                       });
-        }
+        scanner.ScanAssemblies()
+               .Should()
+               .BeEquivalentTo(
+                   new[]
+                   {
+                       typeof(ContractImpl1String),
+                       typeof(ContractImpl2String)
+                   });
+    }
 
-        [Fact]
-        public void FindsAllImplementationsOfClass()
-        {
-            var scanner = new AssemblyScanner(
-                typeof(ContractImplBase));
+    [Fact]
+    public void FindsAllImplementationsOfClass()
+    {
+        var scanner = new AssemblyScanner(
+            typeof(ContractImplBase));
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
+        scanner.Filters.Clear();
+        scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
-            scanner.ScanAssemblies()
-                   .Should()
-                   .BeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1),
-                           typeof(ContractImpl2)
-                       });
-        }
+        scanner.ScanAssemblies()
+               .Should()
+               .BeEquivalentTo(
+                   new[]
+                   {
+                       typeof(ContractImpl1),
+                       typeof(ContractImpl2)
+                   });
+    }
 
-        [Fact]
-        public void FindsAllImplementationsOfOpenGenericClass()
-        {
-            var scanner = new AssemblyScanner(
-                typeof(ContractImplBase<>));
+    [Fact]
+    public void FindsAllImplementationsOfOpenGenericClass()
+    {
+        var scanner = new AssemblyScanner(
+            typeof(ContractImplBase<>));
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
+        scanner.Filters.Clear();
+        scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
-            scanner.ScanAssemblies()
-                   .Should()
-                   .BeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1<>),
-                           typeof(ContractImpl2<>),
-                           typeof(ContractImpl1String),
-                           typeof(ContractImpl2String)
-                       });
-        }
+        scanner.ScanAssemblies()
+               .Should()
+               .BeEquivalentTo(
+                   new[]
+                   {
+                       typeof(ContractImpl1<>),
+                       typeof(ContractImpl2<>),
+                       typeof(ContractImpl1String),
+                       typeof(ContractImpl2String)
+                   });
+    }
 
-        [Fact]
-        public void FindsAllImplementationsOfClosedGenericClass()
-        {
-            var scanner = new AssemblyScanner(
-                typeof(ContractImplBaseString));
+    [Fact]
+    public void FindsAllImplementationsOfClosedGenericClass()
+    {
+        var scanner = new AssemblyScanner(
+            typeof(ContractImplBaseString));
 
-            scanner.Filters.Clear();
-            scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
+        scanner.Filters.Clear();
+        scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
 
-            scanner.ScanAssemblies()
-                   .Should()
-                   .BeEquivalentTo(
-                       new[]
-                       {
-                           typeof(ContractImpl1String),
-                           typeof(ContractImpl2String)
-                       });
-        }
+        scanner.ScanAssemblies()
+               .Should()
+               .BeEquivalentTo(
+                   new[]
+                   {
+                       typeof(ContractImpl1String),
+                       typeof(ContractImpl2String)
+                   });
     }
 }
