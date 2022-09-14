@@ -4,15 +4,14 @@
 using AppCore.Extensions.DependencyInjection.Facilities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.Hosting.Plugins.TestPlugin
-{
-    public class TestFacility : Facility
-    {
-        protected override void ConfigureServices(IServiceCollection services)
-        {
-            base.ConfigureServices(services);
+namespace AppCore.Extensions.Hosting.Plugins.TestPlugin;
 
-            services.AddTransient<TestFacilityService>();
-        }
+public class TestFacility : Facility
+{
+    protected override void ConfigureServices(IServiceCollection services)
+    {
+        base.ConfigureServices(services);
+
+        services.AddTransient<TestFacilityService>();
     }
 }

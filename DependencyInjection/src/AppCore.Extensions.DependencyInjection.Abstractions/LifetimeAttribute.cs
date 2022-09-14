@@ -4,27 +4,26 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+/// <summary>
+/// Specifies the lifetime of a service when registered via dynamic scanning.
+/// </summary>
+/// <seealso cref="ServiceLifetime"/>
+[AttributeUsage(AttributeTargets.Class)]
+public class LifetimeAttribute : Attribute
 {
     /// <summary>
-    /// Specifies the lifetime of a service when registered via dynamic scanning.
+    /// Gets the <see cref="ServiceLifetime"/>.
     /// </summary>
-    /// <seealso cref="ServiceLifetime"/>
-    [AttributeUsage(AttributeTargets.Class)]
-    public class LifetimeAttribute : Attribute
-    {
-        /// <summary>
-        /// Gets the <see cref="ServiceLifetime"/>.
-        /// </summary>
-        public ServiceLifetime Lifetime { get; }
+    public ServiceLifetime Lifetime { get; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LifetimeAttribute"/> class.
-        /// </summary>
-        /// <param name="lifetime">The lifetime of the service.</param>
-        public LifetimeAttribute(ServiceLifetime lifetime)
-        {
-            Lifetime = lifetime;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LifetimeAttribute"/> class.
+    /// </summary>
+    /// <param name="lifetime">The lifetime of the service.</param>
+    public LifetimeAttribute(ServiceLifetime lifetime)
+    {
+        Lifetime = lifetime;
     }
 }

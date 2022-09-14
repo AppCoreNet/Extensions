@@ -60,7 +60,9 @@ public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOpti
             Microsoft.AspNetCore.Authentication.AuthenticationScheme? authenticationScheme =
                 string.IsNullOrWhiteSpace(clientOptions.Scheme)
                     ? await _authenticationSchemeProvider.GetDefaultChallengeSchemeAsync()
-                    : await _authenticationSchemeProvider.GetSchemeAsync(clientOptions.Scheme);
+                                                         .ConfigureAwait(false)
+                    : await _authenticationSchemeProvider.GetSchemeAsync(clientOptions.Scheme)
+                                                         .ConfigureAwait(false);
 
             if (authenticationScheme is null)
             {
@@ -76,8 +78,9 @@ public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOpti
             }
 
             result = (T)(object)await GetOptionsFromSchemeAsync(
-                _clientOptions.Get(scheme.Name),
-                _authenticationSchemeOptions.Get(authenticationScheme.Name));
+                    _clientOptions.Get(scheme.Name),
+                    _authenticationSchemeOptions.Get(authenticationScheme.Name))
+                .ConfigureAwait(false);
         }
 
         return result;

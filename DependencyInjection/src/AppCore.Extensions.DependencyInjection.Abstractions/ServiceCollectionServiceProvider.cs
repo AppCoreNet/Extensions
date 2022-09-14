@@ -7,77 +7,76 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+internal class ServiceCollectionServiceProvider : IServiceProvider
 {
-    internal class ServiceCollectionServiceProvider : IServiceProvider
+    private readonly IServiceCollection _services;
+    private readonly Dictionary<Type, object> _additionalServices = new();
+
+    public ServiceCollectionServiceProvider(IServiceCollection services)
     {
-        private readonly IServiceCollection _services;
-        private readonly Dictionary<Type, object> _additionalServices = new();
+        _services = services;
+    }
 
-        public ServiceCollectionServiceProvider(IServiceCollection services)
-        {
-            _services = services;
-        }
+    public void AddService(Type serviceType, object instance)
+    {
+        _additionalServices.Add(serviceType, instance);
+    }
 
-        public void AddService(Type serviceType, object instance)
+    private IEnumerable<object> GetServices(Type serviceType)
+    {
+        object ServiceFactory(ServiceDescriptor serviceDescriptor)
         {
-            _additionalServices.Add(serviceType, instance);
-        }
-
-        private IEnumerable<object> GetServices(Type serviceType)
-        {
-            object ServiceFactory(ServiceDescriptor serviceDescriptor)
+            object instance = serviceDescriptor.ImplementationInstance;
+            if (instance == null && serviceDescriptor.ImplementationFactory != null)
             {
-                object instance = serviceDescriptor.ImplementationInstance;
-                if (instance == null && serviceDescriptor.ImplementationFactory != null)
-                {
-                    instance = serviceDescriptor.ImplementationFactory(this);
-                }
-
-                if (instance == null && serviceDescriptor.ImplementationType != null)
-                {
-                    Type implementationType = serviceDescriptor.ImplementationType!;
-                    if (implementationType.IsGenericType)
-                        implementationType = implementationType.MakeGenericType(serviceType.GenericTypeArguments);
-
-                    instance = ActivatorUtilities.CreateInstance(this, implementationType);
-                }
-
-                return instance!;
+                instance = serviceDescriptor.ImplementationFactory(this);
             }
 
-            return _services.Where(
-                                sd => sd.ServiceType == serviceType
-                                      || serviceType.IsGenericType
-                                      && sd.ServiceType == serviceType.GetGenericTypeDefinition())
-                            .Select(ServiceFactory);
+            if (instance == null && serviceDescriptor.ImplementationType != null)
+            {
+                Type implementationType = serviceDescriptor.ImplementationType!;
+                if (implementationType.IsGenericType)
+                    implementationType = implementationType.MakeGenericType(serviceType.GenericTypeArguments);
+
+                instance = ActivatorUtilities.CreateInstance(this, implementationType);
+            }
+
+            return instance!;
         }
 
-        public object? GetService(Type serviceType)
-        {
-            if (serviceType == typeof(IServiceProvider))
-                return this;
+        return _services.Where(
+                            sd => sd.ServiceType == serviceType
+                                  || serviceType.IsGenericType
+                                  && sd.ServiceType == serviceType.GetGenericTypeDefinition())
+                        .Select(ServiceFactory);
+    }
 
-            if (_additionalServices.TryGetValue(serviceType, out object? instance))
-                return instance;
+    public object? GetService(Type serviceType)
+    {
+        if (serviceType == typeof(IServiceProvider))
+            return this;
 
-            if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-            {
-                serviceType = serviceType.GenericTypeArguments[0];
-                var instances = (IList) System.Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType))!;
-                foreach (object service in GetServices(serviceType))
-                {
-                    instances.Add(service);
-                }
-
-                instance = instances;
-            }
-            else
-            {
-                instance = GetServices(serviceType).FirstOrDefault();
-            }
-
+        if (_additionalServices.TryGetValue(serviceType, out object? instance))
             return instance;
+
+        if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+        {
+            serviceType = serviceType.GenericTypeArguments[0];
+            var instances = (IList) System.Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType))!;
+            foreach (object service in GetServices(serviceType))
+            {
+                instances.Add(service);
+            }
+
+            instance = instances;
         }
+        else
+        {
+            instance = GetServices(serviceType).FirstOrDefault();
+        }
+
+        return instance;
     }
 }

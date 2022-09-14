@@ -8,66 +8,65 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace AppCore.Extensions.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins;
+
+public class PluginFacilityResolverTests
 {
-    public class PluginFacilityResolverTests
+#nullable disable
+    private class ServiceCollection : List<ServiceDescriptor>, IServiceCollection
     {
-        #nullable disable
-        private class ServiceCollection : List<ServiceDescriptor>, IServiceCollection
-        {
-        }
-        #nullable restore
+    }
+#nullable restore
 
-        [Fact]
-        public void RegistersFacilities()
-        {
-            var services = new ServiceCollection();
-            services.AddAppCore()
-                    .AddPlugins(
-                        o =>
-                        {
-                            o.Assemblies.Add(PluginPaths.TestPlugin);
-                            o.Assemblies.Add(PluginPaths.TestPlugin2);
-                        });
+    [Fact]
+    public void RegistersFacilities()
+    {
+        var services = new ServiceCollection();
+        services.AddAppCore()
+                .AddPlugins(
+                    o =>
+                    {
+                        o.Assemblies.Add(PluginPaths.TestPlugin);
+                        o.Assemblies.Add(PluginPaths.TestPlugin2);
+                    });
 
-            services.AddFacilitiesFrom(s => s.Plugins());
+        services.AddFacilitiesFrom(s => s.Plugins());
 
-            services.Should()
-                    .Contain(
-                        r =>
-                            r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
-                            && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
-                    );
-
-            services.Should()
-                    .Contain(
-                        r =>
-                            r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
-                            && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
-                    );
-        }
-
-        [Fact]
-        public void RegistersFacilityWithServices()
-        {
-            var services = new ServiceCollection();
-            services.AddAppCore()
-                    .AddPlugins(
-                        o =>
-                        {
-                            o.Assemblies.Add(PluginPaths.TestPlugin);
-                        });
-
-            services.AddFacilitiesFrom(s => s.Plugins());
-
-            IEnumerable<ServiceDescriptor> facilityServices =
-                services.Where(
+        services.Should()
+                .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService");
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
+                );
 
-            facilityServices.Should()
-                            .HaveCount(2);
-        }
+        services.Should()
+                .Contain(
+                    r =>
+                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
+                );
+    }
+
+    [Fact]
+    public void RegistersFacilityWithServices()
+    {
+        var services = new ServiceCollection();
+        services.AddAppCore()
+                .AddPlugins(
+                    o =>
+                    {
+                        o.Assemblies.Add(PluginPaths.TestPlugin);
+                    });
+
+        services.AddFacilitiesFrom(s => s.Plugins());
+
+        IEnumerable<ServiceDescriptor> facilityServices =
+            services.Where(
+                r =>
+                    r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
+                    && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService");
+
+        facilityServices.Should()
+                        .HaveCount(2);
     }
 }

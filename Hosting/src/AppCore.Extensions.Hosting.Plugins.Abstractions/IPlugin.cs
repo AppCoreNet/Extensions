@@ -4,34 +4,33 @@
 using System;
 using System.Reflection;
 
-namespace AppCore.Extensions.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins;
+
+/// <summary>
+/// Represents a plugin.
+/// </summary>
+public interface IPlugin : IServiceProvider
 {
     /// <summary>
-    /// Represents a plugin.
+    /// Gets the info about the plugin.
     /// </summary>
-    public interface IPlugin : IServiceProvider
-    {
-        /// <summary>
-        /// Gets the info about the plugin.
-        /// </summary>
-        PluginInfo Info { get; }
+    PluginInfo Info { get; }
 
-        /// <summary>
-        /// Gets the plugin assembly.
-        /// </summary>
-        Assembly Assembly { get; }
+    /// <summary>
+    /// Gets the plugin assembly.
+    /// </summary>
+    Assembly Assembly { get; }
 
-        /// <summary>
-        /// Loads a plugin assembly.
-        /// </summary>
-        /// <param name="fileName">The file name of the assembly.</param>
-        /// <returns>The assembly (if found).</returns>
-        Assembly LoadAssembly(string fileName);
+    /// <summary>
+    /// Loads a plugin assembly.
+    /// </summary>
+    /// <param name="fileName">The file name of the assembly.</param>
+    /// <returns>The assembly (if found).</returns>
+    Assembly LoadAssembly(string fileName);
 
-        /// <summary>
-        /// Enters the contextual reflection scope.
-        /// </summary>
-        /// <returns>The <see cref="IDisposable"/>.</returns>
-        IDisposable EnterContextualReflection();
-    }
+    /// <summary>
+    /// Enters the contextual reflection scope.
+    /// </summary>
+    /// <returns>The <see cref="IDisposable"/>.</returns>
+    IDisposable EnterContextualReflection();
 }

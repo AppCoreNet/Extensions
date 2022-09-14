@@ -31,7 +31,8 @@ internal sealed class OpenIdConnectOAuthClientOptionsResolver
         OpenIdConnectConfiguration oidcConfig;
         try
         {
-            oidcConfig = await oidcOptions.ConfigurationManager!.GetConfigurationAsync(default);
+            oidcConfig = await oidcOptions.ConfigurationManager!.GetConfigurationAsync(default)
+                                          .ConfigureAwait(false);
         }
         catch (Exception e)
         {

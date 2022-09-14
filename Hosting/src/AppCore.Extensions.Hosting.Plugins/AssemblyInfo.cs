@@ -4,45 +4,44 @@
 using System.Reflection;
 using AppCore.Diagnostics;
 
-namespace AppCore.Extensions.Hosting.Plugins
+namespace AppCore.Extensions.Hosting.Plugins;
+
+internal sealed class AssemblyInfo
 {
-    internal sealed class AssemblyInfo
+    public string Title { get; }
+
+    public string? Version { get; }
+
+    public string? Description { get; }
+
+    public string? Copyright { get; }
+
+    public AssemblyInfo(Assembly assembly)
     {
-        public string Title { get; }
+        Ensure.Arg.NotNull(assembly);
 
-        public string? Version { get; }
+        string? title = assembly
+                        ?.GetCustomAttribute<AssemblyTitleAttribute>()
+                        ?.Title;
 
-        public string? Description { get; }
-
-        public string? Copyright { get; }
-
-        public AssemblyInfo(Assembly assembly)
+        if (string.IsNullOrEmpty(title))
         {
-            Ensure.Arg.NotNull(assembly);
-
-            string? title = assembly
-                    ?.GetCustomAttribute<AssemblyTitleAttribute>()
-                    ?.Title;
-
-            if (string.IsNullOrEmpty(title))
-            {
-                title = assembly?.GetName()
-                                .Name;
-            }
-
-            Title = title!;
-
-            Description = assembly
-                          ?.GetCustomAttribute<AssemblyDescriptionAttribute>()
-                          ?.Description;
-
-            Version = assembly
-                      ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                      ?.InformationalVersion;
-
-            Copyright = assembly
-                        ?.GetCustomAttribute<AssemblyCopyrightAttribute>()
-                        ?.Copyright;
+            title = assembly?.GetName()
+                            .Name;
         }
+
+        Title = title!;
+
+        Description = assembly
+                      ?.GetCustomAttribute<AssemblyDescriptionAttribute>()
+                      ?.Description;
+
+        Version = assembly
+                  ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                  ?.InformationalVersion;
+
+        Copyright = assembly
+                    ?.GetCustomAttribute<AssemblyCopyrightAttribute>()
+                    ?.Copyright;
     }
 }

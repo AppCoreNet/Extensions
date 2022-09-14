@@ -10,71 +10,70 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+/// <summary>
+/// Provides extension methods to register plugins.
+/// </summary>
+public static class PluginAppCoreBuilderExtensions
 {
+    private static readonly object _pluginManagerFactorySyncRoot = new();
+    private static Func<IServiceProvider, PluginManager>? _pluginManagerFactory;
+    private static PluginManager? _pluginManager;
+
     /// <summary>
-    /// Provides extension methods to register plugins.
+    /// Adds plugins.
     /// </summary>
-    public static class PluginAppCoreBuilderExtensions
+    /// <param name="builder">The <see cref="IAppCoreBuilder"/>.</param>
+    /// <param name="configure">The configuration delegate.</param>
+    /// <returns>The passed <see cref="IAppCoreBuilder"/> to allow chaining.</returns>
+    public static IAppCoreBuilder AddPlugins(
+        this IAppCoreBuilder builder,
+        Action<PluginOptions>? configure = null)
     {
-        private static readonly object _pluginManagerFactorySyncRoot = new();
-        private static Func<IServiceProvider, PluginManager>? _pluginManagerFactory;
-        private static PluginManager? _pluginManager;
+        Ensure.Arg.NotNull(builder);
 
-        /// <summary>
-        /// Adds plugins.
-        /// </summary>
-        /// <param name="builder">The <see cref="IAppCoreBuilder"/>.</param>
-        /// <param name="configure">The configuration delegate.</param>
-        /// <returns>The passed <see cref="IAppCoreBuilder"/> to allow chaining.</returns>
-        public static IAppCoreBuilder AddPlugins(
-            this IAppCoreBuilder builder,
-            Action<PluginOptions>? configure = null)
+        IServiceCollection services = builder.Services;
+
+        if (configure != null)
         {
-            Ensure.Arg.NotNull(builder, nameof(builder));
+            services.Configure(configure);
 
-            IServiceCollection services = builder.Services;
-
-            if (configure != null)
-            {
-                services.Configure(configure);
-
-                // plugin manager was already created, re-create with possible options
-                lock (_pluginManagerFactorySyncRoot)
-                {
-                    if (_pluginManagerFactory != null)
-                    {
-                        PluginManager pluginManager = _pluginManager!;
-                        _pluginManager = null;
-                        _pluginManagerFactory = sp => _pluginManager ??= new PluginManager(
-                            pluginManager!,
-                            sp.GetRequiredService<IActivator>(),
-                            sp.GetRequiredService<IOptions<PluginOptions>>());
-                    }
-                }
-            }
-
-            services.TryAddTransient<IActivator, ServiceProviderActivator>();
-            services.TryAddTransient(typeof(IPluginService<>), typeof(PluginServiceWrapper<>));
-            services.TryAddTransient(typeof(IPluginServiceCollection<>), typeof(PluginServiceCollectionWrapper<>));
-
-            // resolve plugin manager via delegate, effectively it's a singleton
-            services.TryAddTransient(GetOrCreatePluginManager);
-
-            return builder;
-        }
-
-        private static IPluginManager GetOrCreatePluginManager(IServiceProvider serviceProvider)
-        {
+            // plugin manager was already created, re-create with possible options
             lock (_pluginManagerFactorySyncRoot)
             {
-                // plugin manager is resolved for the first time, create it directly ...
-                _pluginManagerFactory ??= sp => _pluginManager ??= new PluginManager(
-                    sp.GetRequiredService<IActivator>(),
-                    sp.GetRequiredService<IOptions<PluginOptions>>());
-
-                return _pluginManagerFactory(serviceProvider);
+                if (_pluginManagerFactory != null)
+                {
+                    PluginManager pluginManager = _pluginManager!;
+                    _pluginManager = null;
+                    _pluginManagerFactory = sp => _pluginManager ??= new PluginManager(
+                        pluginManager!,
+                        sp.GetRequiredService<IActivator>(),
+                        sp.GetRequiredService<IOptions<PluginOptions>>());
+                }
             }
+        }
+
+        services.TryAddTransient<IActivator, ServiceProviderActivator>();
+        services.TryAddTransient(typeof(IPluginService<>), typeof(PluginServiceWrapper<>));
+        services.TryAddTransient(typeof(IPluginServiceCollection<>), typeof(PluginServiceCollectionWrapper<>));
+
+        // resolve plugin manager via delegate, effectively it's a singleton
+        services.TryAddTransient(GetOrCreatePluginManager);
+
+        return builder;
+    }
+
+    private static IPluginManager GetOrCreatePluginManager(IServiceProvider serviceProvider)
+    {
+        lock (_pluginManagerFactorySyncRoot)
+        {
+            // plugin manager is resolved for the first time, create it directly ...
+            _pluginManagerFactory ??= sp => _pluginManager ??= new PluginManager(
+                sp.GetRequiredService<IActivator>(),
+                sp.GetRequiredService<IOptions<PluginOptions>>());
+
+            return _pluginManagerFactory(serviceProvider);
         }
     }
 }

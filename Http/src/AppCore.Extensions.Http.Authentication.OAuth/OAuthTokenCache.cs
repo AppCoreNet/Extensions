@@ -93,10 +93,11 @@ public class OAuthTokenCache : IOAuthTokenCache
             cacheExpiration);
 
         await _cache.SetAsync(
-            GenerateCacheKey(scheme, options, parameters),
-            SerializeAccessToken(accessToken),
-            new DistributedCacheEntryOptions { AbsoluteExpiration = cacheExpiration },
-            cancellationToken);
+                        GenerateCacheKey(scheme, options, parameters),
+                        SerializeAccessToken(accessToken),
+                        new DistributedCacheEntryOptions { AbsoluteExpiration = cacheExpiration },
+                        cancellationToken)
+                    .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -105,12 +106,14 @@ public class OAuthTokenCache : IOAuthTokenCache
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
-        Ensure.Arg.NotNull(scheme, nameof(scheme));
+        Ensure.Arg.NotNull(scheme);
 
         OAuthTokenCacheOptions options = _optionsMonitor.CurrentValue;
 
         string cacheKey = GenerateCacheKey(scheme, options, parameters);
-        OAuthAccessToken? result = DeserializeAccessToken(await _cache.GetAsync(cacheKey, cancellationToken));
+        OAuthAccessToken? result = DeserializeAccessToken(
+            await _cache.GetAsync(cacheKey, cancellationToken)
+                        .ConfigureAwait(false));
 
         if (result != null)
         {
@@ -130,7 +133,7 @@ public class OAuthTokenCache : IOAuthTokenCache
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
-        Ensure.Arg.NotNull(scheme, nameof(scheme));
+        Ensure.Arg.NotNull(scheme);
 
         OAuthTokenCacheOptions options = _optionsMonitor.CurrentValue;
 

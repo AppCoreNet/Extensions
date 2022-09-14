@@ -4,12 +4,11 @@
 using AppCore.Extensions.DependencyInjection.Facilities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+public class Facility2 : Facility
 {
-    public class Facility2 : Facility
+    protected override void ConfigureServices(IServiceCollection services)
     {
-        protected override void ConfigureServices(IServiceCollection services)
-        {
-        }
     }
 }

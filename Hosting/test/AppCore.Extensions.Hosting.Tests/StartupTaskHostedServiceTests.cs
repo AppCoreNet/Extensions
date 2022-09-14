@@ -9,41 +9,40 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
 
-namespace AppCore.Extensions.Hosting
+namespace AppCore.Extensions.Hosting;
+
+public class StartupTaskHostedServiceTests
 {
-    public class StartupTaskHostedServiceTests
+    [Fact]
+    public async Task ExecutesAll()
     {
-        [Fact]
-        public async Task ExecutesAll()
-        {
-            var task1 = Substitute.For<IStartupTask>();
-            var task2 = Substitute.For<IStartupTask>();
-            var logger = Substitute.For<ILogger<StartupTaskHostedService>>();
+        var task1 = Substitute.For<IStartupTask>();
+        var task2 = Substitute.For<IStartupTask>();
+        var logger = Substitute.For<ILogger<StartupTaskHostedService>>();
 
-            var executor = new StartupTaskHostedService(new []{task1,task2}, logger);
-            await executor.StartAsync(CancellationToken.None);
+        var executor = new StartupTaskHostedService(new []{task1,task2}, logger);
+        await executor.StartAsync(CancellationToken.None);
 
-            await task1.Received(1)
-                       .ExecuteAsync(Arg.Any<CancellationToken>());
+        await task1.Received(1)
+                   .ExecuteAsync(Arg.Any<CancellationToken>());
 
-            await task2.Received(1)
-                       .ExecuteAsync(Arg.Any<CancellationToken>());
-        }
+        await task2.Received(1)
+                   .ExecuteAsync(Arg.Any<CancellationToken>());
+    }
 
-        [Fact]
-        public async Task ExecuteThrowsForAny()
-        {
-            var task1 = Substitute.For<IStartupTask>();
+    [Fact]
+    public async Task ExecuteThrowsForAny()
+    {
+        var task1 = Substitute.For<IStartupTask>();
 
-            var task2 = Substitute.For<IStartupTask>();
-            task2.ExecuteAsync(Arg.Any<CancellationToken>())
-                 .Throws(new InvalidOperationException());
+        var task2 = Substitute.For<IStartupTask>();
+        task2.ExecuteAsync(Arg.Any<CancellationToken>())
+             .Throws(new InvalidOperationException());
 
-            var logger = Substitute.For<ILogger<StartupTaskHostedService>>();
+        var logger = Substitute.For<ILogger<StartupTaskHostedService>>();
 
-            var executor = new StartupTaskHostedService(new[] {task1, task2}, logger);
-            await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await executor.StartAsync(CancellationToken.None));
-        }
+        var executor = new StartupTaskHostedService(new[] {task1, task2}, logger);
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            async () => await executor.StartAsync(CancellationToken.None));
     }
 }

@@ -1,17 +1,16 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018 the AppCore .NET project.
 
-namespace AppCore.Extensions.DependencyInjection
+namespace AppCore.Extensions.DependencyInjection;
+
+public class ContractImpl2 : ContractImplBase
 {
-    public class ContractImpl2 : ContractImplBase
-    {
-    }
+}
 
-    public class ContractImpl2<T> : ContractImplBase<T>
-    {
-    }
+public class ContractImpl2<T> : ContractImplBase<T>
+{
+}
 
-    public class ContractImpl2String : ContractImplBaseString
-    {
-    }
+public class ContractImpl2String : ContractImplBaseString
+{
 }

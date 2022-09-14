@@ -6,25 +6,24 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace AppCore.Extensions.Hosting.Plugins.TestPlugin
+namespace AppCore.Extensions.Hosting.Plugins.TestPlugin;
+
+public class TestFacilityService : IHostedService
 {
-    public class TestFacilityService : IHostedService
+    public IHostApplicationLifetime Lifetime { get; }
+
+    public TestFacilityService(IHostApplicationLifetime lifetime)
     {
-        public IHostApplicationLifetime Lifetime { get; }
+        Lifetime = lifetime;
+    }
 
-        public TestFacilityService(IHostApplicationLifetime lifetime)
-        {
-            Lifetime = lifetime;
-        }
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }
