@@ -46,7 +46,7 @@ public class OAuthTokenService : IOAuthTokenService
             return await _sync.GetOrAdd(
                                   scheme.Name,
                                   _ => new Lazy<Task<OAuthAccessToken>>(tokenFunc))
-                              .Value;
+                              .Value.ConfigureAwait(false);
         }
         finally
         {
@@ -66,7 +66,10 @@ public class OAuthTokenService : IOAuthTokenService
 
         if (parameters == null || parameters.ForceRenewal == false)
         {
-            OAuthAccessToken? item = await _cache.GetAsync(scheme, parameters, cancellationToken);
+            OAuthAccessToken? item =
+                await _cache.GetAsync(scheme, parameters, cancellationToken)
+                            .ConfigureAwait(false);
+
             if (item != null)
             {
                 return item;
@@ -74,38 +77,44 @@ public class OAuthTokenService : IOAuthTokenService
         }
 
         return await InvokeSynchronized(
-            scheme,
-            async () =>
-            {
-                _logger.LogDebug("Requesting access token for client scheme {schemeName} ...", scheme.Name);
-
-                TokenResponse response = await _client.RequestClientAccessToken(scheme, parameters, cancellationToken);
-                if (response.IsError)
+                scheme,
+                async () =>
                 {
-                    _logger.LogError(
-                        "Error requesting access token for client scheme {schemeName}. Error = {error}. Error description = {errorDescription}",
+                    _logger.LogDebug("Requesting access token for client scheme {schemeName} ...", scheme.Name);
+
+                    TokenResponse response =
+                        await _client.RequestClientAccessToken(scheme, parameters, cancellationToken)
+                                     .ConfigureAwait(false);
+
+                    if (response.IsError)
+                    {
+                        _logger.LogError(
+                            "Error requesting access token for client scheme {schemeName}. Error = {error}. Error description = {errorDescription}",
+                            scheme.Name,
+                            response.Error,
+                            response.ErrorDescription);
+
+                        throw new AuthenticationException(
+                            $"Error requesting access token for client scheme {scheme.Name}");
+                    }
+
+                    OAuthAccessToken token = new(
+                        response.AccessToken,
+                        response.ExpiresIn > 0
+                            ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
+                            : null);
+
+                    _logger.LogDebug(
+                        "Received access token for client scheme {schemeName}. Expiration: {expiration}",
                         scheme.Name,
-                        response.Error,
-                        response.ErrorDescription);
+                        token.Expires);
 
-                    throw new AuthenticationException(
-                        $"Error requesting access token for client scheme {scheme.Name}");
-                }
+                    await _cache.SetAsync(scheme, token, parameters, cancellationToken)
+                                .ConfigureAwait(false);
 
-                OAuthAccessToken token = new(
-                    response.AccessToken,
-                    response.ExpiresIn > 0
-                        ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
-                        : null);
-
-                _logger.LogDebug(
-                    "Received access token for client scheme {schemeName}. Expiration: {expiration}",
-                    scheme.Name,
-                    token.Expires);
-
-                await _cache.SetAsync(scheme, token, parameters, cancellationToken);
-                return token;
-            });
+                    return token;
+                })
+            .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -120,7 +129,10 @@ public class OAuthTokenService : IOAuthTokenService
 
         if (parameters == null || parameters.ForceRenewal == false)
         {
-            OAuthAccessToken? item = await _cache.GetAsync(scheme, parameters, cancellationToken);
+            OAuthAccessToken? item =
+                await _cache.GetAsync(scheme, parameters, cancellationToken)
+                            .ConfigureAwait(false);
+
             if (item != null)
             {
                 return item;
@@ -128,38 +140,44 @@ public class OAuthTokenService : IOAuthTokenService
         }
 
         return await InvokeSynchronized(
-            scheme,
-            async () =>
-            {
-                _logger.LogDebug("Requesting access token for password scheme {schemeName} ...", scheme.Name);
-
-                TokenResponse response = await _client.RequestPasswordAccessToken(scheme, parameters, cancellationToken);
-                if (response.IsError)
+                scheme,
+                async () =>
                 {
-                    _logger.LogError(
-                        "Error requesting access token for password scheme {schemeName}. Error = {error}. Error description = {errorDescription}",
+                    _logger.LogDebug("Requesting access token for password scheme {schemeName} ...", scheme.Name);
+
+                    TokenResponse response =
+                        await _client.RequestPasswordAccessToken(scheme, parameters, cancellationToken)
+                                     .ConfigureAwait(false);
+
+                    if (response.IsError)
+                    {
+                        _logger.LogError(
+                            "Error requesting access token for password scheme {schemeName}. Error = {error}. Error description = {errorDescription}",
+                            scheme.Name,
+                            response.Error,
+                            response.ErrorDescription);
+
+                        throw new AuthenticationException(
+                            $"Error requesting access token for password scheme {scheme.Name}");
+                    }
+
+                    OAuthAccessToken token = new(
+                        response.AccessToken,
+                        response.ExpiresIn > 0
+                            ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
+                            : null);
+
+                    _logger.LogDebug(
+                        "Received access token for password scheme {schemeName}. Expiration: {expiration}",
                         scheme.Name,
-                        response.Error,
-                        response.ErrorDescription);
+                        token.Expires);
 
-                    throw new AuthenticationException(
-                        $"Error requesting access token for password scheme {scheme.Name}");
-                }
+                    await _cache.SetAsync(scheme, token, parameters, cancellationToken)
+                                .ConfigureAwait(false);
 
-                OAuthAccessToken token = new(
-                    response.AccessToken,
-                    response.ExpiresIn > 0
-                        ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
-                        : null);
-
-                _logger.LogDebug(
-                    "Received access token for password scheme {schemeName}. Expiration: {expiration}",
-                    scheme.Name,
-                    token.Expires);
-
-                await _cache.SetAsync(scheme, token, parameters, cancellationToken);
-                return token;
-            });
+                    return token;
+                })
+            .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -169,6 +187,8 @@ public class OAuthTokenService : IOAuthTokenService
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme);
-        await _cache.DeleteAsync(scheme, parameters, cancellationToken);
+
+        await _cache.DeleteAsync(scheme, parameters, cancellationToken)
+                    .ConfigureAwait(false);
     }
 }

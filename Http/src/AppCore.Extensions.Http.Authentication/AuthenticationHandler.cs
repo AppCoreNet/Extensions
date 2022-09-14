@@ -56,7 +56,10 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
 
     private async Task<AuthenticationScheme> GetSchemeAsync()
     {
-        AuthenticationScheme? authenticationScheme = await _schemes.FindSchemeAsync(_scheme);
+        AuthenticationScheme? authenticationScheme =
+            await _schemes.FindSchemeAsync(_scheme)
+                          .ConfigureAwait(false);
+
         if (authenticationScheme == null)
         {
             throw new InvalidOperationException($"There is no client authentication scheme registered with name {_scheme}.");
@@ -76,12 +79,16 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
         HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
-        AuthenticationScheme scheme = await GetSchemeAsync();
+        AuthenticationScheme scheme = await GetSchemeAsync()
+            .ConfigureAwait(false);
 
         _logger.LogDebug("Authenticating HTTP request with scheme {schemeName}.", scheme.Name);
 
-        await AuthenticateAsync(scheme, request, forceRenewal: false, cancellationToken);
-        HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+        await AuthenticateAsync(scheme, request, forceRenewal: false, cancellationToken)
+            .ConfigureAwait(false);
+
+        HttpResponseMessage response = await base.SendAsync(request, cancellationToken)
+                                                 .ConfigureAwait(false);
 
         // retry if 401
         if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -90,8 +97,11 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
 
             response.Dispose();
 
-            await AuthenticateAsync(scheme, request, forceRenewal: true, cancellationToken);
-            return await base.SendAsync(request, cancellationToken);
+            await AuthenticateAsync(scheme, request, forceRenewal: true, cancellationToken)
+                .ConfigureAwait(false);
+
+            return await base.SendAsync(request, cancellationToken)
+                             .ConfigureAwait(false);
         }
 
         return response;
@@ -126,6 +136,7 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
             parameters.ForceRenewal = forceRenewal;
         }
 
-        await _schemeHandler.AuthenticateAsync(scheme, parameters, request, cancellationToken);
+        await _schemeHandler.AuthenticateAsync(scheme, parameters, request, cancellationToken)
+                            .ConfigureAwait(false);
     }
 }

@@ -52,6 +52,7 @@ public abstract class AuthenticationSchemeHandler<TOptions, TParameters> : IAuth
         HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
-        await AuthenticateAsync(scheme, _optionsMonitor.Get(scheme.Name), parameters, request, cancellationToken);
+        await AuthenticateAsync(scheme, _optionsMonitor.Get(scheme.Name), parameters, request, cancellationToken)
+            .ConfigureAwait(false);
     }
 }

@@ -31,7 +31,8 @@ public class OAuthPasswordHandler : IAuthenticationSchemeHandler<OAuthParameters
         CancellationToken cancellationToken = default)
     {
         OAuthAccessToken accessToken =
-            await _authTokenService.GetPasswordAccessTokenAsync(scheme, parameters, cancellationToken);
+            await _authTokenService.GetPasswordAccessTokenAsync(scheme, parameters, cancellationToken)
+                                   .ConfigureAwait(false);
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
     }

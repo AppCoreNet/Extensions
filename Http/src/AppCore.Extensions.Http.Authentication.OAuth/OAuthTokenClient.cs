@@ -38,7 +38,9 @@ public class OAuthTokenClient : IOAuthTokenClient
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
-        var options = await _optionsProvider.GetOptionsAsync<OAuthClientOptions>(scheme);
+        OAuthClientOptions options =
+            await _optionsProvider.GetOptionsAsync<OAuthClientOptions>(scheme)
+                                  .ConfigureAwait(false);
 
         var request = new ClientCredentialsTokenRequest
         {
@@ -54,7 +56,8 @@ public class OAuthTokenClient : IOAuthTokenClient
         if (parameters != null && !string.IsNullOrWhiteSpace(parameters.Resource))
             request.Resource.Add(parameters.Resource);
 
-        return await _client.RequestClientCredentialsTokenAsync(request, cancellationToken);
+        return await _client.RequestClientCredentialsTokenAsync(request, cancellationToken)
+                            .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -63,7 +66,9 @@ public class OAuthTokenClient : IOAuthTokenClient
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
-        var options = await _optionsProvider.GetOptionsAsync<OAuthPasswordOptions>(scheme);
+        OAuthPasswordOptions options =
+            await _optionsProvider.GetOptionsAsync<OAuthPasswordOptions>(scheme)
+                                  .ConfigureAwait(false);
 
         var request = new PasswordTokenRequest
         {
@@ -81,6 +86,7 @@ public class OAuthTokenClient : IOAuthTokenClient
         if (parameters != null && !string.IsNullOrWhiteSpace(parameters.Resource))
             request.Resource.Add(parameters.Resource);
 
-        return await _client.RequestPasswordTokenAsync(request, cancellationToken);
+        return await _client.RequestPasswordTokenAsync(request, cancellationToken)
+                            .ConfigureAwait(false);
     }
 }

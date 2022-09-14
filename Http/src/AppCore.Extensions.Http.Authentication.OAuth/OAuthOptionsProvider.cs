@@ -33,7 +33,9 @@ public class OAuthOptionsProvider : IOAuthOptionsProvider
         T? result = null;
         foreach (IOAuthOptionsResolver resolver in _resolvers)
         {
-            result = await resolver.TryGetOptionsAsync<T>(scheme);
+            result = await resolver.TryGetOptionsAsync<T>(scheme)
+                                   .ConfigureAwait(false);
+
             if (result != null)
                 break;
         }
