@@ -2,7 +2,6 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
 using AppCore.Extensions.DependencyInjection;
@@ -14,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to resolve service descriptors and facilities by reflection.
 /// </summary>
-public static class DependencyContextResolverBuilderExtensions
+public static class DependencyContextReflectionBuilderExtensions
 {
     /// <summary>
     /// Adds service descriptors by reflection.
