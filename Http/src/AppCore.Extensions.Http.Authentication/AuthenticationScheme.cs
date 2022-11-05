@@ -9,7 +9,7 @@ namespace AppCore.Extensions.Http.Authentication;
 /// <summary>
 /// Represents a registered authentication scheme.
 /// </summary>
-public class AuthenticationScheme
+public sealed class AuthenticationScheme
 {
     /// <summary>
     /// The name of the authentication scheme.

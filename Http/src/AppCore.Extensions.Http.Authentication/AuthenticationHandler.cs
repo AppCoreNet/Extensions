@@ -62,13 +62,13 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
 
         if (authenticationScheme == null)
         {
-            throw new InvalidOperationException($"There is no client authentication scheme registered with name {_scheme}.");
+            throw new InvalidOperationException($"There is no client authentication scheme registered with name '{_scheme}'.");
         }
 
         if (authenticationScheme.HandlerType != typeof(THandler))
         {
             throw new InvalidOperationException(
-                $"There is no client authentication scheme registered with name {_scheme} and handler {typeof(THandler).Name}.");
+                $"There is no client authentication scheme registered with name '{_scheme}' and handler '{typeof(THandler).Name}'.");
         }
 
         return authenticationScheme;
@@ -82,7 +82,7 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
         AuthenticationScheme scheme = await GetSchemeAsync()
             .ConfigureAwait(false);
 
-        _logger.LogDebug("Authenticating HTTP request with scheme {schemeName}.", scheme.Name);
+        _logger.LogTrace("Authenticating HTTP request with scheme {schemeName}.", scheme.Name);
 
         await AuthenticateAsync(scheme, request, forceRenewal: false, cancellationToken)
             .ConfigureAwait(false);

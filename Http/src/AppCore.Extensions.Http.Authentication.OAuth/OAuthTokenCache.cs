@@ -117,11 +117,11 @@ public class OAuthTokenCache : IOAuthTokenCache
 
         if (result != null)
         {
-            _logger.LogDebug("Cache hit for access token for scheme: {schemeName}", scheme.Name);
+            _logger.LogTrace("Cache hit for access token for scheme: {schemeName}", scheme.Name);
         }
         else
         {
-            _logger.LogDebug("Cache miss for access token for scheme: {schemeName}", scheme.Name);
+            _logger.LogTrace("Cache miss for access token for scheme: {schemeName}", scheme.Name);
         }
 
         return result;

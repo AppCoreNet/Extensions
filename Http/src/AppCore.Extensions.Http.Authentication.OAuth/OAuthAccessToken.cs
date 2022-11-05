@@ -9,7 +9,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 /// <summary>
 /// Represents a OAuth access token.
 /// </summary>
-public class OAuthAccessToken
+public sealed class OAuthAccessToken
 {
     /// <summary>
     /// Gets the access token.
