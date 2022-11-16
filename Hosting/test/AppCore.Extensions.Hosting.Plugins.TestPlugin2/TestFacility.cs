@@ -6,12 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Extensions.Hosting.Plugins.TestPlugin2;
 
-public class TestFacility : Facility
+public class TestFacility : IFacility
 {
-    protected override void ConfigureServices(IServiceCollection services)
+    public void ConfigureServices(IServiceCollection services)
     {
-        base.ConfigureServices(services);
-
         services.AddTransient<TestFacilityService>();
     }
 }

@@ -32,7 +32,7 @@ internal class FacilityReflectionBuilder : IFacilityReflectionBuilder
         return AddResolver(resolver);
     }
 
-    public IReadOnlyCollection<Facility> Resolve()
+    public IReadOnlyCollection<IFacility> Resolve()
     {
         return _resolvers.SelectMany(s => s.Resolve())
                          .ToList()

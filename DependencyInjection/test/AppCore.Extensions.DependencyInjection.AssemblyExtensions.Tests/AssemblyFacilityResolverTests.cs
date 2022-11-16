@@ -25,7 +25,7 @@ public class AssemblyFacilityResolverTests
                                             .Add(typeof(AssemblyFacilityResolverTests).Assembly)
                                             .ClearDefaultFilters();
 
-        IEnumerable<Facility> facilities = ((IFacilityResolver) resolver).Resolve();
+        IEnumerable<IFacility> facilities = ((IFacilityResolver) resolver).Resolve();
 
         facilities.Select(f => f.GetType())
                   .Should()

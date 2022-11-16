@@ -12,7 +12,7 @@ using AppCore.Extensions.DependencyInjection.Facilities;
 namespace AppCore.Extensions.DependencyInjection.Facilities;
 
 /// <summary>
-/// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning assemblies.
+/// Builds an <see cref="IEnumerable{T}"/> of <see cref="IFacility"/> by scanning assemblies.
 /// </summary>
 public class AssemblyFacilityResolver : IFacilityResolver
 {
@@ -98,9 +98,9 @@ public class AssemblyFacilityResolver : IFacilityResolver
     }
 
     /// <inheritdoc />
-    IEnumerable<Facility> IFacilityResolver.Resolve()
+    IEnumerable<IFacility> IFacilityResolver.Resolve()
     {
-        var scanner = new AssemblyScanner(typeof(Facility), _assemblies)
+        var scanner = new AssemblyScanner(typeof(IFacility), _assemblies)
         {
             IncludePrivateTypes = _withPrivateTypes
         };
@@ -112,6 +112,6 @@ public class AssemblyFacilityResolver : IFacilityResolver
             scanner.Filters.Add(filter);
 
         return scanner.ScanAssemblies()
-                      .Select(facilityType => (Facility) _activator.CreateInstance(facilityType));
+                      .Select(facilityType => (IFacility) _activator.CreateInstance(facilityType));
     }
 }

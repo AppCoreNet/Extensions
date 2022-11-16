@@ -14,5 +14,5 @@ public interface IFacilityResolver
     /// Resolves facilities.
     /// </summary>
     /// <returns>The <see cref="IEnumerable{T}"/> of facilities.</returns>
-    IEnumerable<Facility> Resolve();
+    IEnumerable<IFacility> Resolve();
 }

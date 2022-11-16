@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyModel;
 namespace AppCore.DependencyInjection.Facilities;
 
 /// <summary>
-/// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning assemblies in a
+/// Builds an <see cref="IEnumerable{T}"/> of <see cref="IFacility"/> by scanning assemblies in a
 /// <see cref="DependencyContext"/>.
 /// </summary>
 public class DependencyContextFacilityResolver : IFacilityResolver
@@ -88,7 +88,7 @@ public class DependencyContextFacilityResolver : IFacilityResolver
     }
 
     /// <inheritdoc />
-    IEnumerable<Facility> IFacilityResolver.Resolve()
+    IEnumerable<IFacility> IFacilityResolver.Resolve()
     {
         return ((IFacilityResolver)_resolver).Resolve();
     }

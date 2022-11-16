@@ -158,9 +158,9 @@ public static class ReflectionServiceCollectionExtensions
 
         configure(builder);
 
-        foreach (Facility facility in builder.Resolve())
+        foreach (IFacility facility in builder.Resolve())
         {
-            facility.ConfigureServices(activator, services);
+            facility.ConfigureServices(services);
         }
 
         return services;

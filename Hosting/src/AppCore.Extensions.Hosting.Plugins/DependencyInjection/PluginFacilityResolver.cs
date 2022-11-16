@@ -9,7 +9,7 @@ using AppCore.Extensions.Hosting.Plugins;
 namespace AppCore.Extensions.DependencyInjection.Facilities;
 
 /// <summary>
-/// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning plugin assemblies.
+/// Builds an <see cref="IEnumerable{T}"/> of <see cref="IFacility"/> by scanning plugin assemblies.
 /// </summary>
 public class PluginFacilityResolver : IFacilityResolver
 {
@@ -26,9 +26,9 @@ public class PluginFacilityResolver : IFacilityResolver
     }
 
     /// <inheritdoc />
-    IEnumerable<Facility> IFacilityResolver.Resolve()
+    IEnumerable<IFacility> IFacilityResolver.Resolve()
     {
-        foreach (IPluginService<Facility> facility in _pluginManager.GetServices<Facility>())
+        foreach (IPluginService<IFacility> facility in _pluginManager.GetServices<IFacility>())
         {
             yield return facility.Instance;
         }
