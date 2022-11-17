@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Extensions.DependencyInjection;
 
-internal class ServiceCollectionServiceProvider : IServiceProvider
+internal sealed class ServiceCollectionServiceProvider : IServiceProvider
 {
     private readonly IServiceCollection _services;
     private readonly Dictionary<Type, object> _additionalServices = new();

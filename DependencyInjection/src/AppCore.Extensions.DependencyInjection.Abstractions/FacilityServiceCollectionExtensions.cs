@@ -23,10 +23,25 @@ public static class FacilityServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/>.</param>
     /// <param name="configure">The delegate to configure the facility.</param>
     /// <returns>The <see cref="IServiceCollection"/>.</returns>
-    public static IServiceCollection AddFacility<T>(this IServiceCollection services, Action<T>? configure = null)
+    public static IServiceCollection AddFacility<T>(this IServiceCollection services, Action<FacilityBuilder<T>>? configure = null)
         where T : IFacility
     {
-        return AddFacility(services, typeof(T), f => configure?.Invoke((T) f));
+        Ensure.Arg.NotNull(services);
+
+        services.TryAddTransient<IActivator, ServiceProviderActivator>();
+
+        var serviceProvider = new ServiceCollectionServiceProvider(services);
+        var activator = serviceProvider.GetRequiredService<IActivator>();
+
+        var facility = activator.CreateInstance<T>();
+        if (configure != null)
+        {
+            var builder = new FacilityBuilder<T>(services, activator);
+            configure(builder);
+        }
+
+        facility.ConfigureServices(services);
+        return services;
     }
 
     /// <summary>
@@ -39,7 +54,7 @@ public static class FacilityServiceCollectionExtensions
     public static IServiceCollection AddFacility(
         this IServiceCollection services,
         Type facilityType,
-        Action<IFacility>? configure = null)
+        Action<FacilityBuilder>? configure = null)
     {
         Ensure.Arg.NotNull(services);
         Ensure.Arg.NotNull(facilityType);
@@ -51,8 +66,41 @@ public static class FacilityServiceCollectionExtensions
         var activator = serviceProvider.GetRequiredService<IActivator>();
 
         var facility = (IFacility)activator.CreateInstance(facilityType);
-        configure?.Invoke(facility);
+        if (configure != null)
+        {
+            Type builderType = typeof(FacilityBuilder<>).MakeGenericType(facilityType);
+            var builder = (FacilityBuilder)Activator.CreateInstance(builderType, services, activator);
+            configure(builder);
+        }
+
         facility.ConfigureServices(services);
+        return services;
+    }
+
+    /// <summary>
+    /// Adds facilities using a <see cref="IFacilityReflectionBuilder"/> to the <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/>.</param>
+    /// <param name="configure">The delegate used to configure the facility resolvers.</param>
+    /// <returns>The <see cref="IServiceCollection"/>.</returns>
+    public static IServiceCollection AddFacilitiesFrom(
+        this IServiceCollection services,
+        Action<IFacilityReflectionBuilder> configure)
+    {
+        Ensure.Arg.NotNull(services);
+        Ensure.Arg.NotNull(configure);
+
+        services.TryAddTransient<IActivator, ServiceProviderActivator>();
+        var serviceProvider = new ServiceCollectionServiceProvider(services);
+        var activator = serviceProvider.GetRequiredService<IActivator>();
+        var builder = new FacilityReflectionBuilder(activator);
+
+        configure(builder);
+
+        foreach (IFacility facility in builder.Resolve())
+        {
+            facility.ConfigureServices(services);
+        }
 
         return services;
     }
