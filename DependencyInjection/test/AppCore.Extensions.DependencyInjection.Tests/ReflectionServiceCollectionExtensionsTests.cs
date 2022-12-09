@@ -106,10 +106,4 @@ public class ReflectionServiceCollectionExtensionsTests
         services.Should()
                 .Contain(new [] { service1 });
     }
-
-    [Fact]
-    public void AddFacilitiesFromAddsAllFacilities()
-    {
-
-    }
 }

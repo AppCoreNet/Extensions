@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Extensions.Hosting.Plugins.TestPlugin;
 
-public class TestFacilityWithInjectedServices : Facility
+public class TestFacilityWithInjectedServices : IFacility
 {
     public TestFacilityWithInjectedServices(IActivator activator)
     {
@@ -16,10 +16,8 @@ public class TestFacilityWithInjectedServices : Facility
             throw new ArgumentNullException(nameof(activator));
     }
 
-    protected override void ConfigureServices(IServiceCollection services)
+    public void ConfigureServices(IServiceCollection services)
     {
-        base.ConfigureServices(services);
-
         services.AddTransient<TestFacilityService>();
     }
 }

@@ -18,6 +18,9 @@ public static class ReflectionServiceCollectionExtensions
 {
     private static ServiceDescriptorReflectionBuilder CreateBuilder(this IServiceCollection services, Type serviceType)
     {
+        Ensure.Arg.NotNull(services);
+        Ensure.Arg.NotNull(serviceType);
+
         services.TryAddTransient<IActivator, ServiceProviderActivator>();
         var serviceProvider = new ServiceCollectionServiceProvider(services);
         var builder = new ServiceDescriptorReflectionBuilder(
@@ -39,9 +42,7 @@ public static class ReflectionServiceCollectionExtensions
         Type serviceType,
         Action<IServiceDescriptorReflectionBuilder> configure)
     {
-        Ensure.Arg.NotNull(services);
         Ensure.Arg.NotNull(configure);
-
         ServiceDescriptorReflectionBuilder sources = services.CreateBuilder(serviceType);
         configure(sources);
         return services.Add(sources.Resolve());
@@ -73,9 +74,7 @@ public static class ReflectionServiceCollectionExtensions
     /// <returns>The <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection TryAddFrom(this IServiceCollection services, Type serviceType, Action<IServiceDescriptorReflectionBuilder> configure)
     {
-        Ensure.Arg.NotNull(services);
         Ensure.Arg.NotNull(configure);
-
         ServiceDescriptorReflectionBuilder sources = services.CreateBuilder(serviceType);
         configure(sources);
         services.TryAdd(sources.Resolve());
@@ -112,9 +111,7 @@ public static class ReflectionServiceCollectionExtensions
         Type serviceType,
         Action<IServiceDescriptorReflectionBuilder> configure)
     {
-        Ensure.Arg.NotNull(services);
         Ensure.Arg.NotNull(configure);
-
         ServiceDescriptorReflectionBuilder sources = services.CreateBuilder(serviceType);
         configure(sources);
         services.TryAddEnumerable(sources.Resolve());
@@ -136,33 +133,5 @@ public static class ReflectionServiceCollectionExtensions
         where TService : class
     {
         return TryAddEnumerableFrom(services, typeof(TService), configure);
-    }
-
-    /// <summary>
-    /// Adds facilities using a <see cref="IFacilityReflectionBuilder"/> to the <see cref="IServiceCollection"/>.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/>.</param>
-    /// <param name="configure">The delegate used to configure the facility resolvers.</param>
-    /// <returns>The <see cref="IServiceCollection"/>.</returns>
-    public static IServiceCollection AddFacilitiesFrom(
-        this IServiceCollection services,
-        Action<IFacilityReflectionBuilder> configure)
-    {
-        Ensure.Arg.NotNull(services);
-        Ensure.Arg.NotNull(configure);
-
-        services.TryAddTransient<IActivator, ServiceProviderActivator>();
-        var serviceProvider = new ServiceCollectionServiceProvider(services);
-        var activator = serviceProvider.GetRequiredService<IActivator>();
-        var builder = new FacilityReflectionBuilder(activator);
-
-        configure(builder);
-
-        foreach (Facility facility in builder.Resolve())
-        {
-            facility.ConfigureServices(activator, services);
-        }
-
-        return services;
     }
 }
