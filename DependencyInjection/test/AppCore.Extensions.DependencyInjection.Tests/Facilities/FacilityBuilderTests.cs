@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018-2022 the AppCore .NET project.
+
+using System;
 using AppCore.Extensions.DependencyInjection.Activator;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
