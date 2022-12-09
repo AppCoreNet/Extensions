@@ -8,7 +8,7 @@ namespace AppCore.Extensions.DependencyInjection.Facilities;
 /// <summary>
 /// Represents an extension for a facility.
 /// </summary>
-public interface IFacilityExtension<T>
+public interface IFacilityExtension<out T>
     where T : IFacility
 {
     /// <summary>

@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AppCore.Diagnostics;
+using AppCore.Extensions.DependencyInjection.Activator;
+
+namespace AppCore.Extensions.DependencyInjection.Facilities;
+
+internal sealed class FacilityExtensionReflectionBuilder : IFacilityExtensionReflectionBuilder
+{
+    private readonly IActivator _activator;
+    private readonly List<IFacilityExtensionResolver> _resolvers = new();
+
+    public FacilityExtensionReflectionBuilder(IActivator activator)
+    {
+        _activator = activator;
+    }
+
+    public IFacilityExtensionReflectionBuilder AddResolver(IFacilityExtensionResolver resolver)
+    {
+        Ensure.Arg.NotNull(resolver);
+        _resolvers.Add(resolver);
+        return this;
+    }
+
+    public IFacilityExtensionReflectionBuilder AddResolver<T>(Action<T>? configure = null)
+        where T : IFacilityExtensionResolver
+    {
+        var resolver = _activator.CreateInstance<T>();
+        configure?.Invoke(resolver);
+        return AddResolver(resolver);
+    }
+
+    public IReadOnlyCollection<IFacilityExtension<IFacility>> Resolve(Type facilityType)
+    {
+        return _resolvers.SelectMany(s => s.Resolve(facilityType))
+                         .ToList()
+                         .AsReadOnly();
+    }
+}

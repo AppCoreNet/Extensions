@@ -3,15 +3,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using AppCore.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 
 namespace AppCore.Extensions.DependencyInjection.Facilities;
 
-internal class FacilityReflectionBuilder : IFacilityReflectionBuilder
+internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
 {
     private readonly IActivator _activator;
     private readonly List<IFacilityResolver> _resolvers = new();
+    private Action<IFacilityExtensionReflectionBuilder>? _extensionsConfig;
 
     public FacilityReflectionBuilder(IActivator activator)
     {
@@ -20,6 +23,7 @@ internal class FacilityReflectionBuilder : IFacilityReflectionBuilder
 
     public IFacilityReflectionBuilder AddResolver(IFacilityResolver resolver)
     {
+        Ensure.Arg.NotNull(resolver);
         _resolvers.Add(resolver);
         return this;
     }
@@ -32,10 +36,41 @@ internal class FacilityReflectionBuilder : IFacilityReflectionBuilder
         return AddResolver(resolver);
     }
 
-    public IReadOnlyCollection<IFacility> Resolve()
+    public IFacilityReflectionBuilder AddExtensionsFrom(Action<IFacilityExtensionReflectionBuilder> configure)
     {
-        return _resolvers.SelectMany(s => s.Resolve())
-                         .ToList()
-                         .AsReadOnly();
+        Ensure.Arg.NotNull(configure);
+        _extensionsConfig = configure;
+        return this;
+    }
+
+    public IReadOnlyCollection<(IFacility,IReadOnlyCollection<IFacilityExtension<IFacility>>)> Resolve()
+    {
+        List<IFacility> facilities =
+            _resolvers.SelectMany(s => s.Resolve())
+                      .ToList();
+
+        FacilityExtensionReflectionBuilder? extensionReflectionBuilder = null;
+
+        if (_extensionsConfig != null)
+        {
+            extensionReflectionBuilder = new FacilityExtensionReflectionBuilder(_activator);
+            _extensionsConfig(extensionReflectionBuilder);
+        }
+
+        ReadOnlyCollection<IFacilityExtension<IFacility>> emptyFacilityExtensions =
+            new List<IFacilityExtension<IFacility>>().AsReadOnly();
+
+        List<(IFacility, IReadOnlyCollection<IFacilityExtension<IFacility>>)> result = new();
+
+        foreach (IFacility facility in facilities)
+        {
+            IReadOnlyCollection<IFacilityExtension<IFacility>> facilityExtensions =
+                extensionReflectionBuilder?.Resolve(facility.GetType())
+                ?? emptyFacilityExtensions;
+
+            result.Add((facility, facilityExtensions));
+        }
+
+        return result;
     }
 }

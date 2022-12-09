@@ -4,15 +4,14 @@
 using System;
 using AppCore.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
-using AppCore.Extensions.DependencyInjection.Facilities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection.Facilities;
 
 /// <summary>
 /// Provides a builder for facilities.
 /// </summary>
-public abstract class FacilityBuilder
+public class FacilityBuilder
 {
     /// <summary>
     /// Gets the <see cref="IServiceCollection"/>.
@@ -37,12 +36,6 @@ public abstract class FacilityBuilder
     }
 
     /// <summary>
-    /// Must be implemented to add an extension to the facility.
-    /// </summary>
-    /// <param name="extensionType">The type of the extension.</param>
-    protected abstract void AddExtensionCore(Type extensionType);
-
-    /// <summary>
     /// Adds an extension to the facility.
     /// </summary>
     /// <remarks>
@@ -53,7 +46,31 @@ public abstract class FacilityBuilder
     /// <returns>The <see cref="FacilityBuilder"/> to allow chaining.</returns>
     public FacilityBuilder AddExtension(Type extensionType)
     {
-        AddExtensionCore(extensionType);
+        Ensure.Arg.NotNull(extensionType);
+        Ensure.Arg.OfType(extensionType, typeof(IFacilityExtension<>).MakeGenericType(FacilityType));
+
+        var extension = (IFacilityExtension<IFacility>)Activator.CreateInstance(extensionType);
+        extension.ConfigureServices(Services);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds facility extensions using a <see cref="IFacilityExtensionReflectionBuilder"/> to the <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="configure">The delegate used to configure the facility extension resolvers.</param>
+    /// <returns>The <see cref="FacilityBuilder"/>.</returns>
+    public FacilityBuilder AddExtensionsFrom(Action<IFacilityExtensionReflectionBuilder> configure)
+    {
+        Ensure.Arg.NotNull(configure);
+
+        var reflectionBuilder = new FacilityExtensionReflectionBuilder(Activator);
+        configure(reflectionBuilder);
+
+        foreach (IFacilityExtension<IFacility> extension in reflectionBuilder.Resolve(FacilityType))
+        {
+            extension.ConfigureServices(Services);
+        }
+
         return this;
     }
 }
@@ -69,16 +86,6 @@ public sealed class FacilityBuilder<T> : FacilityBuilder
     {
     }
 
-    /// <inheritdoc />
-    protected override void AddExtensionCore(Type extensionType)
-    {
-        Ensure.Arg.NotNull(extensionType);
-        Ensure.Arg.OfType(extensionType, typeof(IFacilityExtension<T>));
-
-        var extension = (IFacilityExtension<T>)Activator.CreateInstance(extensionType);
-        extension.ConfigureServices(Services);
-    }
-
     /// <summary>
     /// Adds an extension to the facility.
     /// </summary>
@@ -90,7 +97,7 @@ public sealed class FacilityBuilder<T> : FacilityBuilder
     /// <returns>The <see cref="FacilityBuilder{T}"/> to allow chaining.</returns>
     public new FacilityBuilder<T> AddExtension(Type extensionType)
     {
-        AddExtensionCore(extensionType);
+        base.AddExtension(extensionType);
         return this;
     }
 
@@ -102,6 +109,30 @@ public sealed class FacilityBuilder<T> : FacilityBuilder
     public FacilityBuilder<T> AddExtension<TExtension>()
         where TExtension : IFacilityExtension<T>
     {
-        return AddExtension(typeof(TExtension));
+        var extension = (IFacilityExtension<IFacility>)Activator.CreateInstance(typeof(TExtension));
+        extension.ConfigureServices(Services);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds an extension to the facility.
+    /// </summary>
+    /// <returns>The <see cref="FacilityBuilder{T}"/> to allow chaining.</returns>
+    public FacilityBuilder<T> AddExtension(IFacilityExtension<T> extension)
+    {
+        Ensure.Arg.NotNull(extension);
+        extension.ConfigureServices(Services);
+        return this;
+    }
+
+    /// <summary>
+    /// Adds facility extensions using a <see cref="IFacilityExtensionReflectionBuilder"/> to the <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="configure">The delegate used to configure the facility extension resolvers.</param>
+    /// <returns>The <see cref="FacilityBuilder{T}"/>.</returns>
+    public new FacilityBuilder<T> AddExtensionsFrom(Action<IFacilityExtensionReflectionBuilder> configure)
+    {
+        base.AddExtensionsFrom(configure);
+        return this;
     }
 }

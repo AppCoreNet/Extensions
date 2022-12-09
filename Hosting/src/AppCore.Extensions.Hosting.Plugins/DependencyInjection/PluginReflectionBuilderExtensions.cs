@@ -40,4 +40,16 @@ public static class PluginReflectionBuilderExtensions
         Ensure.Arg.NotNull(sources);
         return sources.AddResolver<PluginFacilityResolver>();
     }
+
+    /// <summary>
+    /// Adds facility extensions by scanning plugin assemblies.
+    /// </summary>
+    /// <param name="sources">The <see cref="IFacilityExtensionReflectionBuilder"/>.</param>
+    /// <returns>The <see cref="IFacilityReflectionBuilder"/>.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="sources"/> is <c>null</c>. </exception>
+    public static IFacilityExtensionReflectionBuilder Plugins(this IFacilityExtensionReflectionBuilder sources)
+    {
+        Ensure.Arg.NotNull(sources);
+        return sources.AddResolver<PluginFacilityResolver>();
+    }
 }

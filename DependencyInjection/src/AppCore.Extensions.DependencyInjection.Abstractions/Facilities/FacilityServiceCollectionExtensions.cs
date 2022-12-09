@@ -2,6 +2,7 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
+using System.Collections.Generic;
 using AppCore.Diagnostics;
 using AppCore.Extensions.DependencyInjection;
 using AppCore.Extensions.DependencyInjection.Activator;
@@ -68,8 +69,7 @@ public static class FacilityServiceCollectionExtensions
         var facility = (IFacility)activator.CreateInstance(facilityType);
         if (configure != null)
         {
-            Type builderType = typeof(FacilityBuilder<>).MakeGenericType(facilityType);
-            var builder = (FacilityBuilder)Activator.CreateInstance(builderType, services, activator);
+            var builder = new FacilityBuilder(services, activator, facilityType);
             configure(builder);
         }
 
@@ -97,9 +97,16 @@ public static class FacilityServiceCollectionExtensions
 
         configure(builder);
 
-        foreach (IFacility facility in builder.Resolve())
+        foreach ((IFacility facility,
+                     IReadOnlyCollection<IFacilityExtension<IFacility>> facilityExtensions) in builder
+                     .Resolve())
         {
             facility.ConfigureServices(services);
+
+            foreach (IFacilityExtension<IFacility> facilityExtension in facilityExtensions)
+            {
+                facilityExtension.ConfigureServices(services);
+            }
         }
 
         return services;
