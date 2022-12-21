@@ -114,6 +114,18 @@ public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
                       .Select(facilityType => (IFacility) _activator.CreateInstance(facilityType));
     }
 
+    private IFacilityExtension<IFacility> CreateExtension(Type extensionType)
+    {
+        Type contractType = extensionType.GetInterfaces()
+                                         .First(i => i.GetGenericTypeDefinition() == typeof(IFacilityExtension<>))
+                                         .GenericTypeArguments[0];
+
+        Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
+        object extension = _activator.CreateInstance(extensionType);
+
+        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension);
+    }
+
     /// <inheritdoc />
     IEnumerable<IFacilityExtension<IFacility>> IFacilityExtensionResolver.Resolve(Type facilityType)
     {
@@ -129,8 +141,6 @@ public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
             scanner.Filters.Add(filter);
 
         return scanner.ScanAssemblies()
-                      .Select(
-                          facilityExtensionType =>
-                              (IFacilityExtension<IFacility>)_activator.CreateInstance(facilityExtensionType));
+                      .Select(CreateExtension);
     }
 }

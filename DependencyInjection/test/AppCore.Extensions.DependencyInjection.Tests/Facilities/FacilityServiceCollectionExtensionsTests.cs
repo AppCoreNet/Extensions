@@ -35,6 +35,14 @@ public class FacilityServiceCollectionExtensionsTests
                  .ContainSingle(sd => sd.ServiceType == typeof(FacilityTestService));
     }
 
+    [Fact]
+    public void AddFacilityTypeWithContractRegistersServices()
+    {
+        _services.AddFacility(typeof(TestFacility));
+
+        _services.Should()
+                 .ContainSingle(sd => sd.ServiceType == typeof(FacilityTestService));
+    }
 
     [Fact]
     public void AddFacilitiesFromRegistersServices()
