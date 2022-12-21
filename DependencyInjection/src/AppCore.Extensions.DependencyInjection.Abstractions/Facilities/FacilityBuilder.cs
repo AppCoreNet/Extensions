@@ -2,6 +2,7 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
+using System.Linq;
 using AppCore.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,18 @@ public class FacilityBuilder
         FacilityType = facilityType;
     }
 
+    private IFacilityExtension<IFacility> CreateExtension(Type extensionType)
+    {
+        Type contractType = extensionType.GetInterfaces()
+                                         .First(i => i.GetGenericTypeDefinition() == typeof(IFacilityExtension<>))
+                                         .GenericTypeArguments[0];
+
+        Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
+        object extension = Activator.CreateInstance(extensionType);
+
+        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension);
+    }
+
     /// <summary>
     /// Adds an extension to the facility.
     /// </summary>
@@ -49,7 +62,7 @@ public class FacilityBuilder
         Ensure.Arg.NotNull(extensionType);
         Ensure.Arg.OfType(extensionType, typeof(IFacilityExtension<>).MakeGenericType(FacilityType));
 
-        var extension = (IFacilityExtension<IFacility>)Activator.CreateInstance(extensionType);
+        IFacilityExtension<IFacility> extension = CreateExtension(extensionType);
         extension.ConfigureServices(Services);
         return this;
     }
@@ -107,9 +120,9 @@ public sealed class FacilityBuilder<T> : FacilityBuilder
     /// <typeparam name="TExtension">The type of the extension.</typeparam>
     /// <returns>The <see cref="FacilityBuilder{T}"/> to allow chaining.</returns>
     public FacilityBuilder<T> AddExtension<TExtension>()
-        where TExtension : IFacilityExtension<T>
+        where TExtension : class, IFacilityExtension<T>
     {
-        var extension = (IFacilityExtension<IFacility>)Activator.CreateInstance(typeof(TExtension));
+        IFacilityExtension<T> extension = Activator.CreateInstance<TExtension>();
         extension.ConfigureServices(Services);
         return this;
     }

@@ -31,14 +31,26 @@ public class PluginFacilityResolverTests
                     });
 
         services.AddFacilitiesFrom(
-            s => s.Plugins()
-                  .AddExtensionsFrom(r => r.Plugins()));
+            s => s
+                 .Plugins()
+                 .AddExtensionsFrom(r => r.Plugins()));
 
         services.Should()
                 .Contain(
                     r =>
-                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
+                        r.ServiceType.FullName
+                        == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
+                        && r.ImplementationType.FullName
+                        == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
+                );
+
+        services.Should()
+                .Contain(
+                    r =>
+                        r.ServiceType.FullName
+                        == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityContractExtensionService"
+                        && r.ImplementationType.FullName
+                        == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityContractExtensionService"
                 );
 
         services.Should()
