@@ -43,7 +43,7 @@ public class OAuthOptionsProvider : IOAuthOptionsProvider
         if (result == null)
         {
             throw new InvalidOperationException(
-                $"No options of type {typeof(T)} could be resolved for client authentication scheme {scheme.Name}.");
+                $"No options of type '{typeof(T)}' could be resolved for client authentication scheme {scheme.Name}.");
         }
 
         return result;

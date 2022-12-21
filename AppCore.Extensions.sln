@@ -44,6 +44,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins.TestPlugin2", "Hosting\test\AppCore.Extensions.Hosting.Plugins.TestPlugin2\AppCore.Extensions.Hosting.Plugins.TestPlugin2.csproj", "{C74E308B-B96F-473F-AE4B-6117FDBACF4E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Http", "Http", "{9416DF99-18D3-4373-A517-00A65E7CC32A}"
+	ProjectSection(SolutionItems) = preProject
+		Http\README.md = Http\README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B2F9DC67-6D7B-4070-8580-F401050445A9}"
 EndProject

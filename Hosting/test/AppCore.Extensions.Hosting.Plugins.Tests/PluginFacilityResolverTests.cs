@@ -19,6 +19,37 @@ public class PluginFacilityResolverTests
 #nullable restore
 
     [Fact]
+    public void RegistersFacilitiesWithExtensions()
+    {
+        var services = new ServiceCollection();
+        services.AddAppCore()
+                .AddPlugins(
+                    o =>
+                    {
+                        o.Assemblies.Add(PluginPaths.TestPlugin);
+                        o.Assemblies.Add(PluginPaths.TestPlugin2);
+                    });
+
+        services.AddFacilitiesFrom(
+            s => s.Plugins()
+                  .AddExtensionsFrom(r => r.Plugins()));
+
+        services.Should()
+                .Contain(
+                    r =>
+                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
+                );
+
+        services.Should()
+                .Contain(
+                    r =>
+                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityExtensionService"
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityExtensionService"
+                );
+    }
+
+    [Fact]
     public void RegistersFacilities()
     {
         var services = new ServiceCollection();

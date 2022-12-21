@@ -6,11 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AppCore.Diagnostics;
-using AppCore.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 
-namespace AppCore.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning assemblies in a

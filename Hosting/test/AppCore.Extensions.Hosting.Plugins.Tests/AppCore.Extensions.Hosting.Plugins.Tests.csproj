@@ -7,6 +7,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AppCore.Extensions.Hosting.Plugins\AppCore.Extensions.Hosting.Plugins.csproj" />
+    <ProjectReference Include="..\AppCore.Extensions.Hosting.Plugins.TestPlugin2\AppCore.Extensions.Hosting.Plugins.TestPlugin2.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\AppCore.Extensions.Hosting.Plugins.TestPlugin\AppCore.Extensions.Hosting.Plugins.TestPlugin.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

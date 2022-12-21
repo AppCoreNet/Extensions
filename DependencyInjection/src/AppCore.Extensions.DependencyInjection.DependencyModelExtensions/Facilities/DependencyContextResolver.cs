@@ -14,27 +14,27 @@ using Microsoft.Extensions.DependencyModel;
 namespace AppCore.DependencyInjection.Facilities;
 
 /// <summary>
-/// Builds an <see cref="IEnumerable{T}"/> of <see cref="Facility"/> by scanning assemblies in a
+/// Builds an <see cref="IEnumerable{T}"/> of <see cref="IFacility"/> by scanning assemblies in a
 /// <see cref="DependencyContext"/>.
 /// </summary>
-public class DependencyContextFacilityResolver : IFacilityResolver
+public class DependencyContextResolver : IFacilityResolver, IFacilityExtensionResolver
 {
-    private readonly AssemblyFacilityResolver _resolver;
+    private readonly AssemblyResolver _resolver;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DependencyContextFacilityResolver"/> class.
+    /// Initializes a new instance of the <see cref="DependencyContextResolver"/> class.
     /// </summary>
-    public DependencyContextFacilityResolver(IActivator activator)
+    public DependencyContextResolver(IActivator activator)
     {
-        _resolver = new AssemblyFacilityResolver(activator);
+        _resolver = new AssemblyResolver(activator);
     }
 
     /// <summary>
     /// Specifies whether to include private types when scanning for components.
     /// </summary>
     /// <param name="value">A value indicating whether to include private types.</param>
-    /// <returns>The <see cref="DependencyContextFacilityResolver"/>.</returns>
-    public DependencyContextFacilityResolver WithPrivateTypes(bool value = true)
+    /// <returns>The <see cref="DependencyContextResolver"/>.</returns>
+    public DependencyContextResolver WithPrivateTypes(bool value = true)
     {
         _resolver.WithPrivateTypes(value);
         return this;
@@ -44,8 +44,8 @@ public class DependencyContextFacilityResolver : IFacilityResolver
     /// Adds an <see cref="DependencyContext"/> to be scanned for components.
     /// </summary>
     /// <param name="dependencyContext">The <see cref="DependencyContext"/>.</param>
-    /// <returns>The <see cref="DependencyContextFacilityResolver"/>.</returns>
-    public DependencyContextFacilityResolver From(DependencyContext dependencyContext)
+    /// <returns>The <see cref="DependencyContextResolver"/>.</returns>
+    public DependencyContextResolver From(DependencyContext dependencyContext)
     {
         Ensure.Arg.NotNull(dependencyContext);
 
@@ -60,8 +60,8 @@ public class DependencyContextFacilityResolver : IFacilityResolver
     /// Adds a type filter.
     /// </summary>
     /// <param name="filter">The type filter.</param>
-    /// <returns>The <see cref="DependencyContextFacilityResolver"/>.</returns>
-    public DependencyContextFacilityResolver Filter(Predicate<Type> filter)
+    /// <returns>The <see cref="DependencyContextResolver"/>.</returns>
+    public DependencyContextResolver Filter(Predicate<Type> filter)
     {
         _resolver.Filter(filter);
         return this;
@@ -70,8 +70,8 @@ public class DependencyContextFacilityResolver : IFacilityResolver
     /// <summary>
     /// Clears the current type filters.
     /// </summary>
-    /// <returns>The <see cref="DependencyContextFacilityResolver"/>.</returns>
-    public DependencyContextFacilityResolver ClearFilters()
+    /// <returns>The <see cref="DependencyContextResolver"/>.</returns>
+    public DependencyContextResolver ClearFilters()
     {
         _resolver.ClearFilters();
         return this;
@@ -80,16 +80,22 @@ public class DependencyContextFacilityResolver : IFacilityResolver
     /// <summary>
     /// Clears the assembly scanner default type filters.
     /// </summary>
-    /// <returns>The <see cref="DependencyContextFacilityResolver"/>.</returns>
-    public DependencyContextFacilityResolver ClearDefaultFilters()
+    /// <returns>The <see cref="DependencyContextResolver"/>.</returns>
+    public DependencyContextResolver ClearDefaultFilters()
     {
         _resolver.ClearDefaultFilters();
         return this;
     }
 
     /// <inheritdoc />
-    IEnumerable<Facility> IFacilityResolver.Resolve()
+    IEnumerable<IFacility> IFacilityResolver.Resolve()
     {
         return ((IFacilityResolver)_resolver).Resolve();
+    }
+
+    /// <inheritdoc />
+    IEnumerable<IFacilityExtension<IFacility>> IFacilityExtensionResolver.Resolve(Type facilityType)
+    {
+        return ((IFacilityExtensionResolver)_resolver).Resolve(facilityType);
     }
 }

@@ -1,5 +1,5 @@
 // Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
 using System.ComponentModel;
@@ -22,10 +22,17 @@ public interface IFacilityReflectionBuilder
     /// <summary>
     /// Adds a facility resolver to the builder.
     /// </summary>
-    /// <typeparam name="T">The type of the <see cref="IFacilityReflectionBuilder"/>.</typeparam>
+    /// <typeparam name="T">The type of the <see cref="IFacilityResolver"/>.</typeparam>
     /// <param name="configure">The configuration delegate.</param>
     /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public IFacilityReflectionBuilder AddResolver<T>(Action<T>? configure = null)
         where T : IFacilityResolver;
+
+    /// <summary>
+    /// Adds extensions to the resolved facilities by reflection.
+    /// </summary>
+    /// <param name="configure">The configuration delegate.</param>
+    /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
+    public IFacilityReflectionBuilder AddExtensionsFrom(Action<IFacilityExtensionReflectionBuilder> configure);
 }

@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Extensions.DependencyInjection;
 
-public class Facility1 : Facility
+public class Facility1 : IFacility
 {
-    protected override void ConfigureServices(IServiceCollection services)
+    public void ConfigureServices(IServiceCollection services)
     {
     }
 }

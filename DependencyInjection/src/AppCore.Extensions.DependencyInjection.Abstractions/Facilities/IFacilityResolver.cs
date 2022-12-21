@@ -1,5 +1,5 @@
 // Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System.Collections.Generic;
 
@@ -14,5 +14,5 @@ public interface IFacilityResolver
     /// Resolves facilities.
     /// </summary>
     /// <returns>The <see cref="IEnumerable{T}"/> of facilities.</returns>
-    IEnumerable<Facility> Resolve();
+    IEnumerable<IFacility> Resolve();
 }

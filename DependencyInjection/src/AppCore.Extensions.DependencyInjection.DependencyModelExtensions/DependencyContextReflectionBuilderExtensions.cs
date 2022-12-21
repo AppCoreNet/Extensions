@@ -2,7 +2,6 @@
 // Copyright (c) 2018-2021 the AppCore .NET project.
 
 using System;
-using AppCore.DependencyInjection;
 using AppCore.DependencyInjection.Facilities;
 using AppCore.Diagnostics;
 using AppCore.Extensions.DependencyInjection;
@@ -14,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to resolve service descriptors and facilities by reflection.
 /// </summary>
-public static class DependencyContextResolverBuilderExtensions
+public static class DependencyContextReflectionBuilderExtensions
 {
     /// <summary>
     /// Adds service descriptors by reflection.
@@ -37,12 +36,12 @@ public static class DependencyContextResolverBuilderExtensions
     /// Adds facilities by reflection.
     /// </summary>
     /// <param name="builder">The <see cref="IFacilityReflectionBuilder"/>.</param>
-    /// <param name="configure">The delegate to configure the <see cref="DependencyContextFacilityResolver"/>.</param>
+    /// <param name="configure">The delegate to configure the <see cref="DependencyContextResolver"/>.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/>.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
     public static IFacilityReflectionBuilder DependencyContext(
         this IFacilityReflectionBuilder builder,
-        Action<DependencyContextFacilityResolver> configure)
+        Action<DependencyContextResolver> configure)
     {
         Ensure.Arg.NotNull(builder);
         Ensure.Arg.NotNull(configure);
@@ -50,4 +49,20 @@ public static class DependencyContextResolverBuilderExtensions
         return builder.AddResolver(configure);
     }
 
+    /// <summary>
+    /// Adds facility extensions by reflection.
+    /// </summary>
+    /// <param name="builder">The <see cref="IFacilityExtensionReflectionBuilder"/>.</param>
+    /// <param name="configure">The delegate to configure the <see cref="DependencyContextResolver"/>.</param>
+    /// <returns>The <see cref="IFacilityExtensionReflectionBuilder"/>.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
+    public static IFacilityExtensionReflectionBuilder DependencyContext(
+        this IFacilityExtensionReflectionBuilder builder,
+        Action<DependencyContextResolver> configure)
+    {
+        Ensure.Arg.NotNull(builder);
+        Ensure.Arg.NotNull(configure);
+
+        return builder.AddResolver(configure);
+    }
 }

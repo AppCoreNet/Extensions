@@ -95,7 +95,7 @@ public class OAuthTokenService : IOAuthTokenService
                             response.ErrorDescription);
 
                         throw new AuthenticationException(
-                            $"Error requesting access token for client scheme {scheme.Name}");
+                            $"Error requesting access token for client scheme '{scheme.Name}'");
                     }
 
                     OAuthAccessToken token = new(
@@ -158,7 +158,7 @@ public class OAuthTokenService : IOAuthTokenService
                             response.ErrorDescription);
 
                         throw new AuthenticationException(
-                            $"Error requesting access token for password scheme {scheme.Name}");
+                            $"Error requesting access token for password scheme '{scheme.Name}'");
                     }
 
                     OAuthAccessToken token = new(
