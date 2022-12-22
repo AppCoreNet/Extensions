@@ -1,51 +1,37 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
 
-internal sealed class OpenIdConnectOAuthClientOptionsResolver
+internal sealed class OpenIdConnectClientOptionsResolver
     : AuthenticationSchemeOAuthClientOptionsResolver<
-        OpenIdConnectOAuthClientOptions,
+        OpenIdConnectClientOptions,
         OpenIdConnectOptions,
         OpenIdConnectHandler
     >
 {
-    public OpenIdConnectOAuthClientOptionsResolver(
+    public OpenIdConnectClientOptionsResolver(
         Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider authenticationSchemeProvider,
-        IOptionsMonitor<OpenIdConnectOAuthClientOptions> clientOptions,
+        IOptionsMonitor<OpenIdConnectClientOptions> clientOptions,
         IOptionsMonitor<OpenIdConnectOptions> authenticationSchemeOptions)
         : base(authenticationSchemeProvider, authenticationSchemeOptions, clientOptions)
     {
     }
 
+    protected override string? GetSchemeName(OpenIdConnectClientOptions options)
+    {
+        return options.Scheme;
+    }
+
     protected override async Task<OAuthClientOptions> GetOptionsFromSchemeAsync(
-        OpenIdConnectOAuthClientOptions clientOptions,
+        OpenIdConnectClientOptions clientOptions,
         OpenIdConnectOptions oidcOptions)
     {
-        OpenIdConnectConfiguration oidcConfig;
-        try
-        {
-            oidcConfig = await oidcOptions.ConfigurationManager!.GetConfigurationAsync(default)
-                                          .ConfigureAwait(false);
-        }
-        catch (Exception e)
-        {
-            throw new InvalidOperationException(
-                $"Unable to load OpenID configuration for configured scheme: {e.Message}");
-        }
-
-        var result = new OAuthClientOptions
-        {
-            TokenEndpoint = new Uri(oidcConfig.TokenEndpoint),
-            ClientId = oidcOptions.ClientId,
-            ClientSecret = oidcOptions.ClientSecret
-        };
+        OAuthClientOptions result = await oidcOptions.GetOAuthClientOptionsAsync(default);
 
         if (!string.IsNullOrWhiteSpace(clientOptions.Scope))
         {

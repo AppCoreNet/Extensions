@@ -11,7 +11,7 @@ namespace AppCore.Extensions.Http.Authentication;
 /// Represents a HTTP client authentication scheme handler.
 /// </summary>
 /// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
-public interface IAuthenticationSchemeHandler<TParameters>
+public interface IAuthenticationSchemeHandler<in TParameters>
     where TParameters : AuthenticationParameters
 {
     /// <summary>

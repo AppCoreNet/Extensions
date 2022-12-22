@@ -8,7 +8,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
 /// <summary>
 /// Provides the options how to derive <see cref="OAuthClientOptions"/> from <see cref="OpenIdConnectOptions"/>.
 /// </summary>
-public class OpenIdConnectOAuthClientOptions : AuthenticationSchemeOAuthClientOptions
+public class OpenIdConnectClientOptions : AuthenticationSchemeOAuthClientOptions
 {
     /// <summary>
     /// Scope values as space separated list to use when client configuration is inferred from OpenID Connect scheme.

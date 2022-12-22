@@ -69,7 +69,8 @@ builder.Services
                o =>
                {
                    o.Scope = "api";
-               }));
+               }))
+       .AddOpenIdConnect();
 
 // add HTTP client with OAuth client authentication
 builder.Services
@@ -80,6 +81,16 @@ builder.Services
                client.BaseAddress = new Uri("https://demo.duendesoftware.com/api/");
            })
        .AddOAuthClientAuthentication();
+
+// add HTTP client with OAuth user authentication
+builder.Services
+       .AddHttpClient(
+           "api-user-client",
+           client =>
+           {
+               client.BaseAddress = new Uri("https://demo.duendesoftware.com/api/");
+           })
+       .AddOpenIdConnectAuthentication();
 
 WebApplication app = builder.Build();
 
@@ -96,6 +107,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

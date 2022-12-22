@@ -29,9 +29,10 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
         services.AddDistributedMemoryCache();
 
         services.AddOptions<OAuthTokenCacheOptions>();
+        services.TryAddSingleton<IOAuthTokenCache, OAuthTokenCache>();
+        services.TryAddSingleton<IOAuthTokenService, OAuthTokenService>();
+
         services.TryAddTransient<IOAuthOptionsProvider, OAuthOptionsProvider>();
-        services.TryAddTransient<IOAuthTokenCache, OAuthTokenCache>();
-        services.TryAddTransient<IOAuthTokenService, OAuthTokenService>();
         services.AddHttpClient<IOAuthTokenClient, OAuthTokenClient>();
 
         return builder;

@@ -89,4 +89,59 @@ public class OAuthTokenClient : IOAuthTokenClient
         return await _client.RequestPasswordTokenAsync(request, cancellationToken)
                             .ConfigureAwait(false);
     }
+
+    /// <inheritdoc />
+    public async Task<TokenResponse> RequestRefreshTokenAsync(
+        AuthenticationScheme scheme,
+        string refreshToken,
+        OAuthParameters? parameters = null,
+        CancellationToken cancellationToken = default)
+    {
+        Ensure.Arg.NotEmpty(refreshToken);
+
+        OAuthClientOptions options =
+            await _optionsProvider.GetOptionsAsync<OAuthClientOptions>(scheme)
+                                  .ConfigureAwait(false);
+
+        var request = new RefreshTokenRequest
+        {
+            RequestUri = options.TokenEndpoint,
+            ClientId = options.ClientId,
+            ClientSecret = options.ClientSecret,
+            ClientCredentialStyle = options.ClientCredentialStyle,
+            RefreshToken = refreshToken
+        };
+
+        return await _client.RequestRefreshTokenAsync(request, cancellationToken)
+                            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public async Task<TokenRevocationResponse> RevokeTokenAsync(
+        AuthenticationScheme scheme,
+        string token,
+        string tokenTypeHint,
+        OAuthParameters? parameters = null,
+        CancellationToken cancellationToken = default)
+    {
+        Ensure.Arg.NotEmpty(token);
+        Ensure.Arg.NotEmptyButNull(tokenTypeHint);
+
+        OAuthClientOptions options =
+            await _optionsProvider.GetOptionsAsync<OAuthClientOptions>(scheme)
+                                  .ConfigureAwait(false);
+
+        var request = new TokenRevocationRequest
+        {
+            RequestUri = options.TokenEndpoint,
+            ClientId = options.ClientId,
+            ClientSecret = options.ClientSecret,
+            ClientCredentialStyle = options.ClientCredentialStyle,
+            Token = token,
+            TokenTypeHint = tokenTypeHint
+        };
+
+        return await _client.RevokeTokenAsync(request, cancellationToken)
+                            .ConfigureAwait(false);
+    }
 }
