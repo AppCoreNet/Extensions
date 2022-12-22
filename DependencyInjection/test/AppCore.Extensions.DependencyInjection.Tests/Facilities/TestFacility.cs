@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Extensions.DependencyInjection.Facilities;
 
-public class TestFacility : IFacility
+public class TestFacility : ITestFacility
 {
     public void ConfigureServices(IServiceCollection services)
     {

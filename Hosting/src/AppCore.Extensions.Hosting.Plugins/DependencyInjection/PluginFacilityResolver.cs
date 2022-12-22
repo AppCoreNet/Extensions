@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using AppCore.Diagnostics;
 using AppCore.Extensions.Hosting.Plugins;
 
@@ -35,14 +37,30 @@ public class PluginFacilityResolver : IFacilityResolver, IFacilityExtensionResol
         }
     }
 
+    private IFacilityExtension<IFacility> CreateExtension(IPluginService<object> pluginService)
+    {
+        Type extensionType = pluginService.GetType()
+                                          .GetInterfaces()
+                                          .First(i => i.GetGenericTypeDefinition() == typeof(IPluginService<>))
+                                          .GenericTypeArguments[0];
+
+        Type contractType = extensionType.GenericTypeArguments[0];
+        Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
+
+        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(
+            extensionWrapperType,
+            pluginService.Instance)!;
+    }
+
     /// <inheritdoc />
     IEnumerable<IFacilityExtension<IFacility>> IFacilityExtensionResolver.Resolve(Type facilityType)
     {
-        foreach (IPluginService<object> pluginService in _pluginManager.GetServices(
-                     typeof(IFacilityExtension<>).MakeGenericType(facilityType)))
+        IPluginServiceCollection<object> services = _pluginManager.GetServices(
+            typeof(IFacilityExtension<>).MakeGenericType(facilityType));
+
+        foreach (IPluginService<object> service in services)
         {
-            var facility = (IPluginService<IFacilityExtension<IFacility>>)pluginService;
-            yield return facility.Instance;
+            yield return CreateExtension(service);
         }
     }
 }

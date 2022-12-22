@@ -2,6 +2,7 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System;
+using System.Linq;
 using AppCore.Extensions.DependencyInjection.Activator;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,8 +31,19 @@ public class FacilityBuilderTests
     {
         var builder = new FacilityBuilder<TestFacility>(_services, _activator);
         builder.AddExtension<TestFacilityExtension>();
+        builder.AddExtension<TestFacilityContractExtension>();
+        _services.Select(sd => sd.ServiceType)
+                 .Should()
+                 .BeEquivalentTo(new [] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
+    }
+
+    [Fact]
+    public void AddExtensionForContractGenericTypeRegistersServices()
+    {
+        var builder = new FacilityBuilder<ITestFacility>(_services, _activator);
+        builder.AddExtension<TestFacilityContractExtension>();
         _services.Should()
-                 .ContainSingle(sd => sd.ServiceType == typeof(FacilityExtensionTestService));
+                 .Contain(sd => sd.ServiceType == typeof(FacilityExtensionTestService));
     }
 
     [Fact]
@@ -39,8 +51,10 @@ public class FacilityBuilderTests
     {
         var builder = new FacilityBuilder<TestFacility>(_services, _activator);
         builder.AddExtension(typeof(TestFacilityExtension));
-        _services.Should()
-                 .ContainSingle(sd => sd.ServiceType == typeof(FacilityExtensionTestService));
+        builder.AddExtension(typeof(TestFacilityContractExtension));
+        _services.Select(sd => sd.ServiceType)
+                 .Should()
+                 .BeEquivalentTo(new [] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
     }
 
     [Fact]
@@ -48,20 +62,24 @@ public class FacilityBuilderTests
     {
         var builder = new FacilityBuilder<TestFacility>(_services, _activator);
         builder.AddExtension(new TestFacilityExtension());
-        _services.Should()
-                 .ContainSingle(sd => sd.ServiceType == typeof(FacilityExtensionTestService));
+        builder.AddExtension(new TestFacilityContractExtension());
+
+        _services.Select(sd => sd.ServiceType)
+                 .Should()
+                 .BeEquivalentTo(new [] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
     }
 
     [Fact]
-    public void AddExtensionsFromRegistersServices()
+    public void AddExtensionsFromInvokesResolver()
     {
         var resolver = Substitute.For<IFacilityExtensionResolver>();
-        resolver.Resolve(Arg.Is(typeof(TestFacility)))
-                .Returns(new[] { new TestFacilityExtension() });
+        resolver.Resolve(Arg.Any<Type>())
+                .Returns(Array.Empty<IFacilityExtension<IFacility>>());
 
         var builder = new FacilityBuilder<TestFacility>(_services, _activator);
         builder.AddExtensionsFrom(r => r.AddResolver(resolver));
-        _services.Should()
-                 .ContainSingle(sd => sd.ServiceType == typeof(FacilityExtensionTestService));
+
+        resolver.Received()
+                .Resolve(typeof(TestFacility));
     }
 }

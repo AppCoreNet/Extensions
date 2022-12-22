@@ -36,7 +36,11 @@ internal sealed class FacilityExtensionReflectionBuilder : IFacilityExtensionRef
 
     public IReadOnlyCollection<IFacilityExtension<IFacility>> Resolve(Type facilityType)
     {
-        return _resolvers.SelectMany(s => s.Resolve(facilityType))
+        Type[] facilityTypes = facilityType.GetTypesAssignableFrom()
+                                           .Where(t => t.GetInterfaces().Contains(typeof(IFacility)))
+                                           .ToArray();
+
+        return _resolvers.SelectMany(s => facilityTypes.SelectMany(s.Resolve))
                          .ToList()
                          .AsReadOnly();
     }
