@@ -56,13 +56,11 @@ public interface IOAuthTokenClient
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="token">The token to revoke.</param>
     /// <param name="tokenTypeHint">A hint for the type of the token.</param>
-    /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
     /// <returns></returns>
     Task<TokenRevocationResponse> RevokeTokenAsync(
         AuthenticationScheme scheme,
         string token,
         string tokenTypeHint,
-        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default);
 }

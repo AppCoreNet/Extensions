@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018-2022 the AppCore .NET project.
+
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Authentication;
 using System.Security.Claims;
@@ -10,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
 
 /// <summary>
-/// Provides a OAuth user authentication handler.
+/// Provides a base class for a OAuth user authentication handler.
 /// </summary>
 public abstract class OAuthUserHandler<TParameters> : IAuthenticationSchemeHandler<TParameters>
     where TParameters : OAuthUserParameters
@@ -32,13 +35,24 @@ public abstract class OAuthUserHandler<TParameters> : IAuthenticationSchemeHandl
         _authTokenService = authTokenService;
     }
 
+    /// <summary>
+    /// Ensures that the <paramref name="scheme"/> is compatible.
+    /// </summary>
+    /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
+    protected abstract void EnsureCompatibleScheme(AuthenticationScheme scheme);
+
     /// <inheritdoc />
     public async Task AuthenticateAsync(
         AuthenticationScheme scheme,
-        TParameters? parameters,
         HttpRequestMessage request,
+        TParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
+        Ensure.Arg.NotNull(scheme);
+        Ensure.Arg.NotNull(request);
+
+        EnsureCompatibleScheme(scheme);
+
         ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
         if (user == null)
             throw new AuthenticationException("User is not authenticated.");

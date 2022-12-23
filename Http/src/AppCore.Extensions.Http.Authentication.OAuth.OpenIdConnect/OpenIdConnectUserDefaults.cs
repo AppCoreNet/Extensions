@@ -1,4 +1,7 @@
-﻿namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018-2022 the AppCore .NET project.
+
+namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
 /// <summary>
 /// Provides default values for the OpenID Connect authentication.

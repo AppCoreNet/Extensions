@@ -29,8 +29,8 @@ public class OAuthClientHandler : IAuthenticationSchemeHandler<OAuthParameters>
     /// <inheritdoc />
     public async Task AuthenticateAsync(
         AuthenticationScheme scheme,
-        OAuthParameters? parameters,
         HttpRequestMessage request,
+        OAuthParameters? parameters,
         CancellationToken cancellationToken = default)
     {
         OAuthAccessToken accessToken =

@@ -64,7 +64,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService", "Http\sampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth.AspNetCore", "Http\src\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.csproj", "{9301436D-85F6-4845-AAD6-33103F49F018}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect", "Http\src\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect.csproj", "{91754F75-CC7A-48C8-A133-9F087BE10CFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect", "Http\src\AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect\AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect.csproj", "{91754F75-CC7A-48C8-A133-9F087BE10CFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Http\samples\Web\Web.csproj", "{7D72ABA6-5EBE-491A-A599-65D15FD10308}"
 EndProject

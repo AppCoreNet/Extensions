@@ -1,34 +1,49 @@
-﻿using System;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018-2022 the AppCore .NET project.
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
+using AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
+namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
+/// <summary>
+/// Represents the OpenID Connect user token store.
+/// </summary>
 public class OpenIdConnectUserTokenStore : AuthenticationSessionOAuthUserTokenStore<OpenIdConnectUserOptions>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OpenIdConnectUserTokenStore"/>.
+    /// </summary>
+    /// <param name="httpContextAccessor"></param>
+    /// <param name="optionsMonitor"></param>
+    /// <param name="logger"></param>
     public OpenIdConnectUserTokenStore(
         IHttpContextAccessor httpContextAccessor,
         IOptionsMonitor<OpenIdConnectUserOptions> optionsMonitor,
-        ILogger<OpenIdConnectUserTokenStore> logger)
+        ILogger<OpenIdConnectUserTokenStore> logger
+    )
         : base(httpContextAccessor, optionsMonitor, logger)
     {
     }
 
+    /// <inheritdoc />
     protected override void EnsureCompatibleScheme(AuthenticationScheme scheme)
     {
-        if (!typeof(OpenIdConnectUserHandler).IsAssignableFrom(scheme.HandlerType))
-            throw new InvalidOperationException($"The client authentication scheme {scheme.Name} is not registered for the OpenID Connect user handler.");
+        scheme.EnsureOpenIdConnectScheme();
     }
 
-    protected override void SetUserToken(
+    /// <inheritdoc />
+    protected override void StoreToken(
         ClaimsPrincipal principal,
         AuthenticationProperties properties,
         OAuthUserToken token,
@@ -59,7 +74,8 @@ public class OpenIdConnectUserTokenStore : AuthenticationSessionOAuthUserTokenSt
         properties.StoreTokens(tokens);
     }
 
-    protected override OAuthUserToken GetUserToken(
+    /// <inheritdoc />
+    protected override OAuthUserToken GetToken(
         ClaimsPrincipal principal,
         AuthenticationProperties properties,
         OpenIdConnectUserOptions options)

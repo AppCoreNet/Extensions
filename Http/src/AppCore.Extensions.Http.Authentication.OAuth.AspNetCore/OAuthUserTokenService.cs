@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018-2022 the AppCore .NET project.
+
+using System;
 using System.Collections.Concurrent;
 using System.Security.Authentication;
 using System.Security.Claims;
@@ -13,6 +16,10 @@ using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
 
+/// <summary>
+/// Provides the base class for see <see cref="IOAuthUserTokenService"/>.
+/// </summary>
+/// <typeparam name="TOptions">The type of the <see cref="OAuthUserOptions"/>.</typeparam>
 public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
     where TOptions : OAuthUserOptions
 {
@@ -51,6 +58,10 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
         _logger = logger;
     }
 
+    /// <summary>
+    /// Ensures that the <paramref name="scheme"/> is compatible.
+    /// </summary>
+    /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     protected abstract void EnsureCompatibleScheme(AuthenticationScheme scheme);
 
     private async Task<OAuthUserToken> InvokeSynchronized(string key, Func<Task<OAuthUserToken>> tokenFunc)
@@ -80,74 +91,80 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
 
         EnsureCompatibleScheme(scheme);
 
-        OAuthUserOptions options = _optionsMonitor.Get(scheme.Name);
-        OAuthUserToken token = await _store.GetTokenAsync(scheme, user, parameters, cancellationToken);
-
-        if (!options.AllowTokenRefresh)
-            return token;
+        TOptions options = _optionsMonitor.Get(scheme.Name);
+        OAuthUserToken token = await _store.GetTokenAsync(scheme, user, cancellationToken);
 
         DateTimeOffset? refreshAt = token.Expires?.Subtract(options.RefreshBeforeExpiration);
         if (refreshAt.HasValue
             && refreshAt < _clock.UtcNow
             || (parameters?.ForceRenewal).GetValueOrDefault())
         {
+            if (!options.AllowTokenRefresh)
+                throw new AuthenticationException("Cannot refresh access token because it has been disabled.");
+
             if (string.IsNullOrWhiteSpace(token.RefreshToken))
                 throw new AuthenticationException("Cannot refresh access token because no refresh token was found for user.");
 
             return await InvokeSynchronized(
                     token.RefreshToken,
-                    async () =>
-                    {
-                        _logger.LogDebug("Refreshing access token for client scheme {schemeName} ...", scheme.Name);
-
-                        TokenResponse response =
-                            await _client.RequestRefreshTokenAsync(
-                                             scheme,
-                                             token.RefreshToken,
-                                             parameters,
-                                             cancellationToken)
-                                         .ConfigureAwait(false);
-
-                        if (response.IsError)
-                        {
-                            _logger.LogError(
-                                "Error refreshing access token for client scheme {schemeName}. Error = {error}. Error description = {errorDescription}",
-                                scheme.Name,
-                                response.Error,
-                                response.ErrorDescription);
-
-                            throw new AuthenticationException(
-                                $"Error refreshing access token for client scheme '{scheme.Name}': {response.Error}");
-                        }
-
-                        OAuthUserToken refreshedToken = new(
-                            response.AccessToken,
-                            response.RefreshToken,
-                            response.ExpiresIn > 0
-                                ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
-                                : null);
-
-                        _logger.LogDebug(
-                            "Refreshed access token for client scheme {schemeName}. Expiration: {expiration}",
-                            scheme.Name,
-                            refreshedToken.Expires);
-
-                        await _store.StoreTokenAsync(scheme, user, refreshedToken, parameters, cancellationToken)
-                                    .ConfigureAwait(false);
-
-                        return refreshedToken;
-                    })
+                    () => RefreshAccessTokenAsync(scheme, user, token, parameters, cancellationToken))
                 .ConfigureAwait(false);
         }
 
         return token;
     }
 
+    private async Task<OAuthUserToken> RefreshAccessTokenAsync(
+        AuthenticationScheme scheme,
+        ClaimsPrincipal user,
+        OAuthUserToken token,
+        OAuthUserParameters? parameters = null,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogDebug("Refreshing access token for client scheme {schemeName} ...", scheme.Name);
+
+        TokenResponse response =
+            await _client.RequestRefreshTokenAsync(
+                             scheme,
+                             token.RefreshToken!,
+                             parameters,
+                             cancellationToken)
+                         .ConfigureAwait(false);
+
+        if (response.IsError)
+        {
+            _logger.LogError(
+                "Error refreshing access token for client scheme {schemeName}. Error = {error}. Error description = {errorDescription}",
+                scheme.Name,
+                response.Error,
+                response.ErrorDescription);
+
+            throw new AuthenticationException(
+                $"Error refreshing access token for client scheme '{scheme.Name}': {response.Error}");
+        }
+
+        OAuthUserToken refreshedToken = new(
+            response.AccessToken,
+            response.RefreshToken,
+            response.ExpiresIn > 0
+                ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
+                : null);
+
+        _logger.LogDebug(
+            "Refreshed access token for client scheme {schemeName}. Expiration: {expiration}",
+            scheme.Name,
+            refreshedToken.Expires);
+
+        await _store.StoreTokenAsync(scheme, user, refreshedToken, cancellationToken)
+                    .ConfigureAwait(false);
+
+        return refreshedToken;
+    }
+
     /// <inheritdoc />
     public async Task RevokeRefreshTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,
-        OAuthUserParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme);
@@ -155,7 +172,7 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
 
         EnsureCompatibleScheme(scheme);
 
-        OAuthUserToken token = await _store.GetTokenAsync(scheme, user, parameters, cancellationToken)
+        OAuthUserToken token = await _store.GetTokenAsync(scheme, user, cancellationToken)
                                            .ConfigureAwait(false);
 
         if (!string.IsNullOrWhiteSpace(token.RefreshToken))
@@ -164,11 +181,10 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
                              scheme,
                              token.RefreshToken,
                              OidcConstants.TokenTypeIdentifiers.RefreshToken,
-                             parameters,
                              cancellationToken)
                          .ConfigureAwait(false);
 
-            await _store.ClearTokenAsync(scheme, user, parameters, cancellationToken)
+            await _store.ClearTokenAsync(scheme, user, cancellationToken)
                         .ConfigureAwait(false);
         }
     }

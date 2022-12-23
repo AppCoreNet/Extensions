@@ -4,7 +4,7 @@
 using System;
 using AppCore.Diagnostics;
 using AppCore.Extensions.Http.Authentication.OAuth;
-using AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
+using AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace

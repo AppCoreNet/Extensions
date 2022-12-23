@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Licensed under the MIT License.
+// Copyright (c) 2018-2022 the AppCore .NET project.
+
+using System.Collections.Generic;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading;
@@ -12,6 +15,11 @@ using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
 
+/// <summary>
+/// Provides the base class for <see cref="IOAuthUserTokenStore"/> which stores tokens in the authentication
+/// session.
+/// </summary>
+/// <typeparam name="TOptions">The type of the <see cref="OAuthUserOptions"/>.</typeparam>
 public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAuthUserTokenStore
     where TOptions : OAuthUserOptions
 {
@@ -23,6 +31,12 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
     // this requires this service to be added as scoped to the DI system
     private readonly Dictionary<string, AuthenticateResult> _cache = new();
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuthenticationSessionOAuthUserTokenStore{TOptions}"/> class.
+    /// </summary>
+    /// <param name="httpContextAccessor">The <see cref="IHttpContextAccessor"/>.</param>
+    /// <param name="optionsMonitor">The <see cref="IOptionsMonitor{TOptions}"/>.</param>
+    /// <param name="logger">The <see cref="ILogger{TCategoryName}"/>.</param>
     protected AuthenticationSessionOAuthUserTokenStore(
         IHttpContextAccessor httpContextAccessor,
         IOptionsMonitor<TOptions> optionsMonitor,
@@ -67,7 +81,7 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
         return scheme;
     }
 
-    private async Task<AuthenticateResult?> TryAuthenticateAsync(HttpContext httpContext, string signInScheme, TOptions options)
+    private async Task<AuthenticateResult?> TryAuthenticateAsync(HttpContext httpContext, string signInScheme)
     {
         // check the cache in case the token was re-issued via StoreTokenAsync
         if (!_cache.TryGetValue(signInScheme, out AuthenticateResult? result))
@@ -92,13 +106,17 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
         return result;
     }
 
+    /// <summary>
+    /// Ensures that the <paramref name="scheme"/> is compatible.
+    /// </summary>
+    /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     protected abstract void EnsureCompatibleScheme(AuthenticationScheme scheme);
 
+    /// <inheritdoc />
     public async Task StoreTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,
         OAuthUserToken token,
-        OAuthUserParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme);
@@ -111,12 +129,12 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
         TOptions options = _optionsMonitor.Get(scheme.Name);
         string signInScheme = await GetSignInScheme(httpContext, options);
 
-        AuthenticateResult? result = await TryAuthenticateAsync(httpContext, signInScheme, options);
+        AuthenticateResult? result = await TryAuthenticateAsync(httpContext, signInScheme);
         if (result == null)
             throw new AuthenticationException("User is not authenticated, cannot store tokens.");
 
         ClaimsPrincipal principal = result.Principal!;
-        SetUserToken(principal, result.Properties!, token, options);
+        StoreToken(principal, result.Properties!, token, options);
 
         if (result.Properties!.AllowRefresh.GetValueOrDefault(true))
         {
@@ -128,16 +146,23 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
         _cache[signInScheme] = AuthenticateResult.Success(new AuthenticationTicket(principal, result.Properties, signInScheme));
     }
 
-    protected abstract void SetUserToken(
+    /// <summary>
+    /// Stores the token in the authentication session.
+    /// </summary>
+    /// <param name="principal"></param>
+    /// <param name="properties"></param>
+    /// <param name="token"></param>
+    /// <param name="options"></param>
+    protected abstract void StoreToken(
         ClaimsPrincipal principal,
         AuthenticationProperties properties,
         OAuthUserToken token,
         TOptions options);
 
+    /// <inheritdoc />
     public async Task<OAuthUserToken> GetTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,
-        OAuthUserParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme);
@@ -149,22 +174,29 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
         TOptions options = _optionsMonitor.Get(scheme.Name);
         string signInScheme = await GetSignInScheme(httpContext, options);
 
-        AuthenticateResult? result = await TryAuthenticateAsync(httpContext, signInScheme, options);
+        AuthenticateResult? result = await TryAuthenticateAsync(httpContext, signInScheme);
         if (result == null)
             throw new AuthenticationException("User is not authenticated, cannot get tokens.");
 
-        return GetUserToken(result.Principal!, result.Properties!, options);
+        return GetToken(result.Principal!, result.Properties!, options);
     }
 
-    protected abstract OAuthUserToken GetUserToken(
+    /// <summary>
+    /// Gets the token from the authentication session.
+    /// </summary>
+    /// <param name="principal"></param>
+    /// <param name="properties"></param>
+    /// <param name="options"></param>
+    /// <returns></returns>
+    protected abstract OAuthUserToken GetToken(
         ClaimsPrincipal principal,
         AuthenticationProperties properties,
         TOptions options);
 
+    /// <inheritdoc />
     public Task ClearTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,
-        OAuthUserParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotNull(scheme);

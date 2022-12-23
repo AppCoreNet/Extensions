@@ -121,7 +121,6 @@ public class OAuthTokenClient : IOAuthTokenClient
         AuthenticationScheme scheme,
         string token,
         string tokenTypeHint,
-        OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
     {
         Ensure.Arg.NotEmpty(token);

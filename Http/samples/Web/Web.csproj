@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect.csproj" />
+      <ProjectReference Include="..\..\src\AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect\AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect.csproj" />
     </ItemGroup>
 
 </Project>

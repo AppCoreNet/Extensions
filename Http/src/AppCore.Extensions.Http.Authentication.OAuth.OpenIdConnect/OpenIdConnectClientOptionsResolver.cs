@@ -2,10 +2,11 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using System.Threading.Tasks;
+using AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
+namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
 internal sealed class OpenIdConnectClientOptionsResolver
     : AuthenticationSchemeOAuthClientOptionsResolver<

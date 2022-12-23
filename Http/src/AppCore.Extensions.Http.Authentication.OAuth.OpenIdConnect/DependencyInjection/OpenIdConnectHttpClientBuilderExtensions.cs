@@ -2,7 +2,7 @@
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
 using AppCore.Diagnostics;
-using AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
+using AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;

@@ -32,11 +32,9 @@ public interface IOAuthUserTokenService
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="user">The user.</param>
-    /// <param name="parameters">Optional parameters.</param>
     /// <param name="cancellationToken"></param>
     Task RevokeRefreshTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,
-        OAuthUserParameters? parameters = null,
         CancellationToken cancellationToken = default);
 }

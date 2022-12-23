@@ -18,13 +18,13 @@ public interface IAuthenticationSchemeHandler<in TParameters>
     /// Authenticates a <see cref="HttpRequestMessage"/> with the specified scheme and parameters.
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
-    /// <param name="parameters">The <see cref="AuthenticationParameters"/>.</param>
     /// <param name="request">The <see cref="HttpRequestMessage"/>.</param>
+    /// <param name="parameters">The <see cref="AuthenticationParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
     /// <returns>The asynchronous operation.</returns>
     Task AuthenticateAsync(
         AuthenticationScheme scheme,
-        TParameters? parameters,
         HttpRequestMessage request,
+        TParameters? parameters = null,
         CancellationToken cancellationToken = default);
 }
