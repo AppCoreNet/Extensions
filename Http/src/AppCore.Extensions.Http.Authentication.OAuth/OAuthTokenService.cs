@@ -95,7 +95,7 @@ public class OAuthTokenService : IOAuthTokenService
                             response.ErrorDescription);
 
                         throw new AuthenticationException(
-                            $"Error requesting access token for client scheme '{scheme.Name}'");
+                            $"Error requesting access token for client scheme '{scheme.Name}': {response.Error}");
                     }
 
                     OAuthAccessToken token = new(

@@ -48,8 +48,8 @@ public abstract class AuthenticationSchemeHandler<TOptions, TParameters> : IAuth
 
     async Task IAuthenticationSchemeHandler<TParameters>.AuthenticateAsync(
         AuthenticationScheme scheme,
-        TParameters? parameters,
         HttpRequestMessage request,
+        TParameters? parameters,
         CancellationToken cancellationToken)
     {
         await AuthenticateAsync(scheme, _optionsMonitor.Get(scheme.Name), parameters, request, cancellationToken)

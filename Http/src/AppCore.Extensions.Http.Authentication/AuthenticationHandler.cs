@@ -136,7 +136,7 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
             parameters.ForceRenewal = forceRenewal;
         }
 
-        await _schemeHandler.AuthenticateAsync(scheme, parameters, request, cancellationToken)
+        await _schemeHandler.AuthenticateAsync(scheme, request, parameters, cancellationToken)
                             .ConfigureAwait(false);
     }
 }
