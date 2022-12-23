@@ -46,4 +46,15 @@ public class HomeController : Controller
 
         return View("CallApi");
     }
+
+    [Authorize]
+    public async Task<IActionResult> CallApiAsUser()
+    {
+        HttpClient client = _httpClientFactory.CreateClient("api-user-client");
+
+        string response = await client.GetStringAsync("test");
+        ViewBag.Json = JsonNode.Parse(response)!.ToString();
+
+        return View("CallApi");
+    }
 }

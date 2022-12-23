@@ -14,11 +14,11 @@ using IAuthenticationSchemeProvider = Microsoft.AspNetCore.Authentication.IAuthe
 /// <summary>
 /// Provides the base class for resolving OAuth client authentication options from ASP.NET Core authentication schemes.
 /// </summary>
-/// <typeparam name="TClientOptions">The type of the <see cref="AuthenticationSchemeOAuthClientOptions"/>.</typeparam>
+/// <typeparam name="TClientOptions">The type of the <see cref="AuthenticationSchemeOptions"/>.</typeparam>
 /// <typeparam name="TOptions">The type of the <see cref="RemoteAuthenticationOptions"/>.</typeparam>
 /// <typeparam name="THandler">The type of the <see cref="IAuthenticationHandler"/>.</typeparam>
 public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOptions, TOptions, THandler> : IOAuthOptionsResolver
-    where TClientOptions : AuthenticationSchemeOAuthClientOptions
+    where TClientOptions : AuthenticationSchemeOptions
     where TOptions : RemoteAuthenticationOptions
     where THandler : IAuthenticationHandler
 {
@@ -56,12 +56,13 @@ public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOpti
             && typeof(T) == typeof(OAuthClientOptions))
         {
             TClientOptions clientOptions = _clientOptions.Get(scheme.Name);
+            string? schemeName = GetSchemeName(clientOptions);
 
             Microsoft.AspNetCore.Authentication.AuthenticationScheme? authenticationScheme =
-                string.IsNullOrWhiteSpace(clientOptions.Scheme)
+                string.IsNullOrWhiteSpace(schemeName)
                     ? await _authenticationSchemeProvider.GetDefaultChallengeSchemeAsync()
                                                          .ConfigureAwait(false)
-                    : await _authenticationSchemeProvider.GetSchemeAsync(clientOptions.Scheme)
+                    : await _authenticationSchemeProvider.GetSchemeAsync(schemeName)
                                                          .ConfigureAwait(false);
 
             if (authenticationScheme is null)
@@ -85,6 +86,13 @@ public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOpti
 
         return result;
     }
+
+    /// <summary>
+    /// Gets the name of the authentication scheme.
+    /// </summary>
+    /// <param name="options"></param>
+    /// <returns></returns>
+    protected abstract string? GetSchemeName(TClientOptions options);
 
     /// <summary>
     /// Must be implemented to resolve the <see cref="OAuthClientOptions"/> from the authentication scheme options.

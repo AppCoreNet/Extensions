@@ -1,14 +1,15 @@
 ﻿// Licensed under the MIT License.
 // Copyright (c) 2018-2022 the AppCore .NET project.
 
+using AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.OpenIdConnect;
+namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
 /// <summary>
 /// Provides the options how to derive <see cref="OAuthClientOptions"/> from <see cref="OpenIdConnectOptions"/>.
 /// </summary>
-public class OpenIdConnectOAuthClientOptions : AuthenticationSchemeOAuthClientOptions
+public class OpenIdConnectClientOptions : AuthenticationSchemeOAuthClientOptions
 {
     /// <summary>
     /// Scope values as space separated list to use when client configuration is inferred from OpenID Connect scheme.

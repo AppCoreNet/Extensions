@@ -18,6 +18,11 @@ public abstract class OAuthOptions : AuthenticationSchemeOptions
     public Uri? TokenEndpoint { get; set; }
 
     /// <summary>
+    /// Gets or sets the URL of the OAuth token revocation endpoint.
+    /// </summary>
+    public Uri? TokenRevocationEndpoint { get; set; }
+
+    /// <summary>
     /// Gets or sets the <c>client_id</c>.
     /// </summary>
     public string? ClientId { get; set; }
