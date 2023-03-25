@@ -1,9 +1,9 @@
 AppCore .NET add-ons for Microsoft.Extensions
 --------------------
 
-[![Build Status](https://dev.azure.com/AppCoreNet/Extensions/_apis/build/status/AppCore.Extensions%20CI?branchName=dev)](https://dev.azure.com/AppCoreNet/Extensions/_build/latest?definitionId=19&branchName=dev)
+[![Build Status](https://dev.azure.com/AppCoreNet/Extensions/_apis/build/status/AppCore.Extensions%20CI?branchName=main)](https://dev.azure.com/AppCoreNet/Extensions/_build/latest?definitionId=19&branchName=main)
 ![Azure DevOps tests (compact)](https://img.shields.io/azure-devops/tests/AppCoreNet/Extensions/19?compact_message)
-![Azure DevOps coverage (branch)](https://img.shields.io/azure-devops/coverage/AppCoreNet/Extensions/19/dev)
+![Azure DevOps coverage (branch)](https://img.shields.io/azure-devops/coverage/AppCoreNet/Extensions/19/main)
 ![Nuget](https://img.shields.io/nuget/v/AppCore.Extensions.DependencyInjection.Abstractions)
 ![MyGet](https://img.shields.io/myget/appcorenet/vpre/AppCore.Extensions.DependencyInjection.Abstractions?label=myget)
 
