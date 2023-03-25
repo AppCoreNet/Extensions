@@ -45,7 +45,7 @@ public class DependencyContextResolver : IFacilityResolver, IFacilityExtensionRe
     /// </summary>
     /// <param name="dependencyContext">The <see cref="DependencyContext"/>.</param>
     /// <returns>The <see cref="DependencyContextResolver"/>.</returns>
-    public DependencyContextResolver From(DependencyContext dependencyContext)
+    public DependencyContextResolver Add(DependencyContext dependencyContext)
     {
         Ensure.Arg.NotNull(dependencyContext);
 
