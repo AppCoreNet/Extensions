@@ -8,6 +8,7 @@ trigger:
     include:
     - dev
     - master
+    - main
     - releases/*
     - hotfixes/*
     - support/v*
