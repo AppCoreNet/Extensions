@@ -1,0 +1,19 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+variables:
+  configuration: Debug
+
+trigger:
+  branches:
+    include:
+    - dev
+    - master
+    - main
+    - releases/*
+    - hotfixes/*
+    - support/v*
+
+jobs:
+- template: build/shared/azure-pipelines/jobs.yml
+  parameters:
+    configuration: $(configuration)
