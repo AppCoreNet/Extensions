@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net6.0;netstandard2.0;net462</TargetFrameworks>
+    <RootNamespace>AppCoreNet.Extensions.DependencyInjection</RootNamespace>
+    <Description>Provides dependency context assembly reflection extensions to the Microsoft.Extensions.DependencyInjection framework.</Description>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'!='net8.0'">
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AppCoreNet.Extensions.DependencyInjection.AssemblyExtensions\AppCoreNet.Extensions.DependencyInjection.AssemblyExtensions.csproj" />
+  </ItemGroup>
+
+</Project>

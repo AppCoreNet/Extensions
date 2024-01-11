@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
 using AppCore.Extensions.Hosting.Plugins;
+using AppCoreNet.Extensions.DependencyInjection.Facilities;
 
 // ReSharper disable once CheckNamespace
 namespace AppCore.Extensions.DependencyInjection.Facilities;

@@ -2,8 +2,8 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
-using AppCore.Extensions.DependencyInjection.Activator;
-using AppCore.Extensions.DependencyInjection.Facilities;
+using AppCoreNet.Extensions.DependencyInjection.Activator;
+using AppCoreNet.Extensions.DependencyInjection.Facilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Extensions.Hosting.Plugins.TestPlugin;

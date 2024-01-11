@@ -4,6 +4,7 @@
 using System;
 using AppCoreNet.Diagnostics;
 using AppCore.Extensions.Hosting;
+using AppCoreNet.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

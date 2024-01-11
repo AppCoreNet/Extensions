@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DependencyInjection\src\AppCore.Extensions.DependencyInjection.AssemblyExtensions\AppCore.Extensions.DependencyInjection.AssemblyExtensions.csproj" />
+    <ProjectReference Include="..\..\..\DependencyInjection\src\AppCoreNet.Extensions.DependencyInjection.AssemblyExtensions\AppCoreNet.Extensions.DependencyInjection.AssemblyExtensions.csproj" />
     <ProjectReference Include="..\AppCore.Extensions.Hosting.Plugins.Abstractions\AppCore.Extensions.Hosting.Plugins.Abstractions.csproj" />
     <ProjectReference Include="..\AppCore.Extensions.Hosting\AppCore.Extensions.Hosting.csproj" />
   </ItemGroup>

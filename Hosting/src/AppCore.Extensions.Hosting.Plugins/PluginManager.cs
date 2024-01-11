@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.DependencyInjection.Activator;
+using AppCoreNet.Extensions.DependencyInjection.Activator;
 using McMaster.NETCore.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

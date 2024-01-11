@@ -9,7 +9,8 @@ using System.Linq;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection;
-using AppCore.Extensions.DependencyInjection.Activator;
+using AppCoreNet.Extensions.DependencyInjection;
+using AppCoreNet.Extensions.DependencyInjection.Activator;
 using McMaster.NETCore.Plugins;
 
 namespace AppCore.Extensions.Hosting.Plugins;

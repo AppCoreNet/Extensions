@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AppCore.Extensions.DependencyInjection;
+using AppCoreNet.Extensions.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;

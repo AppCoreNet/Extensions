@@ -3,8 +3,8 @@
 
 using System;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.DependencyInjection.Activator;
 using AppCore.Extensions.Hosting.Plugins;
+using AppCoreNet.Extensions.DependencyInjection.Activator;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;

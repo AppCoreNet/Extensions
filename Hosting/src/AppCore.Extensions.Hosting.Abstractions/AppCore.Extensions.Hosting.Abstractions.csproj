@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\DependencyInjection\src\AppCore.Extensions.DependencyInjection.Abstractions\AppCore.Extensions.DependencyInjection.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\DependencyInjection\src\AppCoreNet.Extensions.DependencyInjection.Abstractions\AppCoreNet.Extensions.DependencyInjection.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

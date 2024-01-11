@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AppCoreNet.Diagnostics;
 using AppCore.Extensions.Hosting.Plugins;
+using AppCoreNet.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 

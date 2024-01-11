@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.Extensions.DependencyInjection.Activator;
+using AppCoreNet.Extensions.DependencyInjection.Activator;
 using FluentAssertions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;

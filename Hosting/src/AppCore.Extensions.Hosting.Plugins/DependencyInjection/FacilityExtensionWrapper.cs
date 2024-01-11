@@ -1,6 +1,7 @@
 // Licensed under the MIT license.
 // Copyright (c) The AppCore .NET project.
 
+using AppCoreNet.Extensions.DependencyInjection.Facilities;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
