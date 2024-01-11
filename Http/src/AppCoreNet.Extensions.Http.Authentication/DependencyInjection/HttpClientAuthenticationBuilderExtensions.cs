@@ -4,13 +4,12 @@
 using System;
 using System.ComponentModel;
 using AppCoreNet.Diagnostics;
-
 using AppCore.Extensions.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods for the <see cref="IHttpClientAuthenticationBuilder"/>.

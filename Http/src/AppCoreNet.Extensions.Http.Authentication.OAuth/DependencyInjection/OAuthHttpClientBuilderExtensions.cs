@@ -6,7 +6,7 @@ using AppCore.Extensions.Http.Authentication.OAuth;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to add OAuth authentication to a HttpClient.

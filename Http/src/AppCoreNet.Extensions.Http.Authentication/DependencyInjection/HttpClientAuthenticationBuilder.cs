@@ -5,7 +5,7 @@ using AppCoreNet.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 internal sealed class HttpClientAuthenticationBuilder : IHttpClientAuthenticationBuilder
 {

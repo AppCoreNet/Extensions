@@ -1,5 +1,5 @@
 using System;
-using AppCore.Extensions.DependencyInjection;
+using AppCoreNet.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

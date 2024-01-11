@@ -3,7 +3,8 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.DependencyInjection;
+// ReSharper disable once CheckNamespace
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Builder object for HTTP client authentication.

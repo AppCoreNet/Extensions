@@ -4,7 +4,7 @@
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Builder object for OAuth client credentials authentication scheme from ASP.NET Core authentication

@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.csproj" />
+    <ProjectReference Include="..\AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore\AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to register authentication with a <see cref="IHttpClientBuilder"/>.

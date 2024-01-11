@@ -1,5 +1,5 @@
 using System;
-using AppCore.Extensions.DependencyInjection;
+using AppCoreNet.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WorkerService;

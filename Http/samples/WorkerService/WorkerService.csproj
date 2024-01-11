@@ -12,6 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\AppCore.Extensions.Http.Authentication.OAuth\AppCore.Extensions.Http.Authentication.OAuth.csproj" />
+      <ProjectReference Include="..\..\src\AppCoreNet.Extensions.Http.Authentication.OAuth\AppCoreNet.Extensions.Http.Authentication.OAuth.csproj" />
     </ItemGroup>
 </Project>

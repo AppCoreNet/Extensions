@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppCore.Extensions.Http.Authentication\AppCore.Extensions.Http.Authentication.csproj" />
+    <ProjectReference Include="..\AppCoreNet.Extensions.Http.Authentication\AppCoreNet.Extensions.Http.Authentication.csproj" />
   </ItemGroup>
 
   <ItemGroup>

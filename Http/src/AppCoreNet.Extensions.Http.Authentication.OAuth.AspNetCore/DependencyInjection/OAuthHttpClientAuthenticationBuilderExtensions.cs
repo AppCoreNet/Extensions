@@ -3,11 +3,10 @@
 
 using System;
 using AppCoreNet.Diagnostics;
-
 using AppCore.Extensions.Http.Authentication.OAuth;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to register OAuth authentication.

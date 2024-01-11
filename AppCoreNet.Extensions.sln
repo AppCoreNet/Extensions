@@ -79,19 +79,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A038B60C-C
 		Http\test\Directory.Build.props = Http\test\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication", "Http\src\AppCore.Extensions.Http.Authentication\AppCore.Extensions.Http.Authentication.csproj", "{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Http.Authentication", "Http\src\AppCoreNet.Extensions.Http.Authentication\AppCoreNet.Extensions.Http.Authentication.csproj", "{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth", "Http\src\AppCore.Extensions.Http.Authentication.OAuth\AppCore.Extensions.Http.Authentication.OAuth.csproj", "{DCEFCF02-50A5-433D-BB40-CA321E75F354}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Http.Authentication.OAuth", "Http\src\AppCoreNet.Extensions.Http.Authentication.OAuth\AppCoreNet.Extensions.Http.Authentication.OAuth.csproj", "{DCEFCF02-50A5-433D-BB40-CA321E75F354}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.Tests", "Http\test\AppCore.Extensions.Http.Authentication.Tests\AppCore.Extensions.Http.Authentication.Tests.csproj", "{5AD02E91-D970-402E-8958-6B33C86FFD4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Http.Authentication.Tests", "Http\test\AppCoreNet.Extensions.Http.Authentication.Tests\AppCoreNet.Extensions.Http.Authentication.Tests.csproj", "{5AD02E91-D970-402E-8958-6B33C86FFD4C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{B093F9C1-5054-4198-AE1D-38510FA0547A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerService", "Http\samples\WorkerService\WorkerService.csproj", "{FCE07DAA-08DC-41E0-B091-4A24F1538551}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth.AspNetCore", "Http\src\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore\AppCore.Extensions.Http.Authentication.OAuth.AspNetCore.csproj", "{9301436D-85F6-4845-AAD6-33103F49F018}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore", "Http\src\AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore\AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore.csproj", "{9301436D-85F6-4845-AAD6-33103F49F018}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect", "Http\src\AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect\AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect.csproj", "{91754F75-CC7A-48C8-A133-9F087BE10CFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect", "Http\src\AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect\AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect.csproj", "{91754F75-CC7A-48C8-A133-9F087BE10CFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Http\samples\Web\Web.csproj", "{7D72ABA6-5EBE-491A-A599-65D15FD10308}"
 EndProject
