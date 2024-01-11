@@ -1,11 +1,11 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 using AppCore.Extensions.DependencyInjection.Facilities;
 using Microsoft.Extensions.DependencyModel;
@@ -24,6 +24,8 @@ public class DependencyContextResolver : IFacilityResolver, IFacilityExtensionRe
     /// <summary>
     /// Initializes a new instance of the <see cref="DependencyContextResolver"/> class.
     /// </summary>
+    /// <param name="activator">The <see cref="IActivator"/>.</param>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="activator"/> is <c>null</c>.</exception>
     public DependencyContextResolver(IActivator activator)
     {
         _resolver = new AssemblyResolver(activator);
@@ -45,6 +47,7 @@ public class DependencyContextResolver : IFacilityResolver, IFacilityExtensionRe
     /// </summary>
     /// <param name="dependencyContext">The <see cref="DependencyContext"/>.</param>
     /// <returns>The <see cref="DependencyContextResolver"/>.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="dependencyContext"/> is <c>null</c>.</exception>
     public DependencyContextResolver Add(DependencyContext dependencyContext)
     {
         Ensure.Arg.NotNull(dependencyContext);
@@ -61,6 +64,7 @@ public class DependencyContextResolver : IFacilityResolver, IFacilityExtensionRe
     /// </summary>
     /// <param name="filter">The type filter.</param>
     /// <returns>The <see cref="DependencyContextResolver"/>.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="filter"/> is <c>null</c>.</exception>
     public DependencyContextResolver Filter(Predicate<Type> filter)
     {
         _resolver.Filter(filter);

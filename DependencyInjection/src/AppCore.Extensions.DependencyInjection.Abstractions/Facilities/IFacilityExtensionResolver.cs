@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -16,5 +16,6 @@ public interface IFacilityExtensionResolver
     /// </summary>
     /// <param name="facilityType">The type of the facility.</param>
     /// <returns>The <see cref="IEnumerable{T}"/> of facility extensions.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="facilityType"/> is null.</exception>
     IEnumerable<IFacilityExtension<IFacility>> Resolve(Type facilityType);
 }

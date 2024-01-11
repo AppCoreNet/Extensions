@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 
@@ -11,12 +11,12 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 public class OAuthTokenCacheOptions
 {
     /// <summary>
-    /// Used to prefix the cache key
+    /// Gets or sets the cache key prefix. Defaults to 'AppCore.Http.OAuthToken'.
     /// </summary>
     public string CacheKeyPrefix { get; set; } = "AppCore.Http.OAuthToken";
 
     /// <summary>
-    /// Value to subtract from token lifetime for the cache entry lifetime (defaults to 3 seconds)
+    /// Gets or sets the value to subtract from token lifetime for the cache entry lifetime (defaults to 3 seconds).
     /// </summary>
     public TimeSpan CacheLifetimeBuffer { get; set; } = TimeSpan.FromSeconds(3);
 }

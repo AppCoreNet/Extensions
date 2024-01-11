@@ -1,10 +1,12 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
+using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 internal sealed class OAuthClientFromAuthenticationSchemeBuilder : IOAuthClientFromAuthenticationSchemeBuilder
 {

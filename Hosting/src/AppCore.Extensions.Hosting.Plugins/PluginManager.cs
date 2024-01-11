@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Concurrent;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 using McMaster.NETCore.Plugins;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +23,7 @@ public class PluginManager : IPluginManager
     private readonly IActivator _activator;
     private readonly PluginOptions _options;
     private readonly Lazy<IReadOnlyCollection<IPlugin>> _plugins;
-    private static readonly ConcurrentDictionary<Type, Type> _pluginServiceTypeCache = new();
+    private static readonly ConcurrentDictionary<Type, Type> _pluginServiceTypeCache = new ();
 
     internal PluginOptions Options => _options;
 
@@ -33,8 +33,8 @@ public class PluginManager : IPluginManager
     /// <summary>
     /// Initializes a new instance of the <see cref="PluginManager"/> class.
     /// </summary>
-    /// <param name="activator"></param>
-    /// <param name="options"></param>
+    /// <param name="activator">The <see cref="IActivator"/>.</param>
+    /// <param name="options">The plugin options.</param>
     public PluginManager(IActivator activator, IOptions<PluginOptions> options)
     {
         Ensure.Arg.NotNull(activator);
@@ -85,9 +85,10 @@ public class PluginManager : IPluginManager
         IInternalPluginServiceCollection<object> result = PluginServiceCollection.Create(serviceType);
         foreach (IPlugin plugin in Plugins)
         {
-            foreach (object service in plugin.GetServices(serviceType))
+            foreach (object? service in plugin.GetServices(serviceType))
             {
-                result.Add(plugin, service);
+                if (service != null)
+                    result.Add(plugin, service);
             }
         }
 
@@ -108,7 +109,7 @@ public class PluginManager : IPluginManager
             object? service = plugin.GetService(serviceType);
             if (service != null)
             {
-                result = (IPluginService<object>) Activator.CreateInstance(pluginServiceType, plugin, service)!;
+                result = (IPluginService<object>)Activator.CreateInstance(pluginServiceType, plugin, service) !;
             }
         }
 
@@ -123,7 +124,7 @@ public class PluginManager : IPluginManager
 
     private List<Plugin> LoadPluginsCore(HashSet<string> loadedPlugins)
     {
-        List<Plugin> result = new();
+        List<Plugin> result = new ();
 
         IEnumerable<(string assemblyName, PluginLoader loader)> plugins = GetPluginLoaders(loadedPlugins);
 

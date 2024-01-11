@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,7 @@ public interface IServiceDescriptorResolver
     /// <param name="serviceType">The type of the service.</param>
     /// <param name="defaultLifetime">The default lifetime.</param>
     /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/>.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="serviceType"/> is null.</exception>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     IEnumerable<ServiceDescriptor> Resolve(Type serviceType, ServiceLifetime defaultLifetime);
 }

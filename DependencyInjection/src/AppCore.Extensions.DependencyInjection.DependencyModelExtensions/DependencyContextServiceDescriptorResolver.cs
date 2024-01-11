@@ -1,11 +1,11 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
 
@@ -88,6 +88,7 @@ public class DependencyContextServiceDescriptorResolver : IServiceDescriptorReso
     /// <inheritdoc />
     IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve(Type serviceType, ServiceLifetime defaultLifetime)
     {
-        return ((IServiceDescriptorResolver) _source).Resolve(serviceType, defaultLifetime);
+        Ensure.Arg.NotNull(serviceType);
+        return ((IServiceDescriptorResolver)_source).Resolve(serviceType, defaultLifetime);
     }
 }

@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using Microsoft.Extensions.Logging;
 
@@ -9,7 +9,6 @@ namespace AppCore.Extensions.Hosting;
 internal class LogEventIds
 {
     // StartupTaskHostedService log events
-
     public static readonly EventId TaskExecuting = new EventId(0, nameof(TaskExecuting));
 
     public static readonly EventId TaskExecuted = new EventId(1, nameof(TaskExecuted));

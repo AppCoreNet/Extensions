@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 namespace AppCore.Extensions.Hosting.Plugins;
 
@@ -9,22 +9,22 @@ namespace AppCore.Extensions.Hosting.Plugins;
 public class PluginInfo
 {
     /// <summary>
-    /// The title of the plugin.
+    /// Gets the title of the plugin.
     /// </summary>
     public string Title { get; }
 
     /// <summary>
-    /// The version of the plugin.
+    /// Gets the version of the plugin.
     /// </summary>
     public string? Version { get; }
 
     /// <summary>
-    /// The description of the plugin.
+    /// Gets the description of the plugin.
     /// </summary>
     public string? Description { get; }
 
     /// <summary>
-    /// The copyright of the plugin.
+    /// Gets the copyright of the plugin.
     /// </summary>
     public string? Copyright { get; }
 

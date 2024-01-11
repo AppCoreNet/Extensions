@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -32,11 +32,11 @@ public class AssemblyResolverTests
                                     .Add(typeof(AssemblyResolverTests).Assembly)
                                     .ClearDefaultFilters();
 
-        IEnumerable<IFacility> facilities = ((IFacilityResolver) resolver).Resolve();
+        IEnumerable<IFacility> facilities = ((IFacilityResolver)resolver).Resolve();
 
         facilities.Select(f => f.GetType())
                   .Should()
-                  .BeEquivalentTo(new [] { typeof(Facility1), typeof(Facility2) });
+                  .BeEquivalentTo(new[] { typeof(Facility1), typeof(Facility2) });
     }
 
     [Fact]

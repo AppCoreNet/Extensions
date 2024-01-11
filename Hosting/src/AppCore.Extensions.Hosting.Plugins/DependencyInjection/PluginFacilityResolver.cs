@@ -1,11 +1,11 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.Hosting.Plugins;
 
 // ReSharper disable once CheckNamespace
@@ -49,7 +49,7 @@ public class PluginFacilityResolver : IFacilityResolver, IFacilityExtensionResol
 
         return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(
             extensionWrapperType,
-            pluginService.Instance)!;
+            pluginService.Instance) !;
     }
 
     /// <inheritdoc />

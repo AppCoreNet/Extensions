@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ public class AssemblyServicesDescriptorResolverTests
                 .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
                 .ClearDefaultFilters();
 
-        IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
+        IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver)resolver).Resolve(contractType, ServiceLifetime.Transient);
 
         serviceDescriptors
             .Should()
@@ -34,7 +34,7 @@ public class AssemblyServicesDescriptorResolverTests
                     ServiceDescriptor.Describe(
                         contractType,
                         typeof(ContractImpl2),
-                        ServiceLifetime.Transient)
+                        ServiceLifetime.Transient),
                 });
     }
 
@@ -49,7 +49,7 @@ public class AssemblyServicesDescriptorResolverTests
                 .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
                 .ClearDefaultFilters();
 
-        IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver) resolver).Resolve(contractType, ServiceLifetime.Transient);
+        IEnumerable<ServiceDescriptor> serviceDescriptors = ((IServiceDescriptorResolver)resolver).Resolve(contractType, ServiceLifetime.Transient);
 
         serviceDescriptors
             .Should()
@@ -71,7 +71,7 @@ public class AssemblyServicesDescriptorResolverTests
                     ServiceDescriptor.Describe(
                         closedContractType,
                         typeof(ContractImpl2String),
-                        ServiceLifetime.Transient)
+                        ServiceLifetime.Transient),
                 });
     }
 
@@ -86,7 +86,7 @@ public class AssemblyServicesDescriptorResolverTests
                 .Add(typeof(AssemblyServicesDescriptorResolverTests).Assembly)
                 .ClearDefaultFilters();
 
-        IEnumerable<ServiceDescriptor> registrations = ((IServiceDescriptorResolver) resolver).Resolve(contractType, lifetime);
+        IEnumerable<ServiceDescriptor> registrations = ((IServiceDescriptorResolver)resolver).Resolve(contractType, lifetime);
 
         registrations.Should()
                      .OnlyContain(cr => cr.Lifetime == lifetime);

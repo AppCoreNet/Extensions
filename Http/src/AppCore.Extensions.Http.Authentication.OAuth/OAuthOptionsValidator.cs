@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
 
@@ -9,7 +9,7 @@ internal abstract class OAuthOptionsValidator
 {
     protected List<string> Validate(string name, OAuthOptions options)
     {
-        List<string> errors = new();
+        List<string> errors = new ();
 
         if (options.TokenEndpoint == null)
         {

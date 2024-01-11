@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ namespace AppCore.Extensions.Hosting;
 public interface IStartupTask
 {
     /// <summary>
-    /// The priority of the startup task.
+    /// Gets the priority of the startup task.
     /// </summary>
     int Order { get; }
 

@@ -1,16 +1,15 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
-using AppCore.Diagnostics;
-using AppCore.Extensions.DependencyInjection;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 using AppCore.Extensions.DependencyInjection.Facilities;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-// ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to add facilities to a <see cref="IServiceCollection"/>.
@@ -23,7 +22,8 @@ public static class FacilityServiceCollectionExtensions
     /// <typeparam name="T">The type of the <see cref="IFacility"/>.</typeparam>
     /// <param name="services">The <see cref="IServiceCollection"/>.</param>
     /// <param name="configure">The delegate to configure the facility.</param>
-    /// <returns>The <see cref="IServiceCollection"/>.</returns>
+    /// <returns>The <see cref="IServiceCollection"/> to allow chaining.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="services"/> is null.</exception>
     public static IServiceCollection AddFacility<T>(this IServiceCollection services, Action<FacilityBuilder<T>>? configure = null)
         where T : IFacility
     {
@@ -51,7 +51,9 @@ public static class FacilityServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/>.</param>
     /// <param name="facilityType">The type of the <see cref="IFacility"/>.</param>
     /// <param name="configure">The delegate to configure the facility.</param>
-    /// <returns>The <see cref="IServiceCollection"/>.</returns>
+    /// <returns>The <see cref="IServiceCollection"/> to allow chaining.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="services"/> or <paramref name="facilityType"/> is null.</exception>
+    /// <exception cref="ArgumentException">Argument <paramref name="facilityType"/> is not of type <see cref="IFacility"/>.</exception>
     public static IServiceCollection AddFacility(
         this IServiceCollection services,
         Type facilityType,
@@ -82,7 +84,8 @@ public static class FacilityServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/>.</param>
     /// <param name="configure">The delegate used to configure the facility resolvers.</param>
-    /// <returns>The <see cref="IServiceCollection"/>.</returns>
+    /// <returns>The <see cref="IServiceCollection"/> to allow chaining.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="services"/> or <paramref name="configure"/> is null.</exception>
     public static IServiceCollection AddFacilitiesFrom(
         this IServiceCollection services,
         Action<IFacilityReflectionBuilder> configure)

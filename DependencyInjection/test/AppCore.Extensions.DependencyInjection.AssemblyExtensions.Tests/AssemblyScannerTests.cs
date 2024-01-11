@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Reflection;
 using FluentAssertions;
@@ -25,7 +25,7 @@ public class AssemblyScannerTests
                    {
                        typeof(ContractImpl1),
                        typeof(ContractImpl2),
-                       typeof(ContractImplOpenGeneric<>)
+                       typeof(ContractImplOpenGeneric<>),
                    });
     }
 
@@ -46,7 +46,7 @@ public class AssemblyScannerTests
                        typeof(ContractImpl1<>),
                        typeof(ContractImpl2<>),
                        typeof(ContractImpl1String),
-                       typeof(ContractImpl2String)
+                       typeof(ContractImpl2String),
                    });
     }
 
@@ -65,7 +65,7 @@ public class AssemblyScannerTests
                    new[]
                    {
                        typeof(ContractImpl1String),
-                       typeof(ContractImpl2String)
+                       typeof(ContractImpl2String),
                    });
     }
 
@@ -84,7 +84,7 @@ public class AssemblyScannerTests
                    new[]
                    {
                        typeof(ContractImpl1),
-                       typeof(ContractImpl2)
+                       typeof(ContractImpl2),
                    });
     }
 
@@ -105,7 +105,7 @@ public class AssemblyScannerTests
                        typeof(ContractImpl1<>),
                        typeof(ContractImpl2<>),
                        typeof(ContractImpl1String),
-                       typeof(ContractImpl2String)
+                       typeof(ContractImpl2String),
                    });
     }
 
@@ -124,7 +124,7 @@ public class AssemblyScannerTests
                    new[]
                    {
                        typeof(ContractImpl1String),
-                       typeof(ContractImpl2String)
+                       typeof(ContractImpl2String),
                    });
     }
 }

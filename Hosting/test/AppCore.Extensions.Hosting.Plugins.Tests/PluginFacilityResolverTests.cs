@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +22,7 @@ public class PluginFacilityResolverTests
     public void RegistersFacilitiesWithExtensions()
     {
         var services = new ServiceCollection();
-        services.AddAppCore()
-                .AddPlugins(
+        services.AddPlugins(
                     o =>
                     {
                         o.Assemblies.Add(PluginPaths.TestPlugin);
@@ -41,8 +40,7 @@ public class PluginFacilityResolverTests
                         r.ServiceType.FullName
                         == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
                         && r.ImplementationType.FullName
-                        == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
-                );
+                        == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService");
 
         services.Should()
                 .Contain(
@@ -50,23 +48,20 @@ public class PluginFacilityResolverTests
                         r.ServiceType.FullName
                         == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityContractExtensionService"
                         && r.ImplementationType.FullName
-                        == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityContractExtensionService"
-                );
+                        == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityContractExtensionService");
 
         services.Should()
                 .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityExtensionService"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityExtensionService"
-                );
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityExtensionService");
     }
 
     [Fact]
     public void RegistersFacilities()
     {
         var services = new ServiceCollection();
-        services.AddAppCore()
-                .AddPlugins(
+        services.AddPlugins(
                     o =>
                     {
                         o.Assemblies.Add(PluginPaths.TestPlugin);
@@ -79,23 +74,20 @@ public class PluginFacilityResolverTests
                 .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
-                );
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService");
 
         services.Should()
                 .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
-                );
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService");
     }
 
     [Fact]
     public void RegistersFacilityWithServices()
     {
         var services = new ServiceCollection();
-        services.AddAppCore()
-                .AddPlugins(
+        services.AddPlugins(
                     o =>
                     {
                         o.Assemblies.Add(PluginPaths.TestPlugin);

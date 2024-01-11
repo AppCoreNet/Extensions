@@ -1,10 +1,10 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -17,7 +17,7 @@ namespace AppCore.Extensions.DependencyInjection;
 /// </summary>
 public class PluginServiceDescriptorResolver : IServiceDescriptorResolver
 {
-    private readonly List<Predicate<Type>> _filters = new();
+    private readonly List<Predicate<Type>> _filters = new ();
     private readonly IPluginManager _pluginManager;
     private readonly IOptions<PluginOptions> _pluginOptions;
 

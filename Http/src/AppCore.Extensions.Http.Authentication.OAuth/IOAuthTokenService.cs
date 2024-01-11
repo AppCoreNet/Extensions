@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +12,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 public interface IOAuthTokenService
 {
     /// <summary>
-    /// Returns either a cached or a new access token for a given client configuration or the default client
+    /// Returns either a cached or a new access token for a given client configuration or the default client.
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
@@ -24,7 +24,7 @@ public interface IOAuthTokenService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Returns either a cached or a new access token for a given password configuration or the default client
+    /// Returns either a cached or a new access token for a given password configuration or the default client.
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
@@ -36,12 +36,12 @@ public interface IOAuthTokenService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Deletes a access token from the cache
+    /// Deletes a access token from the cache.
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
-    /// <returns></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task DeleteAccessTokenAsync(
         AuthenticationScheme scheme,
         OAuthParameters? parameters = null,

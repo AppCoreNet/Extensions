@@ -1,16 +1,16 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
 using System.Reflection;
-using AppCore.Diagnostics;
-using AppCore.Extensions.DependencyInjection;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.Hosting.Plugins;
 using AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
+using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to register plugins with MVC.
@@ -30,15 +30,14 @@ public static class PluginsMvcBuilderExtensions
     /// Adds MVC application parts from loaded plugins.
     /// </summary>
     /// <param name="builder">The <see cref="IMvcBuilder"/>.</param>
-    /// <returns>The <see cref="IMvcBuilder"/>.</returns>
+    /// <returns>The <see cref="IMvcBuilder"/> to allow chaining.</returns>
     public static IMvcBuilder AddPluginApplicationParts(this IMvcBuilder builder)
     {
         Ensure.Arg.NotNull(builder);
 
         IServiceCollection services = builder.Services;
 
-        services.AddAppCore()
-                .AddPlugins();
+        services.AddPlugins();
 
         var serviceProvider = new ServiceCollectionServiceProvider(services);
         var pluginManager = serviceProvider.GetRequiredService<IPluginManager>();

@@ -1,8 +1,8 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 using AppCore.Extensions.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,25 +15,23 @@ namespace AppCore.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to register plugins.
 /// </summary>
-public static class PluginAppCoreBuilderExtensions
+public static class PluginServiceCollectionExtensions
 {
-    private static readonly object _pluginManagerFactorySyncRoot = new();
+    private static readonly object _pluginManagerFactorySyncRoot = new ();
     private static Func<IServiceProvider, PluginManager>? _pluginManagerFactory;
     private static PluginManager? _pluginManager;
 
     /// <summary>
     /// Adds plugins.
     /// </summary>
-    /// <param name="builder">The <see cref="IAppCoreBuilder"/>.</param>
+    /// <param name="services">The <see cref="IServiceCollection"/>.</param>
     /// <param name="configure">The configuration delegate.</param>
-    /// <returns>The passed <see cref="IAppCoreBuilder"/> to allow chaining.</returns>
-    public static IAppCoreBuilder AddPlugins(
-        this IAppCoreBuilder builder,
+    /// <returns>The passed <see cref="IServiceCollection"/> to allow chaining.</returns>
+    public static IServiceCollection AddPlugins(
+        this IServiceCollection services,
         Action<PluginOptions>? configure = null)
     {
-        Ensure.Arg.NotNull(builder);
-
-        IServiceCollection services = builder.Services;
+        Ensure.Arg.NotNull(services);
 
         if (configure != null)
         {
@@ -47,7 +45,7 @@ public static class PluginAppCoreBuilderExtensions
                     PluginManager pluginManager = _pluginManager!;
                     _pluginManager = null;
                     _pluginManagerFactory = sp => _pluginManager ??= new PluginManager(
-                        pluginManager!,
+                        pluginManager,
                         sp.GetRequiredService<IActivator>(),
                         sp.GetRequiredService<IOptions<PluginOptions>>());
                 }
@@ -61,7 +59,7 @@ public static class PluginAppCoreBuilderExtensions
         // resolve plugin manager via delegate, effectively it's a singleton
         services.TryAddTransient(GetOrCreatePluginManager);
 
-        return builder;
+        return services;
     }
 
     private static IPluginManager GetOrCreatePluginManager(IServiceProvider serviceProvider)

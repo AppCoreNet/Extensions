@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Linq;
@@ -34,7 +34,7 @@ public class FacilityBuilderTests
         builder.AddExtension<TestFacilityContractExtension>();
         _services.Select(sd => sd.ServiceType)
                  .Should()
-                 .BeEquivalentTo(new [] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
+                 .BeEquivalentTo(new[] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class FacilityBuilderTests
         builder.AddExtension(typeof(TestFacilityContractExtension));
         _services.Select(sd => sd.ServiceType)
                  .Should()
-                 .BeEquivalentTo(new [] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
+                 .BeEquivalentTo(new[] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
     }
 
     [Fact]
@@ -66,7 +66,7 @@ public class FacilityBuilderTests
 
         _services.Select(sd => sd.ServiceType)
                  .Should()
-                 .BeEquivalentTo(new [] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
+                 .BeEquivalentTo(new[] { typeof(FacilityExtensionTestService), typeof(FacilityExtensionTestService) });
     }
 
     [Fact]

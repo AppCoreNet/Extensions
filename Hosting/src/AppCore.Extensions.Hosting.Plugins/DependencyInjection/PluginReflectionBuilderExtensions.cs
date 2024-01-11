@@ -1,13 +1,12 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
-using AppCore.Diagnostics;
-using AppCore.Extensions.DependencyInjection;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Facilities;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to register services and facilities from plugins.
@@ -19,7 +18,7 @@ public static class PluginReflectionBuilderExtensions
     /// </summary>
     /// <param name="sources">The <see cref="IServiceDescriptorReflectionBuilder"/>.</param>
     /// <param name="configure">The delegate to configure the <see cref="PluginServiceDescriptorResolver"/>.</param>
-    /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/>.</returns>
+    /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="sources"/> or <paramref name="configure"/> is <c>null</c>. </exception>
     public static IServiceDescriptorReflectionBuilder Plugins(
         this IServiceDescriptorReflectionBuilder sources,
@@ -33,7 +32,7 @@ public static class PluginReflectionBuilderExtensions
     /// Adds facilities by scanning plugin assemblies.
     /// </summary>
     /// <param name="sources">The <see cref="IFacilityReflectionBuilder"/>.</param>
-    /// <returns>The <see cref="IFacilityReflectionBuilder"/>.</returns>
+    /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="sources"/> is <c>null</c>. </exception>
     public static IFacilityReflectionBuilder Plugins(this IFacilityReflectionBuilder sources)
     {
@@ -45,7 +44,7 @@ public static class PluginReflectionBuilderExtensions
     /// Adds facility extensions by scanning plugin assemblies.
     /// </summary>
     /// <param name="sources">The <see cref="IFacilityExtensionReflectionBuilder"/>.</param>
-    /// <returns>The <see cref="IFacilityReflectionBuilder"/>.</returns>
+    /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="sources"/> is <c>null</c>. </exception>
     public static IFacilityExtensionReflectionBuilder Plugins(this IFacilityExtensionReflectionBuilder sources)
     {

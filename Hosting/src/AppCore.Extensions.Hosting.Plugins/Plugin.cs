@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections;
@@ -7,7 +7,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection;
 using AppCore.Extensions.DependencyInjection.Activator;
 using McMaster.NETCore.Plugins;
@@ -21,9 +21,9 @@ internal sealed class Plugin : IPlugin
 
     private static readonly MethodInfo _enumerableOfTypeMethod = typeof(Enumerable).GetMethod(
         nameof(Enumerable.OfType),
-        BindingFlags.Public | BindingFlags.Static)!;
+        BindingFlags.Public | BindingFlags.Static) !;
 
-    private static readonly ConcurrentDictionary<Type, Func<IEnumerable, IEnumerable>> _enumerableOfTypeMethodCache = new();
+    private static readonly ConcurrentDictionary<Type, Func<IEnumerable, IEnumerable>> _enumerableOfTypeMethodCache = new ();
 
     public PluginLoader Loader { get; }
 
@@ -58,7 +58,7 @@ internal sealed class Plugin : IPlugin
             t =>
             {
                 MethodInfo method = _enumerableOfTypeMethod.MakeGenericMethod(t);
-                return (Func<IEnumerable, IEnumerable>) method.CreateDelegate(
+                return (Func<IEnumerable, IEnumerable>)method.CreateDelegate(
                     typeof(Func<IEnumerable, IEnumerable>));
             });
 

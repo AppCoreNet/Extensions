@@ -1,10 +1,10 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
@@ -18,6 +18,7 @@ public class OAuthOptionsProvider : IOAuthOptionsProvider
     /// <summary>
     /// Initializes a new instance of the <see cref="OAuthOptionsProvider"/> class.
     /// </summary>
+    /// <param name="resolvers">A collection of <see cref="IOAuthOptionsResolver"/>.</param>
     public OAuthOptionsProvider(IEnumerable<IOAuthOptionsResolver> resolvers)
     {
         Ensure.Arg.NotNull(resolvers);

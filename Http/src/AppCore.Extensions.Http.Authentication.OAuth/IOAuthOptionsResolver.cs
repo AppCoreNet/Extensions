@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Threading.Tasks;
 
@@ -15,7 +15,7 @@ public interface IOAuthOptionsResolver
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/> which options should be resolved.</param>
     /// <typeparam name="T">The type of the <see cref="AuthenticationSchemeOptions"/>.</typeparam>
-    /// <returns></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task<T?> TryGetOptionsAsync<T>(AuthenticationScheme scheme)
         where T : AuthenticationSchemeOptions;
 }

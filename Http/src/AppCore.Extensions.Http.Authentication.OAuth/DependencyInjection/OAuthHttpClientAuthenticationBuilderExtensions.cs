@@ -1,14 +1,15 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.Http.Authentication.OAuth;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to register OAuth authentication.
@@ -19,7 +20,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// Adds OAuth client authentication services.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
-    /// <returns></returns>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientAuthenticationBuilder AddOAuthCore(this IHttpClientAuthenticationBuilder builder)
     {
         Ensure.Arg.NotNull(builder);
@@ -43,8 +44,8 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
     /// <param name="scheme">The name of the client authentication scheme.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">A delegate that configures the <see cref="OAuthClientOptions"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientAuthenticationBuilder AddOAuthClient(
         this IHttpClientAuthenticationBuilder builder,
         string scheme,
@@ -66,7 +67,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
 
                 ServiceDescriptor
                     .Transient<IValidateOptions<OAuthClientOptions>,
-                        OAuthClientOptionsValidator>()
+                        OAuthClientOptionsValidator>(),
             });
 
         return builder.AddScheme<
@@ -79,8 +80,8 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// Adds OAuth client credentials authentication with default scheme.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">A delegate that configures the <see cref="OAuthClientOptions"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientAuthenticationBuilder AddOAuthClient(
         this IHttpClientAuthenticationBuilder builder,
         Action<OAuthClientOptions> configure)
@@ -93,8 +94,8 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
     /// <param name="scheme">The name of the client authentication scheme.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">A delegate that configures the <see cref="OAuthPasswordOptions"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientAuthenticationBuilder AddOAuthPassword(
         this IHttpClientAuthenticationBuilder builder,
         string scheme,
@@ -116,7 +117,7 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
 
                 ServiceDescriptor
                     .Transient<IValidateOptions<OAuthPasswordOptions>,
-                        OAuthPasswordOptionsValidator>()
+                        OAuthPasswordOptionsValidator>(),
             });
 
         return builder.AddScheme<
@@ -129,8 +130,8 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// Adds OAuth password authentication with default scheme.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">A delegate that configures the <see cref="OAuthPasswordOptions"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientAuthenticationBuilder AddOAuthPassword(
         this IHttpClientAuthenticationBuilder builder,
         Action<OAuthPasswordOptions> configure)
@@ -141,9 +142,9 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// <summary>
     /// Configures the OAuth token client.
     /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
+    /// <param name="configure">A delegate that configures the <see cref="IHttpClientBuilder"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientAuthenticationBuilder ConfigureOAuthTokenClient(
         this IHttpClientAuthenticationBuilder builder,
         Action<IHttpClientBuilder> configure)

@@ -1,8 +1,8 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 
 namespace AppCore.Extensions.Http.Authentication;
 
@@ -12,26 +12,26 @@ namespace AppCore.Extensions.Http.Authentication;
 public sealed class AuthenticationScheme
 {
     /// <summary>
-    /// The name of the authentication scheme.
+    /// Gets the name of the authentication scheme.
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    /// The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/> which handles the scheme.
+    /// Gets the type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/> which handles the scheme.
     /// </summary>
     public Type HandlerType { get; }
 
     /// <summary>
-    /// The type of the <see cref="AuthenticationSchemeOptions"/>.
+    /// Gets the type of the <see cref="AuthenticationSchemeOptions"/>.
     /// </summary>
     public Type OptionsType { get; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationScheme"/> class.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="handlerType"></param>
-    /// <param name="optionsType"></param>
+    /// <param name="name">The name of the authentication scheme.</param>
+    /// <param name="handlerType">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/> which handles the scheme.</param>
+    /// <param name="optionsType">The type of the <see cref="AuthenticationSchemeOptions"/>.</param>
     public AuthenticationScheme(string name, Type handlerType, Type optionsType)
     {
         Ensure.Arg.NotNull(name);

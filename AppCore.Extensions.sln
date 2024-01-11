@@ -10,18 +10,35 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.DependencyInjection.DependencyModelExtensions", "DependencyInjection\src\AppCore.Extensions.DependencyInjection.DependencyModelExtensions\AppCore.Extensions.DependencyInjection.DependencyModelExtensions.csproj", "{2D04A8E5-C7AE-4403-AF7B-2853E3EB827C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DependencyInjection", "DependencyInjection", "{EB91A313-F884-4256-90A2-070A0C41EEF7}"
+	ProjectSection(SolutionItems) = preProject
+		DependencyInjection\Directory.Build.props = DependencyInjection\Directory.Build.props
+		DependencyInjection\README.md = DependencyInjection\README.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.DependencyInjection.Tests", "DependencyInjection\test\AppCore.Extensions.DependencyInjection.Tests\AppCore.Extensions.DependencyInjection.Tests.csproj", "{87F9A082-B75B-4190-B685-250CBC0C1E67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.DependencyInjection.AssemblyExtensions.Tests", "DependencyInjection\test\AppCore.Extensions.DependencyInjection.AssemblyExtensions.Tests\AppCore.Extensions.DependencyInjection.AssemblyExtensions.Tests.csproj", "{DBF6B4B6-8532-45E0-8FDF-266CB961EA41}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{93CFDB2F-A8BD-4A9D-9024-A3C953C340A2}"
+	ProjectSection(SolutionItems) = preProject
+		DependencyInjection\src\Directory.Build.props = DependencyInjection\src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7149D82E-B79A-400B-902B-F63AA1AE1F1F}"
+	ProjectSection(SolutionItems) = preProject
+		DependencyInjection\test\Directory.Build.props = DependencyInjection\test\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosting", "Hosting", "{EDABA206-A09A-4DF8-8D8C-36FFDE265243}"
+	ProjectSection(SolutionItems) = preProject
+		Hosting\Directory.Build.props = Hosting\Directory.Build.props
+		Hosting\README.md = Hosting\README.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D6508E9B-7A1A-40CD-A5AA-CF21D6FFEB9E}"
+	ProjectSection(SolutionItems) = preProject
+		Hosting\src\Directory.Build.props = Hosting\src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Abstractions", "Hosting\src\AppCore.Extensions.Hosting.Abstractions\AppCore.Extensions.Hosting.Abstractions.csproj", "{FADEC3EC-C66B-44CA-9B94-4B8E13D6D2C1}"
 EndProject
@@ -34,6 +51,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc", "Hosting\src\AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc\AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc.csproj", "{FAC58053-1E7A-487C-8256-6784427A61A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E2C71AB4-DF09-4961-82EC-916A08650A86}"
+	ProjectSection(SolutionItems) = preProject
+		Hosting\test\Directory.Build.props = Hosting\test\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Tests", "Hosting\test\AppCore.Extensions.Hosting.Tests\AppCore.Extensions.Hosting.Tests.csproj", "{8F032CE3-007E-46BC-B913-1884FA3583FE}"
 EndProject
@@ -46,11 +66,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Http", "Http", "{9416DF99-18D3-4373-A517-00A65E7CC32A}"
 	ProjectSection(SolutionItems) = preProject
 		Http\README.md = Http\README.md
+		Http\Directory.Build.props = Http\Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B2F9DC67-6D7B-4070-8580-F401050445A9}"
+	ProjectSection(SolutionItems) = preProject
+		Http\src\Directory.Build.props = Http\src\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{A038B60C-C6C4-4487-A0CC-1591E3D48601}"
+	ProjectSection(SolutionItems) = preProject
+		Http\test\Directory.Build.props = Http\test\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication", "Http\src\AppCore.Extensions.Http.Authentication\AppCore.Extensions.Http.Authentication.csproj", "{D6108CCC-CFD4-40A0-BD5C-B6F0ADFB5E5C}"
 EndProject
@@ -67,6 +94,20 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect", "Http\src\AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect\AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect.csproj", "{91754F75-CC7A-48C8-A133-9F087BE10CFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Http\samples\Web\Web.csproj", "{7D72ABA6-5EBE-491A-A599-65D15FD10308}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{84A72356-33A9-4B80-B96D-436429E1D181}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		AppCoreNet.ruleset = AppCoreNet.ruleset
+		CONTRIBUTING.md = CONTRIBUTING.md
+		Directory.Build.props = Directory.Build.props
+		GitVersion.yml = GitVersion.yml
+		global.json = global.json
+		LICENSE = LICENSE
+		README.md = README.md
+		stylecop.json = stylecop.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

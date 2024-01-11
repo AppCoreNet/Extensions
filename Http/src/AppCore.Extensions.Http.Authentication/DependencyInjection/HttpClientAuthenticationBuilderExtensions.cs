@@ -1,14 +1,16 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.ComponentModel;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
 using AppCore.Extensions.Http.Authentication;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods for the <see cref="IHttpClientAuthenticationBuilder"/>.
@@ -24,13 +26,12 @@ public static class HttpClientAuthenticationBuilderExtensions
     /// <typeparam name="TOptions">The type of the <see cref="AuthenticationSchemeOptions"/>.</typeparam>
     /// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
     /// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/>.</typeparam>
-    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/>.</returns>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static IHttpClientAuthenticationBuilder AddScheme<TOptions, TParameters, THandler>(
         this IHttpClientAuthenticationBuilder builder,
         string name,
-        Action<TOptions>? configure = null
-        )
+        Action<TOptions>? configure = null)
         where TOptions : AuthenticationSchemeOptions
         where TParameters : AuthenticationParameters
         where THandler : class, IAuthenticationSchemeHandler<TParameters>

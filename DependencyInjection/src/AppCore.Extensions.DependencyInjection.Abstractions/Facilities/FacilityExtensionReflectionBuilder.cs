@@ -1,10 +1,11 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.Diagnostics;
+using AppCoreNet;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 
 namespace AppCore.Extensions.DependencyInjection.Facilities;
@@ -12,7 +13,7 @@ namespace AppCore.Extensions.DependencyInjection.Facilities;
 internal sealed class FacilityExtensionReflectionBuilder : IFacilityExtensionReflectionBuilder
 {
     private readonly IActivator _activator;
-    private readonly List<IFacilityExtensionResolver> _resolvers = new();
+    private readonly List<IFacilityExtensionResolver> _resolvers = new ();
 
     public FacilityExtensionReflectionBuilder(IActivator activator)
     {

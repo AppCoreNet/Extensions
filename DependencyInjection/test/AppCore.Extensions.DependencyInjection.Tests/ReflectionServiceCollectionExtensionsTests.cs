@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Text;
 using FluentAssertions;
@@ -26,13 +26,13 @@ public class ReflectionServiceCollectionExtensionsTests
 
         var resolver = Substitute.For<IServiceDescriptorResolver>();
         resolver.Resolve(typeof(string), ServiceLifetime.Transient)
-                .Returns(new[] {service1, service2});
+                .Returns(new[] { service1, service2 });
 
         var services = new ServiceCollection();
         services.AddFrom<string>(r => r.AddResolver(resolver));
 
         services.Should()
-                .Contain(new [] { service1, service2 });
+                .Contain(new[] { service1, service2 });
     }
 
     [Fact]
@@ -56,7 +56,7 @@ public class ReflectionServiceCollectionExtensionsTests
         services.TryAddFrom<Encoding>(r => r.AddResolver(resolver));
 
         services.Should()
-                .Contain(new [] { service1 });
+                .Contain(new[] { service1 });
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public class ReflectionServiceCollectionExtensionsTests
         services.TryAddEnumerableFrom<Encoding>(r => r.AddResolver(resolver));
 
         services.Should()
-                .Contain(new [] { service1, service2 });
+                .Contain(new[] { service1, service2 });
     }
 
     [Fact]
@@ -104,6 +104,6 @@ public class ReflectionServiceCollectionExtensionsTests
         services.TryAddEnumerableFrom<Encoding>(r => r.AddResolver(resolver));
 
         services.Should()
-                .Contain(new [] { service1 });
+                .Contain(new[] { service1 });
     }
 }

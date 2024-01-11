@@ -1,11 +1,13 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
 using AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
+using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to add OAuth authentication to a HttpClient.

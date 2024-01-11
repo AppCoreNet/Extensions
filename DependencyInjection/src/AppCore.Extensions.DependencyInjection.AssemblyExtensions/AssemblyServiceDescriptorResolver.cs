@@ -1,10 +1,11 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using AppCore.Diagnostics;
+using AppCoreNet;
+using AppCoreNet.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Extensions.DependencyInjection;
@@ -14,8 +15,8 @@ namespace AppCore.Extensions.DependencyInjection;
 /// </summary>
 public class AssemblyServiceDescriptorResolver : IServiceDescriptorResolver
 {
-    private readonly List<Assembly> _assemblies = new();
-    private readonly List<Predicate<Type>> _filters = new();
+    private readonly List<Assembly> _assemblies = new ();
+    private readonly List<Predicate<Type>> _filters = new ();
     private bool _clearFilters;
     private bool _withPrivateTypes;
 
@@ -96,6 +97,8 @@ public class AssemblyServiceDescriptorResolver : IServiceDescriptorResolver
     /// <inheritdoc />
     IEnumerable<ServiceDescriptor> IServiceDescriptorResolver.Resolve(Type serviceType, ServiceLifetime defaultLifetime)
     {
+        Ensure.Arg.NotNull(serviceType);
+
         ServiceLifetime GetServiceLifetime(Type implementationType)
         {
             var lifetimeAttribute =
@@ -107,7 +110,7 @@ public class AssemblyServiceDescriptorResolver : IServiceDescriptorResolver
 
         var scanner = new AssemblyScanner(serviceType, _assemblies)
         {
-            IncludePrivateTypes = _withPrivateTypes
+            IncludePrivateTypes = _withPrivateTypes,
         };
 
         if (_clearFilters)

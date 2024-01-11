@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net6</TargetFrameworks>
-    <RootNamespace>AppCore.Extensions.Hosting.Plugins</RootNamespace>
+    <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
+    <RootNamespace>AppCoreNet.Extensions.Hosting.Plugins</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,11 +1,12 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
 using IdentityModel.Client;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth;
@@ -33,7 +34,7 @@ public class OAuthTokenClient : IOAuthTokenClient
     }
 
     /// <inheritdoc />
-    public async Task<TokenResponse> RequestClientAccessToken(
+    public async Task<TokenResponse> RequestClientAccessTokenAsync(
         AuthenticationScheme scheme,
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
@@ -42,7 +43,7 @@ public class OAuthTokenClient : IOAuthTokenClient
             await _optionsProvider.GetOptionsAsync<OAuthClientOptions>(scheme)
                                   .ConfigureAwait(false);
 
-        var request = new ClientCredentialsTokenRequest
+        using var request = new ClientCredentialsTokenRequest
         {
             RequestUri = options.TokenEndpoint,
             ClientId = options.ClientId,
@@ -50,7 +51,7 @@ public class OAuthTokenClient : IOAuthTokenClient
             ClientCredentialStyle = options.ClientCredentialStyle,
             Scope = options.Scope,
             Resource = new List<string>(options.Resource),
-            Parameters = parameters?.Context
+            Parameters = parameters?.Context,
         };
 
         if (parameters != null && !string.IsNullOrWhiteSpace(parameters.Resource))
@@ -61,7 +62,7 @@ public class OAuthTokenClient : IOAuthTokenClient
     }
 
     /// <inheritdoc />
-    public async Task<TokenResponse> RequestPasswordAccessToken(
+    public async Task<TokenResponse> RequestPasswordAccessTokenAsync(
         AuthenticationScheme scheme,
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default)
@@ -70,7 +71,7 @@ public class OAuthTokenClient : IOAuthTokenClient
             await _optionsProvider.GetOptionsAsync<OAuthPasswordOptions>(scheme)
                                   .ConfigureAwait(false);
 
-        var request = new PasswordTokenRequest
+        using var request = new PasswordTokenRequest
         {
             RequestUri = options.TokenEndpoint,
             ClientId = options.ClientId,
@@ -80,7 +81,7 @@ public class OAuthTokenClient : IOAuthTokenClient
             Password = options.Password,
             Scope = options.Scope,
             Resource = new List<string>(options.Resource),
-            Parameters = parameters?.Context
+            Parameters = parameters?.Context,
         };
 
         if (parameters != null && !string.IsNullOrWhiteSpace(parameters.Resource))
@@ -103,13 +104,13 @@ public class OAuthTokenClient : IOAuthTokenClient
             await _optionsProvider.GetOptionsAsync<OAuthClientOptions>(scheme)
                                   .ConfigureAwait(false);
 
-        var request = new RefreshTokenRequest
+        using var request = new RefreshTokenRequest
         {
             RequestUri = options.TokenEndpoint,
             ClientId = options.ClientId,
             ClientSecret = options.ClientSecret,
             ClientCredentialStyle = options.ClientCredentialStyle,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
         };
 
         return await _client.RequestRefreshTokenAsync(request, cancellationToken)
@@ -130,14 +131,14 @@ public class OAuthTokenClient : IOAuthTokenClient
             await _optionsProvider.GetOptionsAsync<OAuthClientOptions>(scheme)
                                   .ConfigureAwait(false);
 
-        var request = new TokenRevocationRequest
+        using var request = new TokenRevocationRequest
         {
             RequestUri = options.TokenEndpoint,
             ClientId = options.ClientId,
             ClientSecret = options.ClientSecret,
             ClientCredentialStyle = options.ClientCredentialStyle,
             Token = token,
-            TokenTypeHint = tokenTypeHint
+            TokenTypeHint = tokenTypeHint,
         };
 
         return await _client.RevokeTokenAsync(request, cancellationToken)

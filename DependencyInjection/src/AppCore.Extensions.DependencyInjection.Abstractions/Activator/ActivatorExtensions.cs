@@ -1,8 +1,8 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 
 namespace AppCore.Extensions.DependencyInjection.Activator;
 
@@ -17,10 +17,11 @@ public static class ActivatorExtensions
     /// <typeparam name="T">The type to activate.</typeparam>
     /// <param name="activator">The <see cref="IActivator"/>.</param>
     /// <param name="parameters">Constructor arguments not provided by the <see cref="IServiceProvider"/>.</param>
-    /// <returns>An activated object of type instanceType</returns>
+    /// <returns>An activated object of type <typeparamref name="T"/>.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="activator"/> is null.</exception>
     public static T CreateInstance<T>(this IActivator activator, params object[] parameters)
     {
         Ensure.Arg.NotNull(activator);
-        return (T) activator.CreateInstance(typeof(T), parameters);
+        return (T)activator.CreateInstance(typeof(T), parameters);
     }
 }

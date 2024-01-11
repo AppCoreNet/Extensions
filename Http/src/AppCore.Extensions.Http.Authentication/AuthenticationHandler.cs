@@ -1,12 +1,13 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
 using Microsoft.Extensions.Logging;
 
 namespace AppCore.Extensions.Http.Authentication;
@@ -34,7 +35,7 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
     /// <param name="schemes">The available authentication schemes.</param>
     /// <param name="schemeHandler">The authentication scheme handler.</param>
     /// <param name="parameters">Additional authentication parameters.</param>
-    /// <param name="logger"></param>
+    /// <param name="logger">The logger.</param>
     public AuthenticationHandler(
         string scheme,
         IAuthenticationSchemeProvider schemes,
@@ -82,7 +83,7 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
         AuthenticationScheme scheme = await GetSchemeAsync()
             .ConfigureAwait(false);
 
-        _logger.LogTrace("Authenticating HTTP request with scheme {schemeName}.", scheme.Name);
+        _logger.LogTrace("Authenticating HTTP request with scheme {SchemeName}", scheme.Name);
 
         await AuthenticateAsync(scheme, request, forceRenewal: false, cancellationToken)
             .ConfigureAwait(false);
@@ -93,7 +94,7 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
         // retry if 401
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
-            _logger.LogDebug("Received 401 response, forcing renewal of authentication for scheme {schemeName}.", scheme.Name);
+            _logger.LogDebug("Received 401 response, forcing renewal of authentication for scheme {SchemeName}", scheme.Name);
 
             response.Dispose();
 
@@ -108,13 +109,13 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
     }
 
     /// <summary>
-    /// Set an access token on the HTTP request
+    /// Set an access token on the HTTP request.
     /// </summary>
-    /// <param name="scheme"></param>
-    /// <param name="request"></param>
-    /// <param name="forceRenewal"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <param name="scheme">The authentication scheme.</param>
+    /// <param name="request">The HTTP request.</param>
+    /// <param name="forceRenewal">Whether to force renewal of the authentication ticket.</param>
+    /// <param name="cancellationToken">Optional cancellation token to cancel the request.</param>
+    /// <returns>An awaitable task.</returns>
     protected virtual async Task AuthenticateAsync(
         AuthenticationScheme scheme,
         HttpRequestMessage request,
@@ -124,9 +125,9 @@ public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
         TParameters? parameters = _parameters;
         if (parameters == null && forceRenewal)
         {
-            parameters = new TParameters()
+            parameters = new TParameters
             {
-                ForceRenewal = true
+                ForceRenewal = true,
             };
         }
 

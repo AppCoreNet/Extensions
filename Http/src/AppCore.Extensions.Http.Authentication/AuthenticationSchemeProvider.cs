@@ -1,11 +1,12 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
 using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication;
@@ -16,12 +17,12 @@ namespace AppCore.Extensions.Http.Authentication;
 public class AuthenticationSchemeProvider : IAuthenticationSchemeProvider, IDisposable
 {
     private readonly IDisposable _optionsListener;
-    private readonly Dictionary<string, AuthenticationScheme> _schemes = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, AuthenticationScheme> _schemes = new (StringComparer.Ordinal);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationSchemeProvider"/> class.
     /// </summary>
-    /// <param name="optionsMonitor"></param>
+    /// <param name="optionsMonitor">The options monitor.</param>
     public AuthenticationSchemeProvider(IOptionsMonitor<HttpClientAuthenticationOptions> optionsMonitor)
     {
         Ensure.Arg.NotNull(optionsMonitor);

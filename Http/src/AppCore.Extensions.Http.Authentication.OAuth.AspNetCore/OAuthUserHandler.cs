@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -7,7 +7,8 @@ using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
 using Microsoft.AspNetCore.Http;
 
 namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;

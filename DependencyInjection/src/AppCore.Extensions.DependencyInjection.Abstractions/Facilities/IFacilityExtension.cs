@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,6 +8,7 @@ namespace AppCore.Extensions.DependencyInjection.Facilities;
 /// <summary>
 /// Represents an extension for a facility.
 /// </summary>
+/// <typeparam name="T">The type of the facility.</typeparam>
 public interface IFacilityExtension<in T>
     where T : IFacility
 {

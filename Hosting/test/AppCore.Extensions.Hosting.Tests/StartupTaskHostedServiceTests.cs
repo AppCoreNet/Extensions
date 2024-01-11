@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Threading;
@@ -20,7 +20,7 @@ public class StartupTaskHostedServiceTests
         var task2 = Substitute.For<IStartupTask>();
         var logger = Substitute.For<ILogger<StartupTaskHostedService>>();
 
-        var executor = new StartupTaskHostedService(new []{task1,task2}, logger);
+        var executor = new StartupTaskHostedService(new[] { task1, task2 }, logger);
         await executor.StartAsync(CancellationToken.None);
 
         await task1.Received(1)
@@ -37,11 +37,11 @@ public class StartupTaskHostedServiceTests
 
         var task2 = Substitute.For<IStartupTask>();
         task2.ExecuteAsync(Arg.Any<CancellationToken>())
-             .Throws(new InvalidOperationException());
+             .ThrowsAsync(new InvalidOperationException());
 
         var logger = Substitute.For<ILogger<StartupTaskHostedService>>();
 
-        var executor = new StartupTaskHostedService(new[] {task1, task2}, logger);
+        var executor = new StartupTaskHostedService(new[] { task1, task2 }, logger);
         await Assert.ThrowsAsync<InvalidOperationException>(
             async () => await executor.StartAsync(CancellationToken.None));
     }

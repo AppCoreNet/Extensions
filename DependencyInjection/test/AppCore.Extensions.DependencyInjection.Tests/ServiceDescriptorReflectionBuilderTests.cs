@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
 using AppCore.Extensions.DependencyInjection.Activator;
@@ -24,7 +24,7 @@ public class ServiceDescriptorReflectionBuilderTests
 
         var resolver1 = Substitute.For<IServiceDescriptorResolver>();
         resolver1.Resolve(typeof(string), ServiceLifetime.Transient)
-                 .Returns(new[] {serviceDescriptor1});
+                 .Returns(new[] { serviceDescriptor1 });
 
         builder.AddResolver(resolver1);
 
@@ -35,13 +35,13 @@ public class ServiceDescriptorReflectionBuilderTests
 
         var resolver2 = Substitute.For<IServiceDescriptorResolver>();
         resolver2.Resolve(typeof(string), ServiceLifetime.Transient)
-                 .Returns(new[] {serviceDescriptor2});
+                 .Returns(new[] { serviceDescriptor2 });
 
         builder.AddResolver(resolver2);
 
         IReadOnlyCollection<ServiceDescriptor> serviceDescriptors = builder.Resolve();
 
         serviceDescriptors.Should()
-                          .BeEquivalentTo(new [] { serviceDescriptor1, serviceDescriptor2 });
+                          .BeEquivalentTo(new[] { serviceDescriptor1, serviceDescriptor2 });
     }
 }

@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ public class PluginManagerTests
     {
         var pluginOptions = new PluginOptions
         {
-            Assemblies = { PluginPaths.TestPlugin, PluginPaths.TestPlugin2 }
+            Assemblies = { PluginPaths.TestPlugin, PluginPaths.TestPlugin2 },
         };
 
         var manager = new PluginManager(new DefaultActivator(), Options.Create(pluginOptions));
@@ -46,7 +46,7 @@ public class PluginManagerTests
         var pluginOptions = new PluginOptions
         {
             ResolvePrivateTypes = true,
-            Assemblies = {PluginPaths.TestPlugin, PluginPaths.TestPlugin2}
+            Assemblies = { PluginPaths.TestPlugin, PluginPaths.TestPlugin2 },
         };
 
         var manager = new PluginManager(new DefaultActivator(), Options.Create(pluginOptions));
@@ -65,8 +65,7 @@ public class PluginManagerTests
                      "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask",
                      "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask",
                      "AppCore.Extensions.Hosting.Plugins.TestPlugin.InternalStartupTask",
-                     "AppCore.Extensions.Hosting.Plugins.TestPlugin2.InternalStartupTask"
-                 );
+                     "AppCore.Extensions.Hosting.Plugins.TestPlugin2.InternalStartupTask");
     }
 
     [Fact]
@@ -91,7 +90,7 @@ public class PluginManagerTests
                            "AppCore.Extensions.Hosting.Plugins.TestPlugin2",
                            "12.10.0",
                            "Plugin2 Description",
-                           "Plugin2 Copyright")
+                           "Plugin2 Copyright"),
                    });
     }
 
@@ -131,7 +130,7 @@ public class PluginManagerTests
         instances.Select(
                      i =>
                          i.Instance.GetType()
-                          .GetProperty("Lifetime")!
+                          .GetProperty("Lifetime") !
                           .GetValue(i.Instance))
                  .Should()
                  .AllBeEquivalentTo(lifetime);

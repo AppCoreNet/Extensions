@@ -1,7 +1,8 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
+using AppCoreNet;
 using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace
@@ -40,7 +41,7 @@ internal static class LoggerExtensions
         _taskExecuted(
             logger,
             task.GetType().GetDisplayName(),
-            (long) elapsed.TotalMilliseconds,
+            (long)elapsed.TotalMilliseconds,
             null);
     }
 
@@ -49,7 +50,7 @@ internal static class LoggerExtensions
         _taskFailed(
             logger,
             task.GetType().GetDisplayName(),
-            (long) elapsed.TotalMilliseconds,
+            (long)elapsed.TotalMilliseconds,
             exception);
     }
 }

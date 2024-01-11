@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 
@@ -15,6 +15,7 @@ public interface IActivator
     /// </summary>
     /// <param name="instanceType">The type to activate.</param>
     /// <param name="parameters">Constructor arguments not provided by the <see cref="IServiceProvider"/>.</param>
-    /// <returns>An activated object of type instanceType</returns>
+    /// <returns>An activated object of type <paramref name="instanceType"/>.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="instanceType"/> is null.</exception>
     object CreateInstance(Type instanceType, params object[] parameters);
 }

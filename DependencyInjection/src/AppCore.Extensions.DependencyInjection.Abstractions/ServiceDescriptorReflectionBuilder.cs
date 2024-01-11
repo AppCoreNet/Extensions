@@ -1,19 +1,19 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCore.Extensions.DependencyInjection;
 
-internal class ServiceDescriptorReflectionBuilder : IServiceDescriptorReflectionBuilder
+internal sealed class ServiceDescriptorReflectionBuilder : IServiceDescriptorReflectionBuilder
 {
-    private readonly List<IServiceDescriptorResolver> _resolvers = new();
+    private readonly List<IServiceDescriptorResolver> _resolvers = new ();
     private readonly IActivator _activator;
     private readonly Type _serviceType;
     private ServiceLifetime _defaultLifetime = ServiceLifetime.Transient;

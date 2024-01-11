@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.ComponentModel;
@@ -16,6 +16,7 @@ public interface IServiceDescriptorReflectionBuilder
     /// Specifies the default lifetime for resolved services.
     /// </summary>
     /// <param name="lifetime">The default lifetime.</param>
+    /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
     IServiceDescriptorReflectionBuilder WithDefaultLifetime(ServiceLifetime lifetime);
 
     /// <summary>
@@ -23,6 +24,7 @@ public interface IServiceDescriptorReflectionBuilder
     /// </summary>
     /// <param name="resolver">The resolver.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="resolver"/> is null.</exception>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     IServiceDescriptorReflectionBuilder AddResolver(IServiceDescriptorResolver resolver);
 

@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using IdentityModel.Client;
 
@@ -11,7 +11,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 public class OAuthParameters : AuthenticationParameters
 {
     /// <summary>
-    /// Specifies the resource parameter.
+    /// Gets or sets the resource parameter.
     /// </summary>
     public string? Resource
     {
@@ -20,7 +20,7 @@ public class OAuthParameters : AuthenticationParameters
     }
 
     /// <summary>
-    /// Additional context that might be relevant in the pipeline
+    /// Gets or sets additional context that might be relevant in the pipeline.
     /// </summary>
     public Parameters? Context
     {

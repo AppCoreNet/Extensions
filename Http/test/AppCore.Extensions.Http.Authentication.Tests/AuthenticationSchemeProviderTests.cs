@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ public class AuthenticationSchemeProviderTests
         options.AddScheme(scheme1);
         options.AddScheme(scheme2);
 
-        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider(options);
+        using AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider(options);
 
         IReadOnlyCollection<AuthenticationScheme> schemes = await provider.GetAllSchemesAsync();
         schemes.Should()
@@ -41,7 +41,7 @@ public class AuthenticationSchemeProviderTests
     [Fact]
     public void AddSchemeThrowsOnDuplicateScheme()
     {
-        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
+        using AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
 
         var scheme = new AuthenticationScheme("scheme", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
         provider.AddScheme(scheme);
@@ -55,7 +55,7 @@ public class AuthenticationSchemeProviderTests
     [Fact]
     public async Task GetAllSchemesReturnsSchemes()
     {
-        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
+        using AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
 
         var scheme1 = new AuthenticationScheme("scheme1", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
         var scheme2 = new AuthenticationScheme("scheme2", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
@@ -70,7 +70,7 @@ public class AuthenticationSchemeProviderTests
     [Fact]
     public async Task FindSchemeReturnsScheme()
     {
-        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
+        using AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
 
         var scheme1 = new AuthenticationScheme("scheme1", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
         var scheme2 = new AuthenticationScheme("scheme2", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
@@ -89,7 +89,7 @@ public class AuthenticationSchemeProviderTests
     [Fact]
     public async Task FindUnknownSchemeReturnsNull()
     {
-        AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
+        using AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
         AuthenticationScheme? result = await provider.FindSchemeAsync("scheme1");
         result.Should()
               .BeNull();

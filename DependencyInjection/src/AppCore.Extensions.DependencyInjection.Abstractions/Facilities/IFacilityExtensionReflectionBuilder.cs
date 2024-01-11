@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.ComponentModel;
@@ -16,6 +16,7 @@ public interface IFacilityExtensionReflectionBuilder
     /// </summary>
     /// <param name="resolver">The facility extension resolver.</param>
     /// <returns>The <see cref="IFacilityExtensionReflectionBuilder"/> to allow chaining.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="resolver"/> is null.</exception>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     IFacilityExtensionReflectionBuilder AddResolver(IFacilityExtensionResolver resolver);
 

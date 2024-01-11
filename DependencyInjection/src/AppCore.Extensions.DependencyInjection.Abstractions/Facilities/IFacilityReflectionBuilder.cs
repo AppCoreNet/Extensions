@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.ComponentModel;
@@ -16,6 +16,7 @@ public interface IFacilityReflectionBuilder
     /// </summary>
     /// <param name="resolver">The facility resolver.</param>
     /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="resolver"/> is null.</exception>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     IFacilityReflectionBuilder AddResolver(IFacilityResolver resolver);
 
@@ -34,5 +35,6 @@ public interface IFacilityReflectionBuilder
     /// </summary>
     /// <param name="configure">The configuration delegate.</param>
     /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="configure"/> is null.</exception>
     public IFacilityReflectionBuilder AddExtensionsFrom(Action<IFacilityExtensionReflectionBuilder> configure);
 }

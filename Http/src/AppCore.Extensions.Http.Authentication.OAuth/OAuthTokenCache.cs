@@ -1,12 +1,13 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -56,7 +57,7 @@ public class OAuthTokenCache : IOAuthTokenCache
         if (bytes == null)
             return null;
 
-        string[] values = Encoding.UTF8.GetString(bytes).Split(new [] { ':' });
+        string[] values = Encoding.UTF8.GetString(bytes).Split(new[] { ':' });
 
         if (values.Length == 0)
             return null;
@@ -149,12 +150,12 @@ public class OAuthTokenCache : IOAuthTokenCache
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="options">The <see cref="OAuthTokenCacheOptions"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
-    /// <returns></returns>
+    /// <returns>The generated cache key.</returns>
     protected virtual string GenerateCacheKey(
         AuthenticationScheme scheme,
         OAuthTokenCacheOptions options,
         OAuthParameters? parameters = null)
     {
-        return options.CacheKeyPrefix + "::" + scheme.Name + "::" + parameters?.Resource ?? "";
+        return options.CacheKeyPrefix + "::" + scheme.Name + "::" + parameters?.Resource ?? string.Empty;
     }
 }

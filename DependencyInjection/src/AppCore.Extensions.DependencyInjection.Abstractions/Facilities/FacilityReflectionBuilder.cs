@@ -1,11 +1,11 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.DependencyInjection.Activator;
 
 namespace AppCore.Extensions.DependencyInjection.Facilities;
@@ -13,7 +13,7 @@ namespace AppCore.Extensions.DependencyInjection.Facilities;
 internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
 {
     private readonly IActivator _activator;
-    private readonly List<IFacilityResolver> _resolvers = new();
+    private readonly List<IFacilityResolver> _resolvers = new ();
     private Action<IFacilityExtensionReflectionBuilder>? _extensionsConfig;
 
     public FacilityReflectionBuilder(IActivator activator)
@@ -43,7 +43,7 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
         return this;
     }
 
-    public IReadOnlyCollection<(IFacility,IReadOnlyCollection<IFacilityExtension<IFacility>>)> Resolve()
+    public IReadOnlyCollection<(IFacility, IReadOnlyCollection<IFacilityExtension<IFacility>>)> Resolve()
     {
         List<IFacility> facilities =
             _resolvers.SelectMany(s => s.Resolve())
@@ -60,7 +60,7 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
         ReadOnlyCollection<IFacilityExtension<IFacility>> emptyFacilityExtensions =
             new List<IFacilityExtension<IFacility>>().AsReadOnly();
 
-        List<(IFacility, IReadOnlyCollection<IFacilityExtension<IFacility>>)> result = new();
+        List<(IFacility, IReadOnlyCollection<IFacilityExtension<IFacility>>)> result = new ();
 
         foreach (IFacility facility in facilities)
         {

@@ -1,11 +1,12 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using AppCore.Extensions.Http.Authentication;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Extension methods for <see cref="IServiceCollection"/> to register HTTP client authentication services.
@@ -13,10 +14,10 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static class HttpClientAuthenticationServiceCollectionExtensions
 {
     /// <summary>
-    /// Adds the token management services to DI using all default values
+    /// Adds the token management services to DI using all default values.
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/>.</param>
-    /// <returns></returns>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to configure the authentication.</returns>
     public static IHttpClientAuthenticationBuilder AddHttpClientAuthentication(this IServiceCollection services)
     {
         services.TryAddSingleton<IAuthenticationSchemeProvider, AuthenticationSchemeProvider>();

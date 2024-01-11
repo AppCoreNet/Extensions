@@ -1,10 +1,11 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
+
 using Microsoft.Extensions.Options;
 
 namespace AppCore.Extensions.Http.Authentication;
@@ -23,7 +24,7 @@ public abstract class AuthenticationSchemeHandler<TOptions, TParameters> : IAuth
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationSchemeHandler{TOptions,TParameters}"/> class.
     /// </summary>
-    /// <param name="optionsMonitor"></param>
+    /// <param name="optionsMonitor">The <see cref="IOptionsMonitor{TOptions}"/>.</param>
     protected AuthenticationSchemeHandler(IOptionsMonitor<TOptions> optionsMonitor)
     {
         Ensure.Arg.NotNull(optionsMonitor);

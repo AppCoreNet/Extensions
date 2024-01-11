@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +11,7 @@ namespace AppCore.Extensions.DependencyInjection;
 /// </summary>
 /// <seealso cref="ServiceLifetime"/>
 [AttributeUsage(AttributeTargets.Class)]
-public class LifetimeAttribute : Attribute
+public sealed class LifetimeAttribute : Attribute
 {
     /// <summary>
     /// Gets the <see cref="ServiceLifetime"/>.

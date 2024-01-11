@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,8 +18,8 @@ public interface IOAuthTokenClient
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
-    /// <returns></returns>
-    Task<TokenResponse> RequestClientAccessToken(
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task<TokenResponse> RequestClientAccessTokenAsync(
         AuthenticationScheme scheme,
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default);
@@ -30,8 +30,8 @@ public interface IOAuthTokenClient
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
-    /// <returns></returns>
-    Task<TokenResponse> RequestPasswordAccessToken(
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+    Task<TokenResponse> RequestPasswordAccessTokenAsync(
         AuthenticationScheme scheme,
         OAuthParameters? parameters = null,
         CancellationToken cancellationToken = default);
@@ -43,7 +43,7 @@ public interface IOAuthTokenClient
     /// <param name="refreshToken">The refresh token.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
-    /// <returns></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task<TokenResponse> RequestRefreshTokenAsync(
         AuthenticationScheme scheme,
         string refreshToken,
@@ -57,7 +57,7 @@ public interface IOAuthTokenClient
     /// <param name="token">The token to revoke.</param>
     /// <param name="tokenTypeHint">A hint for the type of the token.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
-    /// <returns></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task<TokenRevocationResponse> RevokeTokenAsync(
         AuthenticationScheme scheme,
         string token,

@@ -1,34 +1,20 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
-using AppCore.Diagnostics;
-using AppCore.Extensions.DependencyInjection;
+using AppCoreNet.Diagnostics;
 using AppCore.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
 
 // ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extensions methods to register startup tasks with a <see cref="IServiceCollection"/>.
 /// </summary>
 public static class StartupTaskServiceCollectionExtensions
 {
-    /// <summary>
-    /// Adds execution of startup tasks.
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/>.</param>
-    /// <returns>The passed <see cref="IServiceCollection"/> to allow chaining.</returns>
-    /// <exception cref="ArgumentNullException">Argument <paramref name="services"/> is <c>null</c>.</exception>
-    public static IServiceCollection AddStartupTasks(this IServiceCollection services)
-    {
-        Ensure.Arg.NotNull(services);
-        services.TryAddEnumerable(ServiceDescriptor.Transient<IHostedService, StartupTaskHostedService>());
-        return services;
-    }
-
     /// <summary>
     /// Adds startup tasks to the container.
     /// </summary>
@@ -41,8 +27,7 @@ public static class StartupTaskServiceCollectionExtensions
         Ensure.Arg.NotNull(startupTaskType);
         Ensure.Arg.OfType<IStartupTask>(startupTaskType);
 
-        services.AddStartupTasks()
-                .TryAddEnumerable(ServiceDescriptor.Transient(typeof(IStartupTask), startupTaskType));
+        services.TryAddEnumerable(ServiceDescriptor.Transient(typeof(IStartupTask), startupTaskType));
 
         return services;
     }
@@ -67,7 +52,6 @@ public static class StartupTaskServiceCollectionExtensions
     /// <returns>The passed <see cref="IServiceCollection"/> to allow chaining.</returns>
     public static IServiceCollection AddStartupTasksFrom(this IServiceCollection services, Action<IServiceDescriptorReflectionBuilder> configure)
     {
-        return services.AddStartupTasks()
-                       .TryAddEnumerableFrom<IStartupTask>(configure);
+        return services.TryAddEnumerableFrom<IStartupTask>(configure);
     }
 }

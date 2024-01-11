@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections;
@@ -12,7 +12,7 @@ namespace AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc;
 internal sealed class ServiceCollectionServiceProvider : IServiceProvider
 {
     private readonly IServiceCollection _services;
-    private readonly Dictionary<Type, object> _additionalServices = new();
+    private readonly Dictionary<Type, object> _additionalServices = new ();
 
     public ServiceCollectionServiceProvider(IServiceCollection services)
     {
@@ -48,8 +48,8 @@ internal sealed class ServiceCollectionServiceProvider : IServiceProvider
 
         return _services.Where(
                             sd => sd.ServiceType == serviceType
-                                  || serviceType.IsGenericType
-                                  && sd.ServiceType == serviceType.GetGenericTypeDefinition())
+                                  || (serviceType.IsGenericType
+                                  && sd.ServiceType == serviceType.GetGenericTypeDefinition()))
                         .Select(ServiceFactory);
     }
 
@@ -64,7 +64,7 @@ internal sealed class ServiceCollectionServiceProvider : IServiceProvider
         if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
         {
             serviceType = serviceType.GenericTypeArguments[0];
-            var instances = (IList) Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType))!;
+            var instances = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType)) !;
             foreach (object service in GetServices(serviceType))
             {
                 instances.Add(service);

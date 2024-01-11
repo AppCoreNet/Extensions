@@ -1,8 +1,9 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
-// ReSharper disable once CheckNamespace
-namespace Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace AppCore.Extensions.DependencyInjection;
 
 /// <summary>
 /// Builder object for HTTP client authentication.
@@ -10,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 public interface IHttpClientAuthenticationBuilder
 {
     /// <summary>
-    /// The underlying service collection.
+    /// Gets the underlying service collection.
     /// </summary>
     IServiceCollection Services { get; }
 }

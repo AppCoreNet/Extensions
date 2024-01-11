@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
 using AppCore.Extensions.DependencyInjection;
@@ -21,8 +21,7 @@ public class PluginServiceDescriptorResolverTests
     public void RegistersServices()
     {
         var services = new ServiceCollection();
-        services.AddAppCore()
-                .AddPlugins(
+        services.AddPlugins(
                     o =>
                     {
                         o.Assemblies.Add(PluginPaths.TestPlugin);
@@ -35,14 +34,12 @@ public class PluginServiceDescriptorResolverTests
                 .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask"
-                );
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask");
 
         services.Should()
                 .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask"
-                );
+                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask");
     }
 }

@@ -1,16 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
-    <RootNamespace>AppCore.Extensions.Hosting</RootNamespace>
+    <TargetFrameworks>net8.0;net6.0;netstandard2.0;net462</TargetFrameworks>
+    <RootNamespace>AppCoreNet.Extensions.Hosting</RootNamespace>
     <Description>Provides extensions to the Microsoft.Extensions.Hosting framework.</Description>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AppCore.Diagnostics.Sources" Version="$(AppCore_Shared_Version)">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="$(Microsoft_Extensions_Version)" />
+  <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'!='net8.0'">
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

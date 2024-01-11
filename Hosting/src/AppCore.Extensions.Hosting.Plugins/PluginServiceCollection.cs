@@ -1,5 +1,5 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections;
@@ -10,15 +10,15 @@ namespace AppCore.Extensions.Hosting.Plugins;
 
 internal sealed class PluginServiceCollection
 {
-    private static readonly ConcurrentDictionary<Type, Type> _typeCache = new();
+    private static readonly ConcurrentDictionary<Type, Type> _typeCache = new ();
 
     private class InternalCollection<T> : IInternalPluginServiceCollection<T>
     {
-        private readonly List<IPluginService<T>> _instances = new();
+        private readonly List<IPluginService<T>> _instances = new ();
 
         public void Add(IPlugin plugin, object instance)
         {
-            _instances.Add(new PluginService<T>(plugin, (T) instance));
+            _instances.Add(new PluginService<T>(plugin, (T)instance));
         }
 
         public IEnumerator<IPluginService<T>> GetEnumerator()
@@ -35,6 +35,6 @@ internal sealed class PluginServiceCollection
     public static IInternalPluginServiceCollection<object> Create(Type serviceType)
     {
         Type type = _typeCache.GetOrAdd(serviceType, t => typeof(InternalCollection<>).MakeGenericType(serviceType));
-        return (IInternalPluginServiceCollection<object>) Activator.CreateInstance(type)!;
+        return (IInternalPluginServiceCollection<object>)Activator.CreateInstance(type) !;
     }
 }

@@ -1,12 +1,12 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System;
 using System.Collections.Concurrent;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
-using AppCore.Diagnostics;
+using AppCoreNet.Diagnostics;
 using IdentityModel.Client;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +17,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth;
 /// </summary>
 public class OAuthTokenService : IOAuthTokenService
 {
-    private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthAccessToken>>> _sync = new();
+    private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthAccessToken>>> _sync = new ();
     private readonly IOAuthTokenClient _client;
     private readonly IOAuthTokenCache _cache;
     private readonly ILogger<OAuthTokenService> _logger;
@@ -25,9 +25,9 @@ public class OAuthTokenService : IOAuthTokenService
     /// <summary>
     /// Initializes a new instance of the <see cref="OAuthTokenService"/> class.
     /// </summary>
-    /// <param name="client"></param>
-    /// <param name="cache"></param>
-    /// <param name="logger"></param>
+    /// <param name="client">The <see cref="IOAuthTokenClient"/>.</param>
+    /// <param name="cache">The <see cref="IOAuthTokenCache"/>.</param>
+    /// <param name="logger">The <see cref="ILogger"/>.</param>
     public OAuthTokenService(IOAuthTokenClient client, IOAuthTokenCache cache, ILogger<OAuthTokenService> logger)
     {
         Ensure.Arg.NotNull(client);
@@ -39,7 +39,7 @@ public class OAuthTokenService : IOAuthTokenService
         _logger = logger;
     }
 
-    private async Task<OAuthAccessToken> InvokeSynchronized(AuthenticationScheme scheme, Func<Task<OAuthAccessToken>> tokenFunc)
+    private async Task<OAuthAccessToken> InvokeSynchronizedAsync(AuthenticationScheme scheme, Func<Task<OAuthAccessToken>> tokenFunc)
     {
         try
         {
@@ -76,20 +76,20 @@ public class OAuthTokenService : IOAuthTokenService
             }
         }
 
-        return await InvokeSynchronized(
+        return await InvokeSynchronizedAsync(
                 scheme,
                 async () =>
                 {
-                    _logger.LogDebug("Requesting access token for client scheme {schemeName} ...", scheme.Name);
+                    _logger.LogDebug("Requesting access token for client scheme {SchemeName} ...", scheme.Name);
 
                     TokenResponse response =
-                        await _client.RequestClientAccessToken(scheme, parameters, cancellationToken)
+                        await _client.RequestClientAccessTokenAsync(scheme, parameters, cancellationToken)
                                      .ConfigureAwait(false);
 
                     if (response.IsError)
                     {
                         _logger.LogError(
-                            "Error requesting access token for client scheme {schemeName}. Error = {error}. Error description = {errorDescription}",
+                            "Error requesting access token for client scheme {SchemeName}. Error = {Error}. Error description = {ErrorDescription}",
                             scheme.Name,
                             response.Error,
                             response.ErrorDescription);
@@ -98,14 +98,12 @@ public class OAuthTokenService : IOAuthTokenService
                             $"Error requesting access token for client scheme '{scheme.Name}': {response.Error}");
                     }
 
-                    OAuthAccessToken token = new(
+                    OAuthAccessToken token = new (
                         response.AccessToken,
-                        response.ExpiresIn > 0
-                            ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
-                            : null);
+                        response.ExpiresIn > 0 ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 
                     _logger.LogDebug(
-                        "Received access token for client scheme {schemeName}. Expiration: {expiration}",
+                        "Received access token for client scheme {SchemeName}. Expiration: {Expiration}",
                         scheme.Name,
                         token.Expires);
 
@@ -139,20 +137,20 @@ public class OAuthTokenService : IOAuthTokenService
             }
         }
 
-        return await InvokeSynchronized(
+        return await InvokeSynchronizedAsync(
                 scheme,
                 async () =>
                 {
-                    _logger.LogDebug("Requesting access token for password scheme {schemeName} ...", scheme.Name);
+                    _logger.LogDebug("Requesting access token for password scheme {SchemeName} ...", scheme.Name);
 
                     TokenResponse response =
-                        await _client.RequestPasswordAccessToken(scheme, parameters, cancellationToken)
+                        await _client.RequestPasswordAccessTokenAsync(scheme, parameters, cancellationToken)
                                      .ConfigureAwait(false);
 
                     if (response.IsError)
                     {
                         _logger.LogError(
-                            "Error requesting access token for password scheme {schemeName}. Error = {error}. Error description = {errorDescription}",
+                            "Error requesting access token for password scheme {SchemeName}. Error = {Error}. Error description = {ErrorDescription}",
                             scheme.Name,
                             response.Error,
                             response.ErrorDescription);
@@ -161,14 +159,12 @@ public class OAuthTokenService : IOAuthTokenService
                             $"Error requesting access token for password scheme '{scheme.Name}'");
                     }
 
-                    OAuthAccessToken token = new(
+                    OAuthAccessToken token = new (
                         response.AccessToken,
-                        response.ExpiresIn > 0
-                            ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn)
-                            : null);
+                        response.ExpiresIn > 0 ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 
                     _logger.LogDebug(
-                        "Received access token for password scheme {schemeName}. Expiration: {expiration}",
+                        "Received access token for password scheme {SchemeName}. Expiration: {Expiration}",
                         scheme.Name,
                         token.Expires);
 

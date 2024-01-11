@@ -1,14 +1,14 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 namespace AppCore.Extensions.Hosting.Plugins;
 
 public static class PluginPaths
 {
-#if NETCOREAPP3_1
-        private const string FrameworkPath = "netcoreapp3.1";
+#if NET8_0
+    private const string FrameworkPath = "net8.0";
 #elif NET6_0
-    private const string FrameworkPath = "net6";
+    private const string FrameworkPath = "net6.0";
 #else
     #error Unhandled target framework.
 #endif
@@ -16,7 +16,7 @@ public static class PluginPaths
 #if DEBUG
     private const string BuildConfigPath = "Debug";
 #else
-        private const string BuildConfigPath = "Release";
+    private const string BuildConfigPath = "Release";
 #endif
 
     public const string TestPlugin =

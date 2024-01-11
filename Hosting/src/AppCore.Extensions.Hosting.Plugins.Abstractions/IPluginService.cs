@@ -1,11 +1,12 @@
-// Licensed under the MIT License.
-// Copyright (c) 2018-2021 the AppCore .NET project.
+// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 namespace AppCore.Extensions.Hosting.Plugins;
 
 /// <summary>
 /// Represents a plugin service.
 /// </summary>
+/// <typeparam name="T">The type of the service.</typeparam>
 public interface IPluginService<out T>
 {
     /// <summary>

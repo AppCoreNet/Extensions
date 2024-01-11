@@ -1,5 +1,5 @@
-﻿// Licensed under the MIT License.
-// Copyright (c) 2018-2022 the AppCore .NET project.
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
 
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace AppCore.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
-/// Abstraction for caching client access tokens
+/// Abstraction for caching client access tokens.
 /// </summary>
 public interface IOAuthTokenCache
 {
@@ -18,7 +18,7 @@ public interface IOAuthTokenCache
     /// <param name="accessToken">The <see cref="OAuthAccessToken"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
-    /// <returns></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task SetAsync(
         AuthenticationScheme scheme,
         OAuthAccessToken accessToken,
@@ -31,7 +31,7 @@ public interface IOAuthTokenCache
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
-    /// <returns></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task<OAuthAccessToken?> GetAsync(
         AuthenticationScheme scheme,
         OAuthParameters? parameters = null,
@@ -43,7 +43,7 @@ public interface IOAuthTokenCache
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
-    /// <returns></returns>
+    /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
     Task DeleteAsync(
         AuthenticationScheme scheme,
         OAuthParameters? parameters = null,
