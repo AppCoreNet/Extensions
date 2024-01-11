@@ -13,7 +13,8 @@ namespace AppCoreNet.Extensions.Http.Authentication;
 
 public class AuthenticationSchemeProviderTests
 {
-    private static AuthenticationSchemeProvider CreateAuthenticationSchemeProvider(HttpClientAuthenticationOptions? options = null)
+    private static AuthenticationSchemeProvider CreateAuthenticationSchemeProvider(
+        HttpClientAuthenticationOptions? options = null)
     {
         options ??= new HttpClientAuthenticationOptions();
         var optionsMonitor = Substitute.For<IOptionsMonitor<HttpClientAuthenticationOptions>>();
@@ -25,8 +26,16 @@ public class AuthenticationSchemeProviderTests
     [Fact]
     public async Task AddsSchemesFromOptions()
     {
-        var scheme1 = new AuthenticationScheme("scheme1", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
-        var scheme2 = new AuthenticationScheme("scheme2", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
+        var scheme1 = new AuthenticationScheme(
+            "scheme1",
+            typeof(IAuthenticationSchemeHandler<>),
+            typeof(AuthenticationSchemeOptions));
+
+        var scheme2 = new AuthenticationScheme(
+            "scheme2",
+            typeof(IAuthenticationSchemeHandler<>),
+            typeof(AuthenticationSchemeOptions));
+
         var options = new HttpClientAuthenticationOptions();
         options.AddScheme(scheme1);
         options.AddScheme(scheme2);
@@ -43,7 +52,11 @@ public class AuthenticationSchemeProviderTests
     {
         using AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
 
-        var scheme = new AuthenticationScheme("scheme", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
+        var scheme = new AuthenticationScheme(
+            "scheme",
+            typeof(IAuthenticationSchemeHandler<>),
+            typeof(AuthenticationSchemeOptions));
+
         provider.AddScheme(scheme);
 
         Action func = () => provider.AddScheme(scheme);
@@ -57,8 +70,16 @@ public class AuthenticationSchemeProviderTests
     {
         using AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
 
-        var scheme1 = new AuthenticationScheme("scheme1", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
-        var scheme2 = new AuthenticationScheme("scheme2", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
+        var scheme1 = new AuthenticationScheme(
+            "scheme1",
+            typeof(IAuthenticationSchemeHandler<>),
+            typeof(AuthenticationSchemeOptions));
+
+        var scheme2 = new AuthenticationScheme(
+            "scheme2",
+            typeof(IAuthenticationSchemeHandler<>),
+            typeof(AuthenticationSchemeOptions));
+
         provider.AddScheme(scheme1);
         provider.AddScheme(scheme2);
 
@@ -72,8 +93,16 @@ public class AuthenticationSchemeProviderTests
     {
         using AuthenticationSchemeProvider provider = CreateAuthenticationSchemeProvider();
 
-        var scheme1 = new AuthenticationScheme("scheme1", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
-        var scheme2 = new AuthenticationScheme("scheme2", typeof(IAuthenticationSchemeHandler<>), typeof(AuthenticationSchemeOptions));
+        var scheme1 = new AuthenticationScheme(
+            "scheme1",
+            typeof(IAuthenticationSchemeHandler<>),
+            typeof(AuthenticationSchemeOptions));
+
+        var scheme2 = new AuthenticationScheme(
+            "scheme2",
+            typeof(IAuthenticationSchemeHandler<>),
+            typeof(AuthenticationSchemeOptions));
+
         provider.AddScheme(scheme1);
         provider.AddScheme(scheme2);
 
