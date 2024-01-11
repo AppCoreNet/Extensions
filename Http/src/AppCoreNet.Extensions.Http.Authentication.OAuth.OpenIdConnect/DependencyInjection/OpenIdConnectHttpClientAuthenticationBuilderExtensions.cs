@@ -3,8 +3,8 @@
 
 using System;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Http.Authentication.OAuth;
-using AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
+using AppCoreNet.Extensions.Http.Authentication.OAuth;
+using AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -21,8 +21,7 @@ public static class OpenIdConnectHttpClientAuthenticationBuilderExtensions
     /// authentication scheme.
     /// </summary>
     /// <param name="builder">The <see cref="IOAuthClientFromAuthenticationSchemeBuilder"/>.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">The delegate to configure the <see cref="OpenIdConnectClientOptions"/>.</param>
     public static void OpenIdConnect(
         this IOAuthClientFromAuthenticationSchemeBuilder builder,
         Action<OpenIdConnectClientOptions>? configure = null)
@@ -52,8 +51,8 @@ public static class OpenIdConnectHttpClientAuthenticationBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
     /// <param name="scheme">The name of the client authentication scheme.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">The delegate to configure the <see cref="OpenIdConnectUserOptions"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientAuthenticationBuilder AddOpenIdConnect(
         this IHttpClientAuthenticationBuilder builder,
         string scheme,
@@ -80,7 +79,7 @@ public static class OpenIdConnectHttpClientAuthenticationBuilderExtensions
         services.TryAdd(new[]
         {
             ServiceDescriptor.Scoped<OpenIdConnectUserTokenService, OpenIdConnectUserTokenService>(),
-            ServiceDescriptor.Scoped<OpenIdConnectUserTokenStore, OpenIdConnectUserTokenStore>()
+            ServiceDescriptor.Scoped<OpenIdConnectUserTokenStore, OpenIdConnectUserTokenStore>(),
         });
 
         return builder;
@@ -91,8 +90,8 @@ public static class OpenIdConnectHttpClientAuthenticationBuilderExtensions
     /// OpenID connect authentication scheme.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">The delegate to configure the <see cref="OpenIdConnectUserOptions"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientAuthenticationBuilder AddOpenIdConnect(
         this IHttpClientAuthenticationBuilder builder,
         Action<OpenIdConnectUserOptions>? configure = null)

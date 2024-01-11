@@ -4,7 +4,7 @@
 using System;
 using AppCoreNet.Diagnostics;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Represents a OAuth access token.

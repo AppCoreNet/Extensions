@@ -1,10 +1,10 @@
 ﻿// Licensed under the MIT license.
 // Copyright (c) The AppCore .NET project.
 
-using AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+using AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 using Microsoft.AspNetCore.Http;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
 /// <summary>
 /// Represents the OpenID Connect authentication handler.
@@ -12,7 +12,7 @@ namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 public class OpenIdConnectUserHandler : OAuthUserHandler<OpenIdConnectUserParameters>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="OpenIdConnectUserHandler"/>.
+    /// Initializes a new instance of the <see cref="OpenIdConnectUserHandler"/> class.
     /// </summary>
     /// <param name="httpContextAccessor">The <see cref="IHttpContextAccessor"/>.</param>
     /// <param name="authTokenService">The <see cref="OpenIdConnectUserTokenService"/>.</param>

@@ -39,7 +39,7 @@ public class PluginFacilityResolverTests
                     r =>
                         r.ServiceType.FullName
                         == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService"
-                        && r.ImplementationType.FullName
+                        && r.ImplementationType!.FullName
                         == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityExtensionService");
 
         services.Should()
@@ -47,14 +47,14 @@ public class PluginFacilityResolverTests
                     r =>
                         r.ServiceType.FullName
                         == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityContractExtensionService"
-                        && r.ImplementationType.FullName
+                        && r.ImplementationType!.FullName
                         == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityContractExtensionService");
 
         services.Should()
                 .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityExtensionService"
-                        && r.ImplementationType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityExtensionService");
+                        && r.ImplementationType!.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityExtensionService");
     }
 
     [Fact]
@@ -74,13 +74,13 @@ public class PluginFacilityResolverTests
                 .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
-                        && r.ImplementationType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService");
+                        && r.ImplementationType!.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService");
 
         services.Should()
                 .Contain(
                     r =>
                         r.ServiceType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService"
-                        && r.ImplementationType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService");
+                        && r.ImplementationType!.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.TestFacilityService");
     }
 
     [Fact]
@@ -99,7 +99,7 @@ public class PluginFacilityResolverTests
             services.Where(
                 r =>
                     r.ServiceType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService"
-                    && r.ImplementationType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService");
+                    && r.ImplementationType!.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.TestFacilityService");
 
         facilityServices.Should()
                         .HaveCount(2);

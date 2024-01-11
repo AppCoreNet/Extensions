@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using IdentityModel.Client;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Provides the options for the OAuth authentication schemes.

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
 internal static class AuthenticationSchemeExtensions
 {

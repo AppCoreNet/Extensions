@@ -2,18 +2,16 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
-using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
-
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Provides a cache for OAuth access tokens.

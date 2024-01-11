@@ -2,7 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Http.Authentication;
+using AppCoreNet.Extensions.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

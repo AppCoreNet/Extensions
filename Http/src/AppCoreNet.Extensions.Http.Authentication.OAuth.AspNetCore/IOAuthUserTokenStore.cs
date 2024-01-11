@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 
 /// <summary>
 /// Abstraction for the OAuth user token store.
@@ -19,6 +19,7 @@ public interface IOAuthUserTokenStore
     /// <param name="user">The <see cref="ClaimsPrincipal"/>.</param>
     /// <param name="token">The <see cref="OAuthUserToken"/>.</param>
     /// <param name="cancellationToken">Optional <see cref="CancellationToken"/>.</param>
+    /// <returns>An asynchronous task.</returns>
     Task StoreTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,
@@ -31,6 +32,7 @@ public interface IOAuthUserTokenStore
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="user">The <see cref="ClaimsPrincipal"/>.</param>
     /// <param name="cancellationToken">Optional <see cref="CancellationToken"/>.</param>
+    /// <returns>An asynchronous task returning the <see cref="OAuthUserToken"/>.</returns>
     Task<OAuthUserToken> GetTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,
@@ -42,6 +44,7 @@ public interface IOAuthUserTokenStore
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="user">The <see cref="ClaimsPrincipal"/>.</param>
     /// <param name="cancellationToken">Optional <see cref="CancellationToken"/>.</param>
+    /// <returns>An asynchronous task.</returns>
     Task ClearTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 internal static class AuthenticationSchemeExtensions
 {

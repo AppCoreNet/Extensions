@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 internal sealed class OAuthPasswordOptionsValidator
     : OAuthOptionsValidator,

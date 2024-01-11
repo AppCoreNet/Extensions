@@ -7,14 +7,13 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 
 /// <summary>
 /// Provides the base class for <see cref="IOAuthUserTokenStore"/> which stores tokens in the authentication
@@ -30,7 +29,7 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
 
     // per-request cache so that if SignInAsync is used, we won't re-read the old/cached AuthenticateResult from the handler
     // this requires this service to be added as scoped to the DI system
-    private readonly Dictionary<string, AuthenticateResult> _cache = new();
+    private readonly Dictionary<string, AuthenticateResult> _cache = new ();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationSessionOAuthUserTokenStore{TOptions}"/> class.
@@ -61,7 +60,7 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
         return httpContext;
     }
 
-    private async Task<string> GetSignInScheme(HttpContext context, TOptions options)
+    private async Task<string> GetSignInSchemeAsync(HttpContext context, TOptions options)
     {
         string? scheme = string.IsNullOrWhiteSpace(options.SignInScheme)
             ? options.SignInScheme
@@ -92,14 +91,13 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
 
         if (!result.Succeeded)
         {
-            _logger.LogError("Cannot authenticate scheme: {schemeName}", signInScheme);
+            _logger.LogError("Cannot authenticate scheme: {SchemeName}", signInScheme);
             return null;
         }
 
         if (result.Properties == null)
         {
-            _logger.LogError("Authentication result properties are null for scheme: {schemeName}",
-                             signInScheme);
+            _logger.LogError("Authentication result properties are null for scheme: {SchemeName}", signInScheme);
 
             return null;
         }
@@ -128,7 +126,7 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
 
         HttpContext httpContext = GetHttpContext();
         TOptions options = _optionsMonitor.Get(scheme.Name);
-        string signInScheme = await GetSignInScheme(httpContext, options);
+        string signInScheme = await GetSignInSchemeAsync(httpContext, options);
 
         AuthenticateResult? result = await TryAuthenticateAsync(httpContext, signInScheme);
         if (result == null)
@@ -150,10 +148,10 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
     /// <summary>
     /// Stores the token in the authentication session.
     /// </summary>
-    /// <param name="principal"></param>
-    /// <param name="properties"></param>
-    /// <param name="token"></param>
-    /// <param name="options"></param>
+    /// <param name="principal">The <see cref="ClaimsPrincipal"/>.</param>
+    /// <param name="properties">The <see cref="AuthenticationProperties"/>.</param>
+    /// <param name="token">The <see cref="OAuthUserToken"/>.</param>
+    /// <param name="options">The <see cref="OAuthUserOptions"/>.</param>
     protected abstract void StoreToken(
         ClaimsPrincipal principal,
         AuthenticationProperties properties,
@@ -173,7 +171,7 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
 
         HttpContext httpContext = GetHttpContext();
         TOptions options = _optionsMonitor.Get(scheme.Name);
-        string signInScheme = await GetSignInScheme(httpContext, options);
+        string signInScheme = await GetSignInSchemeAsync(httpContext, options);
 
         AuthenticateResult? result = await TryAuthenticateAsync(httpContext, signInScheme);
         if (result == null)
@@ -185,10 +183,10 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
     /// <summary>
     /// Gets the token from the authentication session.
     /// </summary>
-    /// <param name="principal"></param>
-    /// <param name="properties"></param>
-    /// <param name="options"></param>
-    /// <returns></returns>
+    /// <param name="principal">The <see cref="ClaimsPrincipal"/>.</param>
+    /// <param name="properties">The <see cref="AuthenticationProperties"/>.</param>
+    /// <param name="options">The <see cref="OAuthUserOptions"/>.</param>
+    /// <returns>The <see cref="OAuthUserToken"/>.</returns>
     protected abstract OAuthUserToken GetToken(
         ClaimsPrincipal principal,
         AuthenticationProperties properties,

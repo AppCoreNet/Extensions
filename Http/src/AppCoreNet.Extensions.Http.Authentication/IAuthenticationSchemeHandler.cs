@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Extensions.Http.Authentication;
+namespace AppCoreNet.Extensions.Http.Authentication;
 
 /// <summary>
 /// Represents a HTTP client authentication scheme handler.

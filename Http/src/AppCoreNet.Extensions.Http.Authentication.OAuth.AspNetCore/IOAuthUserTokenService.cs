@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 
 /// <summary>
 /// Abstraction for the OAuth user token service.
@@ -19,8 +19,8 @@ public interface IOAuthUserTokenService
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="user">The user.</param>
     /// <param name="parameters">Optional parameters.</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <param name="cancellationToken">Optional cancellation token.</param>
+    /// <returns>A task returning the <see cref="OAuthUserToken"/>.</returns>
     Task<OAuthUserToken> GetAccessTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,
@@ -32,7 +32,8 @@ public interface IOAuthUserTokenService
     /// </summary>
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     /// <param name="user">The user.</param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="cancellationToken">Optional cancellation token.</param>
+    /// <returns>Asynchronous task.</returns>
     Task RevokeRefreshTokenAsync(
         AuthenticationScheme scheme,
         ClaimsPrincipal user,

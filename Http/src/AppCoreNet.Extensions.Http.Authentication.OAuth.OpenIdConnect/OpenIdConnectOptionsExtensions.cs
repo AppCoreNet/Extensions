@@ -8,7 +8,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
 internal static class OpenIdConnectOptionsExtensions
 {
@@ -39,7 +39,7 @@ internal static class OpenIdConnectOptionsExtensions
             TokenEndpoint = new Uri(oidcConfig.TokenEndpoint),
             TokenRevocationEndpoint = tokenRevocationEndpoint != null ? new Uri(tokenRevocationEndpoint) : null,
             ClientId = options.ClientId,
-            ClientSecret = options.ClientSecret
+            ClientSecret = options.ClientSecret,
         };
 
         return result;

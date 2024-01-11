@@ -4,7 +4,7 @@
 using System;
 using AppCoreNet.Diagnostics;
 
-namespace AppCore.Extensions.Http.Authentication;
+namespace AppCoreNet.Extensions.Http.Authentication;
 
 /// <summary>
 /// Represents a registered authentication scheme.

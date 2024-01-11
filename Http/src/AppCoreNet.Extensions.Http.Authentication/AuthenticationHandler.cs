@@ -7,10 +7,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
-
 using Microsoft.Extensions.Logging;
 
-namespace AppCore.Extensions.Http.Authentication;
+namespace AppCoreNet.Extensions.Http.Authentication;
 
 /// <summary>
 /// Provides a <see cref="DelegatingHandler"/> for <see cref="HttpClient"/> which adds client

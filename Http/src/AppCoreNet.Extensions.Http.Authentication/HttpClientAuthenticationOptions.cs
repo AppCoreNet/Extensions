@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AppCore.Extensions.Http.Authentication;
+namespace AppCoreNet.Extensions.Http.Authentication;
 
 /// <summary>
 /// Represents the options for HTTP client authentication.

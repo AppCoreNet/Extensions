@@ -2,7 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Http.Authentication.OAuth;
+using AppCoreNet.Extensions.Http.Authentication.OAuth;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace

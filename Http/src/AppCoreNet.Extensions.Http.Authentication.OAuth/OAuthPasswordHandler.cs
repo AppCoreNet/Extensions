@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Provides a OAuth password authentication handler.

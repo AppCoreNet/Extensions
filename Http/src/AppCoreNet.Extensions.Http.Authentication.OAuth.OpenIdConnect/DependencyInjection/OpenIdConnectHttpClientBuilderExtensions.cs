@@ -2,7 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
+using AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
@@ -18,8 +18,8 @@ public static class OpenIdConnectHttpClientBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientBuilder"/>.</param>
     /// <param name="scheme">The name of the client authentication scheme.</param>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
+    /// <param name="parameters">The <see cref="OpenIdConnectUserParameters"/>.</param>
+    /// <returns>The <see cref="IHttpClientBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientBuilder AddOpenIdConnectAuthentication(
         this IHttpClientBuilder builder,
         string scheme,
@@ -33,8 +33,8 @@ public static class OpenIdConnectHttpClientBuilderExtensions
     /// Adds OpenID connect  authentications with the default scheme.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientBuilder"/>.</param>
-    /// <param name="parameters"></param>
-    /// <returns></returns>
+    /// <param name="parameters">The <see cref="OpenIdConnectUserParameters"/>.</param>
+    /// <returns>The <see cref="IHttpClientBuilder"/> to allow chaining the calls.</returns>
     public static IHttpClientBuilder AddOpenIdConnectAuthentication(
         this IHttpClientBuilder builder,
         OpenIdConnectUserParameters? parameters = null)

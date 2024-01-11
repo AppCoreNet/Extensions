@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AppCore.Extensions.Http.Authentication;
+namespace AppCoreNet.Extensions.Http.Authentication;
 
 /// <summary>
 /// Represents all registered authentication schemes.

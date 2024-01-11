@@ -8,14 +8,14 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
-
 using Microsoft.AspNetCore.Http;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 
 /// <summary>
 /// Provides a base class for a OAuth user authentication handler.
 /// </summary>
+/// <typeparam name="TParameters">The type of the <see cref="OAuthUserParameters"/>.</typeparam>
 public abstract class OAuthUserHandler<TParameters> : IAuthenticationSchemeHandler<TParameters>
     where TParameters : OAuthUserParameters
 {

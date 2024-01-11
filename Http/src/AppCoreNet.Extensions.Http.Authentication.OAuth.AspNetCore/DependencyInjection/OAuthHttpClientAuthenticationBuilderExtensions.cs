@@ -3,7 +3,7 @@
 
 using System;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Http.Authentication.OAuth;
+using AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 // ReSharper disable once CheckNamespace
 namespace AppCoreNet.Extensions.DependencyInjection;
@@ -19,8 +19,8 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
     /// <param name="scheme">The name of the client authentication scheme.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">A delegate to configure the <see cref="OAuthClientFromAuthenticationSchemeBuilder"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining.</returns>
     public static IHttpClientAuthenticationBuilder AddOAuthClientForScheme(
         this IHttpClientAuthenticationBuilder builder,
         string scheme,
@@ -40,8 +40,8 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
     /// authentication scheme.
     /// </summary>
     /// <param name="builder">The <see cref="IHttpClientAuthenticationBuilder"/>.</param>
-    /// <param name="configure"></param>
-    /// <returns></returns>
+    /// <param name="configure">A delegate to configure the <see cref="OAuthClientFromAuthenticationSchemeBuilder"/>.</param>
+    /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining.</returns>
     public static IHttpClientAuthenticationBuilder AddOAuthClientForScheme(
         this IHttpClientAuthenticationBuilder builder,
         Action<IOAuthClientFromAuthenticationSchemeBuilder> configure)

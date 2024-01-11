@@ -3,7 +3,7 @@
 
 using System;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 
 /// <summary>
 /// Represents a user OAuth token.

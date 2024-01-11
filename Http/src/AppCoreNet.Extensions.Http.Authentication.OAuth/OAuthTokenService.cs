@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using AppCoreNet.Diagnostics;
 using IdentityModel.Client;
 using Microsoft.Extensions.Logging;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Service for getting OAuth access tokens.
@@ -39,6 +40,7 @@ public class OAuthTokenService : IOAuthTokenService
         _logger = logger;
     }
 
+    [SuppressMessage("Usage", "VSTHRD011:Use AsyncLazy<T>", Justification = "ConfigureAwait(false) is used")]
     private async Task<OAuthAccessToken> InvokeSynchronizedAsync(AuthenticationScheme scheme, Func<Task<OAuthAccessToken>> tokenFunc)
     {
         try

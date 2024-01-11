@@ -6,10 +6,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
-
 using IdentityModel.Client;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Provides a client for OAuth token endpoints.

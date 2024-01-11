@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using AppCoreNet.Diagnostics;
 
-namespace AppCore.Extensions.Http.Authentication;
+namespace AppCoreNet.Extensions.Http.Authentication;
 
 /// <summary>
 /// Represents the parameters used during authentication.

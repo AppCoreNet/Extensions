@@ -5,7 +5,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 internal sealed class OAuthOptionsResolver<TOptions> : IOAuthOptionsResolver
     where TOptions : OAuthOptions

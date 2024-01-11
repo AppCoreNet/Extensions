@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading;
@@ -14,7 +15,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 
 /// <summary>
 /// Provides the base class for see <see cref="IOAuthUserTokenService"/>.
@@ -64,6 +65,7 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     protected abstract void EnsureCompatibleScheme(AuthenticationScheme scheme);
 
+    [SuppressMessage("Usage", "VSTHRD011:Use AsyncLazy<T>", Justification = "ConfigureAwait(false) is used")]
     private async Task<OAuthUserToken> InvokeSynchronizedAsync(string key, Func<Task<OAuthUserToken>> tokenFunc)
     {
         try

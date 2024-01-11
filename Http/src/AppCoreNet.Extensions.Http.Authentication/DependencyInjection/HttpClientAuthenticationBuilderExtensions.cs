@@ -4,7 +4,7 @@
 using System;
 using System.ComponentModel;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Http.Authentication;
+using AppCoreNet.Extensions.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

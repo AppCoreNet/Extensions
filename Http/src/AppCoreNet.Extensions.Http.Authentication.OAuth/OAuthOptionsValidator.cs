@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 internal abstract class OAuthOptionsValidator
 {

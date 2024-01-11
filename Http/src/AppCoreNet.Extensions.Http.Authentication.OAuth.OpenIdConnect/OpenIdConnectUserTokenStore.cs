@@ -7,14 +7,14 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
-using AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+using AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 
 /// <summary>
 /// Represents the OpenID Connect user token store.
@@ -22,16 +22,15 @@ namespace AppCore.Extensions.Http.Authentication.OAuth.OpenIdConnect;
 public class OpenIdConnectUserTokenStore : AuthenticationSessionOAuthUserTokenStore<OpenIdConnectUserOptions>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="OpenIdConnectUserTokenStore"/>.
+    /// Initializes a new instance of the <see cref="OpenIdConnectUserTokenStore"/> class.
     /// </summary>
-    /// <param name="httpContextAccessor"></param>
-    /// <param name="optionsMonitor"></param>
-    /// <param name="logger"></param>
+    /// <param name="httpContextAccessor">The <see cref="IHttpContextAccessor"/>.</param>
+    /// <param name="optionsMonitor">The <see cref="IOptionsMonitor{TOptions}"/>.</param>
+    /// <param name="logger">The <see cref="ILogger"/>.</param>
     public OpenIdConnectUserTokenStore(
         IHttpContextAccessor httpContextAccessor,
         IOptionsMonitor<OpenIdConnectUserOptions> optionsMonitor,
-        ILogger<OpenIdConnectUserTokenStore> logger
-    )
+        ILogger<OpenIdConnectUserTokenStore> logger)
         : base(httpContextAccessor, optionsMonitor, logger)
     {
     }
@@ -49,16 +48,23 @@ public class OpenIdConnectUserTokenStore : AuthenticationSessionOAuthUserTokenSt
         OAuthUserToken token,
         OpenIdConnectUserOptions options)
     {
-        List<AuthenticationToken> tokens = new(3)
+        List<AuthenticationToken> tokens = new (3)
         {
-            new AuthenticationToken { Name = OpenIdConnectParameterNames.AccessToken, Value = token.AccessToken }
+            new AuthenticationToken
+            {
+                Name = OpenIdConnectParameterNames.AccessToken,
+                Value = token.AccessToken,
+            },
         };
 
         if (!string.IsNullOrWhiteSpace(token.RefreshToken))
         {
             tokens.Add(
                 new AuthenticationToken
-                    { Name = OpenIdConnectParameterNames.RefreshToken, Value = token.RefreshToken });
+                {
+                    Name = OpenIdConnectParameterNames.RefreshToken,
+                    Value = token.RefreshToken,
+                });
         }
 
         if (token.Expires.HasValue)
@@ -67,7 +73,7 @@ public class OpenIdConnectUserTokenStore : AuthenticationSessionOAuthUserTokenSt
                 new AuthenticationToken
                 {
                     Name = "expires_at",
-                    Value = ((DateTimeOffset)token.Expires).ToString("o", CultureInfo.InvariantCulture)
+                    Value = ((DateTimeOffset)token.Expires).ToString("o", CultureInfo.InvariantCulture),
                 });
         }
 
@@ -84,8 +90,10 @@ public class OpenIdConnectUserTokenStore : AuthenticationSessionOAuthUserTokenSt
                                                  .ToArray();
 
         if (tokens.Length == 0)
+        {
             throw new AuthenticationException(
                 "No tokens found in authentication properties. SaveTokens must be enabled.");
+        }
 
         string? GetTokenValue(string tokenName)
         {
@@ -103,8 +111,6 @@ public class OpenIdConnectUserTokenStore : AuthenticationSessionOAuthUserTokenSt
         return new OAuthUserToken(
             accessToken,
             refreshToken,
-            expiresAt != null
-                ? DateTimeOffset.Parse(expiresAt, CultureInfo.InvariantCulture)
-                : null);
+            expiresAt != null ? DateTimeOffset.Parse(expiresAt, CultureInfo.InvariantCulture) : null);
     }
 }

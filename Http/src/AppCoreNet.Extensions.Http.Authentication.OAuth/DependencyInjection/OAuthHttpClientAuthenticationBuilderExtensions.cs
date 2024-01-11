@@ -3,7 +3,7 @@
 
 using System;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Http.Authentication.OAuth;
+using AppCoreNet.Extensions.Http.Authentication.OAuth;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;

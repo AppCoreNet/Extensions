@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,10 @@ using Web.Models;
 
 namespace Web.Controllers;
 
+[SuppressMessage(
+    "IDisposableAnalyzers.Correctness",
+    "IDISP001:Dispose created",
+    Justification = "HttpClient instances are managed by IHttpClientFactory")]
 public class HomeController : Controller
 {
     private readonly IHttpClientFactory _httpClientFactory;
@@ -37,23 +43,23 @@ public class HomeController : Controller
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> CallApiAsClient()
+    public async Task<IActionResult> CallApiAsClientAsync()
     {
         HttpClient client = _httpClientFactory.CreateClient("api-client");
 
         string response = await client.GetStringAsync("test");
-        ViewBag.Json = JsonNode.Parse(response)!.ToString();
+        ViewBag.Json = JsonNode.Parse(response) !.ToString();
 
         return View("CallApi");
     }
 
     [Authorize]
-    public async Task<IActionResult> CallApiAsUser()
+    public async Task<IActionResult> CallApiAsUserAsync()
     {
         HttpClient client = _httpClientFactory.CreateClient("api-user-client");
 
         string response = await client.GetStringAsync("test");
-        ViewBag.Json = JsonNode.Parse(response)!.ToString();
+        ViewBag.Json = JsonNode.Parse(response) !.ToString();
 
         return View("CallApi");
     }

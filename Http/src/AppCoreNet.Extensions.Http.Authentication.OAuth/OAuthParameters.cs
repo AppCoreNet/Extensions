@@ -3,7 +3,7 @@
 
 using IdentityModel.Client;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Represents the parameters used during OAuth authentication.

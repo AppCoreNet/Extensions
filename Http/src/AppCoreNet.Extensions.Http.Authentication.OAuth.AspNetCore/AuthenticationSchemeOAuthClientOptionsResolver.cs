@@ -4,11 +4,10 @@
 using System;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth.AspNetCore;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 
 using IAuthenticationSchemeProvider = Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider;
 
@@ -76,7 +75,6 @@ public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOpti
             {
                 throw new InvalidOperationException(
                     "The authentication scheme handler configured for getting client configuration is not compatible.");
-
             }
 
             result = (T)(object)await GetOptionsFromSchemeAsync(
@@ -91,8 +89,8 @@ public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOpti
     /// <summary>
     /// Gets the name of the authentication scheme.
     /// </summary>
-    /// <param name="options"></param>
-    /// <returns></returns>
+    /// <param name="options">The <see cref="AuthenticationSchemeOptions"/>.</param>
+    /// <returns>The authentication scheme name.</returns>
     protected abstract string? GetSchemeName(TClientOptions options);
 
     /// <summary>
@@ -100,6 +98,6 @@ public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOpti
     /// </summary>
     /// <param name="clientOptions">The <see cref="AuthenticationSchemeOAuthClientOptions"/>.</param>
     /// <param name="options">The <see cref="RemoteAuthenticationOptions"/>.</param>
-    /// <returns></returns>
+    /// <returns>An asynchronous task that returns the <see cref="OAuthClientOptions"/>.</returns>
     protected abstract Task<OAuthClientOptions> GetOptionsFromSchemeAsync(TClientOptions clientOptions, TOptions options);
 }

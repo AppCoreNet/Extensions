@@ -3,7 +3,7 @@
 
 using System.Threading.Tasks;
 
-namespace AppCore.Extensions.Http.Authentication.OAuth;
+namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 /// <summary>
 /// Provides the authentication options for OAuth schemes.

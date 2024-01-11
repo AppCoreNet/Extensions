@@ -6,10 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
-
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Http.Authentication;
+namespace AppCoreNet.Extensions.Http.Authentication;
 
 /// <summary>
 /// Default implementation of <see cref="IAuthenticationSchemeProvider"/>.
