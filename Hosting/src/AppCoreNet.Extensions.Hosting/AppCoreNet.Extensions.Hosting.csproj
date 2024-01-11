@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppCore.Extensions.Hosting.Abstractions\AppCore.Extensions.Hosting.Abstractions.csproj" />
+    <ProjectReference Include="..\AppCoreNet.Extensions.Hosting.Abstractions\AppCoreNet.Extensions.Hosting.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
+    <RootNamespace>AppCoreNet.Extensions.Hosting.Plugins</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AppCoreNet.Extensions.Hosting.Plugins\AppCoreNet.Extensions.Hosting.Plugins.csproj" />
+    <ProjectReference Include="..\AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2\AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.csproj" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\AppCoreNet.Extensions.Hosting.Plugins.TestPlugin\AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+</Project>

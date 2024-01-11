@@ -20,16 +20,16 @@ public static class PluginPaths
 #endif
 
     public const string TestPlugin =
-        "../../../../AppCore.Extensions.Hosting.Plugins.TestPlugin/bin/"
+        "../../../../AppCoreNet.Extensions.Hosting.Plugins.TestPlugin/bin/"
         + BuildConfigPath
         + "/"
         + FrameworkPath
-        + "/AppCore.Extensions.Hosting.Plugins.TestPlugin.dll";
+        + "/AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.dll";
 
     public const string TestPlugin2 =
-        "../../../../AppCore.Extensions.Hosting.Plugins.TestPlugin2/bin/"
+        "../../../../AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2/bin/"
         + BuildConfigPath
         + "/"
         + FrameworkPath
-        + "/AppCore.Extensions.Hosting.Plugins.TestPlugin2.dll";
+        + "/AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.dll";
 }

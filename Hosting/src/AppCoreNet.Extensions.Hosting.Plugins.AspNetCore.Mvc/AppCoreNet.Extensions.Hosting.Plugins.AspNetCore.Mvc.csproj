@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppCore.Extensions.Hosting.Plugins\AppCore.Extensions.Hosting.Plugins.csproj" />
+    <ProjectReference Include="..\AppCoreNet.Extensions.Hosting.Plugins\AppCoreNet.Extensions.Hosting.Plugins.csproj" />
   </ItemGroup>
 
 </Project>

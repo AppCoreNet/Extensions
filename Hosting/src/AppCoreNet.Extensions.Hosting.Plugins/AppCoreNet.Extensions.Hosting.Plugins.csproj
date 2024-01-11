@@ -14,8 +14,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\DependencyInjection\src\AppCoreNet.Extensions.DependencyInjection.AssemblyExtensions\AppCoreNet.Extensions.DependencyInjection.AssemblyExtensions.csproj" />
-    <ProjectReference Include="..\AppCore.Extensions.Hosting.Plugins.Abstractions\AppCore.Extensions.Hosting.Plugins.Abstractions.csproj" />
-    <ProjectReference Include="..\AppCore.Extensions.Hosting\AppCore.Extensions.Hosting.csproj" />
+    <ProjectReference Include="..\AppCoreNet.Extensions.Hosting.Plugins.Abstractions\AppCoreNet.Extensions.Hosting.Plugins.Abstractions.csproj" />
+    <ProjectReference Include="..\AppCoreNet.Extensions.Hosting\AppCoreNet.Extensions.Hosting.csproj" />
   </ItemGroup>
 
 </Project>

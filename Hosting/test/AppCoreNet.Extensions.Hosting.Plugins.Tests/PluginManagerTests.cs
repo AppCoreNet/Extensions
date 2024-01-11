@@ -36,8 +36,8 @@ public class PluginManagerTests
         instances.Select(i => i.Instance.GetType().FullName)
                  .Should()
                  .BeEquivalentTo(
-                     "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask",
-                     "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask");
+                     "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask",
+                     "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask");
     }
 
     [Fact]
@@ -62,10 +62,10 @@ public class PluginManagerTests
         instances.Select(i => i.Instance.GetType().FullName)
                  .Should()
                  .BeEquivalentTo(
-                     "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask",
-                     "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask",
-                     "AppCore.Extensions.Hosting.Plugins.TestPlugin.InternalStartupTask",
-                     "AppCore.Extensions.Hosting.Plugins.TestPlugin2.InternalStartupTask");
+                     "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask",
+                     "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask",
+                     "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.InternalStartupTask",
+                     "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.InternalStartupTask");
     }
 
     [Fact]
@@ -82,12 +82,12 @@ public class PluginManagerTests
                    new[]
                    {
                        new PluginInfo(
-                           "AppCore.Extensions.Hosting.Plugins.TestPlugin",
+                           "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin",
                            "11.10.0",
                            "Plugin1 Description",
                            "Plugin1 Copyright"),
                        new PluginInfo(
-                           "AppCore.Extensions.Hosting.Plugins.TestPlugin2",
+                           "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2",
                            "12.10.0",
                            "Plugin2 Description",
                            "Plugin2 Copyright"),
@@ -142,7 +142,7 @@ public class PluginManagerTests
         var options = new PluginOptions();
         options.Assemblies.Add(PluginPaths.TestPlugin);
         options.Assemblies.Add(PluginPaths.TestPlugin2);
-        options.Disabled.Add("AppCore.Extensions.Hosting.Plugins.TestPlugin2");
+        options.Disabled.Add("AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2");
 
         var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
         manager.LoadPlugins();

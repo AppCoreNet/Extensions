@@ -40,28 +40,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D6508E9B-7A1
 		Hosting\src\Directory.Build.props = Hosting\src\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Abstractions", "Hosting\src\AppCore.Extensions.Hosting.Abstractions\AppCore.Extensions.Hosting.Abstractions.csproj", "{FADEC3EC-C66B-44CA-9B94-4B8E13D6D2C1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting.Abstractions", "Hosting\src\AppCoreNet.Extensions.Hosting.Abstractions\AppCoreNet.Extensions.Hosting.Abstractions.csproj", "{FADEC3EC-C66B-44CA-9B94-4B8E13D6D2C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting", "Hosting\src\AppCore.Extensions.Hosting\AppCore.Extensions.Hosting.csproj", "{B6EC97B5-07BD-45AC-B1E5-A59147945513}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting", "Hosting\src\AppCoreNet.Extensions.Hosting\AppCoreNet.Extensions.Hosting.csproj", "{B6EC97B5-07BD-45AC-B1E5-A59147945513}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins.Abstractions", "Hosting\src\AppCore.Extensions.Hosting.Plugins.Abstractions\AppCore.Extensions.Hosting.Plugins.Abstractions.csproj", "{FD242E13-98CB-4DD5-A6D5-5CBF7B196C6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting.Plugins.Abstractions", "Hosting\src\AppCoreNet.Extensions.Hosting.Plugins.Abstractions\AppCoreNet.Extensions.Hosting.Plugins.Abstractions.csproj", "{FD242E13-98CB-4DD5-A6D5-5CBF7B196C6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins", "Hosting\src\AppCore.Extensions.Hosting.Plugins\AppCore.Extensions.Hosting.Plugins.csproj", "{2D497D27-5465-4C2C-8798-7018D4439A6E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting.Plugins", "Hosting\src\AppCoreNet.Extensions.Hosting.Plugins\AppCoreNet.Extensions.Hosting.Plugins.csproj", "{2D497D27-5465-4C2C-8798-7018D4439A6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc", "Hosting\src\AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc\AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc.csproj", "{FAC58053-1E7A-487C-8256-6784427A61A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting.Plugins.AspNetCore.Mvc", "Hosting\src\AppCoreNet.Extensions.Hosting.Plugins.AspNetCore.Mvc\AppCoreNet.Extensions.Hosting.Plugins.AspNetCore.Mvc.csproj", "{FAC58053-1E7A-487C-8256-6784427A61A4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E2C71AB4-DF09-4961-82EC-916A08650A86}"
 	ProjectSection(SolutionItems) = preProject
 		Hosting\test\Directory.Build.props = Hosting\test\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Tests", "Hosting\test\AppCore.Extensions.Hosting.Tests\AppCore.Extensions.Hosting.Tests.csproj", "{8F032CE3-007E-46BC-B913-1884FA3583FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting.Tests", "Hosting\test\AppCoreNet.Extensions.Hosting.Tests\AppCoreNet.Extensions.Hosting.Tests.csproj", "{8F032CE3-007E-46BC-B913-1884FA3583FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins.Tests", "Hosting\test\AppCore.Extensions.Hosting.Plugins.Tests\AppCore.Extensions.Hosting.Plugins.Tests.csproj", "{0257CC4F-A7A1-46FC-846F-29DFC258D6FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting.Plugins.Tests", "Hosting\test\AppCoreNet.Extensions.Hosting.Plugins.Tests\AppCoreNet.Extensions.Hosting.Plugins.Tests.csproj", "{0257CC4F-A7A1-46FC-846F-29DFC258D6FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins.TestPlugin", "Hosting\test\AppCore.Extensions.Hosting.Plugins.TestPlugin\AppCore.Extensions.Hosting.Plugins.TestPlugin.csproj", "{BE6CCD51-F598-4368-99E3-29E1AA10ACC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin", "Hosting\test\AppCoreNet.Extensions.Hosting.Plugins.TestPlugin\AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.csproj", "{BE6CCD51-F598-4368-99E3-29E1AA10ACC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCore.Extensions.Hosting.Plugins.TestPlugin2", "Hosting\test\AppCore.Extensions.Hosting.Plugins.TestPlugin2\AppCore.Extensions.Hosting.Plugins.TestPlugin2.csproj", "{C74E308B-B96F-473F-AE4B-6117FDBACF4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2", "Hosting\test\AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2\AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.csproj", "{C74E308B-B96F-473F-AE4B-6117FDBACF4E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Http", "Http", "{9416DF99-18D3-4373-A517-00A65E7CC32A}"
 	ProjectSection(SolutionItems) = preProject

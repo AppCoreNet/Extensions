@@ -34,13 +34,13 @@ public class PluginServiceDescriptorResolverTests
         services.Should()
                 .Contain(
                     r =>
-                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask");
+                        r.ServiceType.FullName == "AppCoreNet.Extensions.Hosting.IStartupTask"
+                        && r.ImplementationType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin.PublicStartupTask");
 
         services.Should()
                 .Contain(
                     r =>
-                        r.ServiceType.FullName == "AppCore.Extensions.Hosting.IStartupTask"
-                        && r.ImplementationType.FullName == "AppCore.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask");
+                        r.ServiceType.FullName == "AppCoreNet.Extensions.Hosting.IStartupTask"
+                        && r.ImplementationType.FullName == "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2.PublicStartupTask");
     }
 }
