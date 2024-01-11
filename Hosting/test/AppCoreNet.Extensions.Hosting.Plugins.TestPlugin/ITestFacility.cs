@@ -3,7 +3,7 @@
 
 using AppCoreNet.Extensions.DependencyInjection.Facilities;
 
-namespace AppCore.Extensions.Hosting.Plugins.TestPlugin;
+namespace AppCoreNet.Extensions.Hosting.Plugins.TestPlugin;
 
 public interface ITestFacility : IFacility
 {

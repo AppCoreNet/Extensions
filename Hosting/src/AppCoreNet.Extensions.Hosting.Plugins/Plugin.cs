@@ -8,14 +8,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.DependencyInjection;
 using AppCoreNet.Extensions.DependencyInjection;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
 using McMaster.NETCore.Plugins;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.Hosting.Plugins;
+namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 internal sealed class Plugin : IPlugin
+#if NET6_0_OR_GREATER
+, IServiceProviderIsService
+#endif
 {
     private readonly IActivator _activator;
     private readonly PluginOptions _options;
@@ -70,6 +73,9 @@ internal sealed class Plugin : IPlugin
     {
         Ensure.Arg.NotNull(serviceType);
 
+        if (serviceType == typeof(IServiceProvider) || serviceType == typeof(IServiceProviderIsService))
+            return this;
+
         bool isEnumerable = false;
         if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
         {
@@ -116,6 +122,21 @@ internal sealed class Plugin : IPlugin
         }
 
         return instance;
+    }
+
+    public bool IsService(Type serviceType)
+    {
+        if (serviceType == typeof(IServiceProvider) || serviceType == typeof(IServiceProviderIsService))
+            return true;
+
+        if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            return true;
+
+        var scanner = new AssemblyScanner(serviceType, new[] { Assembly });
+        scanner.IncludePrivateTypes = _options.ResolvePrivateTypes;
+        scanner.Filters.Clear();
+
+        return scanner.ScanAssemblies().Any();
     }
 
     public Assembly LoadAssembly(string fileName)

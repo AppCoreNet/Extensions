@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AppCore.Extensions.Hosting.Plugins;
+namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 /// <summary>
 /// Represents the plugin manager.

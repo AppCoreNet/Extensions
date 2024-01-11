@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
-    <InformationalVersion>12.10.0</InformationalVersion>
     <Description>Plugin2 Description</Description>
     <Copyright>Plugin2 Copyright</Copyright>
     <IsTestProject>false</IsTestProject>

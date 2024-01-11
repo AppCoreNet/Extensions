@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Extensions.Hosting.Plugins.TestPlugin2;
+namespace AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2;
 
 internal class InternalStartupTask : IStartupTask
 {

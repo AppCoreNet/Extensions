@@ -4,13 +4,12 @@
 using System.Collections.Generic;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Hosting.Plugins;
-using AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc;
+using AppCoreNet.Extensions.Hosting.Plugins;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to register plugins with MVC.

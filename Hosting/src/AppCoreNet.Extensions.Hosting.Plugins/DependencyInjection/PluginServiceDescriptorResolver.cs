@@ -5,13 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Hosting.Plugins;
-using AppCoreNet.Extensions.DependencyInjection;
+using AppCoreNet.Extensions.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning plugin assemblies.

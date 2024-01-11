@@ -4,13 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Hosting.Plugins;
-using AppCoreNet.Extensions.DependencyInjection.Facilities;
+using AppCoreNet.Extensions.Hosting.Plugins;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection.Facilities;
+namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 
 /// <summary>
 /// Builds an <see cref="IEnumerable{T}"/> of <see cref="IFacility"/> by scanning plugin assemblies.

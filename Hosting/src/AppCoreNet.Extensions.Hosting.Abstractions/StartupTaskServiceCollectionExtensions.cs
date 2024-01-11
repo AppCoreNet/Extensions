@@ -3,13 +3,12 @@
 
 using System;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Hosting;
-using AppCoreNet.Extensions.DependencyInjection;
+using AppCoreNet.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extensions methods to register startup tasks with a <see cref="IServiceCollection"/>.

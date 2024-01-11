@@ -4,7 +4,7 @@
 using System.Reflection;
 using AppCoreNet.Diagnostics;
 
-namespace AppCore.Extensions.Hosting.Plugins;
+namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 internal sealed class AssemblyInfo
 {

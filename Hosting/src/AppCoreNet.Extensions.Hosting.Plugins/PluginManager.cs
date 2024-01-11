@@ -13,7 +13,7 @@ using McMaster.NETCore.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace AppCore.Extensions.Hosting.Plugins;
+namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 /// <summary>
 /// Provides default implementation of the <see cref="IPluginManager"/> interface.

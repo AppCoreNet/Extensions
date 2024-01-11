@@ -2,13 +2,12 @@
 // Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
-using AppCore.Extensions.DependencyInjection;
 using AppCoreNet.Extensions.DependencyInjection;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace AppCore.Extensions.Hosting.Plugins;
+namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 public class PluginServiceDescriptorResolverTests
 {

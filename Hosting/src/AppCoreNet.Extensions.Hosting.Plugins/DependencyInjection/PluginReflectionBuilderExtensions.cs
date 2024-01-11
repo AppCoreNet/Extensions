@@ -3,12 +3,10 @@
 
 using System;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.DependencyInjection.Facilities;
-using AppCoreNet.Extensions.DependencyInjection;
 using AppCoreNet.Extensions.DependencyInjection.Facilities;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to register services and facilities from plugins.

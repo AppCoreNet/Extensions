@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
 using FluentAssertions;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using Xunit;
 
-namespace AppCore.Extensions.Hosting.Plugins;
+namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 public class PluginManagerTests
 {
@@ -71,6 +72,11 @@ public class PluginManagerTests
     [Fact]
     public void GetAllPlugins()
     {
+        string version = typeof(PluginManagerTests)
+                         .Assembly
+                         .GetCustomAttribute<AssemblyInformationalVersionAttribute>() !
+                         .InformationalVersion;
+
         var options = new PluginOptions();
         options.Assemblies.Add(PluginPaths.TestPlugin);
         options.Assemblies.Add(PluginPaths.TestPlugin2);
@@ -83,12 +89,12 @@ public class PluginManagerTests
                    {
                        new PluginInfo(
                            "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin",
-                           "11.10.0",
+                           version,
                            "Plugin1 Description",
                            "Plugin1 Copyright"),
                        new PluginInfo(
                            "AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2",
-                           "12.10.0",
+                           version,
                            "Plugin2 Description",
                            "Plugin2 Copyright"),
                    });

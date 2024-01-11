@@ -7,11 +7,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AppCore.Extensions.Hosting;
 using AppCoreNet.Diagnostics;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace AppCore.Extensions.Hosting;
+namespace AppCoreNet.Extensions.Hosting;
 
 /// <summary>
 /// Provides an implementation of <see cref="IHostedService"/> which runs startup tasks.

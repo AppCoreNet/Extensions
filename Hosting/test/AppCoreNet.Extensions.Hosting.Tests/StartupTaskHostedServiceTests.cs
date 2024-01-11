@@ -9,7 +9,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
 
-namespace AppCore.Extensions.Hosting;
+namespace AppCoreNet.Extensions.Hosting;
 
 public class StartupTaskHostedServiceTests
 {

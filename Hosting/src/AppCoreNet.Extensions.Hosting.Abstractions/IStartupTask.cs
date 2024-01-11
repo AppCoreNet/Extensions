@@ -4,7 +4,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AppCore.Extensions.Hosting;
+namespace AppCoreNet.Extensions.Hosting;
 
 /// <summary>
 /// Represents a task that is executed during application startup.
@@ -21,5 +21,5 @@ public interface IStartupTask
     /// </summary>
     /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
     /// <returns>A task that represents the asynchronous event operation.</returns>
-    Task ExecuteAsync(CancellationToken cancellationToken);
+    Task ExecuteAsync(CancellationToken cancellationToken = default);
 }

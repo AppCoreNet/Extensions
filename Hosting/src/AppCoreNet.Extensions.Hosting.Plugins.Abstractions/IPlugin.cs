@@ -4,7 +4,7 @@
 using System;
 using System.Reflection;
 
-namespace AppCore.Extensions.Hosting.Plugins;
+namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 /// <summary>
 /// Represents a plugin.

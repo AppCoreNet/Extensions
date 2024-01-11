@@ -7,9 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppCore.Extensions.Hosting.Plugins.AspNetCore.Mvc;
+// ReSharper disable once CheckNamespace
+namespace AppCoreNet.Extensions.DependencyInjection;
 
-internal sealed class ServiceCollectionServiceProvider : IServiceProvider
+internal sealed class ServiceCollectionServiceProvider : IServiceProvider, IServiceProviderIsService
 {
     private readonly IServiceCollection _services;
     private readonly Dictionary<Type, object> _additionalServices = new ();
@@ -55,7 +56,7 @@ internal sealed class ServiceCollectionServiceProvider : IServiceProvider
 
     public object? GetService(Type serviceType)
     {
-        if (serviceType == typeof(IServiceProvider))
+        if (serviceType == typeof(IServiceProvider) || serviceType == typeof(IServiceProviderIsService))
             return this;
 
         if (_additionalServices.TryGetValue(serviceType, out object? instance))
@@ -64,7 +65,7 @@ internal sealed class ServiceCollectionServiceProvider : IServiceProvider
         if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
         {
             serviceType = serviceType.GenericTypeArguments[0];
-            var instances = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType)) !;
+            var instances = (IList)System.Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType)) !;
             foreach (object service in GetServices(serviceType))
             {
                 instances.Add(service);
@@ -78,5 +79,22 @@ internal sealed class ServiceCollectionServiceProvider : IServiceProvider
         }
 
         return instance;
+    }
+
+    public bool IsService(Type serviceType)
+    {
+        if (serviceType == typeof(IServiceProvider) || serviceType == typeof(IServiceProviderIsService))
+            return true;
+
+        if (_additionalServices.TryGetValue(serviceType, out object? _))
+            return true;
+
+        if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            return true;
+
+        return _services.Any(
+            sd => sd.ServiceType == serviceType
+                  || (serviceType.IsGenericType
+                      && sd.ServiceType == serviceType.GetGenericTypeDefinition()));
     }
 }

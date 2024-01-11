@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AppCore.Extensions.Hosting.Plugins;
+namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 /// <summary>
 /// Represents a collection of plugin services.

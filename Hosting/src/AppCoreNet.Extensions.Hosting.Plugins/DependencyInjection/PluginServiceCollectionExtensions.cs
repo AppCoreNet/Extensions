@@ -3,14 +3,14 @@
 
 using System;
 using AppCoreNet.Diagnostics;
-using AppCore.Extensions.Hosting.Plugins;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
+using AppCoreNet.Extensions.Hosting.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extension methods to register plugins.

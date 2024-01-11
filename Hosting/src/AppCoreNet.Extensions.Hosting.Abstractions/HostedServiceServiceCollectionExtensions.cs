@@ -2,12 +2,11 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
-using AppCoreNet.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.DependencyInjection;
+namespace AppCoreNet.Extensions.DependencyInjection;
 
 /// <summary>
 /// Provides extensions methods to register hosted services with a <see cref="IServiceCollection"/>.

@@ -3,6 +3,7 @@
 
 using System;
 using AppCoreNet;
+using AppCoreNet.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace
