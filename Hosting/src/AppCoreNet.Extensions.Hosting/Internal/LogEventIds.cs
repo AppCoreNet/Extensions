@@ -4,7 +4,7 @@
 using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace
-namespace AppCore.Extensions.Hosting;
+namespace AppCoreNet.Extensions.Hosting;
 
 internal class LogEventIds
 {

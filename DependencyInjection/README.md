@@ -6,11 +6,11 @@ the `IServiceCollection` by reflection.
 
 ## Packages
 
-| Package                                                            | Description                                                                           |
-|--------------------------------------------------------------------|---------------------------------------------------------------------------------------|
-| `AppCore.Extensions.DependencyInjection.Abstractions`              | Provides the abstractions for registering services via reflection.                    |
-| `AppCore.Extensions.DependencyInjection.AssemblyExtensions`        | Adds support for registering services by scanning assemblies.                         |
-| `AppCore.Extensions.DependencyInjection.DependencyModelExtensions` | Adds support for registering services by scanning assemblies of a `DependencyContext` |
+| Package                                                               | Description                                                                           |
+|-----------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| `AppCoreNet.Extensions.DependencyInjection.Abstractions`              | Provides the abstractions for registering services via reflection.                    |
+| `AppCoreNet.Extensions.DependencyInjection.AssemblyExtensions`        | Adds support for registering services by scanning assemblies.                         |
+| `AppCoreNet.Extensions.DependencyInjection.DependencyModelExtensions` | Adds support for registering services by scanning assemblies of a `DependencyContext` |
 
 ## Usage
 

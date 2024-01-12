@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
     <Description>
-      Adds support to AppCore.Extensins.Http.Authenticaton.OAuth for deriving token client configuration
+      Adds support to AppCoreNet.Extensins.Http.Authenticaton.OAuth for deriving token client configuration
       from ASP.NET Core authentication schemes.
     </Description>
     <PackageTags>$(PackageTags);Security;Authentication;OAuth;OAuth2;OAuth 2.0;IdentityModel;ASP.NET Core</PackageTags>

@@ -11,9 +11,9 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 public class OAuthTokenCacheOptions
 {
     /// <summary>
-    /// Gets or sets the cache key prefix. Defaults to 'AppCore.Http.OAuthToken'.
+    /// Gets or sets the cache key prefix. Defaults to 'AppCoreNet.Http.OAuthToken'.
     /// </summary>
-    public string CacheKeyPrefix { get; set; } = "AppCore.Http.OAuthToken";
+    public string CacheKeyPrefix { get; set; } = "AppCoreNet.Http.OAuthToken";
 
     /// <summary>
     /// Gets or sets the value to subtract from token lifetime for the cache entry lifetime (defaults to 3 seconds).
