@@ -17,9 +17,11 @@ public sealed class DefaultActivator : IActivator
     public static DefaultActivator Instance { get; } = new ();
 
     /// <inheritdoc />
-    public object CreateInstance(Type instanceType, params object[] parameters)
+    public object? CreateInstance(Type instanceType, params object[] parameters)
     {
         Ensure.Arg.NotNull(instanceType);
-        return System.Activator.CreateInstance(instanceType, parameters ?? Array.Empty<object>());
+        Ensure.Arg.NotNull(parameters);
+
+        return System.Activator.CreateInstance(instanceType, parameters);
     }
 }

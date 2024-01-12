@@ -16,6 +16,6 @@ public interface IActivator
     /// <param name="instanceType">The type to activate.</param>
     /// <param name="parameters">Constructor arguments not provided by the <see cref="IServiceProvider"/>.</param>
     /// <returns>An activated object of type <paramref name="instanceType"/>.</returns>
-    /// <exception cref="ArgumentNullException">Argument <paramref name="instanceType"/> is null.</exception>
-    object CreateInstance(Type instanceType, params object[] parameters);
+    /// <exception cref="ArgumentNullException">Argument <paramref name="instanceType"/> or <paramref name="parameters"/> is null.</exception>
+    object? CreateInstance(Type instanceType, params object[] parameters);
 }

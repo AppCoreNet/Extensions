@@ -45,7 +45,7 @@ internal sealed class ServiceDescriptorReflectionBuilder : IServiceDescriptorRef
     public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T>? configure = null)
         where T : IServiceDescriptorResolver
     {
-        var source = _activator.CreateInstance<T>();
+        var source = _activator.CreateInstance<T>() !;
         configure?.Invoke(source);
         return AddResolver(source);
     }

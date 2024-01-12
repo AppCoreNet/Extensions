@@ -9,10 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCoreNet.Extensions.DependencyInjection;
 
-internal sealed class ServiceCollectionServiceProvider : IServiceProvider
-#if NET6_0_OR_GREATER
-, IServiceProviderIsService
-#endif
+/// <summary>
+/// Internal service provider which resolves services from an <see cref="IServiceCollection"/>.
+/// </summary>
+internal sealed partial class ServiceCollectionServiceProvider : IServiceProvider
 {
     private readonly IServiceCollection _services;
     private readonly Dictionary<Type, object> _additionalServices = new ();
@@ -81,22 +81,5 @@ internal sealed class ServiceCollectionServiceProvider : IServiceProvider
         }
 
         return instance;
-    }
-
-    public bool IsService(Type serviceType)
-    {
-        if (serviceType == typeof(IServiceProvider) || serviceType == typeof(IServiceProviderIsService))
-            return true;
-
-        if (_additionalServices.TryGetValue(serviceType, out object? _))
-            return true;
-
-        if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-            return true;
-
-        return _services.Any(
-            sd => sd.ServiceType == serviceType
-                  || (serviceType.IsGenericType
-                      && sd.ServiceType == serviceType.GetGenericTypeDefinition()));
     }
 }

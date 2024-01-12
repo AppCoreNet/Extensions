@@ -34,7 +34,7 @@ public static class FacilityServiceCollectionExtensions
         var serviceProvider = new ServiceCollectionServiceProvider(services);
         var activator = serviceProvider.GetRequiredService<IActivator>();
 
-        var facility = activator.CreateInstance<T>();
+        var facility = activator.CreateInstance<T>() !;
         if (configure != null)
         {
             var builder = new FacilityBuilder<T>(services, activator);
@@ -68,7 +68,7 @@ public static class FacilityServiceCollectionExtensions
         var serviceProvider = new ServiceCollectionServiceProvider(services);
         var activator = serviceProvider.GetRequiredService<IActivator>();
 
-        var facility = (IFacility)activator.CreateInstance(facilityType);
+        var facility = (IFacility)activator.CreateInstance(facilityType) !;
         if (configure != null)
         {
             var builder = new FacilityBuilder(services, activator, facilityType);

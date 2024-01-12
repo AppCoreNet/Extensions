@@ -26,7 +26,7 @@ public class ServiceProviderActivator : IActivator
     }
 
     /// <inheritdoc />
-    public object CreateInstance(Type instanceType, params object[] parameters)
+    public object? CreateInstance(Type instanceType, params object[] parameters)
     {
         return ActivatorUtilities.CreateInstance(_serviceProvider, instanceType, parameters);
     }

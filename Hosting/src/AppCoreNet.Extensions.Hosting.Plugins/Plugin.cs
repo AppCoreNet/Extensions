@@ -15,10 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCoreNet.Extensions.Hosting.Plugins;
 
-internal sealed class Plugin : IPlugin
-#if NET6_0_OR_GREATER
-, IServiceProviderIsService
-#endif
+internal sealed class Plugin : IPlugin, IServiceProviderIsService
 {
     private readonly IActivator _activator;
     private readonly PluginOptions _options;
@@ -95,7 +92,7 @@ internal sealed class Plugin : IPlugin
             {
                 try
                 {
-                    result.Add(_activator.CreateInstance(type));
+                    result.Add(_activator.CreateInstance(type) !);
                 }
                 catch (Exception error)
                 {

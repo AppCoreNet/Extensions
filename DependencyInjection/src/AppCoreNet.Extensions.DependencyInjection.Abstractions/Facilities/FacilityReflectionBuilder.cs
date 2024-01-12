@@ -31,7 +31,7 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
     public IFacilityReflectionBuilder AddResolver<T>(Action<T>? configure = null)
         where T : IFacilityResolver
     {
-        var resolver = _activator.CreateInstance<T>();
+        var resolver = _activator.CreateInstance<T>() !;
         configure?.Invoke(resolver);
         return AddResolver(resolver);
     }

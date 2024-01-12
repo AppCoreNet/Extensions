@@ -117,7 +117,7 @@ public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
             scanner.Filters.Add(filter);
 
         return scanner.ScanAssemblies()
-                      .Select(facilityType => (IFacility)_activator.CreateInstance(facilityType));
+                      .Select(facilityType => (IFacility)_activator.CreateInstance(facilityType) !);
     }
 
     private IFacilityExtension<IFacility> CreateExtension(Type extensionType)

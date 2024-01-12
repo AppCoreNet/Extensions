@@ -43,9 +43,9 @@ public class FacilityBuilder
                                          .GenericTypeArguments[0];
 
         Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
-        object extension = Activator.CreateInstance(extensionType);
+        object extension = Activator.CreateInstance(extensionType) !;
 
-        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension);
+        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension) !;
     }
 
     /// <summary>
@@ -128,7 +128,7 @@ public sealed class FacilityBuilder<T> : FacilityBuilder
     public FacilityBuilder<T> AddExtension<TExtension>()
         where TExtension : class, IFacilityExtension<T>
     {
-        IFacilityExtension<T> extension = Activator.CreateInstance<TExtension>();
+        IFacilityExtension<T> extension = Activator.CreateInstance<TExtension>() !;
         extension.ConfigureServices(Services);
         return this;
     }
