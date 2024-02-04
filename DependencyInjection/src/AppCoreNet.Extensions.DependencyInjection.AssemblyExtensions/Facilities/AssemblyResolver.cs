@@ -127,9 +127,9 @@ public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
                                          .GenericTypeArguments[0];
 
         Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
-        object extension = _activator.CreateInstance(extensionType);
+        object extension = _activator.CreateInstance(extensionType) !;
 
-        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension);
+        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension) !;
     }
 
     /// <inheritdoc />
