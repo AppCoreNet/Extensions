@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Linq;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.Http.Authentication.OAuth;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,10 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// </summary>
 public static class OAuthHttpClientAuthenticationBuilderExtensions
 {
+    internal sealed class OAuthCoreServiceGuard
+    {
+    }
+
     /// <summary>
     /// Adds OAuth client authentication services.
     /// </summary>
@@ -27,13 +32,18 @@ public static class OAuthHttpClientAuthenticationBuilderExtensions
 
         IServiceCollection services = builder.Services;
 
+        if (builder.Services.Any(sd => sd.ServiceType == typeof(OAuthCoreServiceGuard)))
+            return builder;
+
+        services.AddTransient<OAuthCoreServiceGuard>();
+
         services.AddDistributedMemoryCache();
 
         services.AddOptions<OAuthTokenCacheOptions>();
-        services.TryAddSingleton<IOAuthTokenCache, OAuthTokenCache>();
-        services.TryAddSingleton<IOAuthTokenService, OAuthTokenService>();
+        services.AddSingleton<IOAuthTokenCache, OAuthTokenCache>();
+        services.AddSingleton<IOAuthTokenService, OAuthTokenService>();
 
-        services.TryAddTransient<IOAuthOptionsProvider, OAuthOptionsProvider>();
+        services.AddTransient<IOAuthOptionsProvider, OAuthOptionsProvider>();
         services.AddHttpClient<IOAuthTokenClient, OAuthTokenClient>();
 
         return builder;
