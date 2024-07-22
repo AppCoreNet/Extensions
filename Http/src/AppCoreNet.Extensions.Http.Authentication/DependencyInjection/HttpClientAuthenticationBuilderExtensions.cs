@@ -7,6 +7,7 @@ using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
 namespace AppCoreNet.Extensions.DependencyInjection;
@@ -52,6 +53,14 @@ public static class HttpClientAuthenticationBuilderExtensions
         {
             services.Configure(name, configure);
         }
+
+        services.TryAddEnumerable(
+            new[]
+            {
+                ServiceDescriptor.Singleton<IPostConfigureOptions<TOptions>>(
+                    sp => new PostConfigureAuthenticationSchemeOptions<TOptions>(
+                        sp.GetRequiredService<TimeProvider>())),
+            });
 
         return builder;
     }

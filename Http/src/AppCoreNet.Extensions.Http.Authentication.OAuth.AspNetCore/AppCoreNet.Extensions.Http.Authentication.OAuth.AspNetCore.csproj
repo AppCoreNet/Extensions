@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Bcl.TimeProvider" Condition="'$(TargetFramework)'=='net6.0'" Version="8.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AppCoreNet.Extensions.Http.Authentication.OAuth\AppCoreNet.Extensions.Http.Authentication.OAuth.csproj" />
   </ItemGroup>
 

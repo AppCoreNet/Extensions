@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
 using IdentityModel;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -27,7 +26,6 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
     private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthUserToken>>> _sync = new ();
     private readonly IOAuthTokenClient _client;
     private readonly IOAuthUserTokenStore _store;
-    private readonly TimeProvider _timeProvider;
     private readonly IOptionsMonitor<TOptions> _optionsMonitor;
     private readonly ILogger _logger;
 
@@ -36,25 +34,21 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
     /// </summary>
     /// <param name="client">The <see cref="IOAuthTokenClient"/>.</param>
     /// <param name="store">The <see cref="IOAuthUserTokenStore"/>.</param>
-    /// <param name="timeProvider">The <see cref="TimeProvider"/>.</param>
     /// <param name="optionsMonitor">The <see cref="IOptionsMonitor{TOptions}"/>. </param>
     /// <param name="logger">The <see cref="ILogger"/>.</param>
     protected OAuthUserTokenService(
         IOAuthTokenClient client,
         IOAuthUserTokenStore store,
-        TimeProvider timeProvider,
         IOptionsMonitor<TOptions> optionsMonitor,
         ILogger logger)
     {
         Ensure.Arg.NotNull(client);
         Ensure.Arg.NotNull(store);
-        Ensure.Arg.NotNull(timeProvider);
         Ensure.Arg.NotNull(optionsMonitor);
         Ensure.Arg.NotNull(logger);
 
         _client = client;
         _store = store;
-        _timeProvider = timeProvider;
         _optionsMonitor = optionsMonitor;
         _logger = logger;
     }
@@ -94,10 +88,11 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
         EnsureCompatibleScheme(scheme);
 
         TOptions options = _optionsMonitor.Get(scheme.Name);
+        TimeProvider timeProvider = options.TimeProvider ?? TimeProvider.System;
         OAuthUserToken token = await _store.GetTokenAsync(scheme, user, cancellationToken);
 
         DateTimeOffset? refreshAt = token.Expires?.Subtract(options.RefreshBeforeExpiration);
-        if ((refreshAt.HasValue && refreshAt < _timeProvider.GetUtcNow())
+        if ((refreshAt.HasValue && refreshAt < timeProvider.GetUtcNow())
             || (parameters?.ForceRenewal).GetValueOrDefault())
         {
             if (!options.AllowTokenRefresh)
@@ -144,10 +139,13 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
                 $"Error refreshing access token for client scheme '{scheme.Name}': {response.Error}");
         }
 
+        TOptions options = _optionsMonitor.Get(scheme.Name);
+        TimeProvider timeProvider = options.TimeProvider ?? TimeProvider.System;
+
         OAuthUserToken refreshedToken = new (
             response.AccessToken,
             response.RefreshToken,
-            response.ExpiresIn > 0 ? _timeProvider.GetUtcNow() + TimeSpan.FromSeconds(response.ExpiresIn) : null);
+            response.ExpiresIn > 0 ? timeProvider.GetUtcNow() + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 
         _logger.LogDebug(
             "Refreshed access token for client scheme {SchemeName}. Expiration: {Expiration}",

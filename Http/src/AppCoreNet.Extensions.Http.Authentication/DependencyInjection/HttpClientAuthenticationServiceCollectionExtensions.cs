@@ -1,6 +1,7 @@
 ﻿// Licensed under the MIT license.
 // Copyright (c) The AppCore .NET project.
 
+using System;
 using AppCoreNet.Extensions.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -20,7 +21,9 @@ public static class HttpClientAuthenticationServiceCollectionExtensions
     /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to configure the authentication.</returns>
     public static IHttpClientAuthenticationBuilder AddHttpClientAuthentication(this IServiceCollection services)
     {
+        services.TryAddSingleton(TimeProvider.System);
         services.TryAddSingleton<IAuthenticationSchemeProvider, AuthenticationSchemeProvider>();
+
         return new HttpClientAuthenticationBuilder(services);
     }
 }
