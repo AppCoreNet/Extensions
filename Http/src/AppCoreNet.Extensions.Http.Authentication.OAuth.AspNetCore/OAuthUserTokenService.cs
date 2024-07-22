@@ -27,7 +27,7 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
     private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthUserToken>>> _sync = new ();
     private readonly IOAuthTokenClient _client;
     private readonly IOAuthUserTokenStore _store;
-    private readonly ISystemClock _clock;
+    private readonly TimeProvider _timeProvider;
     private readonly IOptionsMonitor<TOptions> _optionsMonitor;
     private readonly ILogger _logger;
 
@@ -36,25 +36,25 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
     /// </summary>
     /// <param name="client">The <see cref="IOAuthTokenClient"/>.</param>
     /// <param name="store">The <see cref="IOAuthUserTokenStore"/>.</param>
-    /// <param name="clock">The <see cref="ISystemClock"/>.</param>
+    /// <param name="timeProvider">The <see cref="TimeProvider"/>.</param>
     /// <param name="optionsMonitor">The <see cref="IOptionsMonitor{TOptions}"/>. </param>
     /// <param name="logger">The <see cref="ILogger"/>.</param>
     protected OAuthUserTokenService(
         IOAuthTokenClient client,
         IOAuthUserTokenStore store,
-        ISystemClock clock,
+        TimeProvider timeProvider,
         IOptionsMonitor<TOptions> optionsMonitor,
         ILogger logger)
     {
         Ensure.Arg.NotNull(client);
         Ensure.Arg.NotNull(store);
-        Ensure.Arg.NotNull(clock);
+        Ensure.Arg.NotNull(timeProvider);
         Ensure.Arg.NotNull(optionsMonitor);
         Ensure.Arg.NotNull(logger);
 
         _client = client;
         _store = store;
-        _clock = clock;
+        _timeProvider = timeProvider;
         _optionsMonitor = optionsMonitor;
         _logger = logger;
     }
@@ -97,7 +97,7 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
         OAuthUserToken token = await _store.GetTokenAsync(scheme, user, cancellationToken);
 
         DateTimeOffset? refreshAt = token.Expires?.Subtract(options.RefreshBeforeExpiration);
-        if ((refreshAt.HasValue && refreshAt < _clock.UtcNow)
+        if ((refreshAt.HasValue && refreshAt < _timeProvider.GetUtcNow())
             || (parameters?.ForceRenewal).GetValueOrDefault())
         {
             if (!options.AllowTokenRefresh)
@@ -147,7 +147,7 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
         OAuthUserToken refreshedToken = new (
             response.AccessToken,
             response.RefreshToken,
-            response.ExpiresIn > 0 ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn) : null);
+            response.ExpiresIn > 0 ? _timeProvider.GetUtcNow() + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 
         _logger.LogDebug(
             "Refreshed access token for client scheme {SchemeName}. Expiration: {Expiration}",

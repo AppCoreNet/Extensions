@@ -78,6 +78,7 @@ public static class OpenIdConnectHttpClientAuthenticationBuilderExtensions
 
         services.TryAdd(new[]
         {
+            ServiceDescriptor.Singleton(TimeProvider.System),
             ServiceDescriptor.Scoped<OpenIdConnectUserTokenService, OpenIdConnectUserTokenService>(),
             ServiceDescriptor.Scoped<OpenIdConnectUserTokenStore, OpenIdConnectUserTokenStore>(),
         });

@@ -1,8 +1,8 @@
 ﻿// Licensed under the MIT license.
 // Copyright (c) The AppCore .NET project.
 
+using System;
 using AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -18,16 +18,16 @@ public class OpenIdConnectUserTokenService : OAuthUserTokenService<OpenIdConnect
     /// </summary>
     /// <param name="client">The <see cref="IOAuthTokenClient"/>.</param>
     /// <param name="store">The <see cref="OpenIdConnectUserTokenStore"/>.</param>
-    /// <param name="clock">The <see cref="ISystemClock"/>.</param>
+    /// <param name="timeProvider">The <see cref="TimeProvider"/>.</param>
     /// <param name="optionsMonitor">The <see cref="IOptionsMonitor{TOptions}"/>.</param>
     /// <param name="logger">The <see cref="ILogger"/>.</param>
     public OpenIdConnectUserTokenService(
         IOAuthTokenClient client,
         OpenIdConnectUserTokenStore store,
-        ISystemClock clock,
+        TimeProvider timeProvider,
         IOptionsMonitor<OpenIdConnectUserOptions> optionsMonitor,
         ILogger<OpenIdConnectUserTokenService> logger)
-        : base(client, store, clock, optionsMonitor, logger)
+        : base(client, store, timeProvider, optionsMonitor, logger)
     {
     }
 
