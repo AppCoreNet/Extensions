@@ -22,6 +22,7 @@ public class PluginManagerTests
         var pluginOptions = new PluginOptions
         {
             Assemblies = { PluginPaths.TestPlugin, PluginPaths.TestPlugin2 },
+            Enabled = { { "*", true } },
         };
 
         var manager = new PluginManager(new DefaultActivator(), Options.Create(pluginOptions));
@@ -48,6 +49,7 @@ public class PluginManagerTests
         {
             ResolvePrivateTypes = true,
             Assemblies = { PluginPaths.TestPlugin, PluginPaths.TestPlugin2 },
+            Enabled = { { "*", true } },
         };
 
         var manager = new PluginManager(new DefaultActivator(), Options.Create(pluginOptions));
@@ -80,6 +82,7 @@ public class PluginManagerTests
         var options = new PluginOptions();
         options.Assemblies.Add(PluginPaths.TestPlugin);
         options.Assemblies.Add(PluginPaths.TestPlugin2);
+        options.Enabled["*"] = true;
 
         var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
         manager.Plugins.Select(p => p.Info)
@@ -107,6 +110,7 @@ public class PluginManagerTests
         options.Assemblies.Add(PluginPaths.TestPlugin);
         options.Assemblies.Add(PluginPaths.TestPlugin2);
         options.Assemblies.Add("ThisPluginDoesNotExist.dll");
+        options.Enabled["*"] = true;
 
         var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
         manager.LoadPlugins();
@@ -143,11 +147,13 @@ public class PluginManagerTests
     }
 
     [Fact]
+    [Obsolete]
     public void LoadDoesNotLoadDisabled()
     {
         var options = new PluginOptions();
         options.Assemblies.Add(PluginPaths.TestPlugin);
         options.Assemblies.Add(PluginPaths.TestPlugin2);
+        options.Enabled["*"] = true;
         options.Disabled.Add("AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2");
 
         var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
@@ -155,5 +161,67 @@ public class PluginManagerTests
 
         manager.Plugins.Should()
                .HaveCount(1);
+    }
+
+    [Fact]
+    public void LoadsOnlyExplicitlyEnabled()
+    {
+        var options = new PluginOptions();
+        options.Assemblies.Add(PluginPaths.TestPlugin);
+        options.Assemblies.Add(PluginPaths.TestPlugin2);
+        options.Enabled["*"] = false;
+        options.Enabled["AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2"] = true;
+
+        var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
+        manager.LoadPlugins();
+
+        manager.Plugins.Should()
+               .HaveCount(1);
+    }
+
+    [Fact]
+    public void DoesNotLoadExplicitlyDisabled()
+    {
+        var options = new PluginOptions();
+        options.Assemblies.Add(PluginPaths.TestPlugin);
+        options.Assemblies.Add(PluginPaths.TestPlugin2);
+        options.Enabled["*"] = true;
+        options.Enabled["AppCoreNet.Extensions.Hosting.Plugins.TestPlugin2"] = false;
+
+        var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
+        manager.LoadPlugins();
+
+        manager.Plugins.Should()
+               .HaveCount(1);
+    }
+
+    [Fact]
+    public void LoadsAllPlugins()
+    {
+        var options = new PluginOptions();
+        options.Assemblies.Add(PluginPaths.TestPlugin);
+        options.Assemblies.Add(PluginPaths.TestPlugin2);
+        options.Enabled["*"] = true;
+
+        var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
+        manager.LoadPlugins();
+
+        manager.Plugins.Should()
+               .HaveCount(2);
+    }
+
+    [Fact]
+    public void LoadsNoPlugins()
+    {
+        var options = new PluginOptions();
+        options.Assemblies.Add(PluginPaths.TestPlugin);
+        options.Assemblies.Add(PluginPaths.TestPlugin2);
+        options.Enabled["*"] = false;
+
+        var manager = new PluginManager(new DefaultActivator(), Options.Create(options));
+        manager.LoadPlugins();
+
+        manager.Plugins.Should()
+               .HaveCount(0);
     }
 }

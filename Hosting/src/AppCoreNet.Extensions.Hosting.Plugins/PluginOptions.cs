@@ -41,10 +41,19 @@ public class PluginOptions
     public IList<string> Assemblies { get; } = new List<string>();
 
     /// <summary>
-    /// Gets the list of disabled plugins.
+    /// Gets the dictionary of disabled plugins.
     /// </summary>
     /// <remarks>
     /// Entries must have the name of the plugin assembly (excluding the path and extension).
     /// </remarks>
+    [Obsolete]
     public IList<string> Disabled { get; } = new List<string>();
+
+    /// <summary>
+    /// Gets the dictionary of enabled plugins.
+    /// </summary>
+    /// <remarks>
+    /// Entries must have the name of the plugin assembly (excluding the path and extension).
+    /// </remarks>
+    public IDictionary<string, bool> Enabled { get; } = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
 }

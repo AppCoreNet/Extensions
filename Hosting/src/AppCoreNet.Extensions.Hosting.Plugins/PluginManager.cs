@@ -146,6 +146,21 @@ public class PluginManager : IPluginManager
 
     private IEnumerable<(string assemblyName, PluginLoader loader)> GetPluginLoaders(HashSet<string> loadedPlugins)
     {
+        _options.Enabled.TryGetValue("*", out bool allPluginsEnabled);
+
+        bool IsPluginEnabled(string pluginName)
+        {
+#pragma warning disable CS0612 // Type or member is obsolete
+            if (_options.Disabled.Contains(pluginName, StringComparer.OrdinalIgnoreCase))
+#pragma warning restore CS0612 // Type or member is obsolete
+                return false;
+
+            if (!_options.Enabled.TryGetValue(pluginName, out bool enabled))
+                enabled = allPluginsEnabled;
+
+            return enabled;
+        }
+
         PluginLoader? GetPluginLoader(string assemblyPath)
         {
             if (!File.Exists(assemblyPath))
@@ -155,7 +170,8 @@ public class PluginManager : IPluginManager
             }
 
             string pluginName = Path.GetFileNameWithoutExtension(assemblyPath);
-            if (_options.Disabled.Contains(pluginName, StringComparer.OrdinalIgnoreCase))
+
+            if (!IsPluginEnabled(pluginName))
                 return null;
 
             return PluginLoader.CreateFromAssemblyFile(assemblyPath, ConfigurePlugin);
