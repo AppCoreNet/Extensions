@@ -26,7 +26,6 @@ public class PluginServiceDescriptorResolverTests
                     {
                         o.Assemblies.Add(PluginPaths.TestPlugin);
                         o.Assemblies.Add(PluginPaths.TestPlugin2);
-                        o.Enabled["*"] = true;
                     });
 
         services.TryAddEnumerableFrom<IStartupTask>(s => s.Plugins());

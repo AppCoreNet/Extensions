@@ -155,6 +155,10 @@ public class PluginManager : IPluginManager
 #pragma warning restore CS0612 // Type or member is obsolete
                 return false;
 
+            // if there is no explicit config, all plugins are enabled
+            if (_options.Enabled.Count == 0)
+                return true;
+
             if (!_options.Enabled.TryGetValue(pluginName, out bool enabled))
                 enabled = allPluginsEnabled;
 
