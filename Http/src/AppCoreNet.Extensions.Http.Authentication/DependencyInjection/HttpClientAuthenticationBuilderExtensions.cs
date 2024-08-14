@@ -57,9 +57,10 @@ public static class HttpClientAuthenticationBuilderExtensions
         services.TryAddEnumerable(
             new[]
             {
-                ServiceDescriptor.Singleton<IPostConfigureOptions<TOptions>>(
-                    sp => new PostConfigureAuthenticationSchemeOptions<TOptions>(
-                        sp.GetRequiredService<TimeProvider>())),
+                ServiceDescriptor
+                    .Singleton<IPostConfigureOptions<TOptions>, PostConfigureAuthenticationSchemeOptions<TOptions>>(
+                        sp => new PostConfigureAuthenticationSchemeOptions<TOptions>(
+                            sp.GetRequiredService<TimeProvider>())),
             });
 
         return builder;
