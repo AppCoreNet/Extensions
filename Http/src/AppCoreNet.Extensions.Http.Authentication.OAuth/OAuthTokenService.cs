@@ -101,7 +101,7 @@ public class OAuthTokenService : IOAuthTokenService
                     }
 
                     OAuthAccessToken token = new (
-                        response.AccessToken,
+                        response.AccessToken!,
                         response.ExpiresIn > 0 ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 
                     _logger.LogDebug(
@@ -162,7 +162,7 @@ public class OAuthTokenService : IOAuthTokenService
                     }
 
                     OAuthAccessToken token = new (
-                        response.AccessToken,
+                        response.AccessToken!,
                         response.ExpiresIn > 0 ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 
                     _logger.LogDebug(

@@ -143,7 +143,7 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
         TimeProvider timeProvider = options.TimeProvider ?? TimeProvider.System;
 
         OAuthUserToken refreshedToken = new (
-            response.AccessToken,
+            response.AccessToken!,
             response.RefreshToken,
             response.ExpiresIn > 0 ? timeProvider.GetUtcNow() + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 

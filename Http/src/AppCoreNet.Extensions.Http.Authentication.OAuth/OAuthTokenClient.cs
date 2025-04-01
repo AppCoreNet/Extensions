@@ -45,12 +45,12 @@ public class OAuthTokenClient : IOAuthTokenClient
         using var request = new ClientCredentialsTokenRequest
         {
             RequestUri = options.TokenEndpoint,
-            ClientId = options.ClientId,
+            ClientId = options.ClientId!,
             ClientSecret = options.ClientSecret,
             ClientCredentialStyle = options.ClientCredentialStyle,
             Scope = options.Scope,
             Resource = new List<string>(options.Resource),
-            Parameters = parameters?.Context,
+            Parameters = parameters?.Context ?? new Parameters(),
         };
 
         if (parameters != null && !string.IsNullOrWhiteSpace(parameters.Resource))
@@ -73,14 +73,14 @@ public class OAuthTokenClient : IOAuthTokenClient
         using var request = new PasswordTokenRequest
         {
             RequestUri = options.TokenEndpoint,
-            ClientId = options.ClientId,
+            ClientId = options.ClientId!,
             ClientSecret = options.ClientSecret,
             ClientCredentialStyle = options.ClientCredentialStyle,
-            UserName = options.Username,
+            UserName = options.Username!,
             Password = options.Password,
             Scope = options.Scope,
             Resource = new List<string>(options.Resource),
-            Parameters = parameters?.Context,
+            Parameters = parameters?.Context ?? new Parameters(),
         };
 
         if (parameters != null && !string.IsNullOrWhiteSpace(parameters.Resource))
@@ -106,7 +106,7 @@ public class OAuthTokenClient : IOAuthTokenClient
         using var request = new RefreshTokenRequest
         {
             RequestUri = options.TokenEndpoint,
-            ClientId = options.ClientId,
+            ClientId = options.ClientId!,
             ClientSecret = options.ClientSecret,
             ClientCredentialStyle = options.ClientCredentialStyle,
             RefreshToken = refreshToken,
@@ -133,7 +133,7 @@ public class OAuthTokenClient : IOAuthTokenClient
         using var request = new TokenRevocationRequest
         {
             RequestUri = options.TokenEndpoint,
-            ClientId = options.ClientId,
+            ClientId = options.ClientId!,
             ClientSecret = options.ClientSecret,
             ClientCredentialStyle = options.ClientCredentialStyle,
             Token = token,
