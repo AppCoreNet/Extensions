@@ -12,7 +12,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Internal service provider which resolves services from an <see cref="IServiceCollection"/>.
 /// </summary>
-internal sealed partial class ServiceCollectionServiceProvider : IServiceProvider
+internal sealed partial class ServiceCollectionServiceProvider : IServiceProvider, IServiceProviderIsService
 {
     private readonly IServiceCollection _services;
     private readonly Dictionary<Type, object> _additionalServices = new();
@@ -25,6 +25,23 @@ internal sealed partial class ServiceCollectionServiceProvider : IServiceProvide
     public void AddService(Type serviceType, object instance)
     {
         _additionalServices.Add(serviceType, instance);
+    }
+
+    public bool IsService(Type serviceType)
+    {
+        if (serviceType == typeof(IServiceProvider) || serviceType == typeof(IServiceProviderIsService))
+            return true;
+
+        if (_additionalServices.TryGetValue(serviceType, out object? _))
+            return true;
+
+        if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            return true;
+
+        return _services.Any(
+            sd => sd.ServiceType == serviceType
+                  || (serviceType.IsGenericType
+                      && sd.ServiceType == serviceType.GetGenericTypeDefinition()));
     }
 
     private IEnumerable<object> GetServices(Type serviceType)

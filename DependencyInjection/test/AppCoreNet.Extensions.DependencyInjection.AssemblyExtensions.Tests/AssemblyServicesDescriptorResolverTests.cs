@@ -35,15 +35,11 @@ public class AssemblyServicesDescriptorResolverTests
                         contractType,
                         typeof(ContractImpl2),
                         ServiceLifetime.Transient),
-#if !NET8_0_OR_GREATER
-                });
-#else
                 },
                 o =>
                     o.Excluding(sd => sd.KeyedImplementationFactory)
                      .Excluding(sd => sd.KeyedImplementationType)
                      .Excluding(sd => sd.KeyedImplementationInstance));
-#endif
     }
 
     [Fact]
@@ -81,15 +77,11 @@ public class AssemblyServicesDescriptorResolverTests
                         closedContractType,
                         typeof(ContractImpl2String),
                         ServiceLifetime.Transient),
-#if !NET8_0_OR_GREATER
-                });
-#else
                 },
                 o =>
                     o.Excluding(sd => sd.KeyedImplementationFactory)
                      .Excluding(sd => sd.KeyedImplementationType)
                      .Excluding(sd => sd.KeyedImplementationInstance));
-#endif
     }
 
     [Fact]
