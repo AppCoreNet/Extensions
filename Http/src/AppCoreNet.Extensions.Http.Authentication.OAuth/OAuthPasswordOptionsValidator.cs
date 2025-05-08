@@ -10,7 +10,7 @@ internal sealed class OAuthPasswordOptionsValidator
     : OAuthOptionsValidator,
       IValidateOptions<OAuthPasswordOptions>
 {
-    public ValidateOptionsResult Validate(string name, OAuthPasswordOptions options)
+    public ValidateOptionsResult Validate(string? name, OAuthPasswordOptions options)
     {
         List<string> errors = base.Validate(name, options);
 

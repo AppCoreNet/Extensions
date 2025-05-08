@@ -17,7 +17,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// </summary>
 public class PluginServiceDescriptorResolver : IServiceDescriptorResolver
 {
-    private readonly List<Predicate<Type>> _filters = new ();
+    private readonly List<Predicate<Type>> _filters = new();
     private readonly IPluginManager _pluginManager;
     private readonly IOptions<PluginOptions> _pluginOptions;
 

@@ -14,7 +14,7 @@ public sealed class DefaultActivator : IActivator
     /// <summary>
     /// Gets the static instance of the <see cref="DefaultActivator"/>.
     /// </summary>
-    public static DefaultActivator Instance { get; } = new ();
+    public static DefaultActivator Instance { get; } = new();
 
     /// <inheritdoc />
     public object? CreateInstance(Type instanceType, params object[] parameters)

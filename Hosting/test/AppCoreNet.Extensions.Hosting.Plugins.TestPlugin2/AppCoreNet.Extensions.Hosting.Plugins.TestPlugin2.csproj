@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <Description>Plugin2 Description</Description>
     <Copyright>Plugin2 Copyright</Copyright>
     <IsTestProject>false</IsTestProject>

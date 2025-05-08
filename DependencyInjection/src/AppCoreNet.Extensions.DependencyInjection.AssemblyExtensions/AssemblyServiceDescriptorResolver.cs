@@ -14,8 +14,8 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// </summary>
 public class AssemblyServiceDescriptorResolver : IServiceDescriptorResolver
 {
-    private readonly List<Assembly> _assemblies = new ();
-    private readonly List<Predicate<Type>> _filters = new ();
+    private readonly List<Assembly> _assemblies = new();
+    private readonly List<Predicate<Type>> _filters = new();
     private bool _clearFilters;
     private bool _withPrivateTypes;
 

@@ -13,7 +13,7 @@ internal sealed class PostConfigureAuthenticationSchemeOptions<TOptions> : IPost
         _timeProvider = timeProvider;
     }
 
-    public void PostConfigure(string name, TOptions options)
+    public void PostConfigure(string? name, TOptions options)
     {
         options.TimeProvider ??= _timeProvider;
     }

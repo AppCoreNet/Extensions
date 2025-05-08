@@ -74,7 +74,7 @@ public class PluginManagerTests
     {
         string version = typeof(PluginManagerTests)
                          .Assembly
-                         .GetCustomAttribute<AssemblyInformationalVersionAttribute>() !
+                         .GetCustomAttribute<AssemblyInformationalVersionAttribute>()!
                          .InformationalVersion;
 
         var options = new PluginOptions();
@@ -137,7 +137,7 @@ public class PluginManagerTests
         instances.Select(
                      i =>
                          i.Instance.GetType()
-                          .GetProperty("Lifetime") !
+                          .GetProperty("Lifetime")!
                           .GetValue(i.Instance))
                  .Should()
                  .AllBeEquivalentTo(lifetime);

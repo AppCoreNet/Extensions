@@ -5,10 +5,10 @@ namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 public static class PluginPaths
 {
-#if NET8_0
+#if NET9_0
+    private const string FrameworkPath = "net9.0";
+#elif NET8_0
     private const string FrameworkPath = "net8.0";
-#elif NET6_0
-    private const string FrameworkPath = "net6.0";
 #else
     #error Unhandled target framework.
 #endif

@@ -38,7 +38,8 @@ public class AssemblyServicesDescriptorResolverTests
 #if !NET8_0_OR_GREATER
                 });
 #else
-                }, o =>
+                },
+                o =>
                     o.Excluding(sd => sd.KeyedImplementationFactory)
                      .Excluding(sd => sd.KeyedImplementationType)
                      .Excluding(sd => sd.KeyedImplementationInstance));
@@ -83,7 +84,8 @@ public class AssemblyServicesDescriptorResolverTests
 #if !NET8_0_OR_GREATER
                 });
 #else
-                }, o =>
+                },
+                o =>
                     o.Excluding(sd => sd.KeyedImplementationFactory)
                      .Excluding(sd => sd.KeyedImplementationType)
                      .Excluding(sd => sd.KeyedImplementationInstance));

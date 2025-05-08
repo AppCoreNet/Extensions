@@ -15,7 +15,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 internal sealed partial class ServiceCollectionServiceProvider : IServiceProvider
 {
     private readonly IServiceCollection _services;
-    private readonly Dictionary<Type, object> _additionalServices = new ();
+    private readonly Dictionary<Type, object> _additionalServices = new();
 
     public ServiceCollectionServiceProvider(IServiceCollection services)
     {
@@ -67,7 +67,7 @@ internal sealed partial class ServiceCollectionServiceProvider : IServiceProvide
         if (serviceType.IsGenericType && serviceType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
         {
             serviceType = serviceType.GenericTypeArguments[0];
-            var instances = (IList)System.Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType)) !;
+            var instances = (IList)System.Activator.CreateInstance(typeof(List<>).MakeGenericType(serviceType))!;
             foreach (object service in GetServices(serviceType))
             {
                 instances.Add(service);

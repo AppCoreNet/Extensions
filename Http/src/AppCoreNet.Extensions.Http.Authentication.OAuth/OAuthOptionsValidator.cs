@@ -7,9 +7,9 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
 internal abstract class OAuthOptionsValidator
 {
-    protected List<string> Validate(string name, OAuthOptions options)
+    protected List<string> Validate(string? name, OAuthOptions options)
     {
-        List<string> errors = new ();
+        List<string> errors = new();
 
         if (options.TokenEndpoint == null)
         {

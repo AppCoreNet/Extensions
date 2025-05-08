@@ -34,7 +34,7 @@ public static class FacilityServiceCollectionExtensions
         var serviceProvider = new ServiceCollectionServiceProvider(services);
         var activator = serviceProvider.GetRequiredService<IActivator>();
 
-        var facility = activator.CreateInstance<T>() !;
+        var facility = activator.CreateInstance<T>()!;
         if (configure != null)
         {
             var builder = new FacilityBuilder<T>(services, activator);
@@ -68,7 +68,7 @@ public static class FacilityServiceCollectionExtensions
         var serviceProvider = new ServiceCollectionServiceProvider(services);
         var activator = serviceProvider.GetRequiredService<IActivator>();
 
-        var facility = (IFacility)activator.CreateInstance(facilityType) !;
+        var facility = (IFacility)activator.CreateInstance(facilityType)!;
         if (configure != null)
         {
             var builder = new FacilityBuilder(services, activator, facilityType);
@@ -100,13 +100,12 @@ public static class FacilityServiceCollectionExtensions
 
         configure(builder);
 
-        foreach ((IFacility facility,
-                     IReadOnlyCollection<IFacilityExtension<IFacility>> facilityExtensions) in builder
+        foreach ((IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>> FacilityExtensions) item in builder
                      .Resolve())
         {
-            facility.ConfigureServices(services);
+            item.Facility.ConfigureServices(services);
 
-            foreach (IFacilityExtension<IFacility> facilityExtension in facilityExtensions)
+            foreach (IFacilityExtension<IFacility> facilityExtension in item.FacilityExtensions)
             {
                 facilityExtension.ConfigureServices(services);
             }

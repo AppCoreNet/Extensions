@@ -29,7 +29,7 @@ public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAut
 
     // per-request cache so that if SignInAsync is used, we won't re-read the old/cached AuthenticateResult from the handler
     // this requires this service to be added as scoped to the DI system
-    private readonly Dictionary<string, AuthenticateResult> _cache = new ();
+    private readonly Dictionary<string, AuthenticateResult> _cache = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationSessionOAuthUserTokenStore{TOptions}"/> class.

@@ -10,11 +10,11 @@ namespace AppCoreNet.Extensions.Hosting.Plugins;
 
 internal sealed class PluginServiceCollection
 {
-    private static readonly ConcurrentDictionary<Type, Type> _typeCache = new ();
+    private static readonly ConcurrentDictionary<Type, Type> _typeCache = new();
 
     private class InternalCollection<T> : IInternalPluginServiceCollection<T>
     {
-        private readonly List<IPluginService<T>> _instances = new ();
+        private readonly List<IPluginService<T>> _instances = new();
 
         public void Add(IPlugin plugin, object instance)
         {
@@ -34,7 +34,7 @@ internal sealed class PluginServiceCollection
 
     public static IInternalPluginServiceCollection<object> Create(Type serviceType)
     {
-        Type type = _typeCache.GetOrAdd(serviceType, t => typeof(InternalCollection<>).MakeGenericType(serviceType));
-        return (IInternalPluginServiceCollection<object>)Activator.CreateInstance(type) !;
+        Type type = _typeCache.GetOrAdd(serviceType, static t => typeof(InternalCollection<>).MakeGenericType(t));
+        return (IInternalPluginServiceCollection<object>)Activator.CreateInstance(type)!;
     }
 }

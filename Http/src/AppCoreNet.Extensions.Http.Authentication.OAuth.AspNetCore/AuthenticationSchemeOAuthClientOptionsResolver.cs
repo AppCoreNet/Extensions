@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
+using IAspNetCoreAuthenticationSchemeProvider = Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider;
 
 namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
-
-using IAuthenticationSchemeProvider = Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider;
 
 /// <summary>
 /// Provides the base class for resolving OAuth client authentication options from ASP.NET Core authentication schemes.
@@ -22,18 +21,18 @@ public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOpti
     where TOptions : RemoteAuthenticationOptions
     where THandler : IAuthenticationHandler
 {
-    private readonly IAuthenticationSchemeProvider _authenticationSchemeProvider;
+    private readonly IAspNetCoreAuthenticationSchemeProvider _authenticationSchemeProvider;
     private readonly IOptionsMonitor<TClientOptions> _clientOptions;
     private readonly IOptionsMonitor<TOptions> _authenticationSchemeOptions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationSchemeOAuthClientOptionsResolver{TClientOptions,TOptions,THandler}"/> class.
     /// </summary>
-    /// <param name="authenticationSchemeProvider">The <see cref="IAuthenticationSchemeProvider"/>.</param>
+    /// <param name="authenticationSchemeProvider">The <see cref="IAspNetCoreAuthenticationSchemeProvider"/>.</param>
     /// <param name="authenticationSchemeOptions">The authentication scheme options.</param>
     /// <param name="clientOptions">The client authentication scheme options.</param>
     protected AuthenticationSchemeOAuthClientOptionsResolver(
-        IAuthenticationSchemeProvider authenticationSchemeProvider,
+        IAspNetCoreAuthenticationSchemeProvider authenticationSchemeProvider,
         IOptionsMonitor<TOptions> authenticationSchemeOptions,
         IOptionsMonitor<TClientOptions> clientOptions)
     {

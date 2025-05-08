@@ -48,7 +48,7 @@ public class OpenIdConnectUserTokenStore : AuthenticationSessionOAuthUserTokenSt
         OAuthUserToken token,
         OpenIdConnectUserOptions options)
     {
-        List<AuthenticationToken> tokens = new (3)
+        List<AuthenticationToken> tokens = new(3)
         {
             new AuthenticationToken
             {

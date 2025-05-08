@@ -12,7 +12,7 @@ namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 internal sealed class FacilityExtensionReflectionBuilder : IFacilityExtensionReflectionBuilder
 {
     private readonly IActivator _activator;
-    private readonly List<IFacilityExtensionResolver> _resolvers = new ();
+    private readonly List<IFacilityExtensionResolver> _resolvers = new();
 
     public FacilityExtensionReflectionBuilder(IActivator activator)
     {
@@ -29,7 +29,7 @@ internal sealed class FacilityExtensionReflectionBuilder : IFacilityExtensionRef
     public IFacilityExtensionReflectionBuilder AddResolver<T>(Action<T>? configure = null)
         where T : IFacilityExtensionResolver
     {
-        var resolver = _activator.CreateInstance<T>() !;
+        var resolver = _activator.CreateInstance<T>()!;
         configure?.Invoke(resolver);
         return AddResolver(resolver);
     }

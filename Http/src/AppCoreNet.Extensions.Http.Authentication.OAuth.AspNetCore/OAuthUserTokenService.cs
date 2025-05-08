@@ -23,7 +23,7 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
     where TOptions : OAuthUserOptions
 {
-    private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthUserToken>>> _sync = new ();
+    private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthUserToken>>> _sync = new();
     private readonly IOAuthTokenClient _client;
     private readonly IOAuthUserTokenStore _store;
     private readonly IOptionsMonitor<TOptions> _optionsMonitor;
@@ -142,7 +142,7 @@ public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
         TOptions options = _optionsMonitor.Get(scheme.Name);
         TimeProvider timeProvider = options.TimeProvider ?? TimeProvider.System;
 
-        OAuthUserToken refreshedToken = new (
+        OAuthUserToken refreshedToken = new(
             response.AccessToken!,
             response.RefreshToken,
             response.ExpiresIn > 0 ? timeProvider.GetUtcNow() + TimeSpan.FromSeconds(response.ExpiresIn) : null);

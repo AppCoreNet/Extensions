@@ -18,7 +18,7 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 /// </summary>
 public class OAuthTokenService : IOAuthTokenService
 {
-    private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthAccessToken>>> _sync = new ();
+    private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthAccessToken>>> _sync = new();
     private readonly IOAuthTokenClient _client;
     private readonly IOAuthTokenCache _cache;
     private readonly ILogger<OAuthTokenService> _logger;
@@ -100,7 +100,7 @@ public class OAuthTokenService : IOAuthTokenService
                             $"Error requesting access token for client scheme '{scheme.Name}': {response.Error}");
                     }
 
-                    OAuthAccessToken token = new (
+                    OAuthAccessToken token = new(
                         response.AccessToken!,
                         response.ExpiresIn > 0 ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 
@@ -161,7 +161,7 @@ public class OAuthTokenService : IOAuthTokenService
                             $"Error requesting access token for password scheme '{scheme.Name}'");
                     }
 
-                    OAuthAccessToken token = new (
+                    OAuthAccessToken token = new(
                         response.AccessToken!,
                         response.ExpiresIn > 0 ? DateTimeOffset.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn) : null);
 

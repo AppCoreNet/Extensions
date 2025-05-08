@@ -15,8 +15,8 @@ namespace AppCoreNet.Extensions.Http.Authentication;
 /// </summary>
 public class AuthenticationSchemeProvider : IAuthenticationSchemeProvider, IDisposable
 {
-    private readonly IDisposable _optionsListener;
-    private readonly Dictionary<string, AuthenticationScheme> _schemes = new (StringComparer.Ordinal);
+    private readonly IDisposable? _optionsListener;
+    private readonly Dictionary<string, AuthenticationScheme> _schemes = new(StringComparer.Ordinal);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationSchemeProvider"/> class.
@@ -74,7 +74,7 @@ public class AuthenticationSchemeProvider : IAuthenticationSchemeProvider, IDisp
     {
         if (disposing)
         {
-            _optionsListener.Dispose();
+            _optionsListener?.Dispose();
         }
     }
 

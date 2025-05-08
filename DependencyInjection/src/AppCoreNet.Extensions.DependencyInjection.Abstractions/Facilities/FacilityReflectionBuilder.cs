@@ -13,7 +13,7 @@ namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
 {
     private readonly IActivator _activator;
-    private readonly List<IFacilityResolver> _resolvers = new ();
+    private readonly List<IFacilityResolver> _resolvers = new();
     private Action<IFacilityExtensionReflectionBuilder>? _extensionsConfig;
 
     public FacilityReflectionBuilder(IActivator activator)
@@ -31,7 +31,7 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
     public IFacilityReflectionBuilder AddResolver<T>(Action<T>? configure = null)
         where T : IFacilityResolver
     {
-        var resolver = _activator.CreateInstance<T>() !;
+        var resolver = _activator.CreateInstance<T>()!;
         configure?.Invoke(resolver);
         return AddResolver(resolver);
     }
@@ -43,7 +43,8 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
         return this;
     }
 
-    public IReadOnlyCollection<(IFacility, IReadOnlyCollection<IFacilityExtension<IFacility>>)> Resolve()
+    public IReadOnlyCollection<(IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>>
+        FacilityExtensions)> Resolve()
     {
         List<IFacility> facilities =
             _resolvers.SelectMany(s => s.Resolve())
@@ -60,7 +61,8 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
         ReadOnlyCollection<IFacilityExtension<IFacility>> emptyFacilityExtensions =
             new List<IFacilityExtension<IFacility>>().AsReadOnly();
 
-        List<(IFacility, IReadOnlyCollection<IFacilityExtension<IFacility>>)> result = new ();
+        List<(IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>> FacilityExtensions)> result =
+            new();
 
         foreach (IFacility facility in facilities)
         {
@@ -68,7 +70,7 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
                 extensionReflectionBuilder?.Resolve(facility.GetType())
                 ?? emptyFacilityExtensions;
 
-            result.Add((facility, facilityExtensions));
+            result.Add((Facility: facility, FacilityExtensions: facilityExtensions));
         }
 
         return result;

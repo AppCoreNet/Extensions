@@ -16,8 +16,8 @@ namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
 {
     private readonly IActivator _activator;
-    private readonly List<Assembly> _assemblies = new ();
-    private readonly List<Predicate<Type>> _filters = new ();
+    private readonly List<Assembly> _assemblies = new();
+    private readonly List<Predicate<Type>> _filters = new();
     private bool _clearFilters;
     private bool _withPrivateTypes;
 
@@ -117,7 +117,7 @@ public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
             scanner.Filters.Add(filter);
 
         return scanner.ScanAssemblies()
-                      .Select(facilityType => (IFacility)_activator.CreateInstance(facilityType) !);
+                      .Select(facilityType => (IFacility)_activator.CreateInstance(facilityType)!);
     }
 
     private IFacilityExtension<IFacility> CreateExtension(Type extensionType)
@@ -127,9 +127,9 @@ public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
                                          .GenericTypeArguments[0];
 
         Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
-        object extension = _activator.CreateInstance(extensionType) !;
+        object extension = _activator.CreateInstance(extensionType)!;
 
-        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension) !;
+        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension)!;
     }
 
     /// <inheritdoc />

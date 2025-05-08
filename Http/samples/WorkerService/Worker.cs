@@ -24,8 +24,8 @@ public class Worker : BackgroundService
         {
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-            HttpClient client = _factory.CreateClient("api-client");
-            HttpResponseMessage response = await client.GetAsync("test", stoppingToken);
+            using HttpClient client = _factory.CreateClient("api-client");
+            using HttpResponseMessage response = await client.GetAsync("test", stoppingToken);
 
             if (response.IsSuccessStatusCode)
             {

@@ -48,7 +48,7 @@ public class PluginFacilityResolver : IFacilityResolver, IFacilityExtensionResol
 
         return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(
             extensionWrapperType,
-            pluginService.Instance) !;
+            pluginService.Instance)!;
     }
 
     /// <inheritdoc />

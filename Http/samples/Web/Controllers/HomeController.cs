@@ -48,7 +48,7 @@ public class HomeController : Controller
         HttpClient client = _httpClientFactory.CreateClient("api-client");
 
         string response = await client.GetStringAsync("test");
-        ViewBag.Json = JsonNode.Parse(response) !.ToString();
+        ViewBag.Json = JsonNode.Parse(response)!.ToString();
 
         return View("CallApi");
     }
@@ -59,7 +59,7 @@ public class HomeController : Controller
         HttpClient client = _httpClientFactory.CreateClient("api-user-client");
 
         string response = await client.GetStringAsync("test");
-        ViewBag.Json = JsonNode.Parse(response) !.ToString();
+        ViewBag.Json = JsonNode.Parse(response)!.ToString();
 
         return View("CallApi");
     }

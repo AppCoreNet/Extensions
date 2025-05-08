@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using AppCoreNet.Diagnostics;
@@ -23,7 +24,7 @@ public class PluginManager : IPluginManager
     private readonly IActivator _activator;
     private readonly PluginOptions _options;
     private readonly Lazy<IReadOnlyCollection<IPlugin>> _plugins;
-    private static readonly ConcurrentDictionary<Type, Type> _pluginServiceTypeCache = new ();
+    private static readonly ConcurrentDictionary<Type, Type> _pluginServiceTypeCache = new();
 
     internal PluginOptions Options => _options;
 
@@ -109,7 +110,7 @@ public class PluginManager : IPluginManager
             object? service = plugin.GetService(serviceType);
             if (service != null)
             {
-                result = (IPluginService<object>)Activator.CreateInstance(pluginServiceType, plugin, service) !;
+                result = (IPluginService<object>)Activator.CreateInstance(pluginServiceType, plugin, service)!;
             }
         }
 
@@ -124,27 +125,28 @@ public class PluginManager : IPluginManager
 
     private List<Plugin> LoadPluginsCore(HashSet<string> loadedPlugins)
     {
-        List<Plugin> result = new ();
+        List<Plugin> result = new();
 
-        IEnumerable<(string assemblyName, PluginLoader loader)> plugins = GetPluginLoaders(loadedPlugins);
+        IEnumerable<(string AssemblyName, PluginLoader Loader)> plugins = GetPluginLoaders(loadedPlugins);
 
-        foreach ((string assemblyName, PluginLoader loader) plugin in plugins)
+        foreach ((string AssemblyName, PluginLoader Loader) plugin in plugins)
         {
             try
             {
-                Debug.WriteLine($"Loading plugin assembly '{plugin.assemblyName}'");
-                result.Add(new Plugin(plugin.loader, _activator, _options));
+                Debug.WriteLine($"Loading plugin assembly '{plugin.AssemblyName}'");
+                result.Add(new Plugin(plugin.Loader, _activator, _options));
             }
             catch (Exception error)
             {
-                Console.Error.WriteLine($"Error loading plugin assembly '{plugin.assemblyName}': {error.Message}");
+                Console.Error.WriteLine($"Error loading plugin assembly '{plugin.AssemblyName}': {error.Message}");
             }
         }
 
         return result;
     }
 
-    private IEnumerable<(string assemblyName, PluginLoader loader)> GetPluginLoaders(HashSet<string> loadedPlugins)
+    [SuppressMessage("IDisposableAnalyzers.Correctness", "IDISP001:Dispose created", Justification = "Caller is responsible to dispose the loaders.")]
+    private IEnumerable<(string AssemblyName, PluginLoader Loader)> GetPluginLoaders(HashSet<string> loadedPlugins)
     {
         _options.Enabled.TryGetValue("*", out bool allPluginsEnabled);
 
@@ -194,7 +196,7 @@ public class PluginManager : IPluginManager
 
             PluginLoader? loader = GetPluginLoader(pluginDll);
             if (loader != null)
-                yield return (pluginDll, loader);
+                yield return (AssemblyName: pluginDll, Loader: loader);
         }
 
         // find and load plugins in directories
@@ -218,7 +220,7 @@ public class PluginManager : IPluginManager
 
                 PluginLoader? loader = GetPluginLoader(pluginDll);
                 if (loader != null)
-                    yield return (pluginDll, loader);
+                    yield return (AssemblyName: pluginDll, Loader: loader);
             }
         }
     }

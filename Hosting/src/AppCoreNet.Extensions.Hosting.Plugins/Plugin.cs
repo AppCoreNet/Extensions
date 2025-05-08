@@ -22,9 +22,9 @@ internal sealed class Plugin : IPlugin, IServiceProviderIsService
 
     private static readonly MethodInfo _enumerableOfTypeMethod = typeof(Enumerable).GetMethod(
         nameof(Enumerable.OfType),
-        BindingFlags.Public | BindingFlags.Static) !;
+        BindingFlags.Public | BindingFlags.Static)!;
 
-    private static readonly ConcurrentDictionary<Type, Func<IEnumerable, IEnumerable>> _enumerableOfTypeMethodCache = new ();
+    private static readonly ConcurrentDictionary<Type, Func<IEnumerable, IEnumerable>> _enumerableOfTypeMethodCache = new();
 
     public PluginLoader Loader { get; }
 
@@ -92,7 +92,7 @@ internal sealed class Plugin : IPlugin, IServiceProviderIsService
             {
                 try
                 {
-                    result.Add(_activator.CreateInstance(type) !);
+                    result.Add(_activator.CreateInstance(type)!);
                 }
                 catch (Exception error)
                 {

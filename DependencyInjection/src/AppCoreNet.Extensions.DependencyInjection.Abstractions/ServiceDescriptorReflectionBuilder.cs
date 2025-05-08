@@ -13,7 +13,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 
 internal sealed class ServiceDescriptorReflectionBuilder : IServiceDescriptorReflectionBuilder
 {
-    private readonly List<IServiceDescriptorResolver> _resolvers = new ();
+    private readonly List<IServiceDescriptorResolver> _resolvers = new();
     private readonly IActivator _activator;
     private readonly Type _serviceType;
     private ServiceLifetime _defaultLifetime = ServiceLifetime.Transient;
@@ -45,7 +45,7 @@ internal sealed class ServiceDescriptorReflectionBuilder : IServiceDescriptorRef
     public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T>? configure = null)
         where T : IServiceDescriptorResolver
     {
-        var source = _activator.CreateInstance<T>() !;
+        var source = _activator.CreateInstance<T>()!;
         configure?.Invoke(source);
         return AddResolver(source);
     }
