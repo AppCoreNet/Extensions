@@ -4,6 +4,7 @@
 using System.Reflection;
 using FluentAssertions;
 using Xunit;
+using static AppCoreNet.Extensions.DependencyInjection.TestContracts;
 
 namespace AppCoreNet.Extensions.DependencyInjection;
 

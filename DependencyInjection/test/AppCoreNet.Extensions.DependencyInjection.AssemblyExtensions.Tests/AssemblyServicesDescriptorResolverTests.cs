@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using static AppCoreNet.Extensions.DependencyInjection.TestContracts;
 
 namespace AppCoreNet.Extensions.DependencyInjection;
 
