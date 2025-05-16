@@ -2,7 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 /// <summary>
 /// Provides a builder for facilities.
 /// </summary>
-public class FacilityBuilder
+public sealed class FacilityBuilder
 {
     /// <summary>
     /// Gets the <see cref="IServiceCollection"/>.
@@ -36,35 +36,23 @@ public class FacilityBuilder
         FacilityType = facilityType;
     }
 
-    private IFacilityExtension<IFacility> CreateExtension(Type extensionType)
-    {
-        Type contractType = extensionType.GetInterfaces()
-                                         .First(i => i.GetGenericTypeDefinition() == typeof(IFacilityExtension<>))
-                                         .GenericTypeArguments[0];
-
-        Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
-        object extension = Activator.CreateInstance(extensionType)!;
-
-        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension)!;
-    }
-
     /// <summary>
     /// Adds an extension to the facility.
     /// </summary>
     /// <remarks>
-    /// The type <paramref name="extensionType"/> must implement <see cref="IFacilityExtension{T}"/> with the
-    /// type of the facility.
+    /// The type <paramref name="extensionType"/> must implement <see cref="IFacilityExtension"/>.
     /// </remarks>
     /// <param name="extensionType">The type of the extension.</param>
     /// <returns>The <see cref="FacilityBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="extensionType"/> is null.</exception>
-    /// <exception cref="ArgumentException">Argument <paramref name="extensionType"/> does not implement <see cref="IFacilityExtension{T}"/> with the type of the facility.</exception>
-    public FacilityBuilder AddExtension(Type extensionType)
+    /// <exception cref="ArgumentException">Argument <paramref name="extensionType"/> does not implement <see cref="IFacilityExtension"/> with the type of the facility.</exception>
+    public FacilityBuilder AddExtension(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type extensionType)
     {
         Ensure.Arg.NotNull(extensionType);
-        Ensure.Arg.OfType(extensionType, typeof(IFacilityExtension<>).MakeGenericType(FacilityType));
+        Ensure.Arg.OfType<IFacilityExtension>(extensionType);
 
-        IFacilityExtension<IFacility> extension = CreateExtension(extensionType);
+        var extension = (IFacilityExtension)Activator.CreateInstance(extensionType)!;
         extension.ConfigureServices(Services);
         return this;
     }
@@ -82,7 +70,7 @@ public class FacilityBuilder
         var reflectionBuilder = new FacilityExtensionReflectionBuilder(Activator);
         configure(reflectionBuilder);
 
-        foreach (IFacilityExtension<IFacility> extension in reflectionBuilder.Resolve(FacilityType))
+        foreach (IFacilityExtension extension in reflectionBuilder.Resolve(FacilityType))
         {
             extension.ConfigureServices(Services);
         }

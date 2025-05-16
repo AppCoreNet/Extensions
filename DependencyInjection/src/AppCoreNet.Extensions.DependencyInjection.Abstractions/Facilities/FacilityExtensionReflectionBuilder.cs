@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
@@ -26,7 +27,8 @@ internal sealed class FacilityExtensionReflectionBuilder : IFacilityExtensionRef
         return this;
     }
 
-    public IFacilityExtensionReflectionBuilder AddResolver<T>(Action<T>? configure = null)
+    public IFacilityExtensionReflectionBuilder AddResolver<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(Action<T>? configure = null)
         where T : IFacilityExtensionResolver
     {
         var resolver = _activator.CreateInstance<T>()!;
@@ -34,13 +36,9 @@ internal sealed class FacilityExtensionReflectionBuilder : IFacilityExtensionRef
         return AddResolver(resolver);
     }
 
-    public IReadOnlyCollection<IFacilityExtension<IFacility>> Resolve(Type facilityType)
+    public IReadOnlyCollection<IFacilityExtension> Resolve(Type facilityType)
     {
-        Type[] facilityTypes = facilityType.GetTypesAssignableFrom()
-                                           .Where(t => t.GetInterfaces().Contains(typeof(IFacility)))
-                                           .ToArray();
-
-        return _resolvers.SelectMany(s => facilityTypes.SelectMany(s.Resolve))
+        return _resolvers.SelectMany(s => s.Resolve(facilityType))
                          .ToList()
                          .AsReadOnly();
     }

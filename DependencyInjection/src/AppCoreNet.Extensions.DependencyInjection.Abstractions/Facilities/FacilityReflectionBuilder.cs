@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
@@ -28,7 +29,8 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
         return this;
     }
 
-    public IFacilityReflectionBuilder AddResolver<T>(Action<T>? configure = null)
+    public IFacilityReflectionBuilder AddResolver<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(Action<T>? configure = null)
         where T : IFacilityResolver
     {
         var resolver = _activator.CreateInstance<T>()!;
@@ -43,7 +45,7 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
         return this;
     }
 
-    public IReadOnlyCollection<(IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>>
+    public IReadOnlyCollection<(IFacility Facility, IReadOnlyCollection<IFacilityExtension>
         FacilityExtensions)> Resolve()
     {
         List<IFacility> facilities =
@@ -58,15 +60,15 @@ internal sealed class FacilityReflectionBuilder : IFacilityReflectionBuilder
             _extensionsConfig(extensionReflectionBuilder);
         }
 
-        ReadOnlyCollection<IFacilityExtension<IFacility>> emptyFacilityExtensions =
-            new List<IFacilityExtension<IFacility>>().AsReadOnly();
+        ReadOnlyCollection<IFacilityExtension> emptyFacilityExtensions =
+            new List<IFacilityExtension>().AsReadOnly();
 
-        List<(IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>> FacilityExtensions)> result =
+        List<(IFacility Facility, IReadOnlyCollection<IFacilityExtension> FacilityExtensions)> result =
             new();
 
         foreach (IFacility facility in facilities)
         {
-            IReadOnlyCollection<IFacilityExtension<IFacility>> facilityExtensions =
+            IReadOnlyCollection<IFacilityExtension> facilityExtensions =
                 extensionReflectionBuilder?.Resolve(facility.GetType())
                 ?? emptyFacilityExtensions;
 
