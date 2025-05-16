@@ -104,14 +104,14 @@ public static class FacilityServiceCollectionExtensions
 
         configure(builder);
 
-        IReadOnlyCollection<(IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>> FacilityExtensions)>
+        IReadOnlyCollection<(IFacility Facility, IReadOnlyCollection<IFacilityExtension> FacilityExtensions)>
             facilities = builder.Resolve();
 
-        foreach ((IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>> FacilityExtensions) item in facilities)
+        foreach ((IFacility Facility, IReadOnlyCollection<IFacilityExtension> FacilityExtensions) item in facilities)
         {
             item.Facility.ConfigureServices(services);
 
-            foreach (IFacilityExtension<IFacility> facilityExtension in item.FacilityExtensions)
+            foreach (IFacilityExtension facilityExtension in item.FacilityExtensions)
             {
                 facilityExtension.ConfigureServices(services);
             }
