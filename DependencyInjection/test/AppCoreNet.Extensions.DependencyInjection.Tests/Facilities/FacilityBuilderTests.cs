@@ -74,7 +74,7 @@ public class FacilityBuilderTests
     {
         var resolver = Substitute.For<IFacilityExtensionResolver>();
         resolver.Resolve(Arg.Any<Type>())
-                .Returns(Array.Empty<IFacilityExtension<IFacility>>());
+                .Returns(Array.Empty<IFacilityExtension>());
 
         var builder = new FacilityBuilder<TestFacility>(_services, _activator);
         builder.AddExtensionsFrom(r => r.AddResolver(resolver));
