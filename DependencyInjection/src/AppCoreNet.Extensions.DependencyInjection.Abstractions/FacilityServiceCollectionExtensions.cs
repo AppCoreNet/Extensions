@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
 using AppCoreNet.Extensions.DependencyInjection.Facilities;
@@ -24,7 +25,10 @@ public static class FacilityServiceCollectionExtensions
     /// <param name="configure">The delegate to configure the facility.</param>
     /// <returns>The <see cref="IServiceCollection"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="services"/> is null.</exception>
-    public static IServiceCollection AddFacility<T>(this IServiceCollection services, Action<FacilityBuilder<T>>? configure = null)
+    public static IServiceCollection AddFacility<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(
+        this IServiceCollection services,
+        Action<FacilityBuilder<T>>? configure = null)
         where T : IFacility
     {
         Ensure.Arg.NotNull(services);
@@ -56,12 +60,12 @@ public static class FacilityServiceCollectionExtensions
     /// <exception cref="ArgumentException">Argument <paramref name="facilityType"/> is not of type <see cref="IFacility"/>.</exception>
     public static IServiceCollection AddFacility(
         this IServiceCollection services,
-        Type facilityType,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type facilityType,
         Action<FacilityBuilder>? configure = null)
     {
         Ensure.Arg.NotNull(services);
         Ensure.Arg.NotNull(facilityType);
-        Ensure.Arg.OfType(facilityType, typeof(IFacility));
+        Ensure.Arg.OfType<IFacility>(facilityType);
 
         services.TryAddTransient<IActivator, ServiceProviderActivator>();
 
@@ -100,8 +104,10 @@ public static class FacilityServiceCollectionExtensions
 
         configure(builder);
 
-        foreach ((IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>> FacilityExtensions) item in builder
-                     .Resolve())
+        IReadOnlyCollection<(IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>> FacilityExtensions)>
+            facilities = builder.Resolve();
+
+        foreach ((IFacility Facility, IReadOnlyCollection<IFacilityExtension<IFacility>> FacilityExtensions) item in facilities)
         {
             item.Facility.ConfigureServices(services);
 
