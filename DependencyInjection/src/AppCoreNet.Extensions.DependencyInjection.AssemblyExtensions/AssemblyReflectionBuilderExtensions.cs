@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Facilities;
 
@@ -10,6 +11,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to resolve service descriptors and facilities by reflection.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
 public static class AssemblyReflectionBuilderExtensions
 {
     /// <summary>
@@ -33,12 +35,21 @@ public static class AssemblyReflectionBuilderExtensions
     /// Adds service descriptors from the calling assembly by reflection.
     /// </summary>
     /// <param name="builder">The <see cref="IServiceDescriptorReflectionBuilder"/>.</param>
+    /// <param name="configure">The delegate to configure the <see cref="AssemblyResolver"/>.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
-    public static IServiceDescriptorReflectionBuilder Assembly(this IServiceDescriptorReflectionBuilder builder)
+    public static IServiceDescriptorReflectionBuilder Assembly(
+        this IServiceDescriptorReflectionBuilder builder,
+        Action<AssemblyServiceDescriptorResolver>? configure = null)
     {
         var assembly = System.Reflection.Assembly.GetCallingAssembly();
-        return Assemblies(builder, c => c.Add(assembly));
+        return Assemblies(
+            builder,
+            c =>
+            {
+                c.Add(assembly);
+                configure?.Invoke(c);
+            });
     }
 
     /// <summary>
@@ -67,10 +78,14 @@ public static class AssemblyReflectionBuilderExtensions
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
     public static IFacilityReflectionBuilder Assembly(
         this IFacilityReflectionBuilder builder,
-        Action<AssemblyResolver> configure)
+        Action<AssemblyResolver>? configure = null)
     {
         var assembly = System.Reflection.Assembly.GetCallingAssembly();
-        return Assemblies(builder, c => c.Add(assembly));
+        return Assemblies(builder, c =>
+        {
+            c.Add(assembly);
+            configure?.Invoke(c);
+        });
     }
 
     /// <summary>
@@ -99,9 +114,13 @@ public static class AssemblyReflectionBuilderExtensions
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
     public static IFacilityExtensionReflectionBuilder Assembly(
         this IFacilityExtensionReflectionBuilder builder,
-        Action<AssemblyResolver> configure)
+        Action<AssemblyResolver>? configure = null)
     {
         var assembly = System.Reflection.Assembly.GetCallingAssembly();
-        return Assemblies(builder, c => c.Add(assembly));
+        return Assemblies(builder, c =>
+        {
+            c.Add(assembly);
+            configure?.Invoke(c);
+        });
     }
 }

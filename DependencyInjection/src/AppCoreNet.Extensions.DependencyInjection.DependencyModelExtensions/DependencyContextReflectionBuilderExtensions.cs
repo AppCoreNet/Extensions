@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Facilities;
 using DependencyModel = Microsoft.Extensions.DependencyModel;
@@ -11,8 +12,13 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to resolve service descriptors and facilities by reflection.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
 public static class DependencyContextReflectionBuilderExtensions
 {
+    private const string RequiresAssemblyFilesMessage =
+        "DependencyContext for an assembly from a application published as single-file is not supported.";
+
+    [RequiresAssemblyFiles(RequiresAssemblyFilesMessage)]
     private static DependencyModel.DependencyContext ResolveDependencyContext(DependencyModel.DependencyContext? context)
     {
         context ??= DependencyModel.DependencyContext.Default;
@@ -33,6 +39,7 @@ public static class DependencyContextReflectionBuilderExtensions
     /// <param name="configure">The delegate to configure the <see cref="DependencyContextServiceDescriptorResolver"/>.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
+    [RequiresAssemblyFiles(RequiresAssemblyFilesMessage)]
     public static IServiceDescriptorReflectionBuilder DependencyContext(
         this IServiceDescriptorReflectionBuilder builder,
         Action<DependencyContextServiceDescriptorResolver> configure)
@@ -51,6 +58,7 @@ public static class DependencyContextReflectionBuilderExtensions
     /// <param name="configure">The delegate to configure the <see cref="DependencyContextServiceDescriptorResolver"/>.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
+    [RequiresAssemblyFiles(RequiresAssemblyFilesMessage)]
     public static IServiceDescriptorReflectionBuilder DependencyContext(
         this IServiceDescriptorReflectionBuilder builder,
         DependencyModel.DependencyContext? context = null,
@@ -74,6 +82,7 @@ public static class DependencyContextReflectionBuilderExtensions
     /// <param name="configure">The delegate to configure the <see cref="DependencyContextResolver"/>.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
+    [RequiresAssemblyFiles(RequiresAssemblyFilesMessage)]
     public static IFacilityReflectionBuilder DependencyContext(
         this IFacilityReflectionBuilder builder,
         Action<DependencyContextResolver> configure)
@@ -92,6 +101,7 @@ public static class DependencyContextReflectionBuilderExtensions
     /// <param name="configure">The delegate to configure the <see cref="DependencyContextResolver"/>.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
+    [RequiresAssemblyFiles(RequiresAssemblyFilesMessage)]
     public static IFacilityReflectionBuilder DependencyContext(
         this IFacilityReflectionBuilder builder,
         DependencyModel.DependencyContext? context = null,
@@ -115,6 +125,7 @@ public static class DependencyContextReflectionBuilderExtensions
     /// <param name="configure">The delegate to configure the <see cref="DependencyContextResolver"/>.</param>
     /// <returns>The <see cref="IFacilityExtensionReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
+    [RequiresAssemblyFiles(RequiresAssemblyFilesMessage)]
     public static IFacilityExtensionReflectionBuilder DependencyContext(
         this IFacilityExtensionReflectionBuilder builder,
         Action<DependencyContextResolver> configure)
@@ -134,6 +145,7 @@ public static class DependencyContextReflectionBuilderExtensions
     /// <returns>The <see cref="IFacilityExtensionReflectionBuilder"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>.</exception>
     /// <exception cref="NotSupportedException">Argument <paramref name="context"/> is <c>null</c> and no default DependencyContext was available.</exception>
+    [RequiresAssemblyFiles(RequiresAssemblyFilesMessage)]
     public static IFacilityExtensionReflectionBuilder DependencyContext(
         this IFacilityExtensionReflectionBuilder builder,
         DependencyModel.DependencyContext? context = null,

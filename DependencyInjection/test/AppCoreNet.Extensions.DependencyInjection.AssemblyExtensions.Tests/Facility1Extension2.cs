@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCoreNet.Extensions.DependencyInjection;
 
-public class Facility1Extension2 : IFacilityExtension<Facility1>
+public class Facility1Extension2 : IFacilityExtension<IFacility1>
 {
     public void ConfigureServices(IServiceCollection services)
     {
