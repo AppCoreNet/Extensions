@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
@@ -16,6 +17,7 @@ namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 /// Builds an <see cref="IEnumerable{T}"/> of <see cref="IFacility"/> by scanning assemblies in a
 /// <see cref="DependencyContext"/>.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
 public class DependencyContextResolver : IFacilityResolver, IFacilityExtensionResolver
 {
     private readonly AssemblyResolver _resolver;
@@ -97,7 +99,7 @@ public class DependencyContextResolver : IFacilityResolver, IFacilityExtensionRe
     }
 
     /// <inheritdoc />
-    IEnumerable<IFacilityExtension<IFacility>> IFacilityExtensionResolver.Resolve(Type facilityType)
+    IEnumerable<IFacilityExtension> IFacilityExtensionResolver.Resolve(Type facilityType)
     {
         return ((IFacilityExtensionResolver)_resolver).Resolve(facilityType);
     }

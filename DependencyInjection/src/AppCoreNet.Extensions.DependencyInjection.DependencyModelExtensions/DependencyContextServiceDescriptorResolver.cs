@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
@@ -15,6 +16,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning assemblies in a
 /// <see cref="DependencyContext"/>.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
 public class DependencyContextServiceDescriptorResolver : IServiceDescriptorResolver
 {
     private readonly AssemblyServiceDescriptorResolver _source;
