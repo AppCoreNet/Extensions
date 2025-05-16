@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,7 +27,9 @@ public class ServiceProviderActivator : IActivator
     }
 
     /// <inheritdoc />
-    public object? CreateInstance(Type instanceType, params object[] parameters)
+    public object? CreateInstance(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type instanceType,
+        params object[] parameters)
     {
         return ActivatorUtilities.CreateInstance(_serviceProvider, instanceType, parameters);
     }

@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 
 namespace AppCoreNet.Extensions.DependencyInjection.Activator;
@@ -17,7 +18,9 @@ public sealed class DefaultActivator : IActivator
     public static DefaultActivator Instance { get; } = new();
 
     /// <inheritdoc />
-    public object? CreateInstance(Type instanceType, params object[] parameters)
+    public object? CreateInstance(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type instanceType,
+        params object[] parameters)
     {
         Ensure.Arg.NotNull(instanceType);
         Ensure.Arg.NotNull(parameters);
