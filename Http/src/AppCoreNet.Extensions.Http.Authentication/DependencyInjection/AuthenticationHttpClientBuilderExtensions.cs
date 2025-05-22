@@ -26,14 +26,14 @@ public static class AuthenticationHttpClientBuilderExtensions
     /// <param name="scheme">The authentication scheme.</param>
     /// <param name="parameters">Additional authentication parameters.</param>
     /// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
-    /// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/>.</typeparam>
+    /// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler"/>.</typeparam>
     /// <returns>The passed <see cref="IHttpClientBuilder"/>.</returns>
     public static IHttpClientBuilder AddAuthentication<TParameters, THandler>(
         this IHttpClientBuilder builder,
         string scheme,
         TParameters? parameters)
         where TParameters : AuthenticationParameters, new()
-        where THandler : IAuthenticationSchemeHandler<TParameters>
+        where THandler : IAuthenticationSchemeHandler
     {
         Ensure.Arg.NotNull(builder);
         Ensure.Arg.NotNull(scheme);
