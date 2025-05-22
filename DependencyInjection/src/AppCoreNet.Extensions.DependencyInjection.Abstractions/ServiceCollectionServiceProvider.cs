@@ -62,42 +62,46 @@ internal sealed class ServiceCollectionServiceProvider : IServiceProvider, IServ
         return _services.Any(sd => IsServiceType(sd.ServiceType, serviceType));
     }
 
-    private object[] GetServices(Type serviceType)
+    private object CreateService(ServiceDescriptor serviceDescriptor, Type requestedType)
     {
+        object? instance = serviceDescriptor.ImplementationInstance;
+        if (instance == null && serviceDescriptor.ImplementationFactory != null)
+        {
+            instance = serviceDescriptor.ImplementationFactory(this);
+        }
+
+        if (instance == null && serviceDescriptor.ImplementationType != null)
+        {
+            Type implementationType = serviceDescriptor.ImplementationType!;
+            if (implementationType.IsGenericTypeDefinition)
+                implementationType = MakeGenericType(implementationType, requestedType.GenericTypeArguments);
+
+            instance = ActivatorUtilities.CreateInstance(this, implementationType);
+        }
+
+        return instance!;
+
         [UnconditionalSuppressMessage(
             "AotAnalysis",
             "IL3050:RequiresDynamicCode",
-            Justification = "VerifyAotCompatibility ensures that dynamic code supported")]
+            Justification = "VerifyAotCompatibility ensures that dynamic code is supported")]
+        [return: DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
         static Type MakeGenericType(Type type, params Type[] typeArguments)
         {
             if (VerifyAotCompatibility)
-                throw new InvalidOperationException("Cannot build generic type when using AOT.");
+            {
+                throw new InvalidOperationException(
+                    $"Cannot build generic type '{type.GetDisplayName()}' when using AOT");
+            }
 
             return type.MakeGenericType(typeArguments);
         }
+    }
 
-        object ServiceFactory(ServiceDescriptor serviceDescriptor)
-        {
-            object? instance = serviceDescriptor.ImplementationInstance;
-            if (instance == null && serviceDescriptor.ImplementationFactory != null)
-            {
-                instance = serviceDescriptor.ImplementationFactory(this);
-            }
-
-            if (instance == null && serviceDescriptor.ImplementationType != null)
-            {
-                Type implementationType = serviceDescriptor.ImplementationType!;
-                if (implementationType.IsGenericTypeDefinition)
-                    implementationType = MakeGenericType(implementationType, serviceType.GenericTypeArguments);
-
-                instance = ActivatorUtilities.CreateInstance(this, implementationType);
-            }
-
-            return instance!;
-        }
-
+    private object[] GetServices(Type serviceType)
+    {
         return _services.Where(sd => IsServiceType(sd.ServiceType, serviceType))
-                        .Select(ServiceFactory)
+                        .Select(sd => CreateService(sd, serviceType))
                         .ToArray();
     }
 
@@ -139,7 +143,7 @@ internal sealed class ServiceCollectionServiceProvider : IServiceProvider, IServ
         static Array CreateArray(Type elementType, int length)
         {
             if (VerifyAotCompatibility && elementType.IsValueType)
-                throw new InvalidOperationException("Cannot build array of value service types.");
+                throw new InvalidOperationException("Cannot build array of value service types when using AOT");
 
             return Array.CreateInstance(elementType, length);
         }
