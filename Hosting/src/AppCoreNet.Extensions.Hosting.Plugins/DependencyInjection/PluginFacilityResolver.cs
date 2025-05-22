@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.Hosting.Plugins;
@@ -13,6 +14,7 @@ namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 /// <summary>
 /// Builds an <see cref="IEnumerable{T}"/> of <see cref="IFacility"/> by scanning plugin assemblies.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover types.")]
 public class PluginFacilityResolver : IFacilityResolver, IFacilityExtensionResolver
 {
     private readonly IPluginManager _pluginManager;
@@ -36,30 +38,28 @@ public class PluginFacilityResolver : IFacilityResolver, IFacilityExtensionResol
         }
     }
 
-    private IFacilityExtension<IFacility> CreateExtension(IPluginService<object> pluginService)
-    {
-        Type extensionType = pluginService.GetType()
-                                          .GetInterfaces()
-                                          .First(i => i.GetGenericTypeDefinition() == typeof(IPluginService<>))
-                                          .GenericTypeArguments[0];
-
-        Type contractType = extensionType.GenericTypeArguments[0];
-        Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
-
-        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(
-            extensionWrapperType,
-            pluginService.Instance)!;
-    }
-
     /// <inheritdoc />
-    IEnumerable<IFacilityExtension<IFacility>> IFacilityExtensionResolver.Resolve(Type facilityType)
+    IEnumerable<IFacilityExtension> IFacilityExtensionResolver.Resolve(Type facilityType)
     {
-        IPluginServiceCollection<object> services = _pluginManager.GetServices(
-            typeof(IFacilityExtension<>).MakeGenericType(facilityType));
+        IPluginServiceCollection<object> services = _pluginManager.GetServices(typeof(IFacilityExtension));
 
         foreach (IPluginService<object> service in services)
         {
-            yield return CreateExtension(service);
+            if (!IsCompatibleExtensionType(service.Instance.GetType(), facilityType))
+                continue;
+
+            yield return (IFacilityExtension)service.Instance;
+        }
+
+        static bool IsCompatibleExtensionType(Type extensionType, Type facilityType)
+        {
+            IEnumerable<Type> extensionInterfaces =
+                extensionType.GetInterfaces()
+                             .Where(t => t.IsGenericType
+                                         && t.GetGenericTypeDefinition() == typeof(IFacilityExtension<>));
+
+            IEnumerable<Type> extendedFacilityTypes = extensionInterfaces.Select(t => t.GenericTypeArguments[0]);
+            return extendedFacilityTypes.Any(t => t.IsAssignableFrom(facilityType));
         }
     }
 }

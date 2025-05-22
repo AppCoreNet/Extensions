@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Description>Provides plugin extensions to the Microsoft.Extensions.Hosting framework.</Description>
+    <!-- Without this, ILLink analyzers are not added, even though 'IsAotComptabile' is set in the parent 'Directory.Build.props' -->
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

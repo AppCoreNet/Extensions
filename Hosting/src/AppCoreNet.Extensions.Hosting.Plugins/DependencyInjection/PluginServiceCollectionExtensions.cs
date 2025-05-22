@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
 using AppCoreNet.Extensions.Hosting.Plugins;
@@ -15,6 +16,8 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to register plugins.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
+[RequiresDynamicCode("Creates the generic plugin service collection.")]
 public static class PluginServiceCollectionExtensions
 {
     private static readonly object _pluginManagerFactorySyncRoot = new();

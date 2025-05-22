@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
@@ -15,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCoreNet.Extensions.Hosting.Plugins;
 
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
+[RequiresDynamicCode("Dynamically creates generic types.")]
 internal sealed class Plugin : IPlugin, IServiceProviderIsService
 {
     private readonly IActivator _activator;
