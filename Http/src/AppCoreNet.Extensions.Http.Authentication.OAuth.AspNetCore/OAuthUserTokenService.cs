@@ -20,7 +20,9 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 /// Provides the base class for see <see cref="IOAuthUserTokenService"/>.
 /// </summary>
 /// <typeparam name="TOptions">The type of the <see cref="OAuthUserOptions"/>.</typeparam>
-public abstract class OAuthUserTokenService<TOptions> : IOAuthUserTokenService
+public abstract class OAuthUserTokenService<
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TOptions>
+    : IOAuthUserTokenService
     where TOptions : OAuthUserOptions
 {
     private static readonly ConcurrentDictionary<string, Lazy<Task<OAuthUserToken>>> _sync = new();
