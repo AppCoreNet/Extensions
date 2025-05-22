@@ -12,7 +12,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to resolve service descriptors and facilities by reflection.
 /// </summary>
-[RequiresUnreferencedCode("Uses reflection to discover services.")]
+[RequiresUnreferencedCode("Uses reflection to discover types.")]
 public static class DependencyContextReflectionBuilderExtensions
 {
     private const string RequiresAssemblyFilesMessage =
