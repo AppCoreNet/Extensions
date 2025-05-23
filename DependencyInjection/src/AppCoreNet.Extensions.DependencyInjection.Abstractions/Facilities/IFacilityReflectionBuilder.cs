@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 
@@ -27,7 +28,8 @@ public interface IFacilityReflectionBuilder
     /// <param name="configure">The configuration delegate.</param>
     /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public IFacilityReflectionBuilder AddResolver<T>(Action<T>? configure = null)
+    public IFacilityReflectionBuilder AddResolver<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(Action<T>? configure = null)
         where T : IFacilityResolver;
 
     /// <summary>

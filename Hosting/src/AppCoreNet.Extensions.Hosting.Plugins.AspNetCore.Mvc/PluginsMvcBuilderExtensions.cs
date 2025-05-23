@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.Hosting.Plugins;
@@ -14,6 +15,8 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to register plugins with MVC.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
+[RequiresDynamicCode("Creates the generic plugin service collection.")]
 public static class PluginsMvcBuilderExtensions
 {
     private static void AddApplicationParts(ApplicationPartManager manager, Assembly assembly)

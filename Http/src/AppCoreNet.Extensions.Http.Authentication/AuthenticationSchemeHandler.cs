@@ -1,6 +1,7 @@
 ﻿// Licensed under the MIT license.
 // Copyright (c) The AppCore .NET project.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,11 +11,13 @@ using Microsoft.Extensions.Options;
 namespace AppCoreNet.Extensions.Http.Authentication;
 
 /// <summary>
-/// Provides a base class for <see cref="IAuthenticationSchemeHandler{TParameters}"/>.
+/// Provides a base class for <see cref="IAuthenticationSchemeHandler"/>.
 /// </summary>
 /// <typeparam name="TOptions">The type of the <see cref="AuthenticationSchemeOptions"/>.</typeparam>
 /// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
-public abstract class AuthenticationSchemeHandler<TOptions, TParameters> : IAuthenticationSchemeHandler<TParameters>
+public abstract class AuthenticationSchemeHandler<
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TOptions, TParameters>
+    : IAuthenticationSchemeHandler
     where TOptions : AuthenticationSchemeOptions
     where TParameters : AuthenticationParameters, new()
 {
@@ -46,13 +49,18 @@ public abstract class AuthenticationSchemeHandler<TOptions, TParameters> : IAuth
         HttpRequestMessage request,
         CancellationToken cancellationToken);
 
-    async Task IAuthenticationSchemeHandler<TParameters>.AuthenticateAsync(
+    async Task IAuthenticationSchemeHandler.AuthenticateAsync(
         AuthenticationScheme scheme,
         HttpRequestMessage request,
-        TParameters? parameters,
+        AuthenticationParameters? parameters,
         CancellationToken cancellationToken)
     {
-        await AuthenticateAsync(scheme, _optionsMonitor.Get(scheme.Name), parameters, request, cancellationToken)
+        await AuthenticateAsync(
+                scheme,
+                _optionsMonitor.Get(scheme.Name),
+                (TParameters?)parameters,
+                request,
+                cancellationToken)
             .ConfigureAwait(false);
     }
 }

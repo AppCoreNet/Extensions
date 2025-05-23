@@ -17,7 +17,7 @@ public sealed class AuthenticationScheme
     public string Name { get; }
 
     /// <summary>
-    /// Gets the type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/> which handles the scheme.
+    /// Gets the type of the <see cref="IAuthenticationSchemeHandler"/> which handles the scheme.
     /// </summary>
     public Type HandlerType { get; }
 
@@ -27,21 +27,30 @@ public sealed class AuthenticationScheme
     public Type OptionsType { get; }
 
     /// <summary>
+    /// Gets the type of the <see cref="AuthenticationParameters"/>.
+    /// </summary>
+    public Type ParametersType { get; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticationScheme"/> class.
     /// </summary>
     /// <param name="name">The name of the authentication scheme.</param>
-    /// <param name="handlerType">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/> which handles the scheme.</param>
+    /// <param name="handlerType">The type of the <see cref="IAuthenticationSchemeHandler"/> which handles the scheme.</param>
     /// <param name="optionsType">The type of the <see cref="AuthenticationSchemeOptions"/>.</param>
-    public AuthenticationScheme(string name, Type handlerType, Type optionsType)
+    /// <param name="parametersType">The type of the <see cref="AuthenticationParameters"/>.</param>
+    public AuthenticationScheme(string name, Type handlerType, Type optionsType, Type parametersType)
     {
         Ensure.Arg.NotNull(name);
         Ensure.Arg.NotNull(handlerType);
-        Ensure.Arg.OfType(handlerType, typeof(IAuthenticationSchemeHandler<>));
+        Ensure.Arg.OfType<IAuthenticationSchemeHandler>(handlerType);
         Ensure.Arg.NotNull(optionsType);
-        Ensure.Arg.OfType(optionsType, typeof(AuthenticationSchemeOptions));
+        Ensure.Arg.OfType<AuthenticationSchemeOptions>(optionsType);
+        Ensure.Arg.NotNull(parametersType);
+        Ensure.Arg.OfType<AuthenticationParameters>(parametersType);
 
         Name = name;
         HandlerType = handlerType;
         OptionsType = optionsType;
+        ParametersType = parametersType;
     }
 }

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
@@ -12,6 +13,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Represents a type used to scan assemblies for exported types.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover types.")]
 public class AssemblyScanner
 {
     private static readonly List<string> _defaultExcludedAssemblies =

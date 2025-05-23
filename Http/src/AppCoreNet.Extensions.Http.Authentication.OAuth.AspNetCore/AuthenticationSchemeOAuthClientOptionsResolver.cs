@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using AppCoreNet.Diagnostics;
 using Microsoft.AspNetCore.Authentication;
@@ -16,7 +17,11 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 /// <typeparam name="TClientOptions">The type of the <see cref="AuthenticationSchemeOptions"/>.</typeparam>
 /// <typeparam name="TOptions">The type of the <see cref="RemoteAuthenticationOptions"/>.</typeparam>
 /// <typeparam name="THandler">The type of the <see cref="IAuthenticationHandler"/>.</typeparam>
-public abstract class AuthenticationSchemeOAuthClientOptionsResolver<TClientOptions, TOptions, THandler> : IOAuthOptionsResolver
+public abstract class AuthenticationSchemeOAuthClientOptionsResolver<
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TClientOptions,
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TOptions,
+    THandler>
+    : IOAuthOptionsResolver
     where TClientOptions : AuthenticationSchemeOptions
     where TOptions : RemoteAuthenticationOptions
     where THandler : IAuthenticationHandler
