@@ -37,7 +37,7 @@ public static class AssemblyReflectionBuilderExtensions
     /// <param name="builder">The <see cref="IServiceDescriptorReflectionBuilder"/>.</param>
     /// <param name="configure">The delegate to configure the <see cref="AssemblyResolver"/>.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
-    /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>. </exception>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
     public static IServiceDescriptorReflectionBuilder Assembly(
         this IServiceDescriptorReflectionBuilder builder,
         Action<AssemblyServiceDescriptorResolver>? configure = null)
@@ -75,7 +75,7 @@ public static class AssemblyReflectionBuilderExtensions
     /// <param name="builder">The <see cref="IFacilityReflectionBuilder"/>.</param>
     /// <param name="configure">The delegate to configure the <see cref="AssemblyResolver"/>.</param>
     /// <returns>The <see cref="IFacilityReflectionBuilder"/> to allow chaining.</returns>
-    /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
     public static IFacilityReflectionBuilder Assembly(
         this IFacilityReflectionBuilder builder,
         Action<AssemblyResolver>? configure = null)
@@ -111,7 +111,7 @@ public static class AssemblyReflectionBuilderExtensions
     /// <param name="builder">The <see cref="IFacilityExtensionReflectionBuilder"/>.</param>
     /// <param name="configure">The delegate to configure the <see cref="AssemblyResolver"/>.</param>
     /// <returns>The <see cref="IFacilityExtensionReflectionBuilder"/> to allow chaining.</returns>
-    /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> or <paramref name="configure"/> is <c>null</c>. </exception>
+    /// <exception cref="ArgumentNullException">Argument <paramref name="builder"/> is <c>null</c>.</exception>
     public static IFacilityExtensionReflectionBuilder Assembly(
         this IFacilityExtensionReflectionBuilder builder,
         Action<AssemblyResolver>? configure = null)
