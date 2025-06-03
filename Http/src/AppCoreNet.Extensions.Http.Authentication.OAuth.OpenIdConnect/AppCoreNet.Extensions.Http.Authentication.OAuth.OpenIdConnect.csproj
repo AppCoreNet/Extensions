@@ -7,7 +7,6 @@
       from ASP.NET Core OpenID connect authentication schemes.
     </Description>
     <PackageTags>$(PackageTags);Security;Authentication;OAuth;OAuth2;OAuth 2.0;IdentityModel;ASP.NET Core;OpenID Connect</PackageTags>
-    <!-- Without this, ILLink analyzers are not added, even though 'IsAotComptabile' is set in the parent 'Directory.Build.props' -->
     <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
   </PropertyGroup>
 
