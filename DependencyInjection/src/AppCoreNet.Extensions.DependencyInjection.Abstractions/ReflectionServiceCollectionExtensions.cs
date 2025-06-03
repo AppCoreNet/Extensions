@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
 using Microsoft.Extensions.DependencyInjection;

@@ -10,9 +10,7 @@ namespace AppCoreNet.Extensions.Http.Authentication;
 /// <summary>
 /// Represents a HTTP client authentication scheme handler.
 /// </summary>
-/// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
-public interface IAuthenticationSchemeHandler<in TParameters>
-    where TParameters : AuthenticationParameters
+public interface IAuthenticationSchemeHandler
 {
     /// <summary>
     /// Authenticates a <see cref="HttpRequestMessage"/> with the specified scheme and parameters.
@@ -25,6 +23,6 @@ public interface IAuthenticationSchemeHandler<in TParameters>
     Task AuthenticateAsync(
         AuthenticationScheme scheme,
         HttpRequestMessage request,
-        TParameters? parameters = null,
+        AuthenticationParameters? parameters = null,
         CancellationToken cancellationToken = default);
 }

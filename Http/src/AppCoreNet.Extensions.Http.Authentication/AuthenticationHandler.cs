@@ -16,14 +16,14 @@ namespace AppCoreNet.Extensions.Http.Authentication;
 /// authentication to the request.
 /// </summary>
 /// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
-/// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/>.</typeparam>
+/// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler"/>.</typeparam>
 public class AuthenticationHandler<TParameters, THandler> : DelegatingHandler
     where TParameters : AuthenticationParameters, new()
-    where THandler : IAuthenticationSchemeHandler<TParameters>
+    where THandler : IAuthenticationSchemeHandler
 {
     private readonly string _scheme;
     private readonly IAuthenticationSchemeProvider _schemes;
-    private readonly IAuthenticationSchemeHandler<TParameters> _schemeHandler;
+    private readonly IAuthenticationSchemeHandler _schemeHandler;
     private readonly TParameters? _parameters;
     private readonly ILogger _logger;
 

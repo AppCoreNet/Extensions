@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading;
@@ -20,7 +21,9 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 /// session.
 /// </summary>
 /// <typeparam name="TOptions">The type of the <see cref="OAuthUserOptions"/>.</typeparam>
-public abstract class AuthenticationSessionOAuthUserTokenStore<TOptions> : IOAuthUserTokenStore
+public abstract class AuthenticationSessionOAuthUserTokenStore<
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TOptions>
+    : IOAuthUserTokenStore
     where TOptions : OAuthUserOptions
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
