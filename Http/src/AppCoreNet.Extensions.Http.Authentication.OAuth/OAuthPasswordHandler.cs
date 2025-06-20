@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿// Licensed under the MIT license.
+// Copyright (c) The AppCore .NET project.
+
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +12,7 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 /// <summary>
 /// Provides a OAuth password authentication handler.
 /// </summary>
-public class OAuthPasswordHandler : IAuthenticationSchemeHandler<OAuthParameters>
+public class OAuthPasswordHandler : IAuthenticationSchemeHandler
 {
     private readonly IOAuthTokenService _authTokenService;
 
@@ -23,7 +26,14 @@ public class OAuthPasswordHandler : IAuthenticationSchemeHandler<OAuthParameters
         _authTokenService = authTokenService;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Authenticates a <see cref="HttpRequestMessage"/> with the specified OAuth password scheme and parameters.
+    /// </summary>
+    /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
+    /// <param name="request">The <see cref="HttpRequestMessage"/>.</param>
+    /// <param name="parameters">The <see cref="OAuthParameters"/>.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>The asynchronous operation.</returns>
     public async Task AuthenticateAsync(
         AuthenticationScheme scheme,
         HttpRequestMessage request,
@@ -35,5 +45,19 @@ public class OAuthPasswordHandler : IAuthenticationSchemeHandler<OAuthParameters
                                    .ConfigureAwait(false);
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+    }
+
+    async Task IAuthenticationSchemeHandler.AuthenticateAsync(
+        AuthenticationScheme scheme,
+        HttpRequestMessage request,
+        AuthenticationParameters? parameters,
+        CancellationToken cancellationToken)
+    {
+        await AuthenticateAsync(
+                scheme,
+                request,
+                (OAuthParameters?)parameters,
+                cancellationToken)
+            .ConfigureAwait(false);
     }
 }

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
@@ -14,6 +15,7 @@ using Xunit;
 
 namespace AppCoreNet.Extensions.Hosting.Plugins;
 
+[RequiresUnreferencedCode("This test requires types that may be trimmed by the linker.")]
 public class PluginManagerTests
 {
     [Fact]

@@ -3,12 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
+using static AppCoreNet.Extensions.DependencyInjection.TestContracts;
 
 namespace AppCoreNet.Extensions.DependencyInjection;
 
+[RequiresUnreferencedCode("This test requires types that may be trimmed by the linker.")]
 public class AssemblyServicesDescriptorResolverTests
 {
     [Fact]

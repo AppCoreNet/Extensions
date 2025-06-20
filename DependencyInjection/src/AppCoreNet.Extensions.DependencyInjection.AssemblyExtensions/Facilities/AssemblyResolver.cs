@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using AppCoreNet.Diagnostics;
@@ -13,6 +14,7 @@ namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 /// <summary>
 /// Builds an <see cref="IEnumerable{T}"/> of <see cref="IFacility"/> by scanning assemblies.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover types.")]
 public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
 {
     private readonly IActivator _activator;
@@ -120,24 +122,12 @@ public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
                       .Select(facilityType => (IFacility)_activator.CreateInstance(facilityType)!);
     }
 
-    private IFacilityExtension<IFacility> CreateExtension(Type extensionType)
-    {
-        Type contractType = extensionType.GetInterfaces()
-                                         .First(i => i.GetGenericTypeDefinition() == typeof(IFacilityExtension<>))
-                                         .GenericTypeArguments[0];
-
-        Type extensionWrapperType = typeof(FacilityExtensionWrapper<>).MakeGenericType(contractType);
-        object extension = _activator.CreateInstance(extensionType)!;
-
-        return (IFacilityExtension<IFacility>)System.Activator.CreateInstance(extensionWrapperType, extension)!;
-    }
-
     /// <inheritdoc />
-    IEnumerable<IFacilityExtension<IFacility>> IFacilityExtensionResolver.Resolve(Type facilityType)
+    IEnumerable<IFacilityExtension> IFacilityExtensionResolver.Resolve(Type facilityType)
     {
         Ensure.Arg.NotNull(facilityType);
 
-        var scanner = new AssemblyScanner(typeof(IFacilityExtension<>).MakeGenericType(facilityType), _assemblies)
+        var scanner = new AssemblyScanner(typeof(IFacilityExtension<>), _assemblies)
         {
             IncludePrivateTypes = _withPrivateTypes,
         };
@@ -149,6 +139,18 @@ public class AssemblyResolver : IFacilityResolver, IFacilityExtensionResolver
             scanner.Filters.Add(filter);
 
         return scanner.ScanAssemblies()
-                      .Select(CreateExtension);
+                      .Where(t => IsCompatibleExtensionType(t, facilityType))
+                      .Select(t => (IFacilityExtension)_activator.CreateInstance(t)!);
+
+        static bool IsCompatibleExtensionType(Type extensionType, Type facilityType)
+        {
+            IEnumerable<Type> extensionInterfaces =
+                extensionType.GetInterfaces()
+                             .Where(t => t.IsGenericType
+                                         && t.GetGenericTypeDefinition() == typeof(IFacilityExtension<>));
+
+            IEnumerable<Type> extendedFacilityTypes = extensionInterfaces.Select(t => t.GenericTypeArguments[0]);
+            return extendedFacilityTypes.Any(t => t.IsAssignableFrom(facilityType));
+        }
     }
 }

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Description>Provides MVC plugin extensions to the Microsoft.Extensions.Hosting framework.</Description>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +12,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AppCoreNet.Extensions.Hosting.Plugins\AppCoreNet.Extensions.Hosting.Plugins.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\DependencyInjection\src\AppCoreNet.Extensions.DependencyInjection.Abstractions\ServiceCollectionServiceProvider.cs">
+      <Link>ServiceCollectionServiceProvider.cs</Link>
+    </Compile>
   </ItemGroup>
 
 </Project>

@@ -4,6 +4,7 @@
     <TargetFrameworks>net8.0;netstandard2.0;net462</TargetFrameworks>
     <RootNamespace>AppCoreNet.Extensions.Hosting</RootNamespace>
     <Description>Provides extensions to the Microsoft.Extensions.Hosting framework.</Description>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

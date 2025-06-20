@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.Http.Authentication;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,16 +26,16 @@ public static class HttpClientAuthenticationBuilderExtensions
     /// <param name="configure">The option configuration delegate.</param>
     /// <typeparam name="TOptions">The type of the <see cref="AuthenticationSchemeOptions"/>.</typeparam>
     /// <typeparam name="TParameters">The type of the <see cref="AuthenticationParameters"/>.</typeparam>
-    /// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler{TParameters}"/>.</typeparam>
+    /// <typeparam name="THandler">The type of the <see cref="IAuthenticationSchemeHandler"/>.</typeparam>
     /// <returns>The <see cref="IHttpClientAuthenticationBuilder"/> to allow chaining the calls.</returns>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static IHttpClientAuthenticationBuilder AddScheme<TOptions, TParameters, THandler>(
+    public static IHttpClientAuthenticationBuilder AddScheme<TOptions, TParameters, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] THandler>(
         this IHttpClientAuthenticationBuilder builder,
         string name,
         Action<TOptions>? configure = null)
         where TOptions : AuthenticationSchemeOptions
         where TParameters : AuthenticationParameters
-        where THandler : class, IAuthenticationSchemeHandler<TParameters>
+        where THandler : class, IAuthenticationSchemeHandler
     {
         Ensure.Arg.NotNull(builder);
         Ensure.Arg.NotNull(name);
@@ -42,12 +43,12 @@ public static class HttpClientAuthenticationBuilderExtensions
         IServiceCollection services = builder.Services;
 
         services.TryAddTransient<THandler>();
-        services.TryAddTransient<IAuthenticationSchemeHandler<TParameters>>(
+        services.TryAddTransient<IAuthenticationSchemeHandler>(
             sp => sp.GetRequiredService<THandler>());
 
         services.Configure<HttpClientAuthenticationOptions>(
             o => o
-                .AddScheme(name, typeof(THandler), typeof(TOptions)));
+                .AddScheme(name, typeof(THandler), typeof(TOptions), typeof(TParameters)));
 
         if (configure != null)
         {

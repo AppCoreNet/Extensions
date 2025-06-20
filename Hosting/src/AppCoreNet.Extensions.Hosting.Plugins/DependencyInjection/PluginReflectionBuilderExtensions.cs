@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Facilities;
 
@@ -11,6 +12,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Provides extension methods to register services and facilities from plugins.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover types.")]
 public static class PluginReflectionBuilderExtensions
 {
     /// <summary>

@@ -18,11 +18,7 @@ public class FacilityBuilderTests
 
     public FacilityBuilderTests()
     {
-        var activator = Substitute.For<IActivator>();
-        activator.CreateInstance(Arg.Any<Type>(), Arg.Any<object[]>())
-                 .Returns(ci => System.Activator.CreateInstance(ci.ArgAt<Type>(0), ci.ArgAt<object[]>(1)));
-
-        _activator = activator;
+        _activator = DefaultActivator.Instance;
         _services = new ServiceCollection();
     }
 
@@ -74,7 +70,7 @@ public class FacilityBuilderTests
     {
         var resolver = Substitute.For<IFacilityExtensionResolver>();
         resolver.Resolve(Arg.Any<Type>())
-                .Returns(Array.Empty<IFacilityExtension<IFacility>>());
+                .Returns(Array.Empty<IFacilityExtension>());
 
         var builder = new FacilityBuilder<TestFacility>(_services, _activator);
         builder.AddExtensionsFrom(r => r.AddResolver(resolver));

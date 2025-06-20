@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
@@ -42,7 +43,9 @@ internal sealed class ServiceDescriptorReflectionBuilder : IServiceDescriptorRef
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T>? configure = null)
+    public IServiceDescriptorReflectionBuilder AddResolver<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+        T>(Action<T>? configure = null)
         where T : IServiceDescriptorResolver
     {
         var source = _activator.CreateInstance<T>()!;
