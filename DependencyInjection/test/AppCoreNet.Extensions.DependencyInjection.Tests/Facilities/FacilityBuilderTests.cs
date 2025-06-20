@@ -18,11 +18,7 @@ public class FacilityBuilderTests
 
     public FacilityBuilderTests()
     {
-        var activator = Substitute.For<IActivator>();
-        activator.CreateInstance(Arg.Any<Type>(), Arg.Any<object[]>())
-                 .Returns(ci => System.Activator.CreateInstance(ci.ArgAt<Type>(0), ci.ArgAt<object[]>(1)));
-
-        _activator = activator;
+        _activator = DefaultActivator.Instance;
         _services = new ServiceCollection();
     }
 

@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AppCoreNet.Extensions.DependencyInjection;
 using FluentAssertions;
@@ -10,6 +11,7 @@ using Xunit;
 
 namespace AppCoreNet.Extensions.Hosting.Plugins;
 
+[RequiresUnreferencedCode("This test requires types that may be trimmed by the linker.")]
 public class PluginFacilityResolverTests
 {
 #nullable disable
