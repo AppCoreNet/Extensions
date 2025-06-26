@@ -12,7 +12,7 @@ namespace AppCoreNet.Extensions.Http.Authentication;
 /// </summary>
 public class AuthenticationParameters
 {
-    private IDictionary<string, object> _parameters;
+    private readonly IDictionary<string, object> _parameters;
 
     /// <summary>
     /// Gets or sets a value indicating whether to force renewing the authentication.
@@ -49,10 +49,11 @@ public class AuthenticationParameters
     public T Clone<T>()
         where T : AuthenticationParameters, new()
     {
-        var clone = new T
+        var clone = new T();
+        foreach (KeyValuePair<string, object> parameter in _parameters)
         {
-            _parameters = new Dictionary<string, object>(_parameters, StringComparer.Ordinal),
-        };
+            clone._parameters[parameter.Key] = parameter.Value;
+        }
 
         return clone;
     }

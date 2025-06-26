@@ -16,7 +16,7 @@ namespace AppCoreNet.Extensions.Http.Authentication.OAuth.AspNetCore;
 /// Provides a base class for a OAuth user authentication handler.
 /// </summary>
 /// <typeparam name="TParameters">The type of the <see cref="OAuthUserParameters"/>.</typeparam>
-public abstract class OAuthUserHandler<TParameters> : IAuthenticationSchemeHandler<TParameters>
+public abstract class OAuthUserHandler<TParameters> : IAuthenticationSchemeHandler
     where TParameters : OAuthUserParameters
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -42,7 +42,14 @@ public abstract class OAuthUserHandler<TParameters> : IAuthenticationSchemeHandl
     /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
     protected abstract void EnsureCompatibleScheme(AuthenticationScheme scheme);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Authenticates a <see cref="HttpRequestMessage"/> with the specified OAuth user scheme and parameters.
+    /// </summary>
+    /// <param name="scheme">The <see cref="AuthenticationScheme"/>.</param>
+    /// <param name="request">The <see cref="HttpRequestMessage"/>.</param>
+    /// <param name="parameters">The <see cref="OAuthUserParameters"/>.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>The asynchronous operation.</returns>
     public async Task AuthenticateAsync(
         AuthenticationScheme scheme,
         HttpRequestMessage request,
@@ -63,5 +70,19 @@ public abstract class OAuthUserHandler<TParameters> : IAuthenticationSchemeHandl
                                    .ConfigureAwait(false);
 
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
+    }
+
+    async Task IAuthenticationSchemeHandler.AuthenticateAsync(
+        AuthenticationScheme scheme,
+        HttpRequestMessage request,
+        AuthenticationParameters? parameters,
+        CancellationToken cancellationToken)
+    {
+        await AuthenticateAsync(
+                scheme,
+                request,
+                (TParameters?)parameters,
+                cancellationToken)
+            .ConfigureAwait(false);
     }
 }

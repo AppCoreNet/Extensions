@@ -6,6 +6,7 @@
       Adds support to AppCoreNet.Extensions.Http.Authenticaton for authenticating a HttpClient using OAuth2 bearer tokens.
     </Description>
     <PackageTags>$(PackageTags);Security;Authentication;OAuth;OAuth2;OAuth 2.0;IdentityModel</PackageTags>
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

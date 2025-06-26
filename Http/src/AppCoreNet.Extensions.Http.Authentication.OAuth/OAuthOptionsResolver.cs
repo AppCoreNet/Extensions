@@ -2,12 +2,15 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 
 namespace AppCoreNet.Extensions.Http.Authentication.OAuth;
 
-internal sealed class OAuthOptionsResolver<TOptions> : IOAuthOptionsResolver
+internal sealed class OAuthOptionsResolver<
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TOptions>
+    : IOAuthOptionsResolver
     where TOptions : OAuthOptions
 {
     private readonly IOptionsMonitor<TOptions> _options;

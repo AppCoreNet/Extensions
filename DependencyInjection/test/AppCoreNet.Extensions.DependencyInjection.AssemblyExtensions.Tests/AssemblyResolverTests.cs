@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
 using AppCoreNet.Extensions.DependencyInjection.Facilities;
@@ -12,17 +13,14 @@ using Xunit;
 
 namespace AppCoreNet.Extensions.DependencyInjection;
 
+[RequiresUnreferencedCode("This test requires types that may be trimmed by the linker.")]
 public class AssemblyResolverTests
 {
     private readonly IActivator _activator;
 
     public AssemblyResolverTests()
     {
-        var activator = Substitute.For<IActivator>();
-        activator.CreateInstance(Arg.Any<Type>(), Arg.Any<object[]>())
-                 .Returns(ci => System.Activator.CreateInstance(ci.ArgAt<Type>(0)));
-
-        _activator = activator;
+        _activator = DefaultActivator.Instance;
     }
 
     [Fact]
@@ -46,15 +44,16 @@ public class AssemblyResolverTests
                                     .Add(typeof(AssemblyResolverTests).Assembly)
                                     .ClearDefaultFilters();
 
-        IEnumerable<IFacilityExtension<IFacility>> facilityExtensions =
-            ((IFacilityExtensionResolver)resolver).Resolve(typeof(Facility1));
+        IFacilityExtension[] facilityExtensions =
+            ((IFacilityExtensionResolver)resolver).Resolve(typeof(Facility1))
+                                                  .ToArray();
 
-        facilityExtensions.Should()
-                          .AllBeOfType<FacilityExtensionWrapper<Facility1>>();
+        facilityExtensions[0]
+            .Should()
+            .BeOfType<Facility1Extension1>();
 
-        facilityExtensions.OfType<FacilityExtensionWrapper<Facility1>>()
-                          .Select(e => e.Extension.GetType())
-                          .Should()
-                          .BeEquivalentTo(new[] { typeof(Facility1Extension1), typeof(Facility1Extension2) });
+        facilityExtensions[1]
+            .Should()
+            .BeOfType<Facility1Extension2>();
     }
 }

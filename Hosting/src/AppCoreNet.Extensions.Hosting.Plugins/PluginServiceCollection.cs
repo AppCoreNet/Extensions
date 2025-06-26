@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AppCoreNet.Extensions.Hosting.Plugins;
 
@@ -32,6 +33,8 @@ internal sealed class PluginServiceCollection
         }
     }
 
+    [RequiresUnreferencedCode("Uses reflection to discover services.")]
+    [RequiresDynamicCode("Creates the generic plugin service collection.")]
     public static IInternalPluginServiceCollection<object> Create(Type serviceType)
     {
         Type type = _typeCache.GetOrAdd(serviceType, static t => typeof(InternalCollection<>).MakeGenericType(t));

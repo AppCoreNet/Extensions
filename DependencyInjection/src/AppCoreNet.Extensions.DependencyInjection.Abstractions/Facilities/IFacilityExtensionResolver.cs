@@ -17,5 +17,5 @@ public interface IFacilityExtensionResolver
     /// <param name="facilityType">The type of the facility.</param>
     /// <returns>The <see cref="IEnumerable{T}"/> of facility extensions.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="facilityType"/> is null.</exception>
-    IEnumerable<IFacilityExtension<IFacility>> Resolve(Type facilityType);
+    IEnumerable<IFacilityExtension> Resolve(Type facilityType);
 }

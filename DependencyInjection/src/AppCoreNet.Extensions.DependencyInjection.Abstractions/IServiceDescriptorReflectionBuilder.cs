@@ -3,6 +3,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AppCoreNet.Extensions.DependencyInjection;
@@ -35,6 +36,7 @@ public interface IServiceDescriptorReflectionBuilder
     /// <param name="configure">The configuration delegate.</param>
     /// <returns>The <see cref="IServiceDescriptorReflectionBuilder"/> to allow chaining.</returns>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public IServiceDescriptorReflectionBuilder AddResolver<T>(Action<T>? configure = null)
+    public IServiceDescriptorReflectionBuilder AddResolver<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>(Action<T>? configure = null)
         where T : IServiceDescriptorResolver;
 }

@@ -2,7 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.DependencyInjection.Activator;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,12 +13,23 @@ namespace AppCoreNet.Extensions.DependencyInjection.Facilities;
 /// Provides a builder for facilities.
 /// </summary>
 /// <typeparam name="T">The type of the facility.</typeparam>
-public sealed class FacilityBuilder<T> : FacilityBuilder
+public sealed class FacilityBuilder<T>
     where T : IFacility
 {
+    /// <summary>
+    /// Gets the <see cref="IServiceCollection"/>.
+    /// </summary>
+    public IServiceCollection Services { get; }
+
+    /// <summary>
+    /// Gets the <see cref="IActivator"/>.
+    /// </summary>
+    public IActivator Activator { get; }
+
     internal FacilityBuilder(IServiceCollection services, IActivator activator)
-        : base(services, activator, typeof(T))
     {
+        Services = services;
+        Activator = activator;
     }
 
     /// <summary>
@@ -32,9 +43,13 @@ public sealed class FacilityBuilder<T> : FacilityBuilder
     /// <returns>The <see cref="FacilityBuilder{T}"/> to allow chaining.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="extensionType"/> is null.</exception>
     /// <exception cref="ArgumentException">Argument <paramref name="extensionType"/> does not implement <see cref="IFacilityExtension{T}"/> with the type of the facility.</exception>
-    public new FacilityBuilder<T> AddExtension(Type extensionType)
+    public FacilityBuilder<T> AddExtension(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type extensionType)
     {
-        base.AddExtension(extensionType);
+        Ensure.Arg.OfType<IFacilityExtension<T>>(extensionType);
+
+        var extension = (IFacilityExtension<T>)Activator.CreateInstance(extensionType)!;
+        extension.ConfigureServices(Services);
         return this;
     }
 
@@ -43,7 +58,8 @@ public sealed class FacilityBuilder<T> : FacilityBuilder
     /// </summary>
     /// <typeparam name="TExtension">The type of the extension.</typeparam>
     /// <returns>The <see cref="FacilityBuilder{T}"/> to allow chaining.</returns>
-    public FacilityBuilder<T> AddExtension<TExtension>()
+    public FacilityBuilder<T> AddExtension<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TExtension>()
         where TExtension : class, IFacilityExtension<T>
     {
         IFacilityExtension<T> extension = Activator.CreateInstance<TExtension>()!;
@@ -65,14 +81,24 @@ public sealed class FacilityBuilder<T> : FacilityBuilder
     }
 
     /// <summary>
-    /// Adds facility extensions using a <see cref="IFacilityExtensionReflectionBuilder"/> to the <see cref="IServiceCollection"/>.
+    /// Adds facility extensions using a <see cref="IFacilityExtensionReflectionBuilder"/> to the
+    /// <see cref="IServiceCollection"/>.
     /// </summary>
     /// <param name="configure">The delegate used to configure the facility extension resolvers.</param>
     /// <returns>The <see cref="FacilityBuilder{T}"/>.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="configure"/> is null.</exception>
-    public new FacilityBuilder<T> AddExtensionsFrom(Action<IFacilityExtensionReflectionBuilder> configure)
+    public FacilityBuilder<T> AddExtensionsFrom(Action<IFacilityExtensionReflectionBuilder> configure)
     {
-        base.AddExtensionsFrom(configure);
+        Ensure.Arg.NotNull(configure);
+
+        var reflectionBuilder = new FacilityExtensionReflectionBuilder(Activator);
+        configure(reflectionBuilder);
+
+        foreach (IFacilityExtension extension in reflectionBuilder.Resolve(typeof(T)))
+        {
+            extension.ConfigureServices(Services);
+        }
+
         return this;
     }
 }

@@ -19,6 +19,8 @@ namespace AppCoreNet.Extensions.Hosting.Plugins;
 /// <summary>
 /// Provides default implementation of the <see cref="IPluginManager"/> interface.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
+[RequiresDynamicCode("Creates the generic plugin service collection.")]
 public class PluginManager : IPluginManager
 {
     private readonly IActivator _activator;

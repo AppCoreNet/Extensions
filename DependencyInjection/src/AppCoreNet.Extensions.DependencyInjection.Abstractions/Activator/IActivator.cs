@@ -2,6 +2,7 @@
 // Copyright (c) The AppCore .NET project.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AppCoreNet.Extensions.DependencyInjection.Activator;
 
@@ -17,5 +18,7 @@ public interface IActivator
     /// <param name="parameters">Constructor arguments not provided by the <see cref="IServiceProvider"/>.</param>
     /// <returns>An activated object of type <paramref name="instanceType"/>.</returns>
     /// <exception cref="ArgumentNullException">Argument <paramref name="instanceType"/> or <paramref name="parameters"/> is null.</exception>
-    object? CreateInstance(Type instanceType, params object[] parameters);
+    object? CreateInstance(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type instanceType,
+        params object[] parameters);
 }

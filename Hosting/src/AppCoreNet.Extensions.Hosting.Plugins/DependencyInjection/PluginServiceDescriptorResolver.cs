@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AppCoreNet.Diagnostics;
 using AppCoreNet.Extensions.Hosting.Plugins;
@@ -15,6 +16,7 @@ namespace AppCoreNet.Extensions.DependencyInjection;
 /// <summary>
 /// Builds an <see cref="IEnumerable{T}"/> of <see cref="ServiceDescriptor"/> by scanning plugin assemblies.
 /// </summary>
+[RequiresUnreferencedCode("Uses reflection to discover services.")]
 public class PluginServiceDescriptorResolver : IServiceDescriptorResolver
 {
     private readonly List<Predicate<Type>> _filters = new();

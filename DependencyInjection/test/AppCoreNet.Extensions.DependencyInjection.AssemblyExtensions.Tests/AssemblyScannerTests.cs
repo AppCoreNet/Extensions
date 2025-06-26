@@ -1,19 +1,21 @@
 // Licensed under the MIT license.
 // Copyright (c) The AppCore .NET project.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using FluentAssertions;
 using Xunit;
+using static AppCoreNet.Extensions.DependencyInjection.TestContracts;
 
 namespace AppCoreNet.Extensions.DependencyInjection;
 
+[RequiresUnreferencedCode("This test requires types that may be trimmed by the linker.")]
 public class AssemblyScannerTests
 {
     [Fact]
     public void FindsAllImplementationsOfInterface()
     {
-        var scanner = new AssemblyScanner(
-            typeof(IContract));
+        var scanner = new AssemblyScanner(typeof(IContract));
 
         scanner.Filters.Clear();
         scanner.Assemblies.Add(typeof(AssemblyScannerTests).GetTypeInfo().Assembly);
