@@ -22,7 +22,7 @@
     <PackageVersion Include="AppCoreNet.TypeHelpers.Sources" Version="0.8.0" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
 
-    <PackageVersion Include="System.ValueTuple" Version="4.6.1" />
+    <PackageVersion Include="System.ValueTuple" Version="4.6.2" />
 
     <PackageVersion Include="Microsoft.Bcl.TimeProvider" Version="8.0.1" />
 
