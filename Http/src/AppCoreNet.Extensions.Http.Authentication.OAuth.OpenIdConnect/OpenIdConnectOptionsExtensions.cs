@@ -1,4 +1,4 @@
-﻿// Licensed under the MIT license.
+// Licensed under the MIT license.
 // Copyright (c) The AppCore .NET project.
 
 using System;
@@ -28,11 +28,7 @@ internal static class OpenIdConnectOptionsExtensions
                 $"Unable to load OpenID configuration for configured scheme: {e.Message}");
         }
 
-        string? tokenRevocationEndpoint = oidcConfig.AdditionalData.TryGetValue(
-            OidcConstants.Discovery.RevocationEndpoint,
-            out object? value)
-            ? value?.ToString()
-            : null;
+        string? tokenRevocationEndpoint = oidcConfig.RevocationEndpoint;
 
         var result = new OAuthClientOptions
         {
